@@ -1,4 +1,4 @@
-import Immutable, { Map, List } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import { fieldRows, fieldCols } from '../utils/constants';
 
 function createField(row: Number, col: Number) {

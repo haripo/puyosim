@@ -15,18 +15,35 @@ import { puyoSize } from '../utils/constants';
  * Component for render puyo field
  */
 export default class Field extends Component {
-  renderPuyo(puyo) {
-    const image = require('../../assets/puyo.png');
-    return (
-      <Image source={image} style={ styles.puyo }/>
-    );
+  constructor() {
+    super();
+    this.images = [
+      null,
+      require('../../assets/puyo_red.png'),
+      require('../../assets/puyo_green.png'),
+      require('../../assets/puyo_blue.png'),
+      require('../../assets/puyo_yellow.png')
+    ]
+  }
+  renderPuyo(puyo, index) {
+    const image = this.images[puyo];
+    if (image) {
+      return (
+        <Image source={ image } style={ styles.puyo } key={ index }/>
+      )
+    } else {
+      return (
+        <View style={ styles.puyo } key={ index }>
+        </View>
+      )
+    }
   }
 
   renderStack(stack) {
-    const renderRow = (row) => {
+    const renderRow = (row, index) => {
       return (
-        <View style={ styles.fieldRow }>
-          { row.map(this.renderPuyo) }
+        <View style={ styles.fieldRow } key={ index }>
+          { row.map(::this.renderPuyo) }
         </View>
       )
     };

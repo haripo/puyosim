@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     margin: contentsMargin
   },
   field: {
-    backgroundColor: 'blue',
+    backgroundColor: '#BBBBBB',
     margin: contentsMargin
   }
 });
