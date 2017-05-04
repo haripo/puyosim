@@ -2,10 +2,11 @@
 import { connect } from 'react-redux';
 import { putPair } from '../actions/actions';
 import Simulator from '../components/Simulator';
+import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   return {
-    field: state.length
+    field: state.get('field')
   }
 };
 
@@ -20,4 +21,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Simulator);
+)(toJS(Simulator));

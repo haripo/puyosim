@@ -1,8 +1,13 @@
+import { Map } from 'immutable';
 
-const field = (state = [], action) => {
+let initialState = Map({
+  field: 0
+});
+
+const field = (state = initialState, action) => {
   switch (action.type) {
     case 'PUT_PAIR':
-      return [ ...state, action.pair ];
+      return state.update('field', (value) => value + 1);
     default:
       return state;
   }
