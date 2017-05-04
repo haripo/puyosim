@@ -10,10 +10,8 @@ import {
   Text,
   View
 } from 'react-native';
-import { connect } from 'react-redux';
-import { putPair } from '../actions/actions';
 
-class Main extends Component {
+export default class Simulator extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -41,22 +39,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5fcff',
   }
 });
-
-const mapStateToProps = (state) => {
-  return {
-    field: state.length
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    put: (pair) => {
-      dispatch(putPair(pair));
-    }
-  }
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main);
