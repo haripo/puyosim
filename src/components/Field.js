@@ -4,12 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  View,
-  PanResponder
-} from 'react-native';
+import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import { puyoSize } from '../utils/constants';
 
 /**
@@ -24,7 +19,7 @@ export default class Field extends Component {
       require('../../assets/puyo_green.png'),
       require('../../assets/puyo_blue.png'),
       require('../../assets/puyo_yellow.png')
-    ]
+    ];
   }
 
   componentWillMount() {
@@ -51,12 +46,12 @@ export default class Field extends Component {
     };
     let direction = 0;
     if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
-      direction = { row: 0, col: gestureState.dx > 0 ? 1 : -1 }
+      direction = { row: 0, col: gestureState.dx > 0 ? 1 : -1 };
     } else {
-      direction = { row: gestureState.dy > 0 ? 1 : -1, col: 0 }
+      direction = { row: gestureState.dy > 0 ? 1 : -1, col: 0 };
     }
 
-    this.props.put([1, 2], position, direction)
+    this.props.put([1, 2], position, direction);
   }
 
   renderPuyo(puyo, index) {
@@ -64,12 +59,12 @@ export default class Field extends Component {
     if (image) {
       return (
         <Image source={ image } style={ styles.puyo } key={ index }/>
-      )
+      );
     } else {
       return (
         <View style={ styles.puyo } key={ index }>
         </View>
-      )
+      );
     }
   }
 
@@ -79,7 +74,7 @@ export default class Field extends Component {
         <View style={ styles.fieldRow } key={ index }>
           { row.map(::this.renderPuyo) }
         </View>
-      )
+      );
     };
 
     return (

@@ -4,29 +4,24 @@
  */
 
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  ToolbarAndroid,
-  View
-} from 'react-native';
-import Field from './Field';
+import { StyleSheet, Text, ToolbarAndroid, View } from 'react-native';
 import { contentsMargin } from '../utils/constants';
+import Field from './Field';
 
 export default class Simulator extends Component {
   render() {
     const actions = [
-      {title: 'Filter'},
-      {title: 'Filter'},
-      {title: 'Filter'},
-      {title: 'Filter'}
+      { title: 'Filter' },
+      { title: 'Filter' },
+      { title: 'Filter' },
+      { title: 'Filter' }
     ];
     return (
       <View style={styles.container}>
         <ToolbarAndroid
           actions={ actions }
           style={ styles.toolbar }
-          title='ぷよシミュレータ' />
+          title='ぷよシミュレータ'/>
         <View style={ styles.contents }>
           <Field
             stack={ this.props.stack }
@@ -49,17 +44,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#f5fcff',
+    backgroundColor: '#f5fcff'
   },
   toolbar: {
     backgroundColor: '#e9eaed',
-    height: 56,
+    height: 56
   },
   contents: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   head: {
     flex: 1,

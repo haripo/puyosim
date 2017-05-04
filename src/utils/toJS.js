@@ -1,5 +1,5 @@
-import React from 'react';
 import { Iterable } from 'immutable';
+import React from 'react';
 
 export default (WrappedComponent) => {
   return (wrappedComponentProps) => {
@@ -8,13 +8,13 @@ export default (WrappedComponent) => {
 
     const propsJS = Object.entries(wrappedComponentProps)
       .reduce((newProps, wrappedComponentProp) => {
-        newProps[ wrappedComponentProp[ KEY ] ] =
-          Iterable.isIterable(wrappedComponentProp[ VALUE ])
-            ? wrappedComponentProp[ VALUE ].toJS()
-            : wrappedComponentProp[ VALUE ];
+        newProps[wrappedComponentProp[KEY]] =
+          Iterable.isIterable(wrappedComponentProp[VALUE])
+            ? wrappedComponentProp[VALUE].toJS()
+            : wrappedComponentProp[VALUE];
         return newProps;
       }, {});
 
-    return <WrappedComponent {...propsJS} />
+    return <WrappedComponent {...propsJS} />;
   };
 };
