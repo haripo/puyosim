@@ -6,7 +6,7 @@ import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   return {
-    field: state.get('field')
+    stack: state.get('stack')
   }
 };
 
