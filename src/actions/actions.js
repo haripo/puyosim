@@ -1,7 +1,11 @@
 
-export const putPair = (pair) => {
+export const putPair = (pair, location, direction) => {
   return {
     type: 'PUT_PAIR',
-    pair
+    payload: {
+      pair,
+      location,
+      direction
+    }
   };
 };

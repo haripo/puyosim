@@ -28,7 +28,10 @@ export default class Simulator extends Component {
           style={ styles.toolbar }
           title='ぷよシミュレータ' />
         <View style={ styles.contents }>
-          <Field stack={ this.props.stack } style={ styles.field }>
+          <Field
+            stack={ this.props.stack }
+            style={ styles.field }
+            put={ this.props.put }>
           </Field>
           <View style={ styles.head }>
             <Text>

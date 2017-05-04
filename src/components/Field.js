@@ -7,7 +7,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Image,
-  View
+  View,
+  PanResponder
 } from 'react-native';
 import { puyoSize } from '../utils/constants';
 
@@ -25,6 +26,39 @@ export default class Field extends Component {
       require('../../assets/puyo_yellow.png')
     ]
   }
+
+  componentWillMount() {
+    this.panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (() => true),
+      onMoveShouldSetPanResponder: (() => true),
+      onPanResponderGrant: ::this.handlePanResponderGrant,
+      onPanResponderMove: ::this.handlePanResponderMove,
+      onPanResponderRelease: ::this.handlePanResponderEnd,
+      onPanResponderTerminate: ::this.handlePanResponderEnd
+    });
+  }
+
+  handlePanResponderGrant() {
+  }
+
+  handlePanResponderMove(e: Object, gestureState: Object) {
+  }
+
+  handlePanResponderEnd(e: Object, gestureState: Object) {
+    let position = {
+      row: Math.floor(e.nativeEvent.locationY / puyoSize),
+      col: Math.floor(e.nativeEvent.locationX / puyoSize)
+    };
+    let direction = 0;
+    if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
+      direction = { row: 0, col: gestureState.dx > 0 ? 1 : -1 }
+    } else {
+      direction = { row: gestureState.dy > 0 ? 1 : -1, col: 0 }
+    }
+
+    this.props.put([1, 2], position, direction)
+  }
+
   renderPuyo(puyo, index) {
     const image = this.images[puyo];
     if (image) {
@@ -57,7 +91,7 @@ export default class Field extends Component {
 
   render() {
     return (
-      <View style={ this.props.style }>
+      <View style={ this.props.style } { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
       </View>
     );

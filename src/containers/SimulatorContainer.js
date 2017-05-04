@@ -12,8 +12,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    put: (pair) => {
-      dispatch(putPair(pair));
+    put: (pair, location, direction) => {
+      dispatch(putPair(pair, location, direction));
     }
   }
 };
