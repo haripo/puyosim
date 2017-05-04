@@ -5,11 +5,13 @@
 
 import React, { Component } from 'react';
 import {
+  Button,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 import { connect } from 'react-redux';
+import { putPair } from '../actions/actions';
 
 class Main extends Component {
   render() {
@@ -18,6 +20,14 @@ class Main extends Component {
         <Text>
           Welcome to React Native!
         </Text>
+        <Text>
+          { this.props.field }
+        </Text>
+        <Button
+          onPress={ () => this.props.put(1) }
+          title="Put pair"
+          color="#841584"
+        />
       </View>
     );
   }
@@ -32,12 +42,18 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = () => {
-  return {}
+const mapStateToProps = (state) => {
+  return {
+    field: state.length
+  }
 };
 
-const mapDispatchToProps = () => {
-  return {}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    put: (pair) => {
+      dispatch(putPair(pair));
+    }
+  }
 };
 
 export default connect(
