@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
+  Image,
   View
 } from 'react-native';
 import { puyoSize } from '../utils/constants';
@@ -16,10 +16,9 @@ import { puyoSize } from '../utils/constants';
  */
 export default class Field extends Component {
   renderPuyo(puyo) {
+    const image = require('../../assets/puyo.png');
     return (
-      <Text style={ styles.puyo }>
-        { puyo }
-      </Text>
+      <Image source={image} style={ styles.puyo }/>
     );
   }
 
