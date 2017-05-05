@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import field from './field';
+import simulator from './simulator';
 
 export default combineReducers({
-  field
+  simulator
 });

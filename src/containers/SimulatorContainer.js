@@ -4,15 +4,18 @@ import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
+  const simulator = state.simulator;
   return {
-    stack: state.get('stack')
+    stack: simulator.get('stack'),
+    next: simulator.getIn(['queue', 0]),
+    doubleNext: simulator.getIn(['queue', 1])
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onSwipeEnd: (location, direction) => {
-      dispatch(putNextPair(location, direction))
+      dispatch(putNextPair(location, direction));
     }
   };
 };

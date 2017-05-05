@@ -8,7 +8,7 @@ import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import { puyoSize } from '../utils/constants';
 
 /**
- * Component for render puyo field
+ * Component for render puyo pairQueue
  */
 export default class Field extends Component {
   constructor() {

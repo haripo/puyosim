@@ -9,9 +9,9 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import Simulator from './src/containers/SimulatorContainer';
-import field from './src/reducers/field';
+import reducer from './src/reducers';
 
-let store = createStore(field);
+let store = createStore(reducer);
 
 export default class PuyoSimulator extends Component {
   render() {
