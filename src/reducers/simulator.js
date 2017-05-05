@@ -9,8 +9,8 @@ function generateQueue() {
   let queue = [];
   for (let i = 0; i < queueLength; i++) {
     queue.push([
-      Math.floor(Math.random() * 4),
-      Math.floor(Math.random() * 4)
+      Math.floor(Math.random() * 4) + 1,
+      Math.floor(Math.random() * 4) + 1
     ]);
   }
   return queue;
@@ -23,13 +23,12 @@ function putNextPair(state, action) {
   const stack = state.get('stack');
   const pair = state.get('queue').get(0);
 
-
   const { location, direction } = action.payload;
   const positions = FieldUtils.getDropPositions(location, direction, stack);
 
   if (positions) {
     return state
-      .update('queue', q => q.pop().push(pair))
+      .update('queue', q => q.shift().push(pair))
       .updateIn(['stack', positions[0].row, positions[0].col], () => pair.get(0))
       .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1));
   }
