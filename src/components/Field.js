@@ -4,24 +4,14 @@
  */
 
 import React, { Component } from 'react';
-import { Image, PanResponder, StyleSheet, View } from 'react-native';
+import { PanResponder, StyleSheet, View } from 'react-native';
 import { puyoSize } from '../utils/constants';
+import Puyo from './Puyo';
 
 /**
- * Component for render puyo pairQueue
+ * Component for render puyo fields
  */
 export default class Field extends Component {
-  constructor() {
-    super();
-    this.images = [
-      null,
-      require('../../assets/puyo_red.png'),
-      require('../../assets/puyo_green.png'),
-      require('../../assets/puyo_blue.png'),
-      require('../../assets/puyo_yellow.png')
-    ];
-  }
-
   componentWillMount() {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (() => true),
@@ -69,32 +59,22 @@ export default class Field extends Component {
     this.props.onSwipeEnd(position, direction);
   }
 
-  renderPuyo(puyo, index) {
-    const image = this.images[puyo];
-    if (image) {
+  renderStack(stack) {
+    const renderPuyo = (puyo, index) => {
       return (
         <View
           pointerEvents="none"
           style={ styles.puyoContainer }
           key={ index }>
-          <Image
-            style={ styles.puyo }
-            source={ image }/>
+          <Puyo size={ puyoSize } puyo={ puyo }/>
         </View>
-      );
-    } else {
-      return (
-        <View style={ styles.puyoContainer } key={ index }>
-        </View>
-      );
-    }
-  }
+      )
+    };
 
-  renderStack(stack) {
     const renderRow = (row, index) => {
       return (
         <View style={ styles.fieldRow } key={ index }>
-          { row.map(::this.renderPuyo) }
+          { row.map(renderPuyo) }
         </View>
       );
     };
