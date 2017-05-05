@@ -20,7 +20,6 @@ export default class FieldUtils {
    * Returns puyo position considering gravity
    * @param position user input position
    * @param stack stack object
-   * @param previousPuyoCol
    * @returns {{row: number, col: Number}}
    */
   static getDropPosition(position: Position, stack: Stack): Position {
