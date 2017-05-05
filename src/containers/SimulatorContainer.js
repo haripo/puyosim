@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { putPair } from '../actions/actions';
+import { putNextPair } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
 
@@ -11,8 +11,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    put: (pair, location, direction) => {
-      dispatch(putPair(pair, location, direction));
+    onSwipeEnd: (location, direction) => {
+      dispatch(putNextPair(location, direction))
     }
   };
 };

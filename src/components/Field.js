@@ -33,6 +33,27 @@ export default class Field extends Component {
     });
   }
 
+  convertLocation(x: Number, y: Number) {
+    return {
+      row: Math.floor(y / puyoSize),
+      col: Math.floor(x / puyoSize)
+    };
+  }
+
+  convertDirection(dx: Number, dy: Number) {
+    if (Math.abs(dx) > Math.abs(dy)) {
+      return {
+        row: 0,
+        col: dx > 0 ? 1 : -1
+      };
+    } else {
+      return {
+        row: dy > 0 ? 1 : -1,
+        col: 0
+      };
+    }
+  }
+
   handlePanResponderGrant() {
   }
 
@@ -40,18 +61,10 @@ export default class Field extends Component {
   }
 
   handlePanResponderEnd(e: Object, gestureState: Object) {
-    let position = {
-      row: Math.floor(e.nativeEvent.locationY / puyoSize),
-      col: Math.floor(e.nativeEvent.locationX / puyoSize)
-    };
-    let direction = 0;
-    if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
-      direction = { row: 0, col: gestureState.dx > 0 ? 1 : -1 };
-    } else {
-      direction = { row: gestureState.dy > 0 ? 1 : -1, col: 0 };
-    }
+    const position = this.convertLocation(e.nativeEvent.locationX, e.nativeEvent.locationY);
+    const direction = this.convertDirection(gestureState.dx, gestureState.dy);
 
-    this.props.put([1, 2], position, direction);
+    this.props.onSwipeEnd(position, direction);
   }
 
   renderPuyo(puyo, index) {
