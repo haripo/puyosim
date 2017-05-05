@@ -61,7 +61,9 @@ export default class Field extends Component {
   }
 
   handlePanResponderEnd(e: Object, gestureState: Object) {
-    const position = this.convertLocation(e.nativeEvent.locationX, e.nativeEvent.locationY);
+    const position = this.convertLocation(
+      e.nativeEvent.locationX,
+      e.nativeEvent.locationY);
     const direction = this.convertDirection(gestureState.dx, gestureState.dy);
 
     this.props.onSwipeEnd(position, direction);
@@ -71,11 +73,18 @@ export default class Field extends Component {
     const image = this.images[puyo];
     if (image) {
       return (
-        <Image source={ image } style={ styles.puyo } key={ index }/>
+        <View
+          pointerEvents="none"
+          style={ styles.puyoContainer }
+          key={ index }>
+          <Image
+            style={ styles.puyo }
+            source={ image }/>
+        </View>
       );
     } else {
       return (
-        <View style={ styles.puyo } key={ index }>
+        <View style={ styles.puyoContainer } key={ index }>
         </View>
       );
     }
@@ -99,7 +108,9 @@ export default class Field extends Component {
 
   render() {
     return (
-      <View style={ this.props.style } { ...this.panResponder.panHandlers }>
+      <View
+        style={ this.props.style }
+        { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
       </View>
     );
@@ -111,6 +122,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   puyo: {
+    width: puyoSize,
+    height: puyoSize
+  },
+  puyoContainer: {
     width: puyoSize,
     height: puyoSize
   }
