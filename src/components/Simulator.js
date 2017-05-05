@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, ToolbarAndroid, View } from 'react-native';
 import { contentsMargin } from '../utils/constants';
 import Field from './Field';
+import NextWindow from './NextWindow';
 
 export default class Simulator extends Component {
   render() {
@@ -29,9 +30,9 @@ export default class Simulator extends Component {
             onSwipeEnd={ this.props.onSwipeEnd }>
           </Field>
           <View style={ styles.head }>
-            <Text>
-              Next, double next, scores here.
-            </Text>
+            <NextWindow
+              next={ this.props.next }
+              doubleNext={ this.props.doubleNext }/>
           </View>
         </View>
       </View>
