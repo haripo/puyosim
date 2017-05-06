@@ -74,4 +74,25 @@ export default class FieldUtils {
   static isValidPosition(p: Position): boolean {
     return (0 <= p.row && p.row < fieldRows && 0 <= p.col && p.col < fieldCols);
   }
+
+  static getConnectedCount(row: Number, col: Number, stack): Number {
+    let checked = this.createField(fieldRows, fieldCols);
+    let find = null;
+    find = (r, c, puyo) => {
+      if (0 <= r && r < fieldRows && 0 <= c && c < fieldCols) {
+        if (puyo !== stack.getIn([r, c]) || checked[r][c]) {
+          return 0;
+        }
+        checked[r][c] = true;
+        return 1 +
+          find(r - 1, c, puyo) +
+          find(r, c - 1, puyo) +
+          find(r + 1, c, puyo) +
+          find(r, c + 1, puyo);
+      } else {
+        return 0;
+      }
+    };
+    return find(row, col, stack.getIn([row, col]));
+  }
 }

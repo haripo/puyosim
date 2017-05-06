@@ -35,19 +35,71 @@ function putNextPair(state, action) {
   return state;
 }
 
+function vanishPuyos(state, action) {
+  return state.withMutations(s => {
+    action.payload.targets.forEach(target => {
+      s.updateIn(['stack', target[0], target[1]], () => 0);
+    });
+  });
+}
+
+function applyGravity(state, action) {
+  return state.withMutations(s => {
+    for (let i = 0; i < fieldCols; i++) {
+      for (let j = 0; j < fieldRows; j++) {
+        let k = fieldRows - j - 1;
+        if (s.getIn(['stack', k, i]) !== 0) continue;
+        while (0 <= k && s.getIn(['stack', k, i]) === 0) k--;
+        if (0 <= k) {
+          s.setIn(['stack', fieldRows - j - 1, i], s.getIn(['stack', k, i]));
+          s.setIn(['stack', k, i], 0);
+        }
+      }
+    }
+  });
+}
+
 const initialState = Map({
   queue: Immutable.fromJS(generateQueue()),
-  stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols))
+  stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
+  chain: Map({
+    count: 0,
+    isActive: false
+  })
 });
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
     case 'PUT_NEXT_PAIR':
       return putNextPair(state, action);
+    case 'VANISH_PUYOS':
+      return vanishPuyos(state, action);
+    case 'APPLY_GRAVITY':
+      return applyGravity(state, action);
     default:
       return state;
   }
 };
 
-export default simulator;
+/**
+ * Selector function to get connected puyos
+ * @returns {Array}
+ */
+export function getConnectedPuyos(state) {
+  const stack = state.simulator.get('stack');
 
+  let result = [];
+  for (let i = 0; i < fieldRows; i++) {
+    for (let j = 0; j < fieldCols; j++) {
+      if (stack.getIn([i, j]) !== 0) {
+        const count = FieldUtils.getConnectedCount(i, j, stack);
+        if (count >= 4) {
+          result.push([i, j]);
+        }
+      }
+    }
+  }
+  return result;
+}
+
+export default simulator;
