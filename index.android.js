@@ -5,13 +5,20 @@
 
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
 
 import Simulator from './src/containers/SimulatorContainer';
 import reducer from './src/reducers';
+import sagas from './src/sagas';
 
-let store = createStore(reducer);
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(
+  reducer,
+  applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(sagas);
 
 export default class PuyoSimulator extends Component {
   render() {

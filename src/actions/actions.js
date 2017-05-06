@@ -7,3 +7,16 @@ export const putNextPair = (location, direction) => {
     }
   };
 };
+
+export const vanishPuyos = (positions) => {
+  return {
+    type: 'VANISH_PUYOS',
+    payload: { positions }
+  }
+};
+
+export const applyGravity = () => {
+  return {
+    type: 'APPLY_GRAVITY'
+  }
+};
