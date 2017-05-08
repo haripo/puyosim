@@ -18,7 +18,7 @@ export const showHighlights = (position, direction) => {
   }
 };
 
-export const hideHighlights = (location, direction) => {
+export const hideHighlights = () => {
   return {
     type: 'HIDE_HIGHLIGHTS'
   }

@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
 import { puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
+import GhostPuyo from './GhostPuyo';
 
 /**
  * Component for render puyo fields
@@ -61,24 +62,39 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { highlights } = this.props;
+    const { highlights, ghosts } = this.props;
     const renderPuyo = (puyo, row, col) => {
       const containerStyle = () => {
-        if (highlights.some((h) => h.row == row && h.col == col)) {
+        const highlight = highlights.find(h => h.row == row && h.col == col);
+
+        if (highlight) {
           return [styles.puyoContainer, styles.highlight];
         } else {
           return [styles.puyoContainer];
         }
       };
 
-      return (
-        <View
-          pointerEvents="none"
-          style={ containerStyle() }
-          key={ col }>
-          <Puyo size={ puyoSize } puyo={ puyo }/>
-        </View>
-      )
+      const ghost = ghosts.find(g => g.row == row && g.col == col);
+
+      if (ghost) {
+        return (
+          <View
+            pointerEvents="none"
+            style={ containerStyle() }
+            key={ col }>
+            <GhostPuyo size={ puyoSize } puyo={ ghost.color } />
+          </View>
+        )
+      } else {
+        return (
+          <View
+            pointerEvents="none"
+            style={ containerStyle() }
+            key={ col }>
+            <Puyo size={ puyoSize } puyo={ puyo }/>
+          </View>
+        )
+      }
     };
 
     const renderRow = (row, rowIndex) => {

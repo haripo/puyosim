@@ -55,10 +55,14 @@ export default class FieldUtils {
 
 
   static getHighlightPositions(position, direction) {
-    return [
+    const result = [
       position,
       this.addPosition(position, direction)
-    ]
+    ];
+    if (this.isValidPosition(result[0]) && this.isValidPosition(result[1])) {
+      return result;
+    }
+    return [];
   }
 
   /**

@@ -15,18 +15,20 @@ const puyoImages = [
  * Component for render single puyo
  */
 export default class Puyo extends Component {
-  render() {
-    const image = puyoImages[this.props.puyo];
-    const puyoStyle = {
+  style() {
+    return {
       ...styles.puyo,
       width: this.props.size,
       height: this.props.size
     };
+  }
+  render() {
+    const image = puyoImages[this.props.puyo];
 
     if (image === null) return null;
 
     return (
-      <Image style={ puyoStyle } source={ image }/>
+      <Image style={ this.style() } source={ image }/>
     )
   }
 }

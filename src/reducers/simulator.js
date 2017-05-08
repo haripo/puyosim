@@ -22,21 +22,35 @@ function generateQueue() {
   return queue;
 }
 
+/**
+ * Show highlights
+ * @param state
+ * @param action
+ */
 function showHighlights(state, action) {
   const { position, direction } = action.payload;
   const highlightPositions = FieldUtils.getHighlightPositions(position, direction);
-  return state
-    .set('highlights', Immutable.fromJS(highlightPositions));
+  let ghostPositions = FieldUtils.getDropPositions(position, direction, state.get('stack'));
+  if (ghostPositions) {
+    ghostPositions[0].color = state.getIn(['queue', 0, 0]);
+    ghostPositions[1].color = state.getIn(['queue', 0, 1]);
+    return state
+      .set('highlights', Immutable.fromJS(highlightPositions))
+      .set('ghosts', Immutable.fromJS(ghostPositions));
+  }
+  return state;
 }
 
 /**
- * Hide highlight
+ * Hide highlights
  * @param state
  * @param action
  * @returns new state
  */
 function hideHighlights(state, action) {
-  return state.set('highlights', List());
+  return state
+    .set('highlights', List())
+    .set('ghosts', List());
 }
 
 /**
@@ -90,6 +104,7 @@ const initialState = Map({
     isActive: false
   }),
   highlights: List(),
+  ghosts: List()
 });
 
 const simulator = (state = initialState, action) => {
