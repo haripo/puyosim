@@ -1,4 +1,10 @@
-import Immutable, { Map } from 'immutable';
+/**
+ * Show highlight on the field
+ * @param state
+ * @param action
+ * @returns new state
+ */
+import Immutable, { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
@@ -16,16 +22,11 @@ function generateQueue() {
   return queue;
 }
 
-/**
- * Show highlight on the field
- * @param state
- * @param action
- * @returns new state
- */
-function showHighlight(state, action) {
+function showHighlights(state, action) {
+  const { position, direction } = action.payload;
+  const highlightPositions = FieldUtils.getHighlightPositions(position, direction);
   return state
-    .setIn(['highlight', 'row'], action.payload.position.row)
-    .setIn(['highlight', 'col'], action.payload.position.col);
+    .set('highlights', Immutable.fromJS(highlightPositions));
 }
 
 /**
@@ -34,10 +35,8 @@ function showHighlight(state, action) {
  * @param action
  * @returns new state
  */
-function hideHighlight(state, action) {
-  return state
-    .setIn(['highlight', 'row'], null)
-    .setIn(['highlight', 'col'], null);
+function hideHighlights(state, action) {
+  return state.set('highlights', List());
 }
 
 /**
@@ -90,18 +89,15 @@ const initialState = Map({
     count: 0,
     isActive: false
   }),
-  highlight: Map({
-    row: null,
-    col: null,
-  })
+  highlights: List(),
 });
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
-    case 'SHOW_HIGHLIGHT':
-      return showHighlight(state, action);
-    case 'HIDE_HIGHLIGHT':
-      return hideHighlight(state, action);
+    case 'SHOW_HIGHLIGHTS':
+      return showHighlights(state, action);
+    case 'HIDE_HIGHLIGHTS':
+      return hideHighlights(state, action);
     case 'PUT_NEXT_PAIR':
       return putNextPair(state, action);
     case 'VANISH_PUYOS':

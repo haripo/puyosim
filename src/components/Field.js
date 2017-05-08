@@ -61,10 +61,10 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { highlight } = this.props;
+    const { highlights } = this.props;
     const renderPuyo = (puyo, row, col) => {
       const containerStyle = () => {
-        if (highlight.row == row && highlight.col == col) {
+        if (highlights.some((h) => h.row == row && h.col == col)) {
           return [styles.puyoContainer, styles.highlight];
         } else {
           return [styles.puyoContainer];

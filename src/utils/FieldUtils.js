@@ -53,6 +53,14 @@ export default class FieldUtils {
     return null;
   }
 
+
+  static getHighlightPositions(position, direction) {
+    return [
+      position,
+      this.addPosition(position, direction)
+    ]
+  }
+
   /**
    * Add two position, especially position and direction
    * @param p position or direction object

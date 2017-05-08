@@ -8,9 +8,9 @@ export const putNextPair = (position, direction) => {
   };
 };
 
-export const showHighlight = (position, direction) => {
+export const showHighlights = (position, direction) => {
   return {
-    type: 'SHOW_HIGHLIGHT',
+    type: 'SHOW_HIGHLIGHTS',
     payload: {
       position,
       direction
@@ -18,9 +18,9 @@ export const showHighlight = (position, direction) => {
   }
 };
 
-export const hideHighlight = (location, direction) => {
+export const hideHighlights = (location, direction) => {
   return {
-    type: 'HIDE_HIGHLIGHT'
+    type: 'HIDE_HIGHLIGHTS'
   }
 };
 

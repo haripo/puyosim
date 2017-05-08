@@ -26,7 +26,7 @@ export default class Simulator extends Component {
         <View style={ styles.contents }>
           <Field
             stack={ this.props.stack }
-            highlight={ this.props.highlight }
+            highlights={ this.props.highlights }
             style={ styles.field }
             onSwiping={ this.props.onSwiping }
             onSwipeEnd={ this.props.onSwipeEnd }>
