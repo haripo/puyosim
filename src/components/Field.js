@@ -23,14 +23,15 @@ export default class Field extends Component {
     });
   }
 
-  convertLocation(x: Number, y: Number) {
+  eventToPosition(event: Object) {
     return {
-      row: Math.floor(y / puyoSize),
-      col: Math.floor(x / puyoSize)
+      row: Math.floor(event.nativeEvent.locationY / puyoSize),
+      col: Math.floor(event.nativeEvent.locationX / puyoSize)
     };
   }
 
-  convertDirection(dx: Number, dy: Number) {
+  gestureStateToDirection(gestureState: Object) {
+    const { dx, dy } = gestureState;
     if (Math.abs(dx) > Math.abs(dy)) {
       return {
         row: 0,
@@ -48,33 +49,42 @@ export default class Field extends Component {
   }
 
   handlePanResponderMove(e: Object, gestureState: Object) {
+    this.props.onSwiping(
+      this.eventToPosition(e),
+      this.gestureStateToDirection(gestureState));
   }
 
   handlePanResponderEnd(e: Object, gestureState: Object) {
-    const position = this.convertLocation(
-      e.nativeEvent.locationX,
-      e.nativeEvent.locationY);
-    const direction = this.convertDirection(gestureState.dx, gestureState.dy);
-
-    this.props.onSwipeEnd(position, direction);
+    this.props.onSwipeEnd(
+      this.eventToPosition(e),
+      this.gestureStateToDirection(gestureState));
   }
 
   renderStack(stack) {
-    const renderPuyo = (puyo, index) => {
+    const { highlight } = this.props;
+    const renderPuyo = (puyo, row, col) => {
+      const containerStyle = () => {
+        if (highlight.row == row && highlight.col == col) {
+          return [styles.puyoContainer, styles.highlight];
+        } else {
+          return [styles.puyoContainer];
+        }
+      };
+
       return (
         <View
           pointerEvents="none"
-          style={ styles.puyoContainer }
-          key={ index }>
+          style={ containerStyle() }
+          key={ col }>
           <Puyo size={ puyoSize } puyo={ puyo }/>
         </View>
       )
     };
 
-    const renderRow = (row, index) => {
+    const renderRow = (row, rowIndex) => {
       return (
-        <View style={ styles.fieldRow } key={ index }>
-          { row.map(renderPuyo) }
+        <View style={ styles.fieldRow } key={ rowIndex }>
+          { row.map((item, colIndex) => renderPuyo(item, rowIndex, colIndex)) }
         </View>
       );
     };
@@ -108,5 +118,9 @@ const styles = StyleSheet.create({
   puyoContainer: {
     width: puyoSize,
     height: puyoSize
+  },
+  highlight: {
+    borderColor: 'yellow',
+    borderWidth: 1
   }
 });

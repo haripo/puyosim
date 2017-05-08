@@ -7,7 +7,6 @@ import { getConnectedPuyos } from '../reducers/simulator';
 function* vanish(action) {
   while(true) {
     const targets = yield select(getConnectedPuyos);
-    console.log(targets);
 
     // chain is finished
     if (targets.length === 0) break;

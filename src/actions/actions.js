@@ -1,11 +1,27 @@
-export const putNextPair = (location, direction) => {
+export const putNextPair = (position, direction) => {
   return {
     type: 'PUT_NEXT_PAIR',
     payload: {
-      location,
+      position,
       direction
     }
   };
+};
+
+export const showHighlight = (position, direction) => {
+  return {
+    type: 'SHOW_HIGHLIGHT',
+    payload: {
+      position,
+      direction
+    }
+  }
+};
+
+export const hideHighlight = (location, direction) => {
+  return {
+    type: 'HIDE_HIGHLIGHT'
+  }
 };
 
 export const vanishPuyos = (positions) => {

@@ -17,14 +17,38 @@ function generateQueue() {
 }
 
 /**
+ * Show highlight on the field
+ * @param state
+ * @param action
+ * @returns new state
+ */
+function showHighlight(state, action) {
+  return state
+    .setIn(['highlight', 'row'], action.payload.position.row)
+    .setIn(['highlight', 'col'], action.payload.position.col);
+}
+
+/**
+ * Hide highlight
+ * @param state
+ * @param action
+ * @returns new state
+ */
+function hideHighlight(state, action) {
+  return state
+    .setIn(['highlight', 'row'], null)
+    .setIn(['highlight', 'col'], null);
+}
+
+/**
  * Put pair
  */
 function putNextPair(state, action) {
   const stack = state.get('stack');
   const pair = state.get('queue').get(0);
 
-  const { location, direction } = action.payload;
-  const positions = FieldUtils.getDropPositions(location, direction, stack);
+  const { position, direction } = action.payload;
+  const positions = FieldUtils.getDropPositions(position, direction, stack);
 
   if (positions) {
     return state
@@ -65,11 +89,19 @@ const initialState = Map({
   chain: Map({
     count: 0,
     isActive: false
+  }),
+  highlight: Map({
+    row: null,
+    col: null,
   })
 });
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
+    case 'SHOW_HIGHLIGHT':
+      return showHighlight(state, action);
+    case 'HIDE_HIGHLIGHT':
+      return hideHighlight(state, action);
     case 'PUT_NEXT_PAIR':
       return putNextPair(state, action);
     case 'VANISH_PUYOS':
