@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { putNextPair } from '../actions/actions';
+import { showHighlights, hideHighlights, putNextPair } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
 
@@ -8,14 +8,20 @@ const mapStateToProps = (state) => {
   return {
     stack: simulator.get('stack'),
     next: simulator.getIn(['queue', 0]),
-    doubleNext: simulator.getIn(['queue', 1])
+    doubleNext: simulator.getIn(['queue', 1]),
+    highlights: simulator.get('highlights'),
+    ghosts: simulator.get('ghosts'),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSwipeEnd: (location, direction) => {
-      dispatch(putNextPair(location, direction));
+    onSwiping: (position, direction) => {
+      dispatch(showHighlights(position, direction));
+    },
+    onSwipeEnd: (position, direction) => {
+      dispatch(hideHighlights());
+      dispatch(putNextPair(position, direction));
     }
   };
 };

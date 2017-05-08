@@ -53,6 +53,18 @@ export default class FieldUtils {
     return null;
   }
 
+
+  static getHighlightPositions(position, direction) {
+    const result = [
+      position,
+      this.addPosition(position, direction)
+    ];
+    if (this.isValidPosition(result[0]) && this.isValidPosition(result[1])) {
+      return result;
+    }
+    return [];
+  }
+
   /**
    * Add two position, especially position and direction
    * @param p position or direction object
