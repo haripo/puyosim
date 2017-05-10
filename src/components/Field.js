@@ -62,7 +62,7 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { highlights, ghosts } = this.props;
+    const { highlights, ghosts, droppingPuyos } = this.props;
     const renderPuyo = (puyo, row, col) => {
       const containerStyle = () => {
         const highlight = highlights.find(h => h.row == row && h.col == col);
@@ -75,6 +75,8 @@ export default class Field extends Component {
       };
 
       const ghost = ghosts.find(g => g.row == row && g.col == col);
+      const puyoInfo = droppingPuyos.find(g => g.row == row && g.col == col);
+      const altitude = puyoInfo ? puyoInfo.altitude : 0;
 
       if (ghost) {
         return (
@@ -91,7 +93,7 @@ export default class Field extends Component {
             pointerEvents="none"
             style={ containerStyle() }
             key={ col }>
-            <Puyo size={ puyoSize } puyo={ puyo }/>
+            <Puyo size={ puyoSize } puyo={ puyo } shiftY={ -altitude }/>
           </View>
         )
       }

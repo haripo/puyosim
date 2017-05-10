@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, View } from 'react-native';
 
 const puyoImages = [
   null,
@@ -16,10 +16,18 @@ const puyoImages = [
  */
 export default class Puyo extends Component {
   style() {
+
+    if (this.props.shiftY) {
+      console.log(1 + this.props.shiftY);
+    }
+
     return {
-      ...styles.puyo,
+      position: 'absolute',
+      top: -(this.props.shiftY || 0) * this.props.size,
+      left: 0,
+      //opacity: this.props.shiftY ? 1 : 0.5,
       width: this.props.size,
-      height: this.props.size
+      height: this.props.size,
     };
   }
   render() {
@@ -32,10 +40,3 @@ export default class Puyo extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  component: {
-    flexDirection: 'row',
-    backgroundColor: 'gray'
-  }
-});

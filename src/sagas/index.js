@@ -2,7 +2,7 @@
 
 import { delay } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { getConnectedPuyos } from '../reducers/simulator';
+import { getConnectedPuyos, getDroppingPuyos } from '../reducers/simulator';
 
 function* vanish(action) {
   while(true) {
@@ -17,11 +17,21 @@ function* vanish(action) {
         targets
       }
     });
+
     yield delay(500);
+
     yield put({
       type: 'APPLY_GRAVITY'
     });
-    yield delay(500);
+
+    let droppings = yield select(getDroppingPuyos);
+    while (droppings.count() > 0) {
+      yield put({
+        type: 'DROP_ANIMATION_PROCEED'
+      });
+      yield delay(50); // 20fps
+      droppings = yield select(getDroppingPuyos);
+    }
   }
 
   yield put({ type: "CHAIN_FINISHED" });

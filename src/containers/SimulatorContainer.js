@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
     doubleNext: simulator.getIn(['queue', 1]),
     highlights: simulator.get('highlights'),
     ghosts: simulator.get('ghosts'),
+    droppingPuyos: simulator.get('droppingPuyos')
   };
 };
 

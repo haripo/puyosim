@@ -90,9 +90,24 @@ function applyGravity(state, action) {
         if (0 <= k) {
           s.setIn(['stack', fieldRows - j - 1, i], s.getIn(['stack', k, i]));
           s.setIn(['stack', k, i], 0);
+          s.update('droppingPuyos', puyos => {
+            return puyos.push(Map({
+              row: fieldRows - j - 1,
+              col: i,
+              altitude: (fieldRows - j - 1) - k
+            }));
+          });
         }
       }
     }
+  });
+}
+
+function proceedDropAnimation(state, action) {
+  return state.update('droppingPuyos', puyos => {
+    return puyos
+      .map(puyo => puyo.update('altitude', v => v - 0.1))
+      .filter(puyo => puyo.get('altitude') >= 0)
   });
 }
 
@@ -104,7 +119,8 @@ const initialState = Map({
     isActive: false
   }),
   highlights: List(),
-  ghosts: List()
+  ghosts: List(),
+  droppingPuyos: List()
 });
 
 const simulator = (state = initialState, action) => {
@@ -119,6 +135,8 @@ const simulator = (state = initialState, action) => {
       return vanishPuyos(state, action);
     case 'APPLY_GRAVITY':
       return applyGravity(state, action);
+    case 'DROP_ANIMATION_PROCEED':
+      return proceedDropAnimation(state, action);
     default:
       return state;
   }
@@ -143,6 +161,10 @@ export function getConnectedPuyos(state) {
     }
   }
   return result;
+}
+
+export function getDroppingPuyos(state) {
+  return state.simulator.get('droppingPuyos');
 }
 
 export default simulator;
