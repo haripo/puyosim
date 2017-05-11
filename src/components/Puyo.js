@@ -16,23 +16,16 @@ const puyoImages = [
  */
 export default class Puyo extends Component {
   style() {
-
-    if (this.props.shiftY) {
-      console.log(1 + this.props.shiftY);
-    }
-
     return {
       position: 'absolute',
-      top: -(this.props.shiftY || 0) * this.props.size,
-      left: 0,
-      //opacity: this.props.shiftY ? 1 : 0.5,
+      top: this.props.y,
+      left: this.props.x,
       width: this.props.size,
       height: this.props.size,
     };
   }
   render() {
     const image = puyoImages[this.props.puyo];
-
     if (image === null) return null;
 
     return (

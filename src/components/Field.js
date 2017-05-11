@@ -4,8 +4,9 @@
  */
 
 import React, { Component } from 'react';
-import { PanResponder, StyleSheet, View } from 'react-native';
-import { puyoSize } from '../utils/constants';
+import { PanResponder, StyleSheet, Text, View } from 'react-native';
+import _ from 'lodash';
+import { puyoSize, fieldRows, fieldCols } from '../utils/constants';
 import Puyo from './Puyo';
 import GhostPuyo from './GhostPuyo';
 
@@ -63,61 +64,56 @@ export default class Field extends Component {
 
   renderStack(stack) {
     const { highlights, ghosts, droppingPuyos } = this.props;
-    const renderPuyo = (puyo, row, col) => {
-      const containerStyle = () => {
-        const highlight = highlights.find(h => h.row == row && h.col == col);
-
-        if (highlight) {
-          return [styles.puyoContainer, styles.highlight];
-        } else {
-          return [styles.puyoContainer];
-        }
-      };
-
-      const ghost = ghosts.find(g => g.row == row && g.col == col);
-      const puyoInfo = droppingPuyos.find(g => g.row == row && g.col == col);
-      const altitude = puyoInfo ? puyoInfo.altitude : 0;
-
-      if (ghost) {
+    const renderPuyos = (stack) => {
+      const highlightDoms = highlights.map((highlight) => {
         return (
           <View
-            pointerEvents="none"
-            style={ containerStyle() }
-            key={ col }>
-            <GhostPuyo size={ puyoSize } puyo={ ghost.color } />
+            style={ styles.highlight }
+            top={ highlight.row * puyoSize }
+            left={ highlight.col * puyoSize }>
           </View>
-        )
-      } else {
+        );
+      });
+
+      const puyoDoms = _.flatten(stack
+        .map((puyos, row) => {
+          return puyos.map((puyo, col) => {
+            const puyoInfo = droppingPuyos.find(g => g.row == row && g.col == col);
+            const altitude = puyoInfo ? puyoInfo.altitude : 0;
+            return (
+              <Puyo
+                size={ puyoSize }
+                puyo={ puyo }
+                x={ col * puyoSize }
+                y={ row * puyoSize - altitude }/>
+            );
+          });
+        }));
+
+      const ghostDoms = ghosts.map(ghost => {
         return (
-          <View
-            pointerEvents="none"
-            style={ containerStyle() }
-            key={ col }>
-            <Puyo size={ puyoSize } puyo={ puyo } shiftY={ -altitude }/>
-          </View>
-        )
-      }
+          <GhostPuyo
+            size={ puyoSize }
+            puyo={ ghost.color }
+            x={ ghost.col * puyoSize }
+            y={ ghost.row * puyoSize }/>
+        );
+      });
+
+      return [
+        ghostDoms,
+        puyoDoms,
+        highlightDoms
+      ];
     };
 
-    const renderRow = (row, rowIndex) => {
-      return (
-        <View style={ styles.fieldRow } key={ rowIndex }>
-          { row.map((item, colIndex) => renderPuyo(item, rowIndex, colIndex)) }
-        </View>
-      );
-    };
-
-    return (
-      <View>
-        { stack.map(renderRow) }
-      </View>
-    );
+    return renderPuyos(stack);
   }
 
   render() {
     return (
       <View
-        style={ this.props.style }
+        style={ [this.props.style, styles.field] }
         { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
       </View>
@@ -126,8 +122,9 @@ export default class Field extends Component {
 }
 
 const styles = StyleSheet.create({
-  fieldRow: {
-    flexDirection: 'row'
+  field: {
+    width: puyoSize * fieldCols,
+    height: puyoSize * fieldRows
   },
   puyo: {
     width: puyoSize,
@@ -138,7 +135,10 @@ const styles = StyleSheet.create({
     height: puyoSize
   },
   highlight: {
+    position: 'absolute',
     borderColor: 'yellow',
-    borderWidth: 1
+    borderWidth: 1,
+    width: puyoSize,
+    height: puyoSize
   }
 });
