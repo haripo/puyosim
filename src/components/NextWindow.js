@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { nextWindowPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 
@@ -40,7 +40,7 @@ export default class NextWindow extends Component {
             y={ nextWindowPadding + puyoSize}/>
         </View>
       </View>
-    )
+    );
   }
 }
 

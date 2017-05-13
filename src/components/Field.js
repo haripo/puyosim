@@ -3,17 +3,24 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { PanResponder, StyleSheet, Text, View } from 'react-native';
 import _ from 'lodash';
-import { puyoSize, fieldRows, fieldCols } from '../utils/constants';
-import Puyo from './Puyo';
+import React, { Component } from 'react';
+import { PanResponder, StyleSheet, View } from 'react-native';
+import { fieldCols, fieldRows, puyoSize } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
+import Puyo from './Puyo';
 
 /**
  * Component for render puyo fields
  */
 export default class Field extends Component {
+  constructor() {
+    super();
+    this.state = {
+      droppings: []
+    };
+  }
+
   componentWillMount() {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (() => true),
@@ -23,6 +30,40 @@ export default class Field extends Component {
       onPanResponderRelease: ::this.handlePanResponderEnd,
       onPanResponderTerminate: ::this.handlePanResponderEnd
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { droppings } = this.state;
+    if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
+      let s = 0;
+      const nn = () => {
+        return nextProps.droppingPuyos
+          .filter(p => s < p.altitude * puyoSize)
+          .map(p => {
+            return {
+              row: p.row,
+              col: p.col,
+              value: (p.row - p.altitude) * puyoSize + s
+            };
+          });
+      };
+
+      // launch animation
+      const next = () => {
+        const n = nn();
+        this.setState({
+          droppings: n
+        });
+        s += 2;
+        if (n.length > 0) {
+          //setTimeout(next, 0)
+          requestAnimationFrame(next);
+        } else {
+          this.props.onDroppingAnimationFinished();
+        }
+      };
+      next();
+    }
   }
 
   eventToPosition(event: Object) {
@@ -63,7 +104,7 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { highlights, ghosts, droppingPuyos } = this.props;
+    const { highlights, ghosts } = this.props;
     const renderPuyos = (stack) => {
       const highlightDoms = highlights.map((highlight) => {
         return (
@@ -78,14 +119,15 @@ export default class Field extends Component {
       const puyoDoms = _.flatten(stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
-            const puyoInfo = droppingPuyos.find(g => g.row == row && g.col == col);
-            const altitude = puyoInfo ? puyoInfo.altitude : 0;
+            const puyoInfo = _.find(this.state.droppings, g => g.row == row && g.col == col);
+            const altitude = puyoInfo ? puyoInfo.value : 0;
+            //console.log(altitude);
             return (
               <Puyo
                 size={ puyoSize }
                 puyo={ puyo }
                 x={ col * puyoSize }
-                y={ row * puyoSize - altitude }/>
+                y={ (puyoInfo ? puyoInfo.value : row * puyoSize) }/>
             );
           });
         }));

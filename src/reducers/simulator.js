@@ -4,7 +4,7 @@
  * @param action
  * @returns new state
  */
-import Immutable, { Map, List } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
@@ -103,12 +103,9 @@ function applyGravity(state, action) {
   });
 }
 
-function proceedDropAnimation(state, action) {
-  return state.update('droppingPuyos', puyos => {
-    return puyos
-      .map(puyo => puyo.update('altitude', v => v - 0.1))
-      .filter(puyo => puyo.get('altitude') >= 0)
-  });
+function finishDroppingAnimations(state, action) {
+  console.log('hogehoge');
+  return state.set('droppingPuyos', List());
 }
 
 const initialState = Map({
@@ -135,8 +132,8 @@ const simulator = (state = initialState, action) => {
       return vanishPuyos(state, action);
     case 'APPLY_GRAVITY':
       return applyGravity(state, action);
-    case 'DROP_ANIMATION_PROCEED':
-      return proceedDropAnimation(state, action);
+    case 'FINISH_DROPPING_ANIMATIONS':
+      return finishDroppingAnimations(state, action);
     default:
       return state;
   }

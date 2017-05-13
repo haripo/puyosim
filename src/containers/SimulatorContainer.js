@@ -1,5 +1,11 @@
 import { connect } from 'react-redux';
-import { showHighlights, hideHighlights, putNextPair } from '../actions/actions';
+import {
+  doChainVanishingPhase,
+  finishDroppingAnimations,
+  hideHighlights,
+  putNextPair,
+  showHighlights
+} from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
 
@@ -23,6 +29,10 @@ const mapDispatchToProps = (dispatch) => {
     onSwipeEnd: (position, direction) => {
       dispatch(hideHighlights());
       dispatch(putNextPair(position, direction));
+    },
+    onDroppingAnimationFinished: () => {
+      dispatch(finishDroppingAnimations());
+      dispatch(doChainVanishingPhase());
     }
   };
 };

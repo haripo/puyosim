@@ -1,44 +1,39 @@
 /* @flow */
 
-import { delay } from 'redux-saga';
-import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { getConnectedPuyos, getDroppingPuyos } from '../reducers/simulator';
+import { put, select, takeLatest } from 'redux-saga/effects';
+import { getConnectedPuyos } from '../reducers/simulator';
 
-function* vanish(action) {
-  while(true) {
-    const targets = yield select(getConnectedPuyos);
+function* doDroppingPhase(action) {
 
-    // chain is finished
-    if (targets.length === 0) break;
+  yield put({
+    type: 'APPLY_GRAVITY'
+  });
+}
 
+function* doVanishingPhase(action) {
+  console.log('van');
+  const targets = yield select(getConnectedPuyos);
+
+  // chain is finished
+  if (targets.length > 0) {
     yield put({
-      type: "VANISH_PUYOS",
+      type: 'VANISH_PUYOS',
       payload: {
         targets
       }
     });
-
-    yield delay(500);
-
     yield put({
-      type: 'APPLY_GRAVITY'
+      type: 'CHAIN_DROPPING_PHASE'
     });
-
-    let droppings = yield select(getDroppingPuyos);
-    while (droppings.count() > 0) {
-      yield put({
-        type: 'DROP_ANIMATION_PROCEED'
-      });
-      yield delay(50); // 20fps
-      droppings = yield select(getDroppingPuyos);
-    }
+  } else {
+    yield put({ type: 'CHAIN_FINISHED' });
   }
-
-  yield put({ type: "CHAIN_FINISHED" });
 }
 
 function* sagas() {
-  yield takeLatest("PUT_NEXT_PAIR", vanish);
+  yield takeLatest('PUT_NEXT_PAIR', doVanishingPhase);
+  yield takeLatest('CHAIN_VANISHING_PHASE', doVanishingPhase);
+  yield takeLatest('CHAIN_DROPPING_PHASE', doDroppingPhase);
 }
 
 export default sagas;

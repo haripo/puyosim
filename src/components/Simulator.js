@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, ToolbarAndroid, View } from 'react-native';
+import { StyleSheet, ToolbarAndroid, View } from 'react-native';
 import { contentsMargin } from '../utils/constants';
 import Field from './Field';
 import NextWindow from './NextWindow';
@@ -30,6 +30,7 @@ export default class Simulator extends Component {
             ghosts={ this.props.ghosts }
             droppingPuyos={ this.props.droppingPuyos }
             style={ styles.field }
+            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
             onSwiping={ this.props.onSwiping }
             onSwipeEnd={ this.props.onSwipeEnd }>
           </Field>

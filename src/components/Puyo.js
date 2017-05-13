@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 
 const puyoImages = [
   null,
@@ -21,15 +21,16 @@ export default class Puyo extends Component {
       top: this.props.y,
       left: this.props.x,
       width: this.props.size,
-      height: this.props.size,
+      height: this.props.size
     };
   }
+
   render() {
     const image = puyoImages[this.props.puyo];
     if (image === null) return null;
 
     return (
       <Image style={ this.style() } source={ image }/>
-    )
+    );
   }
 }
