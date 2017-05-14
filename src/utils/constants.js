@@ -18,4 +18,4 @@ export const contentsMargin = 3;
 
 export const nextWindowPadding = 3;
 
-export const puyoSize = (screen.height - contentsMargin) / fieldRows;
+export const puyoSize = (screen.height - contentsMargin * 2) / fieldRows;

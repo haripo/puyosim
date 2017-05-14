@@ -29,8 +29,10 @@ export default class Simulator extends Component {
             highlights={ this.props.highlights }
             ghosts={ this.props.ghosts }
             droppingPuyos={ this.props.droppingPuyos }
+            vanishingPuyos={ this.props.vanishingPuyos }
             style={ styles.field }
             onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+            onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
             onSwiping={ this.props.onSwiping }
             onSwipeEnd={ this.props.onSwipeEnd }>
           </Field>

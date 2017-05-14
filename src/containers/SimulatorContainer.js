@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
 import {
+  doChainDroppingPhase,
   doChainVanishingPhase,
   finishDroppingAnimations,
+  finishVanishingAnimations,
   hideHighlights,
   putNextPair,
   showHighlights
@@ -17,7 +19,8 @@ const mapStateToProps = (state) => {
     doubleNext: simulator.getIn(['queue', 1]),
     highlights: simulator.get('highlights'),
     ghosts: simulator.get('ghosts'),
-    droppingPuyos: simulator.get('droppingPuyos')
+    droppingPuyos: simulator.get('droppingPuyos'),
+    vanishingPuyos: simulator.get('vanishingPuyos')
   };
 };
 
@@ -29,10 +32,15 @@ const mapDispatchToProps = (dispatch) => {
     onSwipeEnd: (position, direction) => {
       dispatch(hideHighlights());
       dispatch(putNextPair(position, direction));
+      dispatch(doChainVanishingPhase());
     },
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());
       dispatch(doChainVanishingPhase());
+    },
+    onVanishingAnimationFinished: () => {
+      dispatch(finishVanishingAnimations());
+      dispatch(doChainDroppingPhase());
     }
   };
 };

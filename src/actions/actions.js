@@ -43,8 +43,20 @@ export const doChainVanishingPhase = () => {
   };
 };
 
+export const doChainDroppingPhase = () => {
+  return {
+    type: 'CHAIN_DROPPING_PHASE'
+  };
+};
+
 export const finishDroppingAnimations = () => {
   return {
     type: 'FINISH_DROPPING_ANIMATIONS'
+  };
+};
+
+export const finishVanishingAnimations = () => {
+  return {
+    type: 'FINISH_VANISHING_ANIMATIONS'
   };
 };

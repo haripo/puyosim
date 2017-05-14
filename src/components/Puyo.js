@@ -21,7 +21,8 @@ export default class Puyo extends Component {
       top: this.props.y,
       left: this.props.x,
       width: this.props.size,
-      height: this.props.size
+      height: this.props.size,
+      opacity: this.props.a || 1
     };
   }
 

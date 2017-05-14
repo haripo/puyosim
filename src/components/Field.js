@@ -17,7 +17,8 @@ export default class Field extends Component {
   constructor() {
     super();
     this.state = {
-      droppings: []
+      droppings: [],
+      vanishings: []
     };
   }
 
@@ -33,7 +34,7 @@ export default class Field extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { droppings } = this.state;
+    const { droppings, vanishings } = this.state;
     if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
       let s = 0;
       const nn = () => {
@@ -54,12 +55,43 @@ export default class Field extends Component {
         this.setState({
           droppings: n
         });
-        s += 2;
+        s += puyoSize / 4;
         if (n.length > 0) {
-          //setTimeout(next, 0)
-          requestAnimationFrame(next);
+          setTimeout(next, 0)
+          //requestAnimationFrame(next);
         } else {
           this.props.onDroppingAnimationFinished();
+        }
+      };
+      next();
+    }
+
+    if (vanishings.length === 0 && nextProps.vanishingPuyos.length !== 0) {
+      let progress = 0;
+      const nn = () => {
+        return nextProps.vanishingPuyos
+          .filter(p => progress < 30)
+          .map(p => {
+            return {
+              row: p.row,
+              col: p.col,
+              color: p.color,
+              value: progress % 4 > 2 ? 0.3 : 1
+            }
+          });
+      };
+      // launch animation
+      const next = () => {
+        const n = nn();
+        this.setState({
+          vanishings: n
+        });
+        progress += 1;
+        if (n.length > 0) {
+          setTimeout(next, 0)
+          //requestAnimationFrame(next);
+        } else {
+          this.props.onVanishingAnimationFinished();
         }
       };
       next();
@@ -120,8 +152,6 @@ export default class Field extends Component {
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
             const puyoInfo = _.find(this.state.droppings, g => g.row == row && g.col == col);
-            const altitude = puyoInfo ? puyoInfo.value : 0;
-            //console.log(altitude);
             return (
               <Puyo
                 size={ puyoSize }
@@ -131,6 +161,17 @@ export default class Field extends Component {
             );
           });
         }));
+
+      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
+        return (
+          <Puyo
+            size={ puyoSize }
+            puyo={ vanishing.color }
+            x={ vanishing.col * puyoSize }
+            y={ vanishing.row * puyoSize }
+            a={ vanishing.value }/>
+        );
+      });
 
       const ghostDoms = ghosts.map(ghost => {
         return (
@@ -145,7 +186,8 @@ export default class Field extends Component {
       return [
         ghostDoms,
         puyoDoms,
-        highlightDoms
+        highlightDoms,
+        vanishingPuyoDoms
       ];
     };
 

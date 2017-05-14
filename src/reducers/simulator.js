@@ -75,6 +75,13 @@ function putNextPair(state, action) {
 function vanishPuyos(state, action) {
   return state.withMutations(s => {
     action.payload.targets.forEach(target => {
+      s.update('vanishingPuyos', puyos => {
+        return puyos.push(Map({
+          row: target[0],
+          col: target[1],
+          color: state.getIn(['stack', target[0], target[1]])
+        }))
+      });
       s.updateIn(['stack', target[0], target[1]], () => 0);
     });
   });
@@ -104,8 +111,11 @@ function applyGravity(state, action) {
 }
 
 function finishDroppingAnimations(state, action) {
-  console.log('hogehoge');
   return state.set('droppingPuyos', List());
+}
+
+function finishVanishingAnimations(state, action) {
+  return state.set('vanishingPuyos', List());
 }
 
 const initialState = Map({
@@ -117,7 +127,8 @@ const initialState = Map({
   }),
   highlights: List(),
   ghosts: List(),
-  droppingPuyos: List()
+  droppingPuyos: List(),
+  vanishingPuyos: List()
 });
 
 const simulator = (state = initialState, action) => {
@@ -134,6 +145,8 @@ const simulator = (state = initialState, action) => {
       return applyGravity(state, action);
     case 'FINISH_DROPPING_ANIMATIONS':
       return finishDroppingAnimations(state, action);
+    case 'FINISH_VANISHING_ANIMATIONS':
+      return finishVanishingAnimations(state, action);
     default:
       return state;
   }
