@@ -35,67 +35,64 @@ export default class Field extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { droppings, vanishings } = this.state;
-    if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
-      let s = 0;
-      const nn = () => {
-        return nextProps.droppingPuyos
-          .filter(p => s < p.altitude * puyoSize)
-          .map(p => {
-            return {
-              row: p.row,
-              col: p.col,
-              value: (p.row - p.altitude) * puyoSize + s
-            };
-          });
-      };
 
-      // launch animation
-      const next = () => {
-        const n = nn();
-        this.setState({
-          droppings: n
-        });
-        s += puyoSize / 4;
-        if (n.length > 0) {
-          setTimeout(next, 0)
-          //requestAnimationFrame(next);
-        } else {
-          this.props.onDroppingAnimationFinished();
-        }
-      };
-      next();
+    if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
+      this.launchDroppingAnimation(nextProps.droppingPuyos)
     }
 
     if (vanishings.length === 0 && nextProps.vanishingPuyos.length !== 0) {
-      let progress = 0;
-      const nn = () => {
-        return nextProps.vanishingPuyos
-          .filter(p => progress < 30)
-          .map(p => {
-            return {
-              row: p.row,
-              col: p.col,
-              color: p.color,
-              value: progress % 4 > 2 ? 0.3 : 1
-            }
-          });
-      };
-      // launch animation
-      const next = () => {
-        const n = nn();
-        this.setState({
-          vanishings: n
-        });
-        progress += 1;
-        if (n.length > 0) {
-          setTimeout(next, 0)
-          //requestAnimationFrame(next);
-        } else {
-          this.props.onVanishingAnimationFinished();
-        }
-      };
-      next();
+      this.launchVanishingAnimation(nextProps.vanishingPuyos)
     }
+  }
+
+  launchDroppingAnimation(droppingPuyos) {
+    let progress = 0;
+
+    // launch animation
+    const next = () => {
+      const animatingPuyos = droppingPuyos
+        .filter(p => progress < p.altitude * puyoSize)
+        .map(p => ({
+          ...p,
+          value: (p.row - p.altitude) * puyoSize + progress
+        }));
+
+      this.setState({ droppings: animatingPuyos });
+
+      progress += puyoSize / 2;
+
+      if (animatingPuyos.length > 0) {
+        requestAnimationFrame(next);
+      } else {
+        this.props.onDroppingAnimationFinished();
+      }
+    };
+    next();
+  }
+
+  launchVanishingAnimation(vanishingPuyos) {
+    let progress = 0;
+
+    const next = () => {
+      const animatingPuyos = vanishingPuyos
+        .filter(p => progress < 30)
+        .map(p => {
+          return {
+            ...p,
+            value: progress % 2 === 0 ? 0.3 : 1
+          }
+        });
+
+      this.setState({ vanishings: animatingPuyos });
+      progress += 1;
+
+      if (animatingPuyos.length > 0) {
+        requestAnimationFrame(next);
+      } else {
+        this.props.onVanishingAnimationFinished();
+      }
+    };
+    next();
   }
 
   eventToPosition(event: Object) {
@@ -151,27 +148,25 @@ export default class Field extends Component {
       const puyoDoms = _.flatten(stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
-            const puyoInfo = _.find(this.state.droppings, g => g.row == row && g.col == col);
+            const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
             return (
               <Puyo
                 size={ puyoSize }
                 puyo={ puyo }
                 x={ col * puyoSize }
-                y={ (puyoInfo ? puyoInfo.value : row * puyoSize) }/>
+                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) }/>
             );
           });
         }));
 
-      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
-        return (
-          <Puyo
-            size={ puyoSize }
-            puyo={ vanishing.color }
-            x={ vanishing.col * puyoSize }
-            y={ vanishing.row * puyoSize }
-            a={ vanishing.value }/>
-        );
-      });
+      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => (
+        <Puyo
+          size={ puyoSize }
+          puyo={ vanishing.color }
+          x={ vanishing.col * puyoSize }
+          y={ vanishing.row * puyoSize }
+          a={ vanishing.value }/>
+      ));
 
       const ghostDoms = ghosts.map(ghost => {
         return (
