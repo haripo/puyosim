@@ -4,7 +4,7 @@
  * @param action
  * @returns new state
  */
-import Immutable, { List, Map } from 'immutable';
+import Immutable, { List, Map, Record } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
@@ -20,6 +20,18 @@ function generateQueue() {
     ]);
   }
   return queue;
+}
+
+const HistoryRecord = Record({
+  queue: List(),
+  stack: List()
+});
+
+function makeHistoryRecord(state) {
+  return new HistoryRecord({
+    queue: state.get('queue'),
+    stack: state.get('stack')
+  });
 }
 
 /**
@@ -67,7 +79,8 @@ function putNextPair(state, action) {
     return state
       .update('queue', q => q.shift().push(pair))
       .updateIn(['stack', positions[0].row, positions[0].col], () => pair.get(0))
-      .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1));
+      .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1))
+      .update('history', history => history.unshift(makeHistoryRecord(state)));
   }
   return state;
 }
@@ -118,6 +131,13 @@ function finishVanishingAnimations(state, action) {
   return state.set('vanishingPuyos', List());
 }
 
+function undoField(state, action) {
+  return state
+    .set('queue', state.getIn(['history', 0, 'queue']))
+    .set('stack', state.getIn(['history', 0, 'stack']))
+    .update('history', history => history.shift())
+}
+
 const initialState = Map({
   queue: Immutable.fromJS(generateQueue()),
   stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
@@ -128,7 +148,8 @@ const initialState = Map({
   highlights: List(),
   ghosts: List(),
   droppingPuyos: List(),
-  vanishingPuyos: List()
+  vanishingPuyos: List(),
+  history: List()
 });
 
 const simulator = (state = initialState, action) => {
@@ -147,6 +168,8 @@ const simulator = (state = initialState, action) => {
       return finishDroppingAnimations(state, action);
     case 'FINISH_VANISHING_ANIMATIONS':
       return finishVanishingAnimations(state, action);
+    case 'UNDO_FIELD':
+      return undoField(state, action);
     default:
       return state;
   }

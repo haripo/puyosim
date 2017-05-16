@@ -60,3 +60,9 @@ export const finishVanishingAnimations = () => {
     type: 'FINISH_VANISHING_ANIMATIONS'
   };
 };
+
+export const undoField = () => {
+  return {
+    type: 'UNDO_FIELD'
+  }
+};

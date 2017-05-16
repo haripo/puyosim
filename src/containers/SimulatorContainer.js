@@ -6,7 +6,8 @@ import {
   finishVanishingAnimations,
   hideHighlights,
   putNextPair,
-  showHighlights
+  showHighlights,
+  undoField
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
@@ -41,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations());
       dispatch(doChainDroppingPhase());
+    },
+    onUndoSelected: () => {
+      dispatch(undoField())
     }
   };
 };

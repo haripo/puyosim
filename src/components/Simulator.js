@@ -10,19 +10,29 @@ import Field from './Field';
 import NextWindow from './NextWindow';
 
 export default class Simulator extends Component {
-  render() {
-    const actions = [
-      { title: 'Filter' },
-      { title: 'Filter' },
-      { title: 'Filter' },
-      { title: 'Filter' }
+  constructor() {
+    super();
+    this.actions = [
+      { title: 'Undo' }
     ];
+  }
+
+  handleToolbarAction(position) {
+    switch (this.actions[position].title) {
+      case 'Undo':
+        this.props.onUndoSelected();
+        break;
+    }
+  }
+
+  render() {
     return (
-      <View style={styles.container}>
+      <View style={ styles.container }>
         <ToolbarAndroid
-          actions={ actions }
+          actions={ this.actions }
           style={ styles.toolbar }
-          title='ぷよシミュレータ'/>
+          title='ぷよシミュレータ'
+          onActionSelected={ ::this.handleToolbarAction }/>
         <View style={ styles.contents }>
           <Field
             stack={ this.props.stack }
