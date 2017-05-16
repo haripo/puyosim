@@ -1,7 +1,7 @@
 /* @flow */
 
-import React, { Component } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import React, { PureComponent } from 'react';
+import { Image } from 'react-native';
 
 const puyoImages = [
   null,
@@ -14,28 +14,24 @@ const puyoImages = [
 /**
  * Component for render single puyo
  */
-export default class Puyo extends Component {
+export default class Puyo extends PureComponent {
   style() {
     return {
-      ...styles.puyo,
+      position: 'absolute',
+      top: this.props.y,
+      left: this.props.x,
       width: this.props.size,
-      height: this.props.size
+      height: this.props.size,
+      opacity: this.props.a || 1
     };
   }
+
   render() {
     const image = puyoImages[this.props.puyo];
-
     if (image === null) return null;
 
     return (
       <Image style={ this.style() } source={ image }/>
-    )
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  component: {
-    flexDirection: 'row',
-    backgroundColor: 'gray'
-  }
-});

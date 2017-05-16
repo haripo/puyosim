@@ -4,7 +4,7 @@
  * @param action
  * @returns new state
  */
-import Immutable, { Map, List } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
@@ -75,6 +75,13 @@ function putNextPair(state, action) {
 function vanishPuyos(state, action) {
   return state.withMutations(s => {
     action.payload.targets.forEach(target => {
+      s.update('vanishingPuyos', puyos => {
+        return puyos.push(Map({
+          row: target[0],
+          col: target[1],
+          color: state.getIn(['stack', target[0], target[1]])
+        }))
+      });
       s.updateIn(['stack', target[0], target[1]], () => 0);
     });
   });
@@ -90,10 +97,25 @@ function applyGravity(state, action) {
         if (0 <= k) {
           s.setIn(['stack', fieldRows - j - 1, i], s.getIn(['stack', k, i]));
           s.setIn(['stack', k, i], 0);
+          s.update('droppingPuyos', puyos => {
+            return puyos.push(Map({
+              row: fieldRows - j - 1,
+              col: i,
+              altitude: (fieldRows - j - 1) - k
+            }));
+          });
         }
       }
     }
   });
+}
+
+function finishDroppingAnimations(state, action) {
+  return state.set('droppingPuyos', List());
+}
+
+function finishVanishingAnimations(state, action) {
+  return state.set('vanishingPuyos', List());
 }
 
 const initialState = Map({
@@ -104,7 +126,9 @@ const initialState = Map({
     isActive: false
   }),
   highlights: List(),
-  ghosts: List()
+  ghosts: List(),
+  droppingPuyos: List(),
+  vanishingPuyos: List()
 });
 
 const simulator = (state = initialState, action) => {
@@ -119,6 +143,10 @@ const simulator = (state = initialState, action) => {
       return vanishPuyos(state, action);
     case 'APPLY_GRAVITY':
       return applyGravity(state, action);
+    case 'FINISH_DROPPING_ANIMATIONS':
+      return finishDroppingAnimations(state, action);
+    case 'FINISH_VANISHING_ANIMATIONS':
+      return finishVanishingAnimations(state, action);
     default:
       return state;
   }
@@ -143,6 +171,10 @@ export function getConnectedPuyos(state) {
     }
   }
   return result;
+}
+
+export function getDroppingPuyos(state) {
+  return state.simulator.get('droppingPuyos');
 }
 
 export default simulator;

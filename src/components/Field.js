@@ -3,16 +3,25 @@
  * @flow
  */
 
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
-import { puyoSize } from '../utils/constants';
-import Puyo from './Puyo';
+import { fieldCols, fieldRows, puyoSize } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
+import Puyo from './Puyo';
 
 /**
  * Component for render puyo fields
  */
 export default class Field extends Component {
+  constructor() {
+    super();
+    this.state = {
+      droppings: [],
+      vanishings: []
+    };
+  }
+
   componentWillMount() {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (() => true),
@@ -22,6 +31,68 @@ export default class Field extends Component {
       onPanResponderRelease: ::this.handlePanResponderEnd,
       onPanResponderTerminate: ::this.handlePanResponderEnd
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { droppings, vanishings } = this.state;
+
+    if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
+      this.launchDroppingAnimation(nextProps.droppingPuyos)
+    }
+
+    if (vanishings.length === 0 && nextProps.vanishingPuyos.length !== 0) {
+      this.launchVanishingAnimation(nextProps.vanishingPuyos)
+    }
+  }
+
+  launchDroppingAnimation(droppingPuyos) {
+    let progress = 0;
+
+    // launch animation
+    const next = () => {
+      const animatingPuyos = droppingPuyos
+        .filter(p => progress < p.altitude * puyoSize)
+        .map(p => ({
+          ...p,
+          value: (p.row - p.altitude) * puyoSize + progress
+        }));
+
+      this.setState({ droppings: animatingPuyos });
+
+      progress += puyoSize / 2;
+
+      if (animatingPuyos.length > 0) {
+        requestAnimationFrame(next);
+      } else {
+        this.props.onDroppingAnimationFinished();
+      }
+    };
+    next();
+  }
+
+  launchVanishingAnimation(vanishingPuyos) {
+    let progress = 0;
+
+    const next = () => {
+      const animatingPuyos = vanishingPuyos
+        .filter(p => progress < 30)
+        .map(p => {
+          return {
+            ...p,
+            value: progress % 2 === 0 ? 0.3 : 1
+          }
+        });
+
+      this.setState({ vanishings: animatingPuyos });
+      progress += 1;
+
+      if (animatingPuyos.length > 0) {
+        requestAnimationFrame(next);
+      } else {
+        this.props.onVanishingAnimationFinished();
+      }
+    };
+    next();
   }
 
   eventToPosition(event: Object) {
@@ -63,59 +134,65 @@ export default class Field extends Component {
 
   renderStack(stack) {
     const { highlights, ghosts } = this.props;
-    const renderPuyo = (puyo, row, col) => {
-      const containerStyle = () => {
-        const highlight = highlights.find(h => h.row == row && h.col == col);
-
-        if (highlight) {
-          return [styles.puyoContainer, styles.highlight];
-        } else {
-          return [styles.puyoContainer];
-        }
-      };
-
-      const ghost = ghosts.find(g => g.row == row && g.col == col);
-
-      if (ghost) {
+    const renderPuyos = (stack) => {
+      const highlightDoms = highlights.map((highlight) => {
         return (
           <View
-            pointerEvents="none"
-            style={ containerStyle() }
-            key={ col }>
-            <GhostPuyo size={ puyoSize } puyo={ ghost.color } />
+            style={ styles.highlight }
+            top={ highlight.row * puyoSize }
+            left={ highlight.col * puyoSize }>
           </View>
-        )
-      } else {
+        );
+      });
+
+      const puyoDoms = _.flatten(stack
+        .map((puyos, row) => {
+          return puyos.map((puyo, col) => {
+            const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
+            return (
+              <Puyo
+                size={ puyoSize }
+                puyo={ puyo }
+                x={ col * puyoSize }
+                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) }/>
+            );
+          });
+        }));
+
+      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => (
+        <Puyo
+          size={ puyoSize }
+          puyo={ vanishing.color }
+          x={ vanishing.col * puyoSize }
+          y={ vanishing.row * puyoSize }
+          a={ vanishing.value }/>
+      ));
+
+      const ghostDoms = ghosts.map(ghost => {
         return (
-          <View
-            pointerEvents="none"
-            style={ containerStyle() }
-            key={ col }>
-            <Puyo size={ puyoSize } puyo={ puyo }/>
-          </View>
-        )
-      }
+          <GhostPuyo
+            size={ puyoSize }
+            puyo={ ghost.color }
+            x={ ghost.col * puyoSize }
+            y={ ghost.row * puyoSize }/>
+        );
+      });
+
+      return [
+        ghostDoms,
+        puyoDoms,
+        highlightDoms,
+        vanishingPuyoDoms
+      ];
     };
 
-    const renderRow = (row, rowIndex) => {
-      return (
-        <View style={ styles.fieldRow } key={ rowIndex }>
-          { row.map((item, colIndex) => renderPuyo(item, rowIndex, colIndex)) }
-        </View>
-      );
-    };
-
-    return (
-      <View>
-        { stack.map(renderRow) }
-      </View>
-    );
+    return renderPuyos(stack);
   }
 
   render() {
     return (
       <View
-        style={ this.props.style }
+        style={ [this.props.style, styles.field] }
         { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
       </View>
@@ -124,8 +201,9 @@ export default class Field extends Component {
 }
 
 const styles = StyleSheet.create({
-  fieldRow: {
-    flexDirection: 'row'
+  field: {
+    width: puyoSize * fieldCols,
+    height: puyoSize * fieldRows
   },
   puyo: {
     width: puyoSize,
@@ -136,7 +214,10 @@ const styles = StyleSheet.create({
     height: puyoSize
   },
   highlight: {
+    position: 'absolute',
     borderColor: 'yellow',
-    borderWidth: 1
+    borderWidth: 1,
+    width: puyoSize,
+    height: puyoSize
   }
 });
