@@ -1,4 +1,4 @@
-package com.haripo.puyosim;
+package com.puyosimulator;
 
 import com.facebook.react.ReactActivity;
 
