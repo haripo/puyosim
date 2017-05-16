@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Image } from 'react-native';
 
 const puyoImages = [
@@ -14,7 +14,7 @@ const puyoImages = [
 /**
  * Component for render single puyo
  */
-export default class Puyo extends Component {
+export default class Puyo extends PureComponent {
   style() {
     return {
       position: 'absolute',
