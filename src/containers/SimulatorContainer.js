@@ -11,6 +11,7 @@ import {
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
+import { isActive } from '../reducers/simulator';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
@@ -21,7 +22,8 @@ const mapStateToProps = (state) => {
     highlights: simulator.get('highlights'),
     ghosts: simulator.get('ghosts'),
     droppingPuyos: simulator.get('droppingPuyos'),
-    vanishingPuyos: simulator.get('vanishingPuyos')
+    vanishingPuyos: simulator.get('vanishingPuyos'),
+    isActive: isActive(state)
   };
 };
 

@@ -196,8 +196,11 @@ export function getConnectedPuyos(state) {
   return result;
 }
 
-export function getDroppingPuyos(state) {
-  return state.simulator.get('droppingPuyos');
+export function isActive(state) {
+  return !(
+    state.simulator.get('droppingPuyos').count() > 0 ||
+    state.simulator.get('vanishingPuyos').count() > 0
+  );
 }
 
 export default simulator;

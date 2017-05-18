@@ -40,6 +40,7 @@ export default class Simulator extends Component {
             ghosts={ this.props.ghosts }
             droppingPuyos={ this.props.droppingPuyos }
             vanishingPuyos={ this.props.vanishingPuyos }
+            isActive={ this.props.isActive }
             style={ styles.field }
             onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
             onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
