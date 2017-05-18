@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 
 const puyoImages = [
   null,
@@ -22,6 +22,13 @@ export default class Puyo extends PureComponent {
       left: this.props.x,
       width: this.props.size,
       height: this.props.size,
+    };
+  }
+
+  imageStyle() {
+    return {
+      width: this.props.size,
+      height: this.props.size,
       opacity: this.props.a || 1
     };
   }
@@ -31,7 +38,9 @@ export default class Puyo extends PureComponent {
     if (image === null) return null;
 
     return (
-      <Image style={ this.style() } source={ image }/>
+      <View style={ this.style() } pointerEvents="none">
+        <Image style={ this.imageStyle() } source={ image }/>
+      </View>
     );
   }
 }
