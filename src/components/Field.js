@@ -9,6 +9,7 @@ import { PanResponder, StyleSheet, View } from 'react-native';
 import { fieldCols, fieldRows, puyoSize } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
+import { launchAnimation } from '../utils/animation'
 
 /**
  * Component for render puyo fields
@@ -46,53 +47,34 @@ export default class Field extends Component {
   }
 
   launchDroppingAnimation(droppingPuyos) {
-    let progress = 0;
-
-    // launch animation
-    const next = () => {
+    launchAnimation(step => {
+      const _step = step * puyoSize / 8;
       const animatingPuyos = droppingPuyos
-        .filter(p => progress < p.altitude * puyoSize)
-        .map(p => ({
-          ...p,
-          value: (p.row - p.altitude) * puyoSize + progress
-        }));
-
+        .filter(p => _step < p.altitude * puyoSize)
+        .map(p => {
+          const value = (p.row - p.altitude) * puyoSize + _step;
+          return { ...p, value };
+        });
       this.setState({ droppings: animatingPuyos });
-
-      progress += puyoSize / 2;
-
-      if (animatingPuyos.length > 0) {
-        requestAnimationFrame(next);
-      } else {
-        this.props.onDroppingAnimationFinished();
-      }
-    };
-    next();
+      return animatingPuyos.length > 0;
+    }).then(() => {
+      this.props.onDroppingAnimationFinished()
+    });
   }
 
   launchVanishingAnimation(vanishingPuyos) {
-    let progress = 0;
-
-    const next = () => {
+    launchAnimation((step) => {
       const animatingPuyos = vanishingPuyos
-        .filter(p => progress < 30)
+        .filter(p => step < 30)
         .map(p => {
-          return {
-            ...p,
-            value: progress % 2 === 0 ? 0.3 : 1
-          }
+          const value = step % 2 === 0 ? 0.3 : 1;
+          return { ...p, value };
         });
-
       this.setState({ vanishings: animatingPuyos });
-      progress += 1;
-
-      if (animatingPuyos.length > 0) {
-        requestAnimationFrame(next);
-      } else {
-        this.props.onVanishingAnimationFinished();
-      }
-    };
-    next();
+      return animatingPuyos.length > 0
+    }).then(() => {
+      this.props.onVanishingAnimationFinished()
+    });
   }
 
   eventToPosition(event: Object) {
@@ -133,6 +115,7 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
+
     const { highlights, ghosts } = this.props;
     const renderPuyos = (stack) => {
       const highlightDoms = highlights.map((highlight) => {
