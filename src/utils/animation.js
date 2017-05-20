@@ -10,7 +10,10 @@ export function launchAnimation(func) {
       if (quit) {
         resolve()
       } else {
-        requestAnimationFrame(f)
+        if (__DEV__)
+          setTimeout(f, 0);
+        else
+          requestAnimationFrame(f)
       }
       quit = !func(steps);
       steps++;
