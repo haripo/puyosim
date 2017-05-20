@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 const chainBonusTable = [
   0,
   8,
@@ -40,17 +42,29 @@ const colorBonusTable = [
   24
 ];
 
-function getConnectionBonus(connection) {
-  return connectionBonusTable[connection < 7 ? connection - 4 : 7]
+function getConnectionBonus(vanished) {
+  return _.sum(vanished
+    .map(c => {
+      const connection = c.puyos.length;
+      return connectionBonusTable[connection < 7 ? connection - 4 : 7];
+    }))
 }
 
-function getColorBonus(colorCount) {
-  return colorBonusTable[colorCount - 1]
+function getColorBonus(vanished) {
+  const colorCount = _.uniq(vanished.map(c => c.color)).length;
+  return colorBonusTable[colorCount - 1];
 }
 
 function getChainBonus(chainCount) {
-  return chainBonusTable[chainCount - 1]
+  return chainBonusTable[chainCount - 1];
 }
 
-
+export function calcChainStepScore(chainCount, connections) {
+  const vanished = connections.filter(c => c.puyos.length >= 4);
+  const score = 10 * vanished.reduce((acc, c) => acc + c.puyos.length, 0) * (
+    getConnectionBonus(vanished) +
+    getColorBonus(vanished) +
+    getChainBonus(chainCount));
+  return score === 0 ? 40 : score;
+}
 

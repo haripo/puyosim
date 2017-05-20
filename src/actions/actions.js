@@ -24,19 +24,6 @@ export const hideHighlights = () => {
   };
 };
 
-export const vanishPuyos = (positions) => {
-  return {
-    type: 'VANISH_PUYOS',
-    payload: { positions }
-  };
-};
-
-export const applyGravity = () => {
-  return {
-    type: 'APPLY_GRAVITY'
-  };
-};
-
 export const doChainVanishingPhase = () => {
   return {
     type: 'CHAIN_VANISHING_PHASE'

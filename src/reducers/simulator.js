@@ -8,6 +8,7 @@ import Immutable, { List, Map, Record } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
+import { calcChainStepScore } from '../utils/scoreCalculator';
 
 const queueLength = 128;
 
@@ -101,7 +102,7 @@ function vanishPuyos(state, action) {
         });
     });
     s.update('chain', chain => chain + 1);
-    //s.update('score', score => score + calcChainStepScore(chain, ));
+    s.update('score', score => score + calcChainStepScore(s.get('chain'), connections));
   })
 }
 
@@ -134,6 +135,10 @@ function finishDroppingAnimations(state, action) {
 
 function finishVanishingAnimations(state, action) {
   return state.set('vanishingPuyos', List());
+}
+
+function chainFinished(state, action) {
+  return state.set('chain', 0);
 }
 
 function undoField(state, action) {
@@ -171,6 +176,8 @@ const simulator = (state = initialState, action) => {
       return finishDroppingAnimations(state, action);
     case 'FINISH_VANISHING_ANIMATIONS':
       return finishVanishingAnimations(state, action);
+    case 'CHAIN_FINISHED':
+      return chainFinished(state, action);
     case 'UNDO_FIELD':
       return undoField(state, action);
     default:
@@ -183,6 +190,7 @@ export function canVanish(state) {
   return FieldUtils
     .getConnections(stack)
     .filter(c => c.puyos.length >= 4)
+    .length > 0
 }
 
 export function isActive(state) {
