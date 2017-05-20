@@ -86,18 +86,23 @@ function putNextPair(state, action) {
 }
 
 function vanishPuyos(state, action) {
+  const connections = FieldUtils.getConnections(state.get('stack'));
   return state.withMutations(s => {
-    action.payload.targets.forEach(target => {
-      s.update('vanishingPuyos', puyos => {
-        return puyos.push(Map({
-          row: target[0],
-          col: target[1],
-          color: state.getIn(['stack', target[0], target[1]])
-        }))
-      });
-      s.updateIn(['stack', target[0], target[1]], () => 0);
+    connections
+      .filter(c => c.puyos.length >= 4)
+      .forEach(connection => {
+        connection.puyos.forEach(puyo => {
+          s.update('vanishingPuyos', puyos => puyos.push({
+            row: puyo.row,
+            col: puyo.col,
+            color: connection.color
+          }));
+          s.updateIn(['stack', puyo.row, puyo.col], () => 0);
+        });
     });
-  });
+    s.update('chain', chain => chain + 1);
+    //s.update('score', score => score + calcChainStepScore(chain, ));
+  })
 }
 
 function applyGravity(state, action) {
@@ -141,10 +146,8 @@ function undoField(state, action) {
 const initialState = Map({
   queue: Immutable.fromJS(generateQueue()),
   stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
-  chain: Map({
-    count: 0,
-    isActive: false
-  }),
+  chain: 0,
+  score: 0,
   highlights: List(),
   ghosts: List(),
   droppingPuyos: List(),
@@ -175,25 +178,11 @@ const simulator = (state = initialState, action) => {
   }
 };
 
-/**
- * Selector function to get connected puyos
- * @returns {Array}
- */
-export function getConnectedPuyos(state) {
+export function canVanish(state) {
   const stack = state.simulator.get('stack');
-
-  let result = [];
-  for (let i = 0; i < fieldRows; i++) {
-    for (let j = 0; j < fieldCols; j++) {
-      if (stack.getIn([i, j]) !== 0) {
-        const count = FieldUtils.getConnectedCount(i, j, stack);
-        if (count >= 4) {
-          result.push([i, j]);
-        }
-      }
-    }
-  }
-  return result;
+  return FieldUtils
+    .getConnections(stack)
+    .filter(c => c.puyos.length >= 4)
 }
 
 export function isActive(state) {

@@ -87,24 +87,41 @@ export default class FieldUtils {
     return (0 <= p.row && p.row < fieldRows && 0 <= p.col && p.col < fieldCols);
   }
 
-  static getConnectedCount(row: Number, col: Number, stack): Number {
-    let checked = this.createField(fieldRows, fieldCols);
-    let find = null;
-    find = (r, c, puyo) => {
-      if (0 <= r && r < fieldRows && 0 <= c && c < fieldCols) {
-        if (puyo !== stack.getIn([r, c]) || checked[r][c]) {
-          return 0;
-        }
-        checked[r][c] = true;
-        return 1 +
-          find(r - 1, c, puyo) +
-          find(r, c - 1, puyo) +
-          find(r + 1, c, puyo) +
-          find(r, c + 1, puyo);
-      } else {
-        return 0;
+  static getConnections(stack) {
+    let connectionIds = this.createField(fieldRows, fieldCols);
+    let id = 0;
+
+    const search = (r, c, puyo) => {
+      if (puyo === stack.getIn([r, c]) && !connectionIds[r][c] &&
+        0 <= r && r < fieldRows &&
+        0 <= c && c < fieldCols) {
+        connectionIds[r][c] = id;
+        search(r - 1, c, puyo);
+        search(r, c - 1, puyo);
+        search(r + 1, c, puyo);
+        search(r, c + 1, puyo);
       }
     };
-    return find(row, col, stack.getIn([row, col]));
+
+    let result = [];
+
+    for (let row = 0; row < fieldRows; row++) {
+      for (let col = 0; col < fieldCols; col++) {
+        if (!stack.getIn([row, col])) continue;
+        if (connectionIds[row][col] === 0) {
+          id++;
+          search(row, col, stack.getIn([row, col]), id);
+
+          result[id - 1] = {
+            color: stack.getIn([row, col]),
+            puyos: [ { row, col } ]
+          };
+        } else {
+          result[connectionIds[row][col] - 1].puyos.push({ row, col })
+        }
+      }
+    }
+
+    return result;
   }
 }

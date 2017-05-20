@@ -1,7 +1,7 @@
 /* @flow */
 
 import { put, select, takeLatest } from 'redux-saga/effects';
-import { getConnectedPuyos } from '../reducers/simulator';
+import { canVanish } from '../reducers/simulator';
 
 function* doDroppingPhase() {
   yield put({
@@ -10,18 +10,17 @@ function* doDroppingPhase() {
 }
 
 function* doVanishingPhase() {
-  const targets = yield select(getConnectedPuyos);
+  const isChainProceed = yield select(canVanish);
 
   // chain is finished
-  if (targets.length > 0) {
+  if (isChainProceed) {
     yield put({
       type: 'VANISH_PUYOS',
-      payload: {
-        targets
-      }
     });
   } else {
-    yield put({ type: 'CHAIN_FINISHED' });
+    yield put({
+      type: 'CHAIN_FINISHED'
+    });
   }
 }
 
