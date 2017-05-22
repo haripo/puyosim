@@ -8,6 +8,7 @@ import { StyleSheet, ToolbarAndroid, View } from 'react-native';
 import { contentsMargin } from '../utils/constants';
 import Field from './Field';
 import NextWindow from './NextWindow';
+import NoticePuyos from './NoticePuyos';
 
 export default class Simulator extends Component {
   constructor() {
@@ -51,6 +52,8 @@ export default class Simulator extends Component {
             <NextWindow
               next={ this.props.next }
               doubleNext={ this.props.doubleNext }/>
+            <NoticePuyos score={ this.props.score }>
+            </NoticePuyos>
           </View>
         </View>
       </View>

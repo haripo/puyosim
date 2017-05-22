@@ -46,7 +46,7 @@ function getConnectionBonus(vanished) {
   return _.sum(vanished
     .map(c => {
       const connection = c.puyos.length;
-      return connectionBonusTable[connection < 7 ? connection - 4 : 7];
+      return connectionBonusTable[connection < 11 ? connection - 4 : 7];
     }))
 }
 

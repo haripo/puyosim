@@ -15,7 +15,7 @@ function* doVanishingPhase() {
   // chain is finished
   if (isChainProceed) {
     yield put({
-      type: 'VANISH_PUYOS',
+      type: 'VANISH_PUYOS'
     });
   } else {
     yield put({
