@@ -1,9 +1,3 @@
-/**
- * Show highlight on the field
- * @param state
- * @param action
- * @returns new state
- */
 import Immutable, { List, Map, Record } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
@@ -102,7 +96,10 @@ function vanishPuyos(state, action) {
         });
     });
     s.update('chain', chain => chain + 1);
-    s.update('score', score => score + calcChainStepScore(s.get('chain'), connections));
+    s.update('score', score => {
+      const chain = s.get('chain');
+      return (chain === 1 ? 0 : score) + calcChainStepScore(chain, connections)
+    });
   })
 }
 
