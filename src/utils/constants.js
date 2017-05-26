@@ -15,7 +15,6 @@ export const fieldRows = 13;
 export const fieldCols = 6;
 
 export const contentsMargin = 3;
+export const contentsPadding = 3;
 
-export const nextWindowPadding = 3;
-
-export const puyoSize = (screen.height - contentsMargin * 2) / fieldRows;
+export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 4) / (fieldRows + 2);

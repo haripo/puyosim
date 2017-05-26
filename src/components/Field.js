@@ -6,7 +6,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
-import { fieldCols, fieldRows, puyoSize } from '../utils/constants';
+import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { launchAnimation } from '../utils/animation'
@@ -125,8 +125,8 @@ export default class Field extends Component {
         return (
           <View
             style={ styles.highlight }
-            top={ highlight.row * puyoSize }
-            left={ highlight.col * puyoSize }>
+            top={ highlight.row * puyoSize + contentsPadding }
+            left={ highlight.col * puyoSize + contentsPadding }>
           </View>
         );
       });
@@ -139,8 +139,8 @@ export default class Field extends Component {
               <Puyo
                 size={ puyoSize }
                 puyo={ puyo }
-                x={ col * puyoSize }
-                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) }/>
+                x={ col * puyoSize + contentsPadding }
+                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }/>
             );
           });
         }));
@@ -149,8 +149,8 @@ export default class Field extends Component {
         <Puyo
           size={ puyoSize }
           puyo={ vanishing.color }
-          x={ vanishing.col * puyoSize }
-          y={ vanishing.row * puyoSize }
+          x={ vanishing.col * puyoSize + contentsPadding }
+          y={ vanishing.row * puyoSize + contentsPadding }
           a={ vanishing.value }/>
       ));
 
@@ -159,8 +159,8 @@ export default class Field extends Component {
           <GhostPuyo
             size={ puyoSize }
             puyo={ ghost.color }
-            x={ ghost.col * puyoSize }
-            y={ ghost.row * puyoSize }/>
+            x={ ghost.col * puyoSize + contentsPadding }
+            y={ ghost.row * puyoSize + contentsPadding }/>
         );
       });
 
@@ -188,8 +188,8 @@ export default class Field extends Component {
 
 const styles = StyleSheet.create({
   field: {
-    width: puyoSize * fieldCols,
-    height: puyoSize * fieldRows
+    width: puyoSize * fieldCols + contentsPadding * 2,
+    height: puyoSize * fieldRows + contentsPadding * 2
   },
   puyo: {
     width: puyoSize,

@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { nextWindowPadding, puyoSize } from '../utils/constants';
+import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 
 /**
@@ -19,25 +19,25 @@ export default class NextWindow extends Component {
           <Puyo
             puyo={ next[0] }
             size={ puyoSize }
-            x={ nextWindowPadding }
-            y={ nextWindowPadding }/>
+            x={ contentsPadding }
+            y={ contentsPadding }/>
           <Puyo
             puyo={ next[1] }
             size={ puyoSize }
-            x={ nextWindowPadding }
-            y={ nextWindowPadding + puyoSize }/>
+            x={ contentsPadding }
+            y={ contentsPadding + puyoSize }/>
         </View>
         <View style={ styles.nextWindow }>
           <Puyo
             puyo={ doubleNext[0] }
             size={ puyoSize }
-            x={ nextWindowPadding }
-            y={ nextWindowPadding }/>
+            x={ contentsPadding }
+            y={ contentsPadding }/>
           <Puyo
             puyo={ doubleNext[1] }
             size={ puyoSize }
-            x={ nextWindowPadding}
-            y={ nextWindowPadding + puyoSize}/>
+            x={ contentsPadding}
+            y={ contentsPadding + puyoSize}/>
         </View>
       </View>
     );
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#BBBBBB'
   },
   nextWindow: {
-    width: puyoSize + nextWindowPadding * 2,
-    height: puyoSize * 2 + nextWindowPadding * 2,
+    width: puyoSize + contentsPadding * 2,
+    height: puyoSize * 2 + contentsPadding * 2,
     justifyContent: 'center',
     alignItems: 'center'
   }

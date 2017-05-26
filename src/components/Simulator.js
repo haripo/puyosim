@@ -4,11 +4,12 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, ToolbarAndroid, View } from 'react-native';
+import { StyleSheet, Text, ToolbarAndroid, View } from 'react-native';
 import { contentsMargin } from '../utils/constants';
 import Field from './Field';
 import NextWindow from './NextWindow';
 import NoticePuyos from './NoticePuyos';
+import HandlingPuyos from './HandlingPuyos';
 
 export default class Simulator extends Component {
   constructor() {
@@ -35,23 +36,33 @@ export default class Simulator extends Component {
           title='ぷよシミュレータ'
           onActionSelected={ ::this.handleToolbarAction }/>
         <View style={ styles.contents }>
-          <Field
-            stack={ this.props.stack }
-            highlights={ this.props.highlights }
-            ghosts={ this.props.ghosts }
-            droppingPuyos={ this.props.droppingPuyos }
-            vanishingPuyos={ this.props.vanishingPuyos }
-            isActive={ this.props.isActive }
-            style={ styles.field }
-            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-            onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-            onSwiping={ this.props.onSwiping }
-            onSwipeEnd={ this.props.onSwipeEnd }>
-          </Field>
+          <View>
+            <HandlingPuyos>
+            </HandlingPuyos>
+            <Field
+              stack={ this.props.stack }
+              highlights={ this.props.highlights }
+              ghosts={ this.props.ghosts }
+              droppingPuyos={ this.props.droppingPuyos }
+              vanishingPuyos={ this.props.vanishingPuyos }
+              isActive={ this.props.isActive }
+              style={ styles.field }
+              onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+              onSwiping={ this.props.onSwiping }
+              onSwipeEnd={ this.props.onSwipeEnd }>
+            </Field>
+          </View>
           <View style={ styles.head }>
+            <Text>
+              NEXT
+            </Text>
             <NextWindow
               next={ this.props.next }
               doubleNext={ this.props.doubleNext }/>
+            <Text>
+              おじゃまぷよ
+            </Text>
             <NoticePuyos score={ this.props.score }>
             </NoticePuyos>
           </View>
@@ -80,7 +91,8 @@ const styles = StyleSheet.create({
   },
   head: {
     flex: 1,
-    margin: contentsMargin
+    marginTop: contentsMargin,
+    marginRight: contentsMargin
   },
   field: {
     backgroundColor: '#BBBBBB',
