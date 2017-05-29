@@ -139,9 +139,14 @@ function chainFinished(state, action) {
 }
 
 function undoField(state, action) {
+  if (state.get('history').size === 0) {
+    return state;
+  }
   return state
     .set('queue', state.getIn(['history', 0, 'queue']))
     .set('stack', state.getIn(['history', 0, 'stack']))
+    .set("vanishingPuyos", List())
+    .set("droppingPuyos", List())
     .update('history', history => history.shift())
 }
 

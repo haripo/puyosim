@@ -1,6 +1,4 @@
 
-
-
 export function launchAnimation(func) {
   let quit = false;
   let steps = 0;
@@ -18,6 +16,6 @@ export function launchAnimation(func) {
       quit = !func(steps);
       steps++;
     };
-    f()
+    requestAnimationFrame(f)
   });
 }

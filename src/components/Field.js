@@ -44,17 +44,29 @@ export default class Field extends Component {
     if (vanishings.length === 0 && nextProps.vanishingPuyos.length !== 0) {
       this.launchVanishingAnimation(nextProps.vanishingPuyos)
     }
+
+    if (nextProps.vanishingPuyos.length === 0) {
+      this.setState({ vanishings: [] });
+    }
+
+    if (nextProps.droppingPuyos.length === 0) {
+      this.setState({ droppings: [] });
+    }
   }
 
   launchDroppingAnimation(droppingPuyos) {
+    const droppingSpeed = puyoSize / 8;
+    const easingFunction = (p, step) => (p.row - p.altitude) * puyoSize + step * droppingSpeed;
+
+    this.setState({
+      droppings: droppingPuyos.map(p => ({ ...p, value: easingFunction(p, 0) }))
+    });
+
     launchAnimation(step => {
-      const _step = step * puyoSize / 8;
-      const animatingPuyos = droppingPuyos
-        .filter(p => _step < p.altitude * puyoSize)
-        .map(p => {
-          const value = (p.row - p.altitude) * puyoSize + _step;
-          return { ...p, value };
-        });
+      const animatingPuyos = this.state.droppings
+        .filter(p => step * droppingSpeed < p.altitude * puyoSize)
+        .map(p => ({ ...p, value: easingFunction(p, step) }));
+
       this.setState({ droppings: animatingPuyos });
       return animatingPuyos.length > 0;
     }).then(() => {
@@ -63,12 +75,16 @@ export default class Field extends Component {
   }
 
   launchVanishingAnimation(vanishingPuyos) {
+    this.setState({
+      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0.3 }))
+    });
+    const easingFunction = step => step % 2 === 0 ? 0.3 : 1;
+
     launchAnimation((step) => {
-      const animatingPuyos = vanishingPuyos
+      const animatingPuyos = this.state.vanishings
         .filter(p => step < 30)
         .map(p => {
-          const value = step % 2 === 0 ? 0.3 : 1;
-          return { ...p, value };
+          return { ...p, value: easingFunction(step) };
         });
       this.setState({ vanishings: animatingPuyos });
       return animatingPuyos.length > 0
