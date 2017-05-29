@@ -24,7 +24,7 @@ export default class FieldUtils {
    */
   static getDropPosition(position: Position, stack: Stack): Position {
     let i = fieldRows - 1;
-    while (stack.get(i).get(position.col) !== 0) {
+    while (stack.get(i) && stack.get(i).get(position.col) !== 0) {
       i--;
     }
     return {
@@ -47,7 +47,11 @@ export default class FieldUtils {
           drop1.row -= 1;
         }
       }
-      return [drop1, drop2];
+      if (drop1.row < 0 || drop2.row < 0) {
+        return null
+      } else {
+        return [drop1, drop2];
+      }
     }
 
     return null;
@@ -92,9 +96,8 @@ export default class FieldUtils {
     let id = 0;
 
     const search = (r, c, puyo) => {
-      if (puyo === stack.getIn([r, c]) && !connectionIds[r][c] &&
-        0 <= r && r < fieldRows &&
-        0 <= c && c < fieldCols) {
+      if (0 <= r && r < fieldRows && 0 <= c && c < fieldCols &&
+        puyo === stack.getIn([r, c]) && !connectionIds[r][c]) {
         connectionIds[r][c] = id;
         search(r - 1, c, puyo);
         search(r, c - 1, puyo);
