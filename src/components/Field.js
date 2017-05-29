@@ -5,7 +5,7 @@
 
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { PanResponder, StyleSheet, View } from 'react-native';
+import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
@@ -197,6 +197,7 @@ export default class Field extends Component {
         style={ [this.props.style, styles.field] }
         { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
+        <Image source={ require('../../assets/cross.png') } style={ styles.cross }/>
       </View>
     );
   }
@@ -221,5 +222,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: puyoSize,
     height: puyoSize
+  },
+  cross: {
+    position: 'absolute',
+    width: puyoSize,
+    height: puyoSize,
+    top: puyoSize,
+    left: puyoSize * 2
   }
 });

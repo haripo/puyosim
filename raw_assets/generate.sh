@@ -11,4 +11,8 @@ mv cropped_ojama_002.png ../assets/ojama_stone.png
 mv cropped_ojama_003.png ../assets/ojama_mushroom.png
 mv cropped_ojama_004.png ../assets/ojama_star.png
 mv cropped_ojama_005.png ../assets/ojama_crown.png
+
+convert misc.xcf -crop 16x16 -sample 400% cropped_misc_%03d.png
+mv cropped_misc_000.png ../assets/cross.png
+
 rm -f cropped_*
