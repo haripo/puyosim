@@ -1,8 +1,19 @@
+/**
+ * Show highlights
+ * @param state
+ * @param action
+ */
 import Immutable, { List, Map, Record } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
 import { calcChainStepScore } from '../utils/scoreCalculator';
+import {
+  APPLY_GRAVITY, CHAIN_FINISHED, FINISH_DROPPING_ANIMATIONS, FINISH_VANISHING_ANIMATIONS, HIDE_HIGHLIGHTS,
+  PUT_NEXT_PAIR,
+  SHOW_HIGHLIGHTS, UNDO_FIELD,
+  VANISH_PUYOS
+} from '../actions/actions';
 
 const queueLength = 128;
 
@@ -29,11 +40,6 @@ function makeHistoryRecord(state) {
   });
 }
 
-/**
- * Show highlights
- * @param state
- * @param action
- */
 function showHighlights(state, action) {
   const { position, direction } = action.payload;
   const highlightPositions = FieldUtils.getHighlightPositions(position, direction);
@@ -164,23 +170,23 @@ const initialState = Map({
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
-    case 'SHOW_HIGHLIGHTS':
+    case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
-    case 'HIDE_HIGHLIGHTS':
+    case HIDE_HIGHLIGHTS:
       return hideHighlights(state, action);
-    case 'PUT_NEXT_PAIR':
+    case PUT_NEXT_PAIR:
       return putNextPair(state, action);
-    case 'VANISH_PUYOS':
+    case VANISH_PUYOS:
       return vanishPuyos(state, action);
-    case 'APPLY_GRAVITY':
+    case APPLY_GRAVITY:
       return applyGravity(state, action);
-    case 'FINISH_DROPPING_ANIMATIONS':
+    case FINISH_DROPPING_ANIMATIONS:
       return finishDroppingAnimations(state, action);
-    case 'FINISH_VANISHING_ANIMATIONS':
+    case FINISH_VANISHING_ANIMATIONS:
       return finishVanishingAnimations(state, action);
-    case 'CHAIN_FINISHED':
+    case CHAIN_FINISHED:
       return chainFinished(state, action);
-    case 'UNDO_FIELD':
+    case UNDO_FIELD:
       return undoField(state, action);
     default:
       return state;
