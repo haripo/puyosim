@@ -4,16 +4,21 @@
  * @param action
  */
 import Immutable, { List, Map, Record } from 'immutable';
+import {
+  APPLY_GRAVITY,
+  CHAIN_FINISHED,
+  FINISH_DROPPING_ANIMATIONS,
+  FINISH_VANISHING_ANIMATIONS,
+  HIDE_HIGHLIGHTS,
+  PUT_NEXT_PAIR,
+  SHOW_HIGHLIGHTS,
+  UNDO_FIELD,
+  VANISH_PUYOS
+} from '../actions/actions';
 import { fieldCols, fieldRows } from '../utils/constants';
 
 import FieldUtils from '../utils/FieldUtils';
 import { calcChainStepScore } from '../utils/scoreCalculator';
-import {
-  APPLY_GRAVITY, CHAIN_FINISHED, FINISH_DROPPING_ANIMATIONS, FINISH_VANISHING_ANIMATIONS, HIDE_HIGHLIGHTS,
-  PUT_NEXT_PAIR,
-  SHOW_HIGHLIGHTS, UNDO_FIELD,
-  VANISH_PUYOS
-} from '../actions/actions';
 
 const queueLength = 128;
 
@@ -100,13 +105,13 @@ function vanishPuyos(state, action) {
           }));
           s.updateIn(['stack', puyo.row, puyo.col], () => 0);
         });
-    });
+      });
     s.update('chain', chain => chain + 1);
     s.update('score', score => {
       const chain = s.get('chain');
-      return (chain === 1 ? 0 : score) + calcChainStepScore(chain, connections)
+      return (chain === 1 ? 0 : score) + calcChainStepScore(chain, connections);
     });
-  })
+  });
 }
 
 function applyGravity(state, action) {
@@ -151,9 +156,9 @@ function undoField(state, action) {
   return state
     .set('queue', state.getIn(['history', 0, 'queue']))
     .set('stack', state.getIn(['history', 0, 'stack']))
-    .set("vanishingPuyos", List())
-    .set("droppingPuyos", List())
-    .update('history', history => history.shift())
+    .set('vanishingPuyos', List())
+    .set('droppingPuyos', List())
+    .update('history', history => history.shift());
 }
 
 const initialState = Map({
@@ -196,9 +201,9 @@ const simulator = (state = initialState, action) => {
 export function canVanish(state) {
   const stack = state.simulator.get('stack');
   return FieldUtils
-    .getConnections(stack)
-    .filter(c => c.puyos.length >= 4)
-    .length > 0
+      .getConnections(stack)
+      .filter(c => c.puyos.length >= 4)
+      .length > 0;
 }
 
 export function isActive(state) {
