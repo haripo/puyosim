@@ -10,19 +10,37 @@ import Field from './Field';
 import NextWindow from './NextWindow';
 import NoticePuyos from './NoticePuyos';
 import HandlingPuyos from './HandlingPuyos';
+import { Alert } from 'react-native';
+import * as _ from 'lodash';
 
 export default class Simulator extends Component {
   constructor() {
     super();
     this.actions = [
-      { title: 'Undo' }
+      { title: '1 手戻す' },
+      { title: '初手に戻す' },
+      { title: 'リスタート' }
     ];
   }
 
   handleToolbarAction(position) {
-    switch (this.actions[position].title) {
-      case 'Undo':
+    switch (position) {
+      case 0:
         this.props.onUndoSelected();
+        break;
+      case 1:
+        this.props.onResetSelected();
+        break;
+      case 2:
+        Alert.alert(
+          'リスタート',
+          'ツモが再生成されます。よろしいですか？',
+          [
+            { text: 'Cancel', onPress: _.noop, style: 'cancel' },
+            { text: 'OK', onPress: this.props.onRestartSelected },
+          ],
+          { cancelable: false }
+        );
         break;
     }
   }

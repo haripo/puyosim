@@ -20,6 +20,8 @@ export const APPLY_GRAVITY = 'APPLY_GRAVITY';
 export const VANISH_PUYOS = 'VANISH_PUYOS';
 export const CHAIN_FINISHED = 'CHAIN_FINISHED';
 export const UNDO_FIELD = 'UNDO_FIELD';
+export const RESET_FIELD = 'RESET_FIELD';
+export const RESTART = 'RESTART';
 
 export const putNextPair = (position, direction) => {
   return {
@@ -50,3 +52,5 @@ export const applyGravity = makeActionCreator(APPLY_GRAVITY);
 export const vanishPuyos = makeActionCreator(VANISH_PUYOS);
 export const chainFinished = makeActionCreator(CHAIN_FINISHED);
 export const undoField = makeActionCreator(UNDO_FIELD);
+export const resetField = makeActionCreator(RESET_FIELD);
+export const restart = makeActionCreator(RESTART);

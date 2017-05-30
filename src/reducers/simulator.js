@@ -10,7 +10,7 @@ import {
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
   HIDE_HIGHLIGHTS,
-  PUT_NEXT_PAIR,
+  PUT_NEXT_PAIR, RESET_FIELD, RESTART,
   SHOW_HIGHLIGHTS,
   UNDO_FIELD,
   VANISH_PUYOS
@@ -161,17 +161,30 @@ function undoField(state, action) {
     .update('history', history => history.shift());
 }
 
-const initialState = Map({
-  queue: Immutable.fromJS(generateQueue()),
-  stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
-  chain: 0,
-  score: 0,
-  highlights: List(),
-  ghosts: List(),
-  droppingPuyos: List(),
-  vanishingPuyos: List(),
-  history: List()
-});
+function resetField(state, action) {
+  return initialState
+}
+
+function restart(state, action) {
+  initialState = createInitialState();
+  return initialState
+}
+
+function createInitialState() {
+  return Map({
+    queue: Immutable.fromJS(generateQueue()),
+    stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
+    chain: 0,
+    score: 0,
+    highlights: List(),
+    ghosts: List(),
+    droppingPuyos: List(),
+    vanishingPuyos: List(),
+    history: List()
+  });
+}
+
+let initialState = createInitialState();
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
@@ -193,6 +206,10 @@ const simulator = (state = initialState, action) => {
       return chainFinished(state, action);
     case UNDO_FIELD:
       return undoField(state, action);
+    case RESET_FIELD:
+      return resetField(state, action);
+    case RESTART:
+      return restart(state, action);
     default:
       return state;
   }

@@ -7,7 +7,9 @@ import {
   hideHighlights,
   putNextPair,
   showHighlights,
-  undoField
+  undoField,
+  resetField,
+  restart
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import toJS from '../utils/toJS';
@@ -48,6 +50,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     onUndoSelected: () => {
       dispatch(undoField())
+    },
+    onResetSelected: () => {
+      dispatch(resetField())
+    },
+    onRestartSelected: () => {
+      dispatch(restart())
     }
   };
 };
