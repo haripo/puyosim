@@ -4,8 +4,8 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, ToolbarAndroid, View } from 'react-native';
-import { contentsMargin } from '../utils/constants';
+import { Button, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
+import { contentsMargin, contentsPadding, controllerButtonSize } from '../utils/constants';
 import Field from './Field';
 import NextWindow from './NextWindow';
 import NoticePuyos from './NoticePuyos';
@@ -71,18 +71,41 @@ export default class Simulator extends Component {
               onSwipeEnd={ this.props.onSwipeEnd }>
             </Field>
           </View>
-          <View style={ styles.head }>
-            <Text>
-              NEXT
-            </Text>
-            <NextWindow
-              next={ this.props.next }
-              doubleNext={ this.props.doubleNext }/>
-            <Text>
-              おじゃまぷよ
-            </Text>
-            <NoticePuyos score={ this.props.score }>
-            </NoticePuyos>
+          <View style={ styles.side }>
+            <View style={ styles.sideHead }>
+              <Text>
+                NEXT
+              </Text>
+              <NextWindow
+                next={ this.props.next }
+                doubleNext={ this.props.doubleNext }/>
+              <Text>
+                おじゃまぷよ
+              </Text>
+              <NoticePuyos score={ this.props.score }>
+              </NoticePuyos>
+            </View>
+            <View style={{ flexDirection: 'column' }}>
+              <View style={ styles.rotateButtons }>
+                <TouchableOpacity style={ styles.controllerButton }>
+                  <Text>L</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={ styles.controllerButton }>
+                  <Text>R</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={ styles.horizontalArrowButtons }>
+                <TouchableOpacity style={ styles.controllerButton }>
+                  <Text>L</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={ styles.controllerButton }>
+                  <Text>R</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={ styles.controllerFullWidthButton }>
+                <Text>D</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -107,10 +130,38 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'row'
   },
-  head: {
+  side: {
     flex: 1,
+    justifyContent: 'space-between',
     marginTop: contentsMargin,
-    marginRight: contentsMargin
+    marginRight: contentsMargin,
+    marginBottom: contentsMargin
+  },
+  sideHead: {
+    flex: 1,
+  },
+  rotateButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  horizontalArrowButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  controllerButton: {
+    backgroundColor: '#BBF',
+    width: controllerButtonSize,
+    height: controllerButtonSize,
+    marginBottom: contentsMargin,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  controllerFullWidthButton: {
+    backgroundColor: '#BBF',
+    width: controllerButtonSize * 2 + contentsMargin,
+    height: controllerButtonSize,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   field: {
     backgroundColor: '#BBBBBB',
