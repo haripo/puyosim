@@ -58,6 +58,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDropPressed: () => {
       dispatch(putNextPair());
+      dispatch(doChainVanishingPhase());
     },
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());
