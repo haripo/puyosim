@@ -16,9 +16,9 @@ import {
   VANISH_PUYOS
 } from '../actions/actions';
 import { fieldCols, fieldRows } from '../utils/constants';
-
 import FieldUtils from '../utils/FieldUtils';
 import { calcChainStepScore } from '../utils/scoreCalculator';
+import PendingPair from '../models/PendingPair';
 
 const queueLength = 128;
 
@@ -47,16 +47,13 @@ function makeHistoryRecord(state) {
 
 function showHighlights(state, action) {
   const { position, direction } = action.payload;
-  const highlightPositions = FieldUtils.getHighlightPositions(position, direction);
-  let ghostPositions = FieldUtils.getDropPositions(position, direction, state.get('stack'));
-  if (ghostPositions) {
-    ghostPositions[0].color = state.getIn(['queue', 0, 0]);
-    ghostPositions[1].color = state.getIn(['queue', 0, 1]);
-    return state
-      .set('highlights', Immutable.fromJS(highlightPositions))
-      .set('ghosts', Immutable.fromJS(ghostPositions));
-  }
-  return state;
+  return state
+    .set('pendingPair', new PendingPair(
+      position.col,
+      direction,
+      state.getIn(['queue', 0, 0]),
+      state.getIn(['queue', 0, 1])
+    ))
 }
 
 /**
@@ -78,16 +75,17 @@ function putNextPair(state, action) {
   const stack = state.get('stack');
   const pair = state.get('queue').get(0);
 
-  const { position, direction } = action.payload;
-  const positions = FieldUtils.getDropPositions(position, direction, stack);
+  const positions = getDropPositions(state);
 
   if (positions) {
     return state
       .update('queue', q => q.shift().push(pair))
       .updateIn(['stack', positions[0].row, positions[0].col], () => pair.get(0))
       .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1))
-      .update('history', history => history.unshift(makeHistoryRecord(state)));
+      .update('history', history => history.unshift(makeHistoryRecord(state)))
+      .update('pendingPair', pair => pair.resetPosition());
   }
+
   return state;
 }
 
@@ -176,8 +174,7 @@ function createInitialState() {
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
     score: 0,
-    highlights: List(),
-    ghosts: List(),
+    pendingPair: new PendingPair(),
     droppingPuyos: List(),
     vanishingPuyos: List(),
     history: List()
@@ -228,6 +225,45 @@ export function isActive(state) {
     state.simulator.get('droppingPuyos').count() > 0 ||
     state.simulator.get('vanishingPuyos').count() > 0
   );
+}
+
+export function getGhost(state) {
+  const position = getDropPositions(state);
+  if (position) {
+    return [
+      { ...position[0], color: state.getIn(['queue', 0, 0]) },
+      { ...position[1], color: state.getIn(['queue', 0, 1]) }
+    ]
+  } else {
+    return [];
+  }
+}
+
+function getDropPositions(state) {
+  const pair = state.get('pendingPair');
+  const stack = state.get('stack');
+
+  const getDropRow = (col) => {
+    let i = fieldRows - 1;
+    while (stack.get(i) && stack.getIn([i, col]) !== 0) {
+      i--;
+    }
+    return i;
+  };
+
+  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol };
+  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol };
+  if (drop1.col === drop2.col && drop1.row === drop2.row) {
+    if (pair.direction === 'bottom') {
+      drop1.row -= 1;
+    } else {
+      drop2.row -= 1;
+    }
+  }
+  if (FieldUtils.isValidPosition(drop1) && FieldUtils.isValidPosition(drop2)) {
+    return [drop1, drop2];
+  }
+  return null;
 }
 
 export default simulator;

@@ -33,31 +33,6 @@ export default class FieldUtils {
     };
   }
 
-  static getDropPositions(position: Position, direction: Position, stack: Stack) {
-    const p1 = position;
-    const p2 = this.addPosition(position, direction);
-
-    if (this.isValidPosition(p1) && this.isValidPosition(p2)) {
-      const drop1 = this.getDropPosition(p1, stack);
-      const drop2 = this.getDropPosition(p2, stack);
-      if (drop1.col === drop2.col && drop1.row === drop2.row) {
-        if (direction.row < 0) {
-          drop2.row -= 1;
-        } else {
-          drop1.row -= 1;
-        }
-      }
-      if (drop1.row < 0 || drop2.row < 0) {
-        return null
-      } else {
-        return [drop1, drop2];
-      }
-    }
-
-    return null;
-  }
-
-
   static getHighlightPositions(position, direction) {
     const result = [
       position,

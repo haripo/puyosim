@@ -103,15 +103,9 @@ export default class Field extends Component {
   gestureStateToDirection(gestureState: Object) {
     const { dx, dy } = gestureState;
     if (Math.abs(dx) > Math.abs(dy)) {
-      return {
-        row: 0,
-        col: dx > 0 ? 1 : -1
-      };
+      return dx > 0 ? 'right' : 'left'
     } else {
-      return {
-        row: dy > 0 ? 1 : -1,
-        col: 0
-      };
+      return dy > 0 ? 'bottom' : 'top'
     }
   }
 

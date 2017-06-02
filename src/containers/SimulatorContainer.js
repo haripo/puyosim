@@ -6,14 +6,14 @@ import {
   finishVanishingAnimations,
   hideHighlights,
   putNextPair,
-  showHighlights,
-  undoField,
   resetField,
-  restart
+  restart,
+  showHighlights,
+  undoField
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
+import { getGhost, isActive } from '../reducers/simulator';
 import toJS from '../utils/toJS';
-import { isActive } from '../reducers/simulator';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
@@ -22,8 +22,8 @@ const mapStateToProps = (state) => {
     next: simulator.getIn(['queue', 0]),
     doubleNext: simulator.getIn(['queue', 1]),
     score: simulator.get('score'),
-    highlights: simulator.get('highlights'),
-    ghosts: simulator.get('ghosts'),
+    highlights: [],
+    ghosts: getGhost(simulator),
     droppingPuyos: simulator.get('droppingPuyos'),
     vanishingPuyos: simulator.get('vanishingPuyos'),
     isActive: isActive(state)
@@ -49,13 +49,13 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(doChainDroppingPhase());
     },
     onUndoSelected: () => {
-      dispatch(undoField())
+      dispatch(undoField());
     },
     onResetSelected: () => {
-      dispatch(resetField())
+      dispatch(resetField());
     },
     onRestartSelected: () => {
-      dispatch(restart())
+      dispatch(restart());
     }
   };
 };
