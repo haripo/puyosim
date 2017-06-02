@@ -12,6 +12,10 @@ function makeActionCreator(type, ...argNames) {
 export const PUT_NEXT_PAIR = 'PUT_NEXT_PAIR';
 export const SHOW_HIGHLIGHTS = 'SHOW_HIGHLIGHTS';
 export const HIDE_HIGHLIGHTS = 'HIDE_HIGHLIGHTS';
+export const ROTATE_HIGHLIGHTS_LEFT = 'ROTATE_HIGHLIGHTS_LEFT';
+export const ROTATE_HIGHLIGHTS_RIGHT = 'ROTATE_HIGHLIGHTS_RIGHT';
+export const MOVE_HIGHLIGHTS_LEFT = 'MOVE_HIGHLIGHTS_LEFT';
+export const MOVE_HIGHLIGHTS_RIGHT = 'MOVE_HIGHLIGHTS_RIGHT';
 export const DO_CHAIN_VANISHING_PHASE = 'DO_CHAIN_VANISHING_PHASE';
 export const DO_CHAIN_DROPPING_PHASE = 'DO_CHAIN_DROPPING_PHASE';
 export const FINISH_VANISHING_ANIMATIONS = 'FINISH_VANISHING_ANIMATIONS';
@@ -23,27 +27,31 @@ export const UNDO_FIELD = 'UNDO_FIELD';
 export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
 
-export const putNextPair = (position, direction) => {
+export const putNextPair = (position, rotation) => {
   return {
     type: 'PUT_NEXT_PAIR',
     payload: {
       position,
-      direction
+      rotation
     }
   };
 };
 
-export const showHighlights = (position, direction) => {
+export const showHighlights = (position, rotation) => {
   return {
     type: 'SHOW_HIGHLIGHTS',
     payload: {
       position,
-      direction
+      rotation
     }
   };
 };
 
 export const hideHighlights = makeActionCreator(HIDE_HIGHLIGHTS);
+export const rotateHighlightsLeft = makeActionCreator(ROTATE_HIGHLIGHTS_LEFT);
+export const rotateHighlightsRight = makeActionCreator(ROTATE_HIGHLIGHTS_RIGHT);
+export const moveHighlightsLeft = makeActionCreator(MOVE_HIGHLIGHTS_LEFT);
+export const moveHighlightsRight = makeActionCreator(MOVE_HIGHLIGHTS_RIGHT);
 export const doChainVanishingPhase = makeActionCreator(DO_CHAIN_VANISHING_PHASE);
 export const doChainDroppingPhase = makeActionCreator(DO_CHAIN_DROPPING_PHASE);
 export const finishDroppingAnimations = makeActionCreator(FINISH_DROPPING_ANIMATIONS);

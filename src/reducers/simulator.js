@@ -9,8 +9,8 @@ import {
   CHAIN_FINISHED,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
-  HIDE_HIGHLIGHTS,
-  PUT_NEXT_PAIR, RESET_FIELD, RESTART,
+  HIDE_HIGHLIGHTS, MOVE_HIGHLIGHTS_LEFT, MOVE_HIGHLIGHTS_RIGHT,
+  PUT_NEXT_PAIR, RESET_FIELD, RESTART, ROTATE_HIGHLIGHTS_LEFT, ROTATE_HIGHLIGHTS_RIGHT,
   SHOW_HIGHLIGHTS,
   UNDO_FIELD,
   VANISH_PUYOS
@@ -46,26 +46,30 @@ function makeHistoryRecord(state) {
 }
 
 function showHighlights(state, action) {
-  const { position, direction } = action.payload;
+  const { position, rotation } = action.payload;
   return state
     .set('pendingPair', new PendingPair(
       position.col,
-      direction,
+      rotation,
       state.getIn(['queue', 0, 0]),
       state.getIn(['queue', 0, 1])
     ))
 }
 
-/**
- * Hide highlights
- * @param state
- * @param action
- * @returns new state
- */
-function hideHighlights(state, action) {
-  return state
-    .set('highlights', List())
-    .set('ghosts', List());
+function rotateHighlightsLeft(state, action) {
+  return state.update('pendingPair', pair => pair.rotateLeft())
+}
+
+function rotateHighlightsRight(state, action) {
+  return state.update('pendingPair', pair => pair.rotateRight())
+}
+
+function moveHighlightsLeft(state, action) {
+  return state.update('pendingPair', pair => pair.moveLeft())
+}
+
+function moveHighlightsRight(state, action) {
+  return state.update('pendingPair', pair => pair.moveRight())
 }
 
 /**
@@ -169,12 +173,13 @@ function restart(state, action) {
 }
 
 function createInitialState() {
+  const queue = generateQueue();
   return Map({
-    queue: Immutable.fromJS(generateQueue()),
+    queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
     score: 0,
-    pendingPair: new PendingPair(),
+    pendingPair: new PendingPair(2, 'bottom', queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
     history: List()
@@ -187,8 +192,16 @@ const simulator = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
-    case HIDE_HIGHLIGHTS:
-      return hideHighlights(state, action);
+    // case HIDE_HIGHLIGHTS:
+    //   return hideHighlights(state, action);
+    case ROTATE_HIGHLIGHTS_LEFT:
+      return rotateHighlightsLeft(state, action);
+    case ROTATE_HIGHLIGHTS_RIGHT:
+      return rotateHighlightsRight(state, action);
+    case MOVE_HIGHLIGHTS_LEFT:
+      return moveHighlightsLeft(state, action);
+    case MOVE_HIGHLIGHTS_RIGHT:
+      return moveHighlightsRight(state, action);
     case PUT_NEXT_PAIR:
       return putNextPair(state, action);
     case VANISH_PUYOS:
@@ -254,7 +267,7 @@ function getDropPositions(state) {
   const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol };
   const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
-    if (pair.direction === 'bottom') {
+    if (pair.rotation === 'bottom') {
       drop1.row -= 1;
     } else {
       drop2.row -= 1;

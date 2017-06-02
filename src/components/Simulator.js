@@ -87,22 +87,32 @@ export default class Simulator extends Component {
             </View>
             <View style={{ flexDirection: 'column' }}>
               <View style={ styles.rotateButtons }>
-                <TouchableOpacity style={ styles.controllerButton }>
+                <TouchableOpacity
+                  style={ styles.controllerButton }
+                  onPress={ this.props.onRotateLeftPressed }>
                   <Text>L</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={ styles.controllerButton }>
+                <TouchableOpacity
+                  style={ styles.controllerButton }
+                  onPress={ this.props.onRotateRightPressed }>
                   <Text>R</Text>
                 </TouchableOpacity>
               </View>
               <View style={ styles.horizontalArrowButtons }>
-                <TouchableOpacity style={ styles.controllerButton }>
+                <TouchableOpacity
+                  style={ styles.controllerButton }
+                  onPress={ this.props.onMoveLeftPressed }>
                   <Text>L</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={ styles.controllerButton }>
+                <TouchableOpacity
+                  style={ styles.controllerButton }
+                  onPress={ this.props.onMoveRightPressed }>
                   <Text>R</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={ styles.controllerFullWidthButton }>
+              <TouchableOpacity
+                style={ styles.controllerFullWidthButton }
+                onPress={ this.props.onDropPressed }>
                 <Text>D</Text>
               </TouchableOpacity>
             </View>

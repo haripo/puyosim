@@ -5,9 +5,13 @@ import {
   finishDroppingAnimations,
   finishVanishingAnimations,
   hideHighlights,
+  moveHighlightsLeft,
+  moveHighlightsRight,
   putNextPair,
   resetField,
   restart,
+  rotateHighlightsLeft,
+  rotateHighlightsRight,
   showHighlights,
   undoField
 } from '../actions/actions';
@@ -32,13 +36,28 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSwiping: (position, direction) => {
-      dispatch(showHighlights(position, direction));
+    onSwiping: (position, rotation) => {
+      dispatch(showHighlights(position, rotation));
     },
-    onSwipeEnd: (position, direction) => {
+    onSwipeEnd: (position, rotation) => {
       dispatch(hideHighlights());
-      dispatch(putNextPair(position, direction));
+      dispatch(putNextPair(position, rotation));
       dispatch(doChainVanishingPhase());
+    },
+    onRotateRightPressed: () => {
+      dispatch(rotateHighlightsRight());
+    },
+    onRotateLeftPressed: () => {
+      dispatch(rotateHighlightsLeft());
+    },
+    onMoveRightPressed: () => {
+      dispatch(moveHighlightsRight());
+    },
+    onMoveLeftPressed: () => {
+      dispatch(moveHighlightsLeft());
+    },
+    onDropPressed: () => {
+      dispatch(putNextPair());
     },
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());

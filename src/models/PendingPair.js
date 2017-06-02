@@ -3,16 +3,23 @@ import { Record } from 'immutable';
 
 const initialState = {
   col: 2,
-  direction: null,
+  rotation: 'bottom',
   first: null,
   second: null
 };
 
+const rotations = [
+  'top',
+  'right',
+  'bottom',
+  'left'
+];
+
 export default class PendingPair extends Record(initialState) {
-  constructor(col, direction, first, second) {
+  constructor(col, rotation, first, second) {
     super({
       col,
-      direction,
+      rotation,
       first,
       second
     })
@@ -23,7 +30,7 @@ export default class PendingPair extends Record(initialState) {
   }
 
   get secondCol() {
-    switch (this.direction) {
+    switch (this.rotation) {
       case 'left':
         return this.col - 1;
       case 'right':
@@ -34,21 +41,26 @@ export default class PendingPair extends Record(initialState) {
   }
 
   resetPosition() {
-    return this.set('col', 2).set('direction', 'bottom')
+    return this.set('col', 2).set('rotation', 'bottom')
   }
 
   rotateLeft() {
+    return this.update('rotation', value => {
+      return rotations[(rotations.findIndex(x => x === value) - 1) % rotations.length]
+    })
   }
 
   rotateRight() {
-
+    return this.update('rotation', value => {
+      return rotations[(rotations.findIndex(x => x === value) + 1) % rotations.length]
+    })
   }
 
   moveLeft() {
-
+    return this.update('col', value => (0 < value ? value - 1 : value))
   }
 
   moveRight() {
-
+    return this.update('col', value => (value < 5 ? value + 1 : value))
   }
 }

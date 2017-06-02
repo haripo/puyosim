@@ -33,10 +33,10 @@ export default class FieldUtils {
     };
   }
 
-  static getHighlightPositions(position, direction) {
+  static getHighlightPositions(position, rotation) {
     const result = [
       position,
-      this.addPosition(position, direction)
+      this.addPosition(position, rotation)
     ];
     if (this.isValidPosition(result[0]) && this.isValidPosition(result[1])) {
       return result;
@@ -45,9 +45,9 @@ export default class FieldUtils {
   }
 
   /**
-   * Add two position, especially position and direction
-   * @param p position or direction object
-   * @param q position or direction object
+   * Add two position, especially position and rotation
+   * @param p position or rotation object
+   * @param q position or rotation object
    * @returns {{row: number, col: number}} position
    */
   static addPosition(p: Position, q: Position): Position {
