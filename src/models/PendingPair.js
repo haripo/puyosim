@@ -1,5 +1,6 @@
 
 import { Record } from 'immutable';
+import { fieldCols } from '../utils/constants';
 
 const initialState = {
   col: 2,
@@ -44,23 +45,41 @@ export default class PendingPair extends Record(initialState) {
     return this.set('col', 2).set('rotation', 'bottom')
   }
 
+  rotate(direction) {
+    const rotation = this.get('rotation');
+    const index = rotations.findIndex(x => x === rotation);
+    const newRotation = rotations[(index + rotations.length + direction) % rotations.length];
+
+    return this
+      .set('rotation', newRotation)
+      .update('col', col => {
+        if (col === 0 && newRotation === 'left') return 1;
+        if (col === fieldCols - 1 && newRotation === 'right') return fieldCols - 2;
+        return col;
+      })
+  }
+
   rotateLeft() {
-    return this.update('rotation', value => {
-      return rotations[(rotations.findIndex(x => x === value) - 1) % rotations.length]
-    })
+    return this.rotate(-1)
   }
 
   rotateRight() {
-    return this.update('rotation', value => {
-      return rotations[(rotations.findIndex(x => x === value) + 1) % rotations.length]
-    })
+    return this.rotate(1)
   }
 
   moveLeft() {
-    return this.update('col', value => (0 < value ? value - 1 : value))
+    const col = this.get('col');
+    if (col === 0 || (col === 1 && this.get('rotation') === 'left')) {
+      return this;
+    }
+    return this.update('col', value => value - 1)
   }
 
   moveRight() {
-    return this.update('col', value => (value < 5 ? value + 1 : value))
+    const col = this.get('col');
+    if (col === 5 || (col === 4 && this.get('rotation') === 'right')) {
+      return this;
+    }
+    return this.update('col', value => value + 1)
   }
 }
