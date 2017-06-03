@@ -46,7 +46,16 @@ function makeHistoryRecord(state) {
 }
 
 function showHighlights(state, action) {
-  const { position, rotation } = action.payload;
+  let { position, rotation } = action.payload;
+
+  if (position.col === 0 && rotation === 'left') {
+    position.col = 1
+  }
+
+  if (position.col === 5 && rotation === 'right') {
+    position.col = 4
+  }
+
   return state
     .set('pendingPair', new PendingPair(
       position.col,

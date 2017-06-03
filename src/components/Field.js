@@ -175,7 +175,7 @@ export default class Field extends Component {
       });
 
       return [
-        ghostDoms,
+        this.props.isActive ? ghostDoms : null,
         puyoDoms,
         highlightDoms,
         vanishingPuyoDoms
