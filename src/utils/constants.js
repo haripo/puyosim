@@ -17,7 +17,7 @@ export const fieldCols = 6;
 export const contentsMargin = 3;
 export const contentsPadding = 3;
 
-export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 4) / (fieldRows + 2);
+export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 4) / (fieldRows + 3);
 
 export const controllerButtonSize = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
 

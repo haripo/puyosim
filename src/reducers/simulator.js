@@ -252,6 +252,23 @@ export function getGhost(state) {
   }
 }
 
+export function getPendingPair(state) {
+  const pair = state.get('pendingPair');
+  const queue = state.getIn(['queue', 0]);
+
+  let secondRow = 1;
+  if (pair.rotation === 'bottom') {
+    secondRow = 2
+  } else if (pair.rotation === 'top') {
+    secondRow = 0
+  }
+
+  return [
+    { row: 1, col: pair.firstCol, color: queue.get(0) },
+    { row: secondRow, col: pair.secondCol, color: queue.get(1) }
+  ]
+}
+
 function getDropPositions(state) {
   const pair = state.get('pendingPair');
   const stack = state.get('stack');

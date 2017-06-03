@@ -55,7 +55,7 @@ export default class Simulator extends Component {
           onActionSelected={ ::this.handleToolbarAction }/>
         <View style={ styles.contents }>
           <View>
-            <HandlingPuyos pair={ this.props.ghosts }>
+            <HandlingPuyos pair={ this.props.pendingPair }>
             </HandlingPuyos>
             <Field
               stack={ this.props.stack }
