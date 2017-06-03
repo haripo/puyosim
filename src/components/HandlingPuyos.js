@@ -5,7 +5,6 @@ import React from 'react';
 import Puyo from './Puyo';
 import { puyoSize, contentsPadding, contentsMargin, fieldCols } from '../utils/constants';
 import { View } from 'react-native';
-import _ from 'lodash';
 
 export default class HandlingPuyos extends Puyo {
   render() {
