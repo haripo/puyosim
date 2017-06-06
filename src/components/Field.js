@@ -76,9 +76,9 @@ export default class Field extends Component {
 
   launchVanishingAnimation(vanishingPuyos) {
     this.setState({
-      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0.8 }))
+      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0 }))
     });
-    const easingFunction = step => step % 2 === 0 ? 0.8 : 1;
+    const easingFunction = step => step % 2 === 0 ? 0 : 1;
 
     launchAnimation((step) => {
       const animatingPuyos = this.state.vanishings

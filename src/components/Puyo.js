@@ -42,7 +42,7 @@ export default class Puyo extends PureComponent {
       left: this.props.x,
       width: this.props.size + 1,
       height: this.props.size + 1,
-      opacity: this.props.a || 1
+      opacity: this.props.a === undefined ? 1 : this.props.a
     };
   }
 
