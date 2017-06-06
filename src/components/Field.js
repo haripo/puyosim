@@ -76,9 +76,9 @@ export default class Field extends Component {
 
   launchVanishingAnimation(vanishingPuyos) {
     this.setState({
-      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0.3 }))
+      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0.8 }))
     });
-    const easingFunction = step => step % 2 === 0 ? 0.3 : 1;
+    const easingFunction = step => step % 2 === 0 ? 0.8 : 1;
 
     launchAnimation((step) => {
       const animatingPuyos = this.state.vanishings
@@ -144,25 +144,58 @@ export default class Field extends Component {
       const puyoDoms = _.flatten(stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
+            if (puyo === 0) return;
+
             const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
+            const getNeighbor = (r, c) => {
+              const p = stack[r][c];
+              const d = _.find(this.state.droppings, p => p.row === r && p.col === c);
+              return !d && p;
+            };
+
+            let connections = {};
+            if (!droppingInfo) {
+              connections = {
+                top: 0 < row ? getNeighbor(row - 1, col) === puyo : false,
+                bottom: row < fieldRows - 1 ? getNeighbor(row + 1, col) === puyo : false,
+                left: 0 < col ? getNeighbor(row, col - 1) === puyo : false,
+                right: col < fieldCols - 1 ? getNeighbor(row, col + 1) === puyo : false
+              };
+            }
+
             return (
               <Puyo
                 size={ puyoSize }
                 puyo={ puyo }
                 x={ col * puyoSize + contentsPadding }
-                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }/>
+                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }
+                connections={ connections } />
             );
           });
         }));
 
-      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => (
-        <Puyo
-          size={ puyoSize }
-          puyo={ vanishing.color }
-          x={ vanishing.col * puyoSize + contentsPadding }
-          y={ vanishing.row * puyoSize + contentsPadding }
-          a={ vanishing.value }/>
-      ));
+      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
+        const getNeighbor = (r, c) => {
+          const p = _.find(this.state.vanishings, p => p.row === r && p.col === c);
+          return p && p.color;
+        };
+        const { color, row, col } = vanishing;
+        const connections = {
+          bottom: row < fieldRows - 1 ? getNeighbor(row + 1, col) === color : false,
+          top: 0 < row ? getNeighbor(row - 1, col) === color : false,
+          right: col < fieldCols - 1 ? getNeighbor(row, col + 1) === color : false,
+          left: 0 < col ? getNeighbor(row, col - 1) === color : false
+        };
+        return (
+          <Puyo
+            size={ puyoSize }
+            puyo={ vanishing.color }
+            connections={ connections }
+            x={ vanishing.col * puyoSize + contentsPadding }
+            y={ vanishing.row * puyoSize + contentsPadding }
+            a={ vanishing.value }/>
+        )
+      });
 
       const ghostDoms = ghosts.map(ghost => {
         return (
