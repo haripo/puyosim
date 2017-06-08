@@ -169,7 +169,8 @@ export default class Field extends Component {
                 puyo={ puyo }
                 x={ col * puyoSize + contentsPadding }
                 y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }
-                connections={ connections } />
+                connections={ connections }
+                key={ `puyo-${row}-${col}` } />
             );
           });
         }));

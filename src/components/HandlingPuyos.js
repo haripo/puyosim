@@ -1,12 +1,12 @@
 /**
  * Component for render pair on handling state
  */
-import React from 'react';
+import React, { Component } from 'react';
 import Puyo from './Puyo';
 import { puyoSize, contentsPadding, fieldCols } from '../utils/constants';
 import { View } from 'react-native';
 
-export default class HandlingPuyos extends Puyo {
+export default class HandlingPuyos extends Component {
   render() {
     const { pair } = this.props;
 

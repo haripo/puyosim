@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Image, View } from 'react-native';
+import _ from 'lodash';
 
 const puyoImages = [
   null,
@@ -34,7 +35,11 @@ const connectionImages = [
 /**
  * Component for render single puyo
  */
-export default class Puyo extends PureComponent {
+export default class Puyo extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+  }
+
   style() {
     return {
       position: 'absolute',
