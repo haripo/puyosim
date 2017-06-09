@@ -140,29 +140,14 @@ export default class Field extends Component {
             if (puyo === 0) return;
 
             const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
-            const getNeighbor = (r, c) => {
-              const p = stack[r][c];
-              const d = _.find(this.state.droppings, p => p.row === r && p.col === c);
-              return !d && p;
-            };
-
-            let connections = {};
-            if (!droppingInfo) {
-              connections = {
-                top: 0 < row ? getNeighbor(row - 1, col) === puyo : false,
-                bottom: row < fieldRows - 1 ? getNeighbor(row + 1, col) === puyo : false,
-                left: 0 < col ? getNeighbor(row, col - 1) === puyo : false,
-                right: col < fieldCols - 1 ? getNeighbor(row, col + 1) === puyo : false
-              };
-            }
 
             return (
               <Puyo
                 size={ puyoSize }
-                puyo={ puyo }
+                puyo={ puyo.color }
                 x={ col * puyoSize + contentsPadding }
                 y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }
-                connections={ connections }
+                connections={ puyo.connections }
                 key={ `puyo-${row}-${col}` } />
             );
           });

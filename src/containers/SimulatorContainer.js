@@ -16,13 +16,13 @@ import {
   undoField
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getVanishingPuyos, isActive } from '../reducers/simulator';
+import { getGhost, getPendingPair, getStack, getVanishingPuyos, isActive } from '../reducers/simulator';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
   return {
-    stack: simulator.get('stack'),
+    stack: getStack(simulator),
     current: simulator.getIn(['queue', 0]),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),

@@ -303,6 +303,31 @@ export function getVanishingPuyos(state) {
   })
 }
 
+export function getStack(state) {
+  const stack = state.get('stack');
+
+  const hasConnection = (row, col, color) => {
+    return FieldUtils.isValidPosition({ row, col }) && stack.getIn([row, col]) === color;
+  };
+
+  return stack.map((cols, col) => {
+    return cols.map((color, row) => {
+      const connections = {
+        top: hasConnection(row - 1, col, color),
+        bottom: hasConnection(row + 1, col, color),
+        left: hasConnection(row, col - 1, color),
+        right: hasConnection(row, col + 1, color)
+      };
+      return Map({
+        row: row,
+        col: col,
+        color: color,
+        connections: Map(connections)
+      })
+    })
+  })
+}
+
 function getDropPositions(state) {
   const pair = state.get('pendingPair');
   const stack = state.get('stack');
