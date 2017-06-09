@@ -137,7 +137,7 @@ export default class Field extends Component {
       const puyoDoms = _.flatten(stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
-            if (puyo === 0) return;
+            if (puyo.color === 0) return;
 
             const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
 

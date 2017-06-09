@@ -307,11 +307,11 @@ export function getStack(state) {
   const stack = state.get('stack');
 
   const hasConnection = (row, col, color) => {
-    return FieldUtils.isValidPosition({ row, col }) && stack.getIn([row, col]) === color;
+    return FieldUtils.isValidPosition({ row, col }) && stack.getIn([row, col]) === color && color !== 0;
   };
 
-  return stack.map((cols, col) => {
-    return cols.map((color, row) => {
+  return stack.map((cols, row) => {
+    return cols.map((color, col) => {
       const connections = {
         top: hasConnection(row - 1, col, color),
         bottom: hasConnection(row + 1, col, color),
