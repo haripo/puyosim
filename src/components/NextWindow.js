@@ -1,7 +1,3 @@
-/**
- * @flow
- */
-
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';

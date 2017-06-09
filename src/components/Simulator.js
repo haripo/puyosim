@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { Button, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
 import { contentsMargin, contentsPadding, controllerButtonSize } from '../utils/constants';
 import Field from './Field';
-import NextWindow from './NextWindow';
+import NextWindowContainer from '../containers/NextWindowContainer';
 import NoticePuyos from './NoticePuyos';
 import HandlingPuyos from './HandlingPuyos';
 import { Alert } from 'react-native';
@@ -76,9 +76,7 @@ export default class Simulator extends Component {
               <Text>
                 NEXT
               </Text>
-              <NextWindow
-                next={ this.props.next }
-                doubleNext={ this.props.doubleNext }/>
+              <NextWindowContainer />
               <Text>
                 おじゃまぷよ
               </Text>
