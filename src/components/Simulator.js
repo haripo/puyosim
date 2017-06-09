@@ -8,7 +8,7 @@ import { Button, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View
 import { contentsMargin, contentsPadding, controllerButtonSize } from '../utils/constants';
 import Field from './Field';
 import NextWindowContainer from '../containers/NextWindowContainer';
-import NoticePuyos from './NoticePuyos';
+import NoticePuyosContainer from '../containers/NoticePuyosContainer';
 import HandlingPuyos from './HandlingPuyos';
 import { Alert } from 'react-native';
 import * as _ from 'lodash';
@@ -80,8 +80,7 @@ export default class Simulator extends Component {
               <Text>
                 おじゃまぷよ
               </Text>
-              <NoticePuyos score={ this.props.score }>
-              </NoticePuyos>
+              <NoticePuyosContainer />
             </View>
             <View style={{ flexDirection: 'column' }}>
               <View style={ styles.rotateButtons }>

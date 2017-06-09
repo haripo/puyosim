@@ -24,7 +24,6 @@ const mapStateToProps = (state) => {
   return {
     stack: simulator.get('stack'),
     current: simulator.getIn(['queue', 0]),
-    score: simulator.get('score'),
     highlights: [],
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
