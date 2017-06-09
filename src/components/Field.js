@@ -79,17 +79,20 @@ export default class Field extends Component {
       vanishings: vanishingPuyos.map(p => ({ ...p, value: 0 }))
     });
     const easingFunction = step => step % 2 === 0 ? 0 : 1;
-
+    let pr = [];
     launchAnimation((step) => {
       const animatingPuyos = this.state.vanishings
         .filter(p => step < 30)
         .map(p => {
           return { ...p, value: easingFunction(step) };
         });
+      let now = new Date();
       this.setState({ vanishings: animatingPuyos });
+      pr.push(new Date() - now);
       return animatingPuyos.length > 0
     }).then(() => {
       this.props.onVanishingAnimationFinished()
+      console.log(_.sum(pr) / pr.length);
     });
   }
 
