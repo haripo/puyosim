@@ -201,8 +201,6 @@ const simulator = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
-    // case HIDE_HIGHLIGHTS:
-    //   return hideHighlights(state, action);
     case ROTATE_HIGHLIGHTS_LEFT:
       return rotateHighlightsLeft(state, action);
     case ROTATE_HIGHLIGHTS_RIGHT:

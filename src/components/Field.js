@@ -132,18 +132,8 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { highlights, ghosts } = this.props;
+    const { ghosts } = this.props;
     const renderPuyos = (stack) => {
-      const highlightDoms = highlights.map((highlight) => {
-        return (
-          <View
-            style={ styles.highlight }
-            top={ highlight.row * puyoSize + contentsPadding }
-            left={ highlight.col * puyoSize + contentsPadding }>
-          </View>
-        );
-      });
-
       const puyoDoms = _.flatten(stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
@@ -214,7 +204,6 @@ export default class Field extends Component {
       return [
         this.props.isActive ? ghostDoms : null,
         puyoDoms,
-        highlightDoms,
         vanishingPuyoDoms
       ];
     };

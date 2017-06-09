@@ -59,7 +59,6 @@ export default class Simulator extends Component {
             </HandlingPuyos>
             <Field
               stack={ this.props.stack }
-              highlights={ this.props.highlights }
               ghosts={ this.props.ghosts }
               droppingPuyos={ this.props.droppingPuyos }
               vanishingPuyos={ this.props.vanishingPuyos }
