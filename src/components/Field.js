@@ -169,22 +169,11 @@ export default class Field extends Component {
         }));
 
       const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
-        const getNeighbor = (r, c) => {
-          const p = _.find(this.state.vanishings, p => p.row === r && p.col === c);
-          return p && p.color;
-        };
-        const { color, row, col } = vanishing;
-        const connections = {
-          bottom: row < fieldRows - 1 ? getNeighbor(row + 1, col) === color : false,
-          top: 0 < row ? getNeighbor(row - 1, col) === color : false,
-          right: col < fieldCols - 1 ? getNeighbor(row, col + 1) === color : false,
-          left: 0 < col ? getNeighbor(row, col - 1) === color : false
-        };
         return (
           <Puyo
             size={ puyoSize }
             puyo={ vanishing.color }
-            connections={ connections }
+            connections={ vanishing.connections }
             x={ vanishing.col * puyoSize + contentsPadding }
             y={ vanishing.row * puyoSize + contentsPadding }
             a={ vanishing.value }/>

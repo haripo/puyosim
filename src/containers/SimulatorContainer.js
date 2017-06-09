@@ -16,7 +16,7 @@ import {
   undoField
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, isActive } from '../reducers/simulator';
+import { getGhost, getPendingPair, getVanishingPuyos, isActive } from '../reducers/simulator';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     droppingPuyos: simulator.get('droppingPuyos'),
-    vanishingPuyos: simulator.get('vanishingPuyos'),
+    vanishingPuyos: getVanishingPuyos(simulator),
     isActive: isActive(state)
   };
 };

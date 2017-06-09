@@ -109,11 +109,11 @@ function vanishPuyos(state, action) {
       .filter(c => c.puyos.length >= 4)
       .forEach(connection => {
         connection.puyos.forEach(puyo => {
-          s.update('vanishingPuyos', puyos => puyos.push({
+          s.update('vanishingPuyos', puyos => puyos.push(Map({
             row: puyo.row,
             col: puyo.col,
             color: connection.color
-          }));
+          })));
           s.updateIn(['stack', puyo.row, puyo.col], () => 0);
         });
       });
@@ -274,6 +274,33 @@ export function getPendingPair(state) {
     { row: 1, col: pair.firstCol, color: queue.get(0) },
     { row: secondRow, col: pair.secondCol, color: queue.get(1) }
   ]
+}
+
+export function getVanishingPuyos(state) {
+  const vanishings = state.get('vanishingPuyos');
+
+  let field = FieldUtils.createField(fieldRows, fieldCols);
+  vanishings.forEach(puyo => {
+    field[puyo.get('row')][puyo.get('col')] = puyo.get('color');
+  });
+
+  const hasConnection = (row, col, color) => {
+    return FieldUtils.isValidPosition({ row, col }) && field[row][col] === color;
+  };
+
+  return vanishings.map(puyo => {
+    const color = puyo.get('color');
+    const row = puyo.get('row');
+    const col = puyo.get('col');
+    const connections = {
+      top: hasConnection(row - 1, col, color),
+      bottom: hasConnection(row + 1, col, color),
+      left: hasConnection(row, col - 1, color),
+      right: hasConnection(row, col + 1, color)
+    };
+
+    return puyo.set('connections', Map(connections))
+  })
 }
 
 function getDropPositions(state) {
