@@ -1,10 +1,8 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
-import { Image, PanResponder, StyleSheet, View } from 'react-native';
-import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
-import GhostPuyo from './GhostPuyo';
+import { View } from 'react-native';
+import { launchAnimation } from '../utils/animation';
+import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
-import { launchAnimation } from '../utils/animation'
 
 export default class DroppingPuyos extends Component {
   constructor() {
@@ -18,7 +16,7 @@ export default class DroppingPuyos extends Component {
     const { droppings } = this.state;
 
     if (droppings.length === 0 && nextProps.droppings.length !== 0) {
-      this.launchDroppingAnimation(nextProps.droppings)
+      this.launchDroppingAnimation(nextProps.droppings);
     }
 
     if (nextProps.droppings.length === 0) {
@@ -45,9 +43,9 @@ export default class DroppingPuyos extends Component {
       this.setState({ droppings: animatingPuyos });
       return animatingPuyos
           .filter(p => step * droppingSpeed < p.altitude * puyoSize)
-          .length > 0
+          .length > 0;
     }).then(() => {
-      this.props.onDroppingAnimationFinished()
+      this.props.onDroppingAnimationFinished();
     });
   }
 
@@ -60,11 +58,11 @@ export default class DroppingPuyos extends Component {
           x={ dropping.col * puyoSize + contentsPadding }
           y={ dropping.value + contentsPadding }
           key={ `dropping-${dropping.row}-${dropping.col}` }/>
-      )
+      );
     });
   }
 
   render() {
-    return <View>{ ::this.renderPuyos() }</View>
+    return <View>{ ::this.renderPuyos() }</View>;
   }
 }

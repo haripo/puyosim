@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity,
-  finishDroppingAnimations,
-  finishVanishingAnimations,
   hideHighlights,
   moveHighlightsLeft,
   moveHighlightsRight,
@@ -12,7 +9,8 @@ import {
   rotateHighlightsLeft,
   rotateHighlightsRight,
   showHighlights,
-  undoField, vanishPuyos
+  undoField,
+  vanishPuyos
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simulator';

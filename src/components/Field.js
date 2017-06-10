@@ -5,11 +5,11 @@
 
 import React, { Component } from 'react';
 import { Image, PanResponder, StyleSheet, View } from 'react-native';
-import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
-import GhostPuyo from './GhostPuyo';
-import Puyo from './Puyo';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
+import { contentsPadding, fieldCols, fieldRows, puyoSize } from '../utils/constants';
+import GhostPuyo from './GhostPuyo';
+import Puyo from './Puyo';
 
 /**
  * Component for render puyo fields
@@ -43,9 +43,9 @@ export default class Field extends Component {
   gestureStateToDirection(gestureState: Object) {
     const { dx, dy } = gestureState;
     if (Math.abs(dx) > Math.abs(dy)) {
-      return dx > 0 ? 'right' : 'left'
+      return dx > 0 ? 'right' : 'left';
     } else {
-      return dy > 0 ? 'bottom' : 'top'
+      return dy > 0 ? 'bottom' : 'top';
     }
   }
 
@@ -82,7 +82,7 @@ export default class Field extends Component {
                 x={ col * puyoSize + contentsPadding }
                 y={ row * puyoSize + contentsPadding }
                 connections={ puyo.connections }
-                key={ `puyo-${row}-${col}` } />
+                key={ `puyo-${row}-${col}` }/>
             );
           });
         });

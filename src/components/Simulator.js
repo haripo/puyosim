@@ -3,15 +3,14 @@
  * @flow
  */
 
+import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { Button, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
-import { contentsMargin, contentsPadding, controllerButtonSize } from '../utils/constants';
-import Field from './Field';
+import { Alert, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../containers/NextWindowContainer';
 import NoticePuyosContainer from '../containers/NoticePuyosContainer';
+import { contentsMargin, controllerButtonSize } from '../utils/constants';
+import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
-import { Alert } from 'react-native';
-import * as _ from 'lodash';
 
 export default class Simulator extends Component {
   constructor() {
@@ -37,7 +36,7 @@ export default class Simulator extends Component {
           'ツモが再生成されます。よろしいですか？',
           [
             { text: 'Cancel', onPress: _.noop, style: 'cancel' },
-            { text: 'OK', onPress: this.props.onRestartSelected },
+            { text: 'OK', onPress: this.props.onRestartSelected }
           ],
           { cancelable: false }
         );
@@ -86,30 +85,30 @@ export default class Simulator extends Component {
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onRotateLeftPressed }>
-                  <Image source={ require('../../assets/control_a.png') }  style={ styles.controllerButtonImage }/>
+                  <Image source={ require('../../assets/control_a.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onRotateRightPressed }>
-                  <Image source={ require('../../assets/control_b.png') }  style={ styles.controllerButtonImage }/>
+                  <Image source={ require('../../assets/control_b.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
               </View>
               <View style={ styles.horizontalArrowButtons }>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onMoveLeftPressed }>
-                  <Image source={ require('../../assets/control_left.png') }  style={ styles.controllerButtonImage }/>
+                  <Image source={ require('../../assets/control_left.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onMoveRightPressed }>
-                  <Image source={ require('../../assets/control_right.png') }  style={ styles.controllerButtonImage }/>
+                  <Image source={ require('../../assets/control_right.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
                 style={ styles.controllerFullWidthButton }
                 onPress={ this.props.onDropPressed }>
-                <Image source={ require('../../assets/control_down.png') }  style={ styles.controllerButtonImage }/>
+                <Image source={ require('../../assets/control_down.png') } style={ styles.controllerButtonImage }/>
               </TouchableOpacity>
             </View>
           </View>
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: contentsMargin
   },
   sideHead: {
-    flex: 1,
+    flex: 1
   },
   rotateButtons: {
     flexDirection: 'row',

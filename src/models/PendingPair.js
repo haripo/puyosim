@@ -1,4 +1,3 @@
-
 import { Record } from 'immutable';
 import { fieldCols } from '../utils/constants';
 
@@ -23,7 +22,7 @@ export default class PendingPair extends Record(initialState) {
       rotation,
       first,
       second
-    })
+    });
   }
 
   get firstCol() {
@@ -42,7 +41,7 @@ export default class PendingPair extends Record(initialState) {
   }
 
   resetPosition() {
-    return this.set('col', 2).set('rotation', 'bottom')
+    return this.set('col', 2).set('rotation', 'bottom');
   }
 
   rotate(direction) {
@@ -56,15 +55,15 @@ export default class PendingPair extends Record(initialState) {
         if (col === 0 && newRotation === 'left') return 1;
         if (col === fieldCols - 1 && newRotation === 'right') return fieldCols - 2;
         return col;
-      })
+      });
   }
 
   rotateLeft() {
-    return this.rotate(-1)
+    return this.rotate(-1);
   }
 
   rotateRight() {
-    return this.rotate(1)
+    return this.rotate(1);
   }
 
   moveLeft() {
@@ -72,7 +71,7 @@ export default class PendingPair extends Record(initialState) {
     if (col === 0 || (col === 1 && this.get('rotation') === 'left')) {
       return this;
     }
-    return this.update('col', value => value - 1)
+    return this.update('col', value => value - 1);
   }
 
   moveRight() {
@@ -80,6 +79,6 @@ export default class PendingPair extends Record(initialState) {
     if (col === 5 || (col === 4 && this.get('rotation') === 'right')) {
       return this;
     }
-    return this.update('col', value => value + 1)
+    return this.update('col', value => value + 1);
   }
 }

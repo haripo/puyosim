@@ -1,8 +1,8 @@
 /* @flow */
 
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
-import _ from 'lodash';
 
 const puyoImages = [
   null,
@@ -37,7 +37,7 @@ const connectionImages = [
  */
 export default class Puyo extends Component {
   shouldComponentUpdate(nextProps, nextState) {
-    return !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+    return !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state);
   }
 
   style() {
@@ -72,16 +72,16 @@ export default class Puyo extends Component {
     const image = connectionImages[puyo - 1];
     const render = (source, style, key) => {
       return (
-        <Image source={ source } style={ [base, style] } key={ key } />
-      )
+        <Image source={ source } style={ [base, style] } key={ key }/>
+      );
     };
 
     return [
       connections.top ? render(image.vertical, { top: -half - 1 }, 't') : null,
       connections.bottom ? render(image.vertical, { top: this.props.size - half }, 'b') : null,
       connections.left ? render(image.horizontal, { left: -half }, 'l') : null,
-      connections.right ? render(image.horizontal, { left: this.props.size - half }, 'r') : null,
-    ]
+      connections.right ? render(image.horizontal, { left: this.props.size - half }, 'r') : null
+    ];
   }
 
   render() {

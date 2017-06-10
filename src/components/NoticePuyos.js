@@ -2,11 +2,11 @@
 
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { contentsMargin, contentsPadding, puyoSize } from '../utils/constants';
+import { contentsMargin, contentsPadding } from '../utils/constants';
 
 /**
-  * Component for render notice puyos
-*/
+ * Component for render notice puyos
+ */
 export default class NoticePuyos extends Component {
   constructor() {
     super();
@@ -50,7 +50,7 @@ export default class NoticePuyos extends Component {
       const style = [styles.puyo, { left: index * 16 + contentsPadding }];
       return (
         <Image source={ this.images[type] } style={ style } key={ index }/>
-      )
+      );
     });
   }
 
@@ -59,7 +59,7 @@ export default class NoticePuyos extends Component {
       <View style={ styles.component }>
         { this.renderNoticePuyos() }
       </View>
-    )
+    );
   }
 }
 
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#BBBBBB',
     marginTop: contentsMargin,
-    height: 32 + contentsPadding * 2,
+    height: 32 + contentsPadding * 2
   },
   puyo: {
     width: 32,

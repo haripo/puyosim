@@ -1,4 +1,3 @@
-
 export function launchAnimation(func) {
   let quit = false;
   let steps = 0;
@@ -6,16 +5,16 @@ export function launchAnimation(func) {
   return new Promise((resolve) => {
     const f = () => {
       if (quit) {
-        resolve()
+        resolve();
       } else {
         if (__DEV__)
           setTimeout(f, 0);
         else
-          requestAnimationFrame(f)
+          requestAnimationFrame(f);
       }
       quit = !func(steps);
       steps++;
     };
-    requestAnimationFrame(f)
+    requestAnimationFrame(f);
   });
 }

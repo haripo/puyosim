@@ -6,19 +6,23 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
   APPLY_GRAVITY,
-  CHAIN_FINISHED,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
-  HIDE_HIGHLIGHTS, MOVE_HIGHLIGHTS_LEFT, MOVE_HIGHLIGHTS_RIGHT,
-  PUT_NEXT_PAIR, RESET_FIELD, RESTART, ROTATE_HIGHLIGHTS_LEFT, ROTATE_HIGHLIGHTS_RIGHT,
+  MOVE_HIGHLIGHTS_LEFT,
+  MOVE_HIGHLIGHTS_RIGHT,
+  PUT_NEXT_PAIR,
+  RESET_FIELD,
+  RESTART,
+  ROTATE_HIGHLIGHTS_LEFT,
+  ROTATE_HIGHLIGHTS_RIGHT,
   SHOW_HIGHLIGHTS,
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
+import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
 import { calcChainStepScore } from '../utils/scoreCalculator';
-import PendingPair from '../models/PendingPair';
 
 const queueLength = 128;
 
@@ -49,11 +53,11 @@ function showHighlights(state, action) {
   let { position, rotation } = action.payload;
 
   if (position.col === 0 && rotation === 'left') {
-    position.col = 1
+    position.col = 1;
   }
 
   if (position.col === 5 && rotation === 'right') {
-    position.col = 4
+    position.col = 4;
   }
 
   return state
@@ -62,23 +66,23 @@ function showHighlights(state, action) {
       rotation,
       state.getIn(['queue', 0, 0]),
       state.getIn(['queue', 0, 1])
-    ))
+    ));
 }
 
 function rotateHighlightsLeft(state, action) {
-  return state.update('pendingPair', pair => pair.rotateLeft())
+  return state.update('pendingPair', pair => pair.rotateLeft());
 }
 
 function rotateHighlightsRight(state, action) {
-  return state.update('pendingPair', pair => pair.rotateRight())
+  return state.update('pendingPair', pair => pair.rotateRight());
 }
 
 function moveHighlightsLeft(state, action) {
-  return state.update('pendingPair', pair => pair.moveLeft())
+  return state.update('pendingPair', pair => pair.moveLeft());
 }
 
 function moveHighlightsRight(state, action) {
-  return state.update('pendingPair', pair => pair.moveRight())
+  return state.update('pendingPair', pair => pair.moveRight());
 }
 
 /**
@@ -181,12 +185,12 @@ function undoField(state, action) {
 }
 
 function resetField(state, action) {
-  return initialState
+  return initialState;
 }
 
 function restart(state, action) {
   initialState = createInitialState();
-  return initialState
+  return initialState;
 }
 
 function createInitialState() {
@@ -259,7 +263,7 @@ export function getGhost(state) {
     return [
       { ...position[0], color: state.getIn(['queue', 0, 0]) },
       { ...position[1], color: state.getIn(['queue', 0, 1]) }
-    ]
+    ];
   } else {
     return [];
   }
@@ -271,15 +275,15 @@ export function getPendingPair(state) {
 
   let secondRow = 1;
   if (pair.rotation === 'bottom') {
-    secondRow = 2
+    secondRow = 2;
   } else if (pair.rotation === 'top') {
-    secondRow = 0
+    secondRow = 0;
   }
 
   return [
     { row: 1, col: pair.firstCol, color: queue.get(0) },
     { row: secondRow, col: pair.secondCol, color: queue.get(1) }
-  ]
+  ];
 }
 
 export function getVanishingPuyos(state) {
@@ -305,15 +309,15 @@ export function getVanishingPuyos(state) {
       right: hasConnection(row, col + 1, color)
     };
 
-    return puyo.set('connections', Map(connections))
-  })
+    return puyo.set('connections', Map(connections));
+  });
 }
 
 export function getStack(state) {
   const stack = state.get('stack');
   const droppings = state.get('droppingPuyos');
 
-  const isDropping = (row, col)  => {
+  const isDropping = (row, col) => {
     return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
   };
 
@@ -338,9 +342,9 @@ export function getStack(state) {
         color: color,
         connections: Map(connections),
         isDropping: isDropping(row, col)
-      })
-    })
-  })
+      });
+    });
+  });
 }
 
 function getDropPositions(state) {

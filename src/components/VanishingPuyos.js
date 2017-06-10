@@ -1,10 +1,8 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
-import { Image, PanResponder, StyleSheet, View } from 'react-native';
-import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
-import GhostPuyo from './GhostPuyo';
+import { View } from 'react-native';
+import { launchAnimation } from '../utils/animation';
+import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
-import { launchAnimation } from '../utils/animation'
 
 export default class DroppingPuyos extends Component {
   constructor() {
@@ -19,7 +17,7 @@ export default class DroppingPuyos extends Component {
     const { vanishings } = this.state;
 
     if (vanishings.length === 0 && nextProps.vanishings.length !== 0) {
-      this.launchVanishingAnimation(nextProps.vanishings)
+      this.launchVanishingAnimation(nextProps.vanishings);
     }
 
     if (nextProps.vanishings.length === 0) {
@@ -40,7 +38,7 @@ export default class DroppingPuyos extends Component {
           return { ...p, value: easingFunction(step) };
         });
       this.setState({ vanishings: animatingPuyos });
-      return animatingPuyos.length > 0
+      return animatingPuyos.length > 0;
     }).then(() => {
       this.props.onVanishingAnimationFinished();
     });
@@ -57,11 +55,11 @@ export default class DroppingPuyos extends Component {
           y={ vanishing.row * puyoSize + contentsPadding }
           a={ vanishing.value }
           key={ `vanishing-${vanishing.row}-${vanishing.col}` }/>
-      )
+      );
     });
   }
 
   render() {
-    return <View>{ ::this.renderPuyos() }</View>
+    return <View>{ ::this.renderPuyos() }</View>;
   }
 }

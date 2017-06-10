@@ -2,9 +2,9 @@
  * Component for render pair on handling state
  */
 import React, { Component } from 'react';
-import Puyo from './Puyo';
-import { puyoSize, contentsPadding, fieldCols } from '../utils/constants';
 import { View } from 'react-native';
+import { contentsPadding, fieldCols, puyoSize } from '../utils/constants';
+import Puyo from './Puyo';
 
 export default class HandlingPuyos extends Component {
   render() {
@@ -35,6 +35,6 @@ const styles = {
     marginLeft: 3,
     width: puyoSize * fieldCols + contentsPadding * 2,
     height: puyoSize * 3 + contentsPadding * 2,
-    backgroundColor: "#BBBBBB"
+    backgroundColor: '#BBBBBB'
   }
 };

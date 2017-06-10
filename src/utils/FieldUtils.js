@@ -92,10 +92,10 @@ export default class FieldUtils {
 
           result[id - 1] = {
             color: stack.getIn([row, col]),
-            puyos: [ { row, col } ]
+            puyos: [{ row, col }]
           };
         } else {
-          result[connectionIds[row][col] - 1].puyos.push({ row, col })
+          result[connectionIds[row][col] - 1].puyos.push({ row, col });
         }
       }
     }

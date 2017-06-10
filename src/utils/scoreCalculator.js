@@ -1,5 +1,4 @@
-
-import _ from 'lodash'
+import _ from 'lodash';
 
 const chainBonusTable = [
   0,
@@ -47,7 +46,7 @@ function getConnectionBonus(vanished) {
     .map(c => {
       const connection = c.puyos.length;
       return connectionBonusTable[connection < 11 ? connection - 4 : 7];
-    }))
+    }));
 }
 
 function getColorBonus(vanished) {

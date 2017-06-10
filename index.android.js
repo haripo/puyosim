@@ -3,17 +3,17 @@
  * @flow
  */
 
+import { mapValues } from 'lodash';
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { applyMiddleware, createStore } from 'redux';
+import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import { createLogger } from 'redux-logger'
 
 import Simulator from './src/containers/SimulatorContainer';
 import reducer from './src/reducers';
 import sagas from './src/sagas';
-import { mapValues } from 'lodash';
 
 
 const stateTransformer = (state) => {
