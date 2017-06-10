@@ -3,13 +3,13 @@
  * @flow
  */
 
-import _ from 'lodash';
 import React, { Component } from 'react';
 import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import { fieldCols, fieldRows, puyoSize, contentsPadding } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
-import { launchAnimation } from '../utils/animation'
+import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
+import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
 
 /**
  * Component for render puyo fields
@@ -18,7 +18,6 @@ export default class Field extends Component {
   constructor() {
     super();
     this.state = {
-      droppings: [],
       vanishings: []
     };
   }
@@ -31,73 +30,6 @@ export default class Field extends Component {
       onPanResponderMove: ::this.handlePanResponderMove,
       onPanResponderRelease: ::this.handlePanResponderEnd,
       onPanResponderTerminate: ::this.handlePanResponderEnd
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { droppings, vanishings } = this.state;
-
-    if (droppings.length === 0 && nextProps.droppingPuyos.length !== 0) {
-      this.launchDroppingAnimation(nextProps.droppingPuyos)
-    }
-
-    if (vanishings.length === 0 && nextProps.vanishingPuyos.length !== 0) {
-      this.launchVanishingAnimation(nextProps.vanishingPuyos)
-    }
-
-    if (nextProps.vanishingPuyos.length === 0) {
-      this.setState({ vanishings: [] });
-    }
-
-    if (nextProps.droppingPuyos.length === 0) {
-      this.setState({ droppings: [] });
-    }
-  }
-
-  launchDroppingAnimation(droppingPuyos) {
-    const droppingSpeed = puyoSize / 8;
-    const easingFunction = (p, step) => {
-      return Math.min(
-        (p.row - p.altitude) * puyoSize + step * droppingSpeed,
-        p.row * puyoSize
-      );
-    };
-
-    this.setState({
-      droppings: droppingPuyos.map(p => ({ ...p, value: easingFunction(p, 0) }))
-    });
-
-    launchAnimation(step => {
-      const animatingPuyos = this.state.droppings
-        .map(p => ({ ...p, value: easingFunction(p, step) }));
-      this.setState({ droppings: animatingPuyos });
-      return animatingPuyos
-          .filter(p => step * droppingSpeed < p.altitude * puyoSize)
-          .length > 0
-    }).then(() => {
-      this.props.onDroppingAnimationFinished()
-    });
-  }
-
-  launchVanishingAnimation(vanishingPuyos) {
-    this.setState({
-      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0 }))
-    });
-    const easingFunction = step => step % 2 === 0 ? 0 : 1;
-    let pr = [];
-    launchAnimation((step) => {
-      const animatingPuyos = this.state.vanishings
-        .filter(p => step < 30)
-        .map(p => {
-          return { ...p, value: easingFunction(step) };
-        });
-      let now = new Date();
-      this.setState({ vanishings: animatingPuyos });
-      pr.push(new Date() - now);
-      return animatingPuyos.length > 0
-    }).then(() => {
-      this.props.onVanishingAnimationFinished()
-      console.log(_.sum(pr) / pr.length);
     });
   }
 
@@ -155,28 +87,6 @@ export default class Field extends Component {
           });
         });
 
-      const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
-        return (
-          <Puyo
-            size={ puyoSize }
-            puyo={ vanishing.color }
-            connections={ vanishing.connections }
-            x={ vanishing.col * puyoSize + contentsPadding }
-            y={ vanishing.row * puyoSize + contentsPadding }
-            a={ vanishing.value }/>
-        )
-      });
-
-      const droppingPuyoDoms = this.state.droppings.map(dropping => {
-        return (
-          <Puyo
-            size={ puyoSize }
-            puyo={ dropping.color }
-            x={ dropping.col * puyoSize + contentsPadding }
-            y={ dropping.value + contentsPadding } />
-        )
-      });
-
       const ghostDoms = ghosts.map(ghost => {
         return (
           <GhostPuyo
@@ -189,9 +99,7 @@ export default class Field extends Component {
 
       return [
         this.props.isActive ? ghostDoms : null,
-        puyoDoms,
-        vanishingPuyoDoms,
-        droppingPuyoDoms,
+        puyoDoms
       ];
     };
 
@@ -205,6 +113,8 @@ export default class Field extends Component {
         { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
         <Image source={ require('../../assets/cross.png') } style={ styles.cross }/>
+        <DroppingPuyosContainer />
+        <VanishingPuyosContainer />
       </View>
     );
   }

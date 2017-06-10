@@ -15,7 +15,7 @@ import {
   undoField, vanishPuyos
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, getVanishingPuyos, isActive } from '../reducers/simulator';
+import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simulator';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
@@ -25,8 +25,6 @@ const mapStateToProps = (state) => {
     current: simulator.getIn(['queue', 0]),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
-    droppingPuyos: simulator.get('droppingPuyos'),
-    vanishingPuyos: getVanishingPuyos(simulator),
     isActive: isActive(state)
   };
 };
@@ -56,14 +54,6 @@ const mapDispatchToProps = (dispatch) => {
     onDropPressed: () => {
       dispatch(putNextPair());
       dispatch(vanishPuyos());
-    },
-    onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
-    },
-    onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
     },
     onUndoSelected: () => {
       dispatch(undoField());
