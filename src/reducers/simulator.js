@@ -133,12 +133,14 @@ function applyGravity(state, action) {
         if (s.getIn(['stack', k, i]) !== 0) continue;
         while (0 <= k && s.getIn(['stack', k, i]) === 0) k--;
         if (0 <= k) {
-          s.setIn(['stack', fieldRows - j - 1, i], s.getIn(['stack', k, i]));
+          const target = s.getIn(['stack', k, i]);
+          s.setIn(['stack', fieldRows - j - 1, i], target);
           s.setIn(['stack', k, i], 0);
           s.update('droppingPuyos', puyos => {
             return puyos.push(Map({
               row: fieldRows - j - 1,
               col: i,
+              color: target,
               altitude: (fieldRows - j - 1) - k
             }));
           });
@@ -305,9 +307,16 @@ export function getVanishingPuyos(state) {
 
 export function getStack(state) {
   const stack = state.get('stack');
+  const droppings = state.get('droppingPuyos');
+
+  const isDropping = (row, col)  => {
+    return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
+  };
 
   const hasConnection = (row, col, color) => {
-    return FieldUtils.isValidPosition({ row, col }) && stack.getIn([row, col]) === color && color !== 0;
+    return FieldUtils.isValidPosition({ row, col }) &&
+      stack.getIn([row, col]) === color &&
+      color !== 0;
   };
 
   return stack.map((cols, row) => {
@@ -322,7 +331,8 @@ export function getStack(state) {
         row: row,
         col: col,
         color: color,
-        connections: Map(connections)
+        connections: Map(connections),
+        isDropping: isDropping(row, col)
       })
     })
   })

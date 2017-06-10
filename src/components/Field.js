@@ -68,7 +68,7 @@ export default class Field extends Component {
         .map(p => ({ ...p, value: easingFunction(p, step) }));
 
       this.setState({ droppings: animatingPuyos });
-      return animatingPuyos.length > 0;
+      return animatingPuyos.length > 0
     }).then(() => {
       this.props.onDroppingAnimationFinished()
     });
@@ -134,24 +134,21 @@ export default class Field extends Component {
   renderStack(stack) {
     const { ghosts } = this.props;
     const renderPuyos = (stack) => {
-      const puyoDoms = _.flatten(stack
+      const puyoDoms = stack
         .map((puyos, row) => {
           return puyos.map((puyo, col) => {
-            if (puyo.color === 0) return;
-
-            const droppingInfo = _.find(this.state.droppings, g => g.row === row && g.col === col);
-
+            if (puyo.color === 0 || puyo.isDropping) return null;
             return (
               <Puyo
                 size={ puyoSize }
                 puyo={ puyo.color }
                 x={ col * puyoSize + contentsPadding }
-                y={ (droppingInfo ? droppingInfo.value : row * puyoSize) + contentsPadding }
+                y={ row * puyoSize + contentsPadding }
                 connections={ puyo.connections }
                 key={ `puyo-${row}-${col}` } />
             );
           });
-        }));
+        });
 
       const vanishingPuyoDoms = this.state.vanishings.map(vanishing => {
         return (
@@ -162,6 +159,16 @@ export default class Field extends Component {
             x={ vanishing.col * puyoSize + contentsPadding }
             y={ vanishing.row * puyoSize + contentsPadding }
             a={ vanishing.value }/>
+        )
+      });
+
+      const droppingPuyoDoms = this.state.droppings.map(dropping => {
+        return (
+          <Puyo
+            size={ puyoSize }
+            puyo={ dropping.color }
+            x={ dropping.col * puyoSize + contentsPadding }
+            y={ dropping.value + contentsPadding } />
         )
       });
 
@@ -178,7 +185,8 @@ export default class Field extends Component {
       return [
         this.props.isActive ? ghostDoms : null,
         puyoDoms,
-        vanishingPuyoDoms
+        vanishingPuyoDoms,
+        droppingPuyoDoms,
       ];
     };
 
