@@ -56,7 +56,12 @@ export default class Field extends Component {
 
   launchDroppingAnimation(droppingPuyos) {
     const droppingSpeed = puyoSize / 8;
-    const easingFunction = (p, step) => (p.row - p.altitude) * puyoSize + step * droppingSpeed;
+    const easingFunction = (p, step) => {
+      return Math.min(
+        (p.row - p.altitude) * puyoSize + step * droppingSpeed,
+        p.row * puyoSize
+      );
+    };
 
     this.setState({
       droppings: droppingPuyos.map(p => ({ ...p, value: easingFunction(p, 0) }))
@@ -64,11 +69,11 @@ export default class Field extends Component {
 
     launchAnimation(step => {
       const animatingPuyos = this.state.droppings
-        .filter(p => step * droppingSpeed < p.altitude * puyoSize)
         .map(p => ({ ...p, value: easingFunction(p, step) }));
-
       this.setState({ droppings: animatingPuyos });
-      return animatingPuyos.length > 0
+      return animatingPuyos
+          .filter(p => step * droppingSpeed < p.altitude * puyoSize)
+          .length > 0
     }).then(() => {
       this.props.onDroppingAnimationFinished()
     });

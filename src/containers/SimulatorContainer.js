@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  doChainDroppingPhase,
-  doChainVanishingPhase,
+  applyGravity,
   finishDroppingAnimations,
   finishVanishingAnimations,
   hideHighlights,
@@ -13,7 +12,7 @@ import {
   rotateHighlightsLeft,
   rotateHighlightsRight,
   showHighlights,
-  undoField
+  undoField, vanishPuyos
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, getVanishingPuyos, isActive } from '../reducers/simulator';
@@ -40,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
     onSwipeEnd: (position, rotation) => {
       dispatch(hideHighlights());
       dispatch(putNextPair(position, rotation));
-      dispatch(doChainVanishingPhase());
+      dispatch(vanishPuyos());
     },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
@@ -56,15 +55,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDropPressed: () => {
       dispatch(putNextPair());
-      dispatch(doChainVanishingPhase());
+      dispatch(vanishPuyos());
     },
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());
-      dispatch(doChainVanishingPhase());
+      dispatch(vanishPuyos());
     },
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations());
-      dispatch(doChainDroppingPhase());
+      dispatch(applyGravity());
     },
     onUndoSelected: () => {
       dispatch(undoField());

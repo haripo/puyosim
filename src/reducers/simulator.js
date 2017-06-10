@@ -103,10 +103,16 @@ function putNextPair(state, action) {
 }
 
 function vanishPuyos(state, action) {
-  const connections = FieldUtils.getConnections(state.get('stack'));
+  const connections = FieldUtils
+    .getConnections(state.get('stack'))
+    .filter(c => c.puyos.length >= 4);
+
+  if (connections.length === 0) {
+    return finishChain(state, {});
+  }
+
   return state.withMutations(s => {
     connections
-      .filter(c => c.puyos.length >= 4)
       .forEach(connection => {
         connection.puyos.forEach(puyo => {
           s.update('vanishingPuyos', puyos => puyos.push(Map({
@@ -158,7 +164,7 @@ function finishVanishingAnimations(state, action) {
   return state.set('vanishingPuyos', List());
 }
 
-function chainFinished(state, action) {
+function finishChain(state, action) {
   return state.set('chain', 0);
 }
 
@@ -221,8 +227,6 @@ const simulator = (state = initialState, action) => {
       return finishDroppingAnimations(state, action);
     case FINISH_VANISHING_ANIMATIONS:
       return finishVanishingAnimations(state, action);
-    case CHAIN_FINISHED:
-      return chainFinished(state, action);
     case UNDO_FIELD:
       return undoField(state, action);
     case RESET_FIELD:
@@ -316,7 +320,8 @@ export function getStack(state) {
   const hasConnection = (row, col, color) => {
     return FieldUtils.isValidPosition({ row, col }) &&
       stack.getIn([row, col]) === color &&
-      color !== 0;
+      color !== 0 &&
+      !isDropping(row, col);
   };
 
   return stack.map((cols, row) => {
