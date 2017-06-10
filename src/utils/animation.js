@@ -15,6 +15,6 @@ export function launchAnimation(func) {
       quit = !func(steps);
       steps++;
     };
-    requestAnimationFrame(f);
+    setTimeout(f, 0);
   });
 }
