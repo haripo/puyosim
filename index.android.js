@@ -10,7 +10,7 @@ import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
-import Simulator from './src/containers/SimulatorContainer';
+import Simulator from './src/screens/SimulatorContainer';
 import reducer from './src/reducers';
 import sagas from './src/sagas';
 import { Navigation } from 'react-native-navigation';
@@ -38,7 +38,6 @@ Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, sto
 Navigation.startSingleScreenApp({
   screen: {
     screen: 'com.puyosimulator.Simulator',
-    title: 'puyosim',
   },
   animationType: 'slide-down'
 });

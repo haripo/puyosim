@@ -36,6 +36,7 @@ export default class Simulator extends Component {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(::this.onNavigatorEvent);
+    this.props.navigator.setTitle({ title: "puyosim" })
   }
 
   onNavigatorEvent(event) {
