@@ -1,5 +1,4 @@
 convert puyos.xcf -crop 16x16 -sample 400% cropped_puyo_%03d.png
-convert cropped_puyo_000.png -sample 800% png32:icon.png
 mv cropped_puyo_000.png ../assets/puyo_red.png
 mv cropped_puyo_001.png ../assets/puyo_green.png
 mv cropped_puyo_002.png ../assets/puyo_blue.png
@@ -32,5 +31,11 @@ mv cropped_controls_001.png ../assets/control_b.png
 mv cropped_controls_002.png ../assets/control_left.png
 mv cropped_controls_003.png ../assets/control_right.png
 mv cropped_controls_004.png ../assets/control_down.png
+
+convert puyos.xcf -crop 16x16 cropped_icon_%03d.png
+convert cropped_icon_000.png -sample 300% png32:../android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+convert cropped_icon_000.png -sample 450% png32:../android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+convert cropped_icon_000.png -sample 600% png32:../android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
 
 rm -f cropped_*
