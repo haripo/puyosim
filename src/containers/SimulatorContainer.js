@@ -14,13 +14,12 @@ import {
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simulator';
-import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
   return {
-    stack: getStack(simulator),
-    current: simulator.getIn(['queue', 0]),
+    stack: getStack(simulator).toJS(),
+    current: simulator.getIn(['queue', 0]).toJS(),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state)
@@ -68,4 +67,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(Simulator));
+)(Simulator);

@@ -31,29 +31,10 @@ const store = createStore(
 
 sagaMiddleware.run(sagas);
 
-export default class PuyoSimulator extends Component {
-  static navigatorButtons = {
-    rightButtons: [
-      {
-        title: 'Edit',
-        id: 'edit',
-        showAsAction: 'never'
-      }
-    ]
-  };
+// Register screen components
+Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
 
-  render() {
-    return (
-      <Provider store={ store }>
-        <Simulator>
-        </Simulator>
-      </Provider>
-    );
-  }
-};
-
-Navigation.registerComponent('com.puyosimulator.Simulator', () => PuyoSimulator);
-
+// launch first screen
 Navigation.startSingleScreenApp({
   screen: {
     screen: 'com.puyosimulator.Simulator',
