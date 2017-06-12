@@ -95,7 +95,14 @@ export default class Simulator extends Component {
               <NoticePuyosContainer />
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <View style={ styles.rotateButtons }>
+              <View style={ styles.buttonGroup }>
+                <TouchableOpacity
+                  style={ styles.controllerFullWidthButton }
+                  onPress={ this.props.onUndoSelected }>
+                  <Text>Undo</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={ styles.buttonGroup }>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onRotateLeftPressed }>
@@ -107,7 +114,7 @@ export default class Simulator extends Component {
                   <Image source={ require('../../assets/control_b.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
               </View>
-              <View style={ styles.horizontalArrowButtons }>
+              <View style={ styles.buttonGroup }>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onMoveLeftPressed }>
@@ -159,11 +166,7 @@ const styles = StyleSheet.create({
   sideHead: {
     flex: 1
   },
-  rotateButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  horizontalArrowButtons: {
+  buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#999',
     width: controllerButtonSize,
     height: controllerButtonSize,
-    marginBottom: contentsMargin,
+    marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#999',
     width: controllerButtonSize * 2 + contentsMargin,
     height: controllerButtonSize,
+    marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center'
   },
