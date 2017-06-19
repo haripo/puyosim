@@ -8,15 +8,15 @@ export default class ChainResult extends Component {
   }
 
   render() {
-    const { chain, score } = this.props;
+    const { chain, score, chainScore } = this.props;
     return (
       <View style={ styles.component }>
-        <NoticePuyos score={ score } />
+        <NoticePuyos score={ chainScore } />
         <Text>
-          { chain } 連鎖
+          { chain } 連鎖 { chainScore } 点
         </Text>
         <Text>
-          { score } 点
+          トータル { score } 点
         </Text>
       </View>
     )

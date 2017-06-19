@@ -6,7 +6,8 @@ const mapStateToProps = (state) => {
   const simulator = state.simulator;
   return {
     score: simulator.get('score'),
-    chain: simulator.get('chain')
+    chain: simulator.get('chain'),
+    chainScore: simulator.get('chainScore')
   };
 };
 

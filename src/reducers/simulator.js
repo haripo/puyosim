@@ -116,6 +116,9 @@ function vanishPuyos(state, action) {
   }
 
   return state.withMutations(s => {
+    const chain = s.get('chain');
+    const additionalScore = calcChainStepScore(chain + 1, connections);
+
     connections
       .forEach(connection => {
         connection.puyos.forEach(puyo => {
@@ -128,10 +131,8 @@ function vanishPuyos(state, action) {
         });
       });
     s.update('chain', chain => chain + 1);
-    s.update('score', score => {
-      const chain = s.get('chain');
-      return (chain === 1 ? 0 : score) + calcChainStepScore(chain, connections);
-    });
+    s.update('score', score => score + additionalScore);
+    s.update('chainScore', score => score + additionalScore);
   });
 }
 
@@ -169,7 +170,7 @@ function finishVanishingAnimations(state, action) {
 }
 
 function finishChain(state, action) {
-  return state.set('chain', 0);
+  return state.set('chain', 0).set('chainScore', 0);
 }
 
 function undoField(state, action) {
@@ -199,6 +200,7 @@ function createInitialState() {
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
+    chainScore: 0,
     score: 0,
     pendingPair: new PendingPair(2, 'bottom', queue[0][0], queue[0][1]),
     droppingPuyos: List(),
