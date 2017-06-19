@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import NoticePuyos from '../components/NoticePuyos';
+import ChainResult from '../components/ChainResult';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
   return {
-    score: simulator.get('score')
+    score: simulator.get('score'),
+    chain: simulator.get('chain')
   };
 };
 
@@ -16,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(NoticePuyos));
+)(toJS(ChainResult));
