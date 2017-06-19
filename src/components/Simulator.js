@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import React, { Component } from 'react';
 import { Alert, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../containers/NextWindowContainer';
-import NoticePuyosContainer from '../containers/NoticePuyosContainer';
+import ChainResultContainer from '../containers/ChainResultContainer';
 import { contentsMargin, controllerButtonSize } from '../utils/constants';
 import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
@@ -92,7 +92,7 @@ export default class Simulator extends Component {
               <Text>
                 おじゃまぷよ
               </Text>
-              <NoticePuyosContainer />
+              <ChainResultContainer />
             </View>
             <View style={{ flexDirection: 'column' }}>
               <View style={ styles.buttonGroup }>
