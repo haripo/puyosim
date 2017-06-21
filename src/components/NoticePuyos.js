@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { contentsMargin, contentsPadding } from '../utils/constants';
+import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
 
 /**
  * Component for render notice puyos
@@ -66,9 +66,10 @@ export default class NoticePuyos extends Component {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'row',
-    backgroundColor: '#BBBBBB',
+    backgroundColor: cardBackgroundColor,
     marginTop: contentsMargin,
-    height: 32 + contentsPadding * 2
+    height: 32 + contentsPadding * 2,
+    elevation: 2,
   },
   puyo: {
     width: 32,

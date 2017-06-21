@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { Alert, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../containers/NextWindowContainer';
 import ChainResultContainer from '../containers/ChainResultContainer';
-import { contentsMargin, controllerButtonSize } from '../utils/constants';
+import { contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../utils/constants';
 import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
 
@@ -31,6 +31,12 @@ export default class Simulator extends Component {
         showAsAction: 'never'
       }
     ]
+  };
+
+  static navigatorStyle = {
+    navBarBackgroundColor: themeColor,
+    navBarTextColor: themeLightColor,
+    navBarButtonColor: themeLightColor
   };
 
   constructor(props) {
@@ -144,11 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#f5fcff'
-  },
-  toolbar: {
-    backgroundColor: '#e9eaed',
-    height: 56
+    backgroundColor: '#F5F5F5'
   },
   contents: {
     flex: 1,
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   controllerButton: {
-    backgroundColor: '#999',
+    backgroundColor: themeColor,
     width: controllerButtonSize,
     height: controllerButtonSize,
     marginTop: contentsMargin,
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   controllerFullWidthButton: {
-    backgroundColor: '#999',
+    backgroundColor: themeColor,
     width: controllerButtonSize * 2 + contentsMargin,
     height: controllerButtonSize,
     marginTop: contentsMargin,
@@ -192,7 +194,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   field: {
-    backgroundColor: '#BBBBBB',
     margin: contentsMargin
   }
 });

@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
-import { contentsPadding, fieldCols, fieldRows, puyoSize } from '../utils/constants';
+import { cardBackgroundColor, contentsPadding, fieldCols, fieldRows, puyoSize } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 
@@ -122,6 +122,8 @@ export default class Field extends Component {
 
 const styles = StyleSheet.create({
   field: {
+    backgroundColor: cardBackgroundColor,
+    elevation: 2,
     width: puyoSize * fieldCols + contentsPadding * 2,
     height: puyoSize * fieldRows + contentsPadding * 2
   },

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { contentsPadding, puyoSize } from '../utils/constants';
-import Puyo from './Puyo';
-
 /**
  * Component for render next and double-next pairs
  */
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { cardBackgroundColor, contentsPadding, puyoSize } from '../utils/constants';
+import Puyo from './Puyo';
+
 export default class NextWindow extends Component {
   render() {
     const { next, doubleNext } = this.props;
@@ -43,7 +43,8 @@ export default class NextWindow extends Component {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'row',
-    backgroundColor: '#BBBBBB'
+    backgroundColor: cardBackgroundColor,
+    elevation: 2
   },
   nextWindow: {
     width: puyoSize + contentsPadding * 2,

@@ -22,3 +22,7 @@ export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 
 export const controllerButtonSize = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
 
 
+export const cardBackgroundColor = '#EFEBE9';
+export const themeColor = '#6D4C41';
+export const themeLightColor = '#EFEBE9';
+
