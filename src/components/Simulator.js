@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { Alert, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../containers/NextWindowContainer';
 import ChainResultContainer from '../containers/ChainResultContainer';
-import { contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../utils/constants';
+import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../utils/constants';
 import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
 
@@ -120,23 +120,25 @@ export default class Simulator extends Component {
                   <Image source={ require('../../assets/control_b.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
               </View>
-              <View style={ styles.buttonGroup }>
+              <View style={styles.buttons}>
+                <View style={ styles.buttonGroup }>
+                  <TouchableOpacity
+                    style={ styles.controllerButton }
+                    onPress={ this.props.onMoveLeftPressed }>
+                    <Image source={ require('../../assets/control_left.png') } style={ styles.controllerButtonImage }/>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={ styles.controllerButton }
+                    onPress={ this.props.onMoveRightPressed }>
+                    <Image source={ require('../../assets/control_right.png') } style={ styles.controllerButtonImage }/>
+                  </TouchableOpacity>
+                </View>
                 <TouchableOpacity
-                  style={ styles.controllerButton }
-                  onPress={ this.props.onMoveLeftPressed }>
-                  <Image source={ require('../../assets/control_left.png') } style={ styles.controllerButtonImage }/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={ styles.controllerButton }
-                  onPress={ this.props.onMoveRightPressed }>
-                  <Image source={ require('../../assets/control_right.png') } style={ styles.controllerButtonImage }/>
+                  style={ styles.controllerFullWidthButton }
+                  onPress={ this.props.onDropPressed }>
+                  <Image source={ require('../../assets/control_down.png') } style={ styles.controllerButtonImage }/>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={ styles.controllerFullWidthButton }
-                onPress={ this.props.onDropPressed }>
-                <Image source={ require('../../assets/control_down.png') } style={ styles.controllerButtonImage }/>
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -168,25 +170,29 @@ const styles = StyleSheet.create({
   sideHead: {
     flex: 1
   },
+  buttons: {
+  },
   buttonGroup: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   controllerButton: {
-    backgroundColor: themeColor,
     width: controllerButtonSize,
     height: controllerButtonSize,
     marginTop: contentsMargin,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: buttonColor,
+    borderRadius: 3,
   },
   controllerFullWidthButton: {
-    backgroundColor: themeColor,
+    backgroundColor: buttonColor,
     width: controllerButtonSize * 2 + contentsMargin,
     height: controllerButtonSize,
     marginTop: contentsMargin,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: 3,
   },
   controllerButtonImage: {
     width: '25%',
