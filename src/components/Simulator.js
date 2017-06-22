@@ -11,6 +11,7 @@ import ChainResultContainer from '../containers/ChainResultContainer';
 import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../utils/constants';
 import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -105,19 +106,20 @@ export default class Simulator extends Component {
                 <TouchableOpacity
                   style={ styles.controllerFullWidthButton }
                   onPress={ this.props.onUndoSelected }>
-                  <Text>Undo</Text>
+                  <Icon name="undo" size={30} color="#FFF" />
+                  <Text style={{ color: '#FFF' }}>Undo</Text>
                 </TouchableOpacity>
               </View>
               <View style={ styles.buttonGroup }>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onRotateLeftPressed }>
-                  <Image source={ require('../../assets/control_a.png') } style={ styles.controllerButtonImage }/>
+                  <Icon name="rotate-left" size={30} color="#FFF" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={ styles.controllerButton }
                   onPress={ this.props.onRotateRightPressed }>
-                  <Image source={ require('../../assets/control_b.png') } style={ styles.controllerButtonImage }/>
+                  <Icon name="rotate-right" size={30} color="#FFF" />
                 </TouchableOpacity>
               </View>
               <View style={styles.buttons}>
@@ -125,18 +127,18 @@ export default class Simulator extends Component {
                   <TouchableOpacity
                     style={ styles.controllerButton }
                     onPress={ this.props.onMoveLeftPressed }>
-                    <Image source={ require('../../assets/control_left.png') } style={ styles.controllerButtonImage }/>
+                    <Icon name="arrow-back" size={30} color="#FFF" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={ styles.controllerButton }
                     onPress={ this.props.onMoveRightPressed }>
-                    <Image source={ require('../../assets/control_right.png') } style={ styles.controllerButtonImage }/>
+                    <Icon name="arrow-forward" size={30} color="#FFF" />
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity
                   style={ styles.controllerFullWidthButton }
                   onPress={ this.props.onDropPressed }>
-                  <Image source={ require('../../assets/control_down.png') } style={ styles.controllerButtonImage }/>
+                  <Icon name="arrow-downward" size={30} color="#FFF" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: buttonColor,
     borderRadius: 3,
+    elevation: 3,
   },
   controllerFullWidthButton: {
     backgroundColor: buttonColor,
@@ -193,6 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
+    elevation: 3,
   },
   controllerButtonImage: {
     width: '25%',
