@@ -3,7 +3,7 @@ import { fieldCols } from '../utils/constants';
 
 const initialState = {
   col: 2,
-  rotation: 'bottom',
+  rotation: 'top',
   first: null,
   second: null
 };
@@ -41,7 +41,7 @@ export default class PendingPair extends Record(initialState) {
   }
 
   resetPosition() {
-    return this.set('col', 2).set('rotation', 'bottom');
+    return this.set('col', 2).set('rotation', 'top');
   }
 
   rotate(direction) {
