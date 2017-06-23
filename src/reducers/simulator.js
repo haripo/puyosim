@@ -112,7 +112,7 @@ function vanishPuyos(state, action) {
     .filter(c => c.puyos.length >= 4);
 
   if (connections.length === 0) {
-    return finishChain(state, {});
+    return finishChain(state); // finish chain if nothing to vanish
   }
 
   return state.withMutations(s => {
@@ -137,6 +137,10 @@ function vanishPuyos(state, action) {
 }
 
 function applyGravity(state, action) {
+  if (!hasDrop(state)) {
+    return finishChain(state); // finish chain if nothing to drop
+  }
+
   return state.withMutations(s => {
     for (let i = 0; i < fieldCols; i++) {
       for (let j = 0; j < fieldRows; j++) {
@@ -244,12 +248,16 @@ const simulator = (state = initialState, action) => {
   }
 };
 
-export function canVanish(state) {
-  const stack = state.simulator.get('stack');
-  return FieldUtils
-      .getConnections(stack)
-      .filter(c => c.puyos.length >= 4)
-      .length > 0;
+function hasDrop(state) {
+  const stack = state.get('stack');
+  for (let i = 0; i < fieldRows - 1; i++) {
+    for (let j = 0; j < fieldCols; j++) {
+      if (stack.getIn([i, j]) !== 0 && stack.getIn([i + 1, j]) === 0) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 export function isActive(state) {

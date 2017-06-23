@@ -12,7 +12,6 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-
   componentWillReceiveProps(nextProps) {
     const { vanishings } = this.state;
 
@@ -24,7 +23,6 @@ export default class DroppingPuyos extends Component {
       this.setState({ vanishings: [] });
     }
   }
-
 
   launchVanishingAnimation(vanishingPuyos) {
     this.setState({
