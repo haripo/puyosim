@@ -13,24 +13,24 @@ export default class NextWindow extends Component {
       <View style={ styles.component }>
         <View style={ styles.nextWindow }>
           <Puyo
-            puyo={ next[0] }
+            puyo={ next[1] }
             size={ puyoSize }
             x={ contentsPadding }
             y={ contentsPadding }/>
           <Puyo
-            puyo={ next[1] }
+            puyo={ next[0] }
             size={ puyoSize }
             x={ contentsPadding }
             y={ contentsPadding + puyoSize }/>
         </View>
         <View style={ styles.nextWindow }>
           <Puyo
-            puyo={ doubleNext[0] }
+            puyo={ doubleNext[1] }
             size={ puyoSize }
             x={ contentsPadding }
             y={ contentsPadding }/>
           <Puyo
-            puyo={ doubleNext[1] }
+            puyo={ doubleNext[0] }
             size={ puyoSize }
             x={ contentsPadding}
             y={ contentsPadding + puyoSize}/>
