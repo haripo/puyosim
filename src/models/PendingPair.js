@@ -1,9 +1,12 @@
 import { Record } from 'immutable';
 import { fieldCols } from '../utils/constants';
 
-const initialState = {
-  col: 2,
-  rotation: 'top',
+const defaultCol = 2;
+const defaultRotation = 'top';
+
+const recordType = {
+  col: defaultCol,
+  rotation: defaultRotation,
   first: null,
   second: null
 };
@@ -15,14 +18,9 @@ const rotations = [
   'left'
 ];
 
-export default class PendingPair extends Record(initialState) {
-  constructor(col, rotation, first, second) {
-    super({
-      col,
-      rotation,
-      first,
-      second
-    });
+export default class PendingPair extends Record(recordType) {
+  constructor(first, second) {
+    super({ first, second });
   }
 
   get firstCol() {
@@ -41,7 +39,7 @@ export default class PendingPair extends Record(initialState) {
   }
 
   resetPosition() {
-    return this.set('col', 2).set('rotation', 'top');
+    return this.set('col', defaultCol).set('rotation', defaultRotation);
   }
 
   rotate(direction) {

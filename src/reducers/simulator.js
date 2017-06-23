@@ -202,7 +202,7 @@ function createInitialState() {
     chain: 0,
     chainScore: 0,
     score: 0,
-    pendingPair: new PendingPair(2, 'bottom', queue[0][0], queue[0][1]),
+    pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
     history: List()
