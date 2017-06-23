@@ -15,7 +15,6 @@ import {
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simulator';
 import toJS from '../utils/toJS';
-import { themeColor, themeLightColor } from '../utils/constants';
 
 const mapStateToProps = (state) => {
   const simulator = state.simulator;
