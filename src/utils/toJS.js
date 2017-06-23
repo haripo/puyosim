@@ -2,7 +2,7 @@ import { Iterable } from 'immutable';
 import React from 'react';
 
 export default (WrappedComponent) => {
-  return (wrappedComponentProps) => {
+  const component = (wrappedComponentProps) => {
     const KEY = 0;
     const VALUE = 1;
 
@@ -17,4 +17,14 @@ export default (WrappedComponent) => {
 
     return <WrappedComponent {...propsJS} />;
   };
+
+  // copy static members
+  const ignoreKeys = ['length', 'name', 'arguments', 'caller', 'prototype'];
+  for (let key of Object.getOwnPropertyNames(WrappedComponent)) {
+    if (!ignoreKeys.find(k => k === key)) {
+      component[key] = WrappedComponent[key];
+    }
+  }
+
+  return component;
 };
