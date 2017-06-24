@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: puyoSize,
     height: puyoSize,
-    top: puyoSize,
-    left: puyoSize * 2
+    top: puyoSize + contentsPadding,
+    left: puyoSize * 2 + contentsPadding
   }
 });
