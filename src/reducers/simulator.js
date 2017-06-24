@@ -100,7 +100,8 @@ function putNextPair(state, action) {
       .updateIn(['stack', positions[0].row, positions[0].col], () => pair.get(0))
       .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1))
       .update('history', history => history.unshift(makeHistoryRecord(state)))
-      .update('pendingPair', pair => pair.resetPosition());
+      .update('pendingPair', pair => pair.resetPosition())
+      .set('isDropOperated', true);
   }
 
   return state;
@@ -113,6 +114,13 @@ function vanishPuyos(state, action) {
 
   if (connections.length === 0) {
     return finishChain(state); // finish chain if nothing to vanish
+  }
+
+  if (state.get('isDropOperated')) {
+    state = state
+      .set('isDropOperated', false)
+      .set('chain', 0)
+      .set('chainScore', 0);
   }
 
   return state.withMutations(s => {
@@ -174,7 +182,7 @@ function finishVanishingAnimations(state, action) {
 }
 
 function finishChain(state, action) {
-  return state.set('chain', 0).set('chainScore', 0);
+  return state;
 }
 
 function undoField(state, action) {
@@ -206,6 +214,7 @@ function createInitialState() {
     chain: 0,
     chainScore: 0,
     score: 0,
+    isDropOperated: false,
     pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
