@@ -113,12 +113,14 @@ export default class Simulator extends Component {
               <View style={ styles.buttonGroup }>
                 <TouchableOpacity
                   style={ styles.controllerButton }
-                  onPress={ this.props.onRotateLeftPressed }>
+                  onPress={ this.props.onRotateLeftPressed }
+                  disabled={ !this.props.isActive }>
                   <Icon name="rotate-left" size={30} color="#FFF" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={ styles.controllerButton }
-                  onPress={ this.props.onRotateRightPressed }>
+                  onPress={ this.props.onRotateRightPressed }
+                  disabled={ !this.props.isActive }>
                   <Icon name="rotate-right" size={30} color="#FFF" />
                 </TouchableOpacity>
               </View>
@@ -126,18 +128,21 @@ export default class Simulator extends Component {
                 <View style={ styles.buttonGroup }>
                   <TouchableOpacity
                     style={ styles.controllerButton }
-                    onPress={ this.props.onMoveLeftPressed }>
+                    onPress={ this.props.onMoveLeftPressed }
+                    disabled={ !this.props.isActive }>
                     <Icon name="arrow-back" size={30} color="#FFF" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={ styles.controllerButton }
-                    onPress={ this.props.onMoveRightPressed }>
+                    onPress={ this.props.onMoveRightPressed }
+                    disabled={ !this.props.isActive }>
                     <Icon name="arrow-forward" size={30} color="#FFF" />
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity
                   style={ styles.controllerFullWidthButton }
-                  onPress={ this.props.onDropPressed }>
+                  onPress={ this.props.onDropPressed }
+                  disabled={ !this.props.isActive }>
                   <Icon name="arrow-downward" size={30} color="#FFF" />
                 </TouchableOpacity>
               </View>
