@@ -39,13 +39,19 @@ function generateQueue() {
 
 const HistoryRecord = Record({
   queue: List(),
-  stack: List()
+  stack: List(),
+  chain: 0,
+  score: 0,
+  chainScore: 0
 });
 
 function makeHistoryRecord(state) {
   return new HistoryRecord({
     queue: state.get('queue'),
-    stack: state.get('stack')
+    stack: state.get('stack'),
+    chain: state.get('chain'),
+    score: state.get('score'),
+    chainScore: state.get('chainScore')
   });
 }
 
@@ -189,12 +195,18 @@ function undoField(state, action) {
   if (state.get('history').size === 0) {
     return state;
   }
-  return state
-    .set('queue', state.getIn(['history', 0, 'queue']))
-    .set('stack', state.getIn(['history', 0, 'stack']))
-    .set('vanishingPuyos', List())
-    .set('droppingPuyos', List())
-    .update('history', history => history.shift());
+  return state.withMutations(s => {
+    const record = state.getIn(['history', 0]);
+    return s
+      .set('queue', record.get('queue'))
+      .set('stack', record.get('stack'))
+      .set('chain', record.get('chain'))
+      .set('score', record.get('score'))
+      .set('chainScore', record.get('chainScore'))
+      .set('vanishingPuyos', List())
+      .set('droppingPuyos', List())
+      .update('history', history => history.shift());
+  })
 }
 
 function resetField(state, action) {
