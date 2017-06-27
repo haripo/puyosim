@@ -12,6 +12,7 @@ import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLig
 import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import I18n from '../utils/i18n';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
