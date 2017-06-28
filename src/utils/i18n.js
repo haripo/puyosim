@@ -4,10 +4,26 @@ I18n.fallbacks = true;
 
 I18n.translations = {
   'ja-JP': {
-    greeting: 'こん'
+    nextTitle: 'ネクスト',
+    garbageTitle: 'おじゃまぷよ',
+    chain: '連鎖',
+    points: '点',
+    total: 'トータル',
+    undo: '1 手戻す',
+    reset: '初手に戻す',
+    restart: 'リスタート',
+    confirmRestart: 'ツモが再生成されます。よろしいですか？'
   },
   'en': {
-    greeting: 'Hi!'
+    nextTitle: 'Next',
+    garbageTitle: 'Nuisance queue',
+    chain: 'chain',
+    points: 'points',
+    total: 'total',
+    undo: 'undo',
+    reset: 'reset',
+    restart: 'restart',
+    confirmRestart: 'Color pattern will regenerate. Are you sure?'
   }
 };
 

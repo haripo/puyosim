@@ -18,17 +18,17 @@ export default class Simulator extends Component {
   static navigatorButtons = {
     rightButtons: [
       {
-        title: 'リスタート',
+        title: I18n.t('restart'),
         id: 'restart',
         showAsAction: 'never'
       },
       {
-        title: '初手に戻す',
+        title: I18n.t('reset'),
         id: 'reset',
         showAsAction: 'never'
       },
       {
-        title: '1 手戻す',
+        title: I18n.t('undo'),
         id: 'undo',
         showAsAction: 'never'
       }
@@ -58,8 +58,8 @@ export default class Simulator extends Component {
           break;
         case 'restart':
           Alert.alert(
-            'リスタート',
-            'ツモが再生成されます。よろしいですか？',
+            I18n.t('restart'),
+            I18n.t('confirmRestart'),
             [
               { text: 'Cancel', onPress: _.noop, style: 'cancel' },
               { text: 'OK', onPress: this.props.onRestartSelected }
@@ -94,11 +94,11 @@ export default class Simulator extends Component {
           <View style={ styles.side }>
             <View style={ styles.sideHead }>
               <Text>
-                NEXT
+                { I18n.t('nextTitle') }
               </Text>
               <NextWindowContainer />
               <Text>
-                おじゃまぷよ
+                { I18n.t('garbageTitle') }
               </Text>
               <ChainResultContainer />
             </View>
