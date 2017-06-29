@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
-import { cardBackgroundColor, contentsPadding, fieldCols, fieldRows, puyoSize } from '../utils/constants';
+import { cardBackgroundColor, contentsPadding, fieldCols, fieldRows, puyoSize, themeColor } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 
@@ -115,6 +115,7 @@ export default class Field extends Component {
         <Image source={ require('../../assets/cross.png') } style={ styles.cross }/>
         <DroppingPuyosContainer />
         <VanishingPuyosContainer />
+        <View style={ styles.topShadow }></View>
       </View>
     );
   }
@@ -148,5 +149,14 @@ const styles = StyleSheet.create({
     height: puyoSize,
     top: puyoSize + contentsPadding,
     left: puyoSize * 2 + contentsPadding
+  },
+  topShadow: {
+    width: puyoSize * fieldCols * contentsPadding * 2,
+    height: puyoSize + contentsPadding,
+    backgroundColor: themeColor,
+    opacity: 0.2,
+    position: 'absolute',
+    top: 0,
+    left: 0,
   }
 });
