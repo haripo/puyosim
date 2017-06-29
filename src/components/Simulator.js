@@ -17,6 +17,11 @@ import I18n from '../utils/i18n';
 export default class Simulator extends Component {
   static navigatorButtons = {
     rightButtons: [
+      // {
+      //   title: 'About',
+      //   id: 'about',
+      //   showAsAction: 'never'
+      // },
       {
         title: I18n.t('restart'),
         id: 'restart',
@@ -66,6 +71,9 @@ export default class Simulator extends Component {
             ],
             { cancelable: false }
           );
+          break;
+        case 'about':
+          this.props.navigator.push({ screen: 'com.puyosimulator.About' });
           break;
       }
     }
