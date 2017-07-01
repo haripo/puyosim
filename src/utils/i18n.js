@@ -23,7 +23,7 @@ I18n.translations = {
     undo: 'undo',
     reset: 'reset',
     restart: 'restart',
-    confirmRestart: 'Color pattern will regenerate. Are you sure?'
+    confirmRestart: 'Color pattern will be regenerated. Are you sure?'
   }
 };
 
