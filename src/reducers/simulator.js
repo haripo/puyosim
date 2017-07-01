@@ -106,7 +106,7 @@ function putNextPair(state, action) {
 
   return state.withMutations(s => {
     for (let i = 0; i < positions.length; i++) {
-      s.updateIn(['stack', positions[i].row, positions[i].col], () => pair.get(i))
+      s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
     return s
       .update('queue', q => q.shift().push(pair))
@@ -292,9 +292,7 @@ export function isActive(state) {
 }
 
 export function getGhost(state) {
-  return getDropPositions(state).map((p, index) => {
-    return { ...p, color: state.getIn(['queue', 0, index]) }
-  })
+  return getDropPositions(state);
 }
 
 export function getPendingPair(state) {
@@ -323,7 +321,8 @@ export function getVanishingPuyos(state) {
   });
 
   const hasConnection = (row, col, color) => {
-    return FieldUtils.isValidPosition({ row, col }) && field[row][col] === color;
+    return FieldUtils.isValidPosition({ row, col }) &&
+      field[row][col] === color;
   };
 
   return vanishings.map(puyo => {
@@ -351,6 +350,7 @@ export function getStack(state) {
 
   const hasConnection = (row, col, color) => {
     return FieldUtils.isValidPosition({ row, col }) &&
+      0 < row &&
       stack.getIn([row, col]) === color &&
       color !== 0 &&
       !isDropping(row, col);
@@ -358,12 +358,13 @@ export function getStack(state) {
 
   return stack.map((cols, row) => {
     return cols.map((color, col) => {
-      const connections = {
+      let connections = {
         top: hasConnection(row - 1, col, color),
         bottom: hasConnection(row + 1, col, color),
         left: hasConnection(row, col - 1, color),
         right: hasConnection(row, col + 1, color)
       };
+      if (row === 0) connections = {}; // puyos on row = 0 have no connection
       return Map({
         row: row,
         col: col,
@@ -375,9 +376,10 @@ export function getStack(state) {
   });
 }
 
-function getDropPositions(state) {
+export function getDropPositions(state) {
   const pair = state.get('pendingPair');
   const stack = state.get('stack');
+  const queueHead = state.get('queue').get(0);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
@@ -387,8 +389,8 @@ function getDropPositions(state) {
     return i;
   };
 
-  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol };
-  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol };
+  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: queueHead.get(0) };
+  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: queueHead.get(1) };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
     if (pair.rotation === 'bottom') {
       drop1.row -= 1;
@@ -396,6 +398,10 @@ function getDropPositions(state) {
       drop2.row -= 1;
     }
   }
+
+  console.log(drop1);
+  console.log(drop2);
+  console.log([drop1, drop2].filter(d => FieldUtils.isValidPosition(d)));
 
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
 }

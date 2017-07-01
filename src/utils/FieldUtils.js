@@ -71,7 +71,8 @@ export default class FieldUtils {
     let id = 0;
 
     const search = (r, c, puyo) => {
-      if (0 <= r && r < fieldRows && 0 <= c && c < fieldCols &&
+      // note: puyos on row = 0 do not be connected nor vanished.
+      if (1 <= r && r < fieldRows && 0 <= c && c < fieldCols &&
         puyo === stack.getIn([r, c]) && !connectionIds[r][c]) {
         connectionIds[r][c] = id;
         search(r - 1, c, puyo);
