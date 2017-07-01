@@ -399,10 +399,6 @@ export function getDropPositions(state) {
     }
   }
 
-  console.log(drop1);
-  console.log(drop2);
-  console.log([drop1, drop2].filter(d => FieldUtils.isValidPosition(d)));
-
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
 }
 
