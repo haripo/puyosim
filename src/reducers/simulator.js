@@ -100,17 +100,20 @@ function putNextPair(state, action) {
 
   const positions = getDropPositions(state);
 
-  if (positions) {
-    return state
+  if (positions.length === 0) {
+    return state;
+  }
+
+  return state.withMutations(s => {
+    for (let i = 0; i < positions.length; i++) {
+      s.updateIn(['stack', positions[i].row, positions[i].col], () => pair.get(i))
+    }
+    return s
       .update('queue', q => q.shift().push(pair))
-      .updateIn(['stack', positions[0].row, positions[0].col], () => pair.get(0))
-      .updateIn(['stack', positions[1].row, positions[1].col], () => pair.get(1))
       .update('history', history => history.unshift(makeHistoryRecord(state)))
       .update('pendingPair', pair => pair.resetPosition())
       .set('isDropOperated', true);
-  }
-
-  return state;
+  });
 }
 
 function vanishPuyos(state, action) {
@@ -289,15 +292,9 @@ export function isActive(state) {
 }
 
 export function getGhost(state) {
-  const position = getDropPositions(state);
-  if (position) {
-    return [
-      { ...position[0], color: state.getIn(['queue', 0, 0]) },
-      { ...position[1], color: state.getIn(['queue', 0, 1]) }
-    ];
-  } else {
-    return [];
-  }
+  return getDropPositions(state).map((p, index) => {
+    return { ...p, color: state.getIn(['queue', 0, index]) }
+  })
 }
 
 export function getPendingPair(state) {
@@ -399,10 +396,8 @@ function getDropPositions(state) {
       drop2.row -= 1;
     }
   }
-  if (FieldUtils.isValidPosition(drop1) && FieldUtils.isValidPosition(drop2)) {
-    return [drop1, drop2];
-  }
-  return null;
+
+  return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
 }
 
 export default simulator;
