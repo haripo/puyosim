@@ -11,22 +11,23 @@
     "babel-preset-react-native-stage-0": "^1.0.1",
     "babel-preset-stage-0": "^6.24.1",
     "bugsnag-react-native": "^2.2.3",
+    "i18n-js": "^1.0.0",
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.45.0",
-    "react-native-i18n": "^2.0.1",
-    "react-native-navigation": "^1.1.93",
+    "react": "^16.0.0-alpha.12",
+    "react-native": "^0.45.1",
+    "react-native-i18n": "^2.0.2",
+    "react-native-navigation": "^1.1.128",
     "react-native-vector-icons": "^4.2.0",
     "react-redux": "^5.0.4",
-    "redux": "^3.6.0",
+    "redux": "^3.7.1",
     "redux-logger": "^3.0.1",
-    "redux-saga": "^0.15.3"
+    "redux-saga": "^0.15.4"
   },
   "devDependencies": {
-    "babel-jest": "19.0.0",
-    "babel-preset-react-native": "1.9.1",
-    "jest": "19.0.2",
+    "babel-jest": "^20.0.3",
+    "babel-preset-react-native": "^2.0.0",
+    "jest": "^20.0.4",
     "react-test-renderer": "16.0.0-alpha.6"
   },
   "jest": {
