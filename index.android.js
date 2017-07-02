@@ -41,5 +41,9 @@ Navigation.startSingleScreenApp({
   screen: {
     screen: 'com.puyosimulator.Simulator',
   },
-  animationType: 'none'
+  appStyle: {
+    orientation: 'portrait'
+  },
+  animationType: 'none',
+  portraitOnlyMode: true,
 });
