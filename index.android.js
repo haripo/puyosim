@@ -41,5 +41,5 @@ Navigation.startSingleScreenApp({
   screen: {
     screen: 'com.puyosimulator.Simulator',
   },
-  animationType: 'slide-down'
+  animationType: 'none'
 });
