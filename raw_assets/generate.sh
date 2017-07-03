@@ -32,10 +32,11 @@ mv cropped_controls_002.png ../assets/control_left.png
 mv cropped_controls_003.png ../assets/control_right.png
 mv cropped_controls_004.png ../assets/control_down.png
 
-convert puyos.xcf -crop 16x16 cropped_icon_%03d.png
+convert icon.xcf -crop 16x16 cropped_icon_%03d.png
 convert cropped_icon_000.png -sample 300% png32:../android/app/src/main/res/mipmap-mdpi/ic_launcher.png
 convert cropped_icon_000.png -sample 450% png32:../android/app/src/main/res/mipmap-hdpi/ic_launcher.png
 convert cropped_icon_000.png -sample 600% png32:../android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
 convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+cp cropped_icon_000.png icon.png
 
 rm -f cropped_*
