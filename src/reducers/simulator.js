@@ -1,8 +1,3 @@
-/**
- * Show highlights
- * @param state
- * @param action
- */
 import Immutable, { List, Map, Record } from 'immutable';
 import {
   APPLY_GRAVITY,
@@ -22,6 +17,7 @@ import {
 import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
+import { loadLastState, saveLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 
 const queueLength = 128;
@@ -44,6 +40,7 @@ const HistoryRecord = Record({
   score: 0,
   chainScore: 0,
 });
+
 
 function makeHistoryRecord(state) {
   return new HistoryRecord({
@@ -123,6 +120,10 @@ function vanishPuyos(state, action) {
     .filter(c => c.puyos.length >= 4);
 
   if (connections.length === 0) {
+    // save current state
+    // TODO: Redux として正しいか？
+    saveLastState(makeHistoryRecord(state));
+
     return finishChain(state); // finish chain if nothing to vanish
   }
 
@@ -195,18 +196,24 @@ function finishChain(state, action) {
   return state;
 }
 
-function undoField(state, action) {
-  if (state.get('history').size === 0) {
-    return state;
-  }
+function revertFromRecord(state, record) {
   return state.withMutations(s => {
-    const record = state.getIn(['history', 0]);
     return s
       .set('queue', record.get('queue'))
       .set('stack', record.get('stack'))
       .set('chain', record.get('chain'))
       .set('score', record.get('score'))
       .set('chainScore', record.get('chainScore'))
+  });
+}
+
+function undoField(state, action) {
+  if (state.get('history').size === 0) {
+    return state;
+  }
+  return state.withMutations(s => {
+    const record = state.getIn(['history', 0]);
+    return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
       .update('history', history => history.shift())
@@ -240,7 +247,18 @@ function createInitialState() {
   });
 }
 
-let initialState = createInitialState();
+function loadOrCreateInitialState() {
+  let record = loadLastState();
+  if (record) {
+    // revert last state
+    let state = createInitialState();
+    return revertFromRecord(state, Immutable.fromJS(record))
+  } else {
+    return createInitialState();
+  }
+}
+
+let initialState = loadOrCreateInitialState();
 
 const simulator = (state = initialState, action) => {
   switch (action.type) {
