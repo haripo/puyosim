@@ -17,47 +17,6 @@ export default class FieldUtils {
   }
 
   /**
-   * Returns puyo position considering gravity
-   * @param position user input position
-   * @param stack stack object
-   * @returns {{row: number, col: Number}}
-   */
-  static getDropPosition(position: Position, stack: Stack): Position {
-    let i = fieldRows - 1;
-    while (stack.get(i) && stack.get(i).get(position.col) !== 0) {
-      i--;
-    }
-    return {
-      row: i,
-      col: position.col
-    };
-  }
-
-  static getHighlightPositions(position, rotation) {
-    const result = [
-      position,
-      this.addPosition(position, rotation)
-    ];
-    if (this.isValidPosition(result[0]) && this.isValidPosition(result[1])) {
-      return result;
-    }
-    return [];
-  }
-
-  /**
-   * Add two position, especially position and rotation
-   * @param p position or rotation object
-   * @param q position or rotation object
-   * @returns {{row: number, col: number}} position
-   */
-  static addPosition(p: Position, q: Position): Position {
-    return {
-      row: p.row + q.row,
-      col: p.col + q.col
-    };
-  }
-
-  /**
    * Check whether given position is valid
    * @param p position object
    * @returns {boolean} true if given position is valid
