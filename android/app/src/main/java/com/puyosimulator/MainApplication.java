@@ -3,6 +3,7 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.realm.react.RealmReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactNativeHost;
@@ -28,6 +29,7 @@ public class MainApplication extends NavigationApplication {
          // No need to add RnnPackage and MainReactPackage
          return Arrays.<ReactPackage>asList(
              BugsnagReactNative.getPackage(),
+             new RealmReactPackage(),
              new RNI18nPackage()
          );
      }

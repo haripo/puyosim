@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':realm')
     compile project(':react-native-vector-icons')
     compile project(':react-native-i18n')
     compile project(':bugsnag-react-native')
