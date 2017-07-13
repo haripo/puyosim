@@ -16,6 +16,7 @@ export default class AboutContents extends Component {
 
     this.websiteURL = "http://puyos.im";
     this.feedbackURL = "http://puyos.im/feedback.html";
+    this.licensesURL  = "http://puyos.im/license.txt";
   }
 
   render() {
@@ -36,6 +37,7 @@ export default class AboutContents extends Component {
         </View>
         <View style={ styles.row } >
           <Button style={ styles.button }
+                  onPress={ () => Linking.openURL(this.licensesURL) }
                   title="open source licenses" />
         </View>
       </View>
