@@ -36,7 +36,7 @@ export default class AboutContents extends Component {
         </View>
         <View style={ styles.row } >
           <Button style={ styles.button }
-                  title="open source licences" />
+                  title="open source licenses" />
         </View>
       </View>
     )
