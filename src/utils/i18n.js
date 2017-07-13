@@ -12,6 +12,7 @@ I18n.translations = {
     undo: '1 手戻す',
     reset: '初手に戻す',
     restart: 'リスタート',
+    about: 'puyosim について',
     confirmRestart: 'ツモが再生成されます。よろしいですか？'
   },
   'en': {
@@ -23,6 +24,7 @@ I18n.translations = {
     undo: 'undo',
     reset: 'reset',
     restart: 'restart',
+    about: 'about',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?'
   }
 };
