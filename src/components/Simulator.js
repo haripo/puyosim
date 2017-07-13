@@ -17,11 +17,11 @@ import I18n from '../utils/i18n';
 export default class Simulator extends Component {
   static navigatorButtons = {
     rightButtons: [
-      // {
-      //   title: 'About',
-      //   id: 'about',
-      //   showAsAction: 'never'
-      // },
+      {
+        title: I18n.t('about'),
+        id: 'about',
+        showAsAction: 'never'
+      },
       {
         title: I18n.t('restart'),
         id: 'restart',

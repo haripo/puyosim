@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, Button, Linking } from 'react-native';
 import I18n from '../utils/i18n';
+import VersionNumber from 'react-native-version-number';
 import { themeColor, themeLightColor } from '../utils/constants';
 
 export default class AboutContents extends Component {
@@ -11,16 +12,32 @@ export default class AboutContents extends Component {
   };
 
   componentDidMount() {
-    this.props.navigator.setTitle({ title: "About" })
+    this.props.navigator.setTitle({ title: "About" });
+
+    this.websiteURL = "http://puyos.im";
+    this.feedbackURL = "http://puyos.im/feedback.html";
   }
 
   render() {
     return (
       <View style={ styles.component }>
-        <Image style={ styles.logo } source={ require('../../raw_assets/icon.png') } />
-        <Text>
-          Puyosim
-        </Text>
+        <View style={ styles.row }>
+          <Text style={ styles.title }>puyosim { VersionNumber.appVersion }</Text>
+        </View>
+        <View style={ styles.row }>
+          <Button style={ styles.button }
+                  onPress={ () => Linking.openURL(this.websiteURL) }
+                  title="view website" />
+        </View>
+        <View style={ styles.row }>
+          <Button style={ styles.button }
+                  onPress={ () => Linking.openURL(this.feedbackURL) }
+                  title="send feedback" />
+        </View>
+        <View style={ styles.row } >
+          <Button style={ styles.button }
+                  title="open source licences" />
+        </View>
       </View>
     )
   }
@@ -28,10 +45,16 @@ export default class AboutContents extends Component {
 
 const styles = StyleSheet.create({
   component: {
-    alignItems: 'center'
+    alignItems: 'stretch'
+  },
+  title: {
+    fontSize: 20
   },
   logo: {
-    width: '50%',
+    width: 200,
     resizeMode: 'contain'
+  },
+  row: {
+    padding: 10
   }
 });
