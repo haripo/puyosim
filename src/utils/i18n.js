@@ -13,7 +13,8 @@ I18n.translations = {
     reset: '初手に戻す',
     restart: 'リスタート',
     about: 'puyosim について',
-    confirmRestart: 'ツモが再生成されます。よろしいですか？'
+    confirmRestart: 'ツモが再生成されます。よろしいですか？',
+    shareViaTwitter: 'Twitter で手順をシェア',
   },
   'en': {
     nextTitle: 'Next',
@@ -25,7 +26,8 @@ I18n.translations = {
     reset: 'reset',
     restart: 'restart',
     about: 'about',
-    confirmRestart: 'Color pattern will be regenerated. Are you sure?'
+    confirmRestart: 'Color pattern will be regenerated. Are you sure?',
+    shareViaTwitter: 'Share '
   }
 };
 

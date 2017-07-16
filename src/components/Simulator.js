@@ -24,7 +24,7 @@ export default class Simulator extends Component {
         showAsAction: 'never'
       },
       {
-        title: 'share via IPS Simulator',
+        title: I18n.t('shareViaTwitter'),
         id: 'share-via-ips',
         showAsAction: 'never'
       },
