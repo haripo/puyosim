@@ -39,10 +39,11 @@ function generateQueue() {
 
 const HistoryRecord = Record({
   queue: List(),
-  stack: List(),
+  stack: List(), // TODO: stack and queue are redundant
   chain: 0,
   score: 0,
-  chainScore: 0
+  chainScore: 0,
+  move: null
 });
 
 function makeHistoryRecord(state) {
@@ -51,7 +52,8 @@ function makeHistoryRecord(state) {
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
-    chainScore: state.get('chainScore')
+    chainScore: state.get('chainScore'),
+    move: state.get('pendingPair'),
   });
 }
 
