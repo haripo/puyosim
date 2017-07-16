@@ -19,6 +19,7 @@
     "react-native-i18n": "^2.0.2",
     "react-native-navigation": "^1.1.128",
     "react-native-vector-icons": "^4.2.0",
+    "react-native-version-number": "^0.1.2",
     "react-redux": "^5.0.4",
     "realm": "^1.8.3",
     "redux": "^3.7.1",
