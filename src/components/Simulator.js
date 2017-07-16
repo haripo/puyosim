@@ -5,7 +5,7 @@
 
 import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { Alert, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View } from 'react-native';
+import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../containers/NextWindowContainer';
 import ChainResultContainer from '../containers/ChainResultContainer';
 import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../utils/constants';
@@ -13,6 +13,7 @@ import Field from './Field';
 import HandlingPuyos from './HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from '../utils/i18n';
+import generateIPSSimulatorURL from '../utils/generateIPSSimulatorURL';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -20,6 +21,11 @@ export default class Simulator extends Component {
       {
         title: I18n.t('about'),
         id: 'about',
+        showAsAction: 'never'
+      },
+      {
+        title: 'share via IPS Simulator',
+        id: 'share-via-ips',
         showAsAction: 'never'
       },
       {
@@ -71,6 +77,11 @@ export default class Simulator extends Component {
             ],
             { cancelable: false }
           );
+          break;
+        case 'share-via-ips':
+          const simulatorURL = generateIPSSimulatorURL(this.props.history);
+          const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&hashtags=puyosim`;
+          Linking.openURL(tweetURL);
           break;
         case 'about':
           this.props.navigator.push({ screen: 'com.puyosimulator.About' });

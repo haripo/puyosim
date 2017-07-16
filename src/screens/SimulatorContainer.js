@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   hideHighlights,
   moveHighlightsLeft,
-  moveHighlightsRight,
+  moveHighlightsRight, openTwitterShare,
   putNextPair,
   resetField,
   restart,
@@ -23,7 +23,8 @@ const mapStateToProps = (state) => {
     current: simulator.getIn(['queue', 0]),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
-    isActive: isActive(state)
+    isActive: isActive(state),
+    history: simulator.get('history')
   };
 };
 
@@ -61,6 +62,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRestartSelected: () => {
       dispatch(restart());
+    },
+    onTwitterShareSelected: () => {
+      dispatch(openTwitterShare());
     }
   };
 };
