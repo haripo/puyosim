@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   hideHighlights,
   moveHighlightsLeft,
-  moveHighlightsRight, openTwitterShare,
+  moveHighlightsRight,
   putNextPair,
   resetField,
   restart,
@@ -62,9 +62,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRestartSelected: () => {
       dispatch(restart());
-    },
-    onTwitterShareSelected: () => {
-      dispatch(openTwitterShare());
     }
   };
 };

@@ -25,7 +25,6 @@ export const CHAIN_FINISHED = 'CHAIN_FINISHED';
 export const UNDO_FIELD = 'UNDO_FIELD';
 export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
-export const OPEN_TWITTER_SHARE = 'OPEN_TWITTER_SHARE';
 
 export const putNextPair = (position, rotation) => {
   return {
@@ -62,4 +61,3 @@ export const chainFinished = makeActionCreator(CHAIN_FINISHED);
 export const undoField = makeActionCreator(UNDO_FIELD);
 export const resetField = makeActionCreator(RESET_FIELD);
 export const restart = makeActionCreator(RESTART);
-export const openTwitterShare = makeActionCreator(OPEN_TWITTER_SHARE);
