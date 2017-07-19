@@ -80,7 +80,7 @@ export default class Simulator extends Component {
           break;
         case 'share-via-ips':
           const simulatorURL = generateIPSSimulatorURL(this.props.moves);
-          const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&hashtags=puyosim`;
+          const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
           Linking.openURL(tweetURL);
           break;
         case 'about':
