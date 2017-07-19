@@ -22,5 +22,5 @@ function generateMovesString(history) {
 }
 
 export default function generateIPSSimulatorURL(history) {
-  return 'http://ips.karou.jp/simu/pe.html?_' + generateMovesString(history);
+  return 'http://ips.karou.jp/simu/ps.html?_' + generateMovesString(history);
 }
