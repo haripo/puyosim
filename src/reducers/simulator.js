@@ -43,7 +43,6 @@ const HistoryRecord = Record({
   chain: 0,
   score: 0,
   chainScore: 0,
-  move: null
 });
 
 function makeHistoryRecord(state) {
@@ -52,8 +51,7 @@ function makeHistoryRecord(state) {
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
-    chainScore: state.get('chainScore'),
-    move: state.get('pendingPair'),
+    chainScore: state.get('chainScore')
   });
 }
 
@@ -113,6 +111,7 @@ function putNextPair(state, action) {
     return s
       .update('queue', q => q.shift().push(pair))
       .update('history', history => history.unshift(makeHistoryRecord(state)))
+      .update('moves', moves => moves.unshift(Immutable.fromJS({ move: state.get('pendingPair'), pair: pair })))
       .update('pendingPair', pair => pair.resetPosition())
       .set('isDropOperated', true);
   });
@@ -210,7 +209,8 @@ function undoField(state, action) {
       .set('chainScore', record.get('chainScore'))
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .update('history', history => history.shift());
+      .update('history', history => history.shift())
+      .update('moves', moves => moves.shift());
   })
 }
 
@@ -235,7 +235,8 @@ function createInitialState() {
     pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
-    history: List()
+    history: List(),
+    moves: List()
   });
 }
 

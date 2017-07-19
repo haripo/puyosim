@@ -11,11 +11,8 @@ function generateMovesString(history) {
   return history
     .reverse()
     .map(record => {
-      const pair = record.queue[0];
-      const color = (pair[0] - 1) + (pair[1] - 1) * 6;
+      const color = (record.pair[0] - 1) + (record.pair[1] - 1) * 6;
       const position = record.move.col + rotation[record.move.rotation] * 6;
-      console.log(record);
-      console.log(color + ", " + position);
       return colorChars[color] + colorChars[position];
     })
     .join('');
