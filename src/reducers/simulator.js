@@ -122,7 +122,7 @@ function vanishPuyos(state, action) {
   if (connections.length === 0) {
     // save current state
     // TODO: Redux として正しいか？
-    saveLastState(makeHistoryRecord(state));
+    //saveLastState(makeHistoryRecord(state));
 
     return finishChain(state); // finish chain if nothing to vanish
   }
