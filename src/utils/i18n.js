@@ -12,6 +12,7 @@ I18n.translations = {
     undo: '1 手戻す',
     reset: '初手に戻す',
     restart: 'リスタート',
+    settings: '設定',
     about: 'puyosim について',
     confirmRestart: 'ツモが再生成されます。よろしいですか？',
     shareViaTwitter: 'Twitter で手順をシェア',
@@ -25,6 +26,7 @@ I18n.translations = {
     undo: 'undo',
     reset: 'reset',
     restart: 'restart',
+    settings: 'settings',
     about: 'about',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?',
     shareViaTwitter: 'Share '

@@ -7,9 +7,19 @@ const StackStateSchema = {
   }
 };
 
+const configSchema = {
+  name: 'Config',
+  primaryKey: 'key',
+  properties: {
+    key: { type: 'string' },
+    value: { type: 'string' }
+  }
+}
+
 let realm = new Realm({
   schema: [
-    StackStateSchema
+    StackStateSchema,
+    configSchema
   ]
 });
 
@@ -23,7 +33,6 @@ export function saveLastState(history) {
       history: body
     });
   });
-  const json = realm.objects('LastState');
 }
 
 export function loadLastState() {
@@ -33,4 +42,23 @@ export function loadLastState() {
   } else {
     return null;
   }
+}
+
+export function loadConfig() {
+  const config = realm.objects('Config');
+  console.warn(JSON.stringify(config));
+  return config;
+}
+
+loadConfig();
+
+export function saveConfig(key, value) {
+  const config = realm.objects('Config').filtered(`key = ${key}`);
+  realm.write(() => {
+    if (config[0]) {
+      config.value = value;
+    } else {
+      realm.create('Config', { key, value });
+    }
+  });
 }

@@ -18,6 +18,8 @@ function generateMovesString(history) {
     .join('');
 }
 
-export default function generateIPSSimulatorURL(history) {
+function generateIPSSimulatorURL(history) {
   return 'http://ips.karou.jp/simu/ps.html?_' + generateMovesString(history);
 }
+
+export default generateIPSSimulatorURL;

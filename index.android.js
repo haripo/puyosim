@@ -12,6 +12,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import Simulator from './src/screens/SimulatorContainer';
 import About from './src/screens/AboutContainer';
+import Settings from './src/screens/SettingsContainer';
 import reducer from './src/reducers';
 import sagas from './src/sagas';
 import { Navigation } from 'react-native-navigation';
@@ -25,7 +26,6 @@ const logger = createLogger({
 });
 
 const sagaMiddleware = createSagaMiddleware();
-
 const store = createStore(
   reducer,
   applyMiddleware(sagaMiddleware/*, logger*/));
@@ -35,6 +35,7 @@ sagaMiddleware.run(sagas);
 // Register screen components
 Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
+Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
 
 // launch first screen
 Navigation.startSingleScreenApp({
