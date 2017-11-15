@@ -3,7 +3,7 @@ import NextWindow from '../components/NextWindow';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
-  const simulator = state.simulator;
+  const simulator = state.get('simulator');
   return {
     next: simulator.getIn(['queue', 1]),
     doubleNext: simulator.getIn(['queue', 2])

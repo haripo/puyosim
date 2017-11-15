@@ -1,6 +1,11 @@
-import { combineReducers } from 'redux';
-import simulator from './simulator';
+import Immutable from 'immutable';
+import * as simulator from './simulator';
 
-export default combineReducers({
-  simulator
+let initialState = Immutable.fromJS({
+  simulator: simulator.initialState
 });
+
+export default function(state = initialState, action) {
+  return state
+    .update('simulator', s => simulator.reducer(s, action));
+};

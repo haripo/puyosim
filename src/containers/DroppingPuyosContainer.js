@@ -4,7 +4,7 @@ import DroppingPuyos from '../components/DroppingPuyos';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
-  const simulator = state.simulator;
+  const simulator = state.get('simulator');
   return {
     droppings: simulator.get('droppingPuyos')
   };

@@ -226,8 +226,7 @@ function resetField(state, action) {
 }
 
 function restart(state, action) {
-  initialState = createInitialState();
-  return initialState;
+  return createInitialState();
 }
 
 function createInitialState() {
@@ -258,9 +257,9 @@ function loadOrCreateInitialState() {
   }
 }
 
-let initialState = loadOrCreateInitialState();
+export const initialState = loadOrCreateInitialState();
 
-const simulator = (state = initialState, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
@@ -307,8 +306,8 @@ function hasDrop(state) {
 
 export function isActive(state) {
   return !(
-    state.simulator.get('droppingPuyos').count() > 0 ||
-    state.simulator.get('vanishingPuyos').count() > 0
+    state.get('simulator').get('droppingPuyos').count() > 0 ||
+    state.get('simulator').get('vanishingPuyos').count() > 0
   );
 }
 
@@ -422,5 +421,3 @@ export function getDropPositions(state) {
 
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
 }
-
-export default simulator;
