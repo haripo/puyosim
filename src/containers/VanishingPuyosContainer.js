@@ -5,7 +5,7 @@ import toJS from '../utils/toJS';
 import { getVanishingPuyos } from '../reducers/simulator';
 
 const mapStateToProps = (state) => {
-  const simulator = state.simulator;
+  const simulator = state.get('simulator');
   return {
     vanishings: getVanishingPuyos(simulator)
   };

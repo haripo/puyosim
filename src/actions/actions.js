@@ -8,6 +8,7 @@ function makeActionCreator(type, ...argNames) {
   };
 }
 
+export const INITIALIZE_SIMULATOR = 'INITIALIZE_SIMULATOR';
 export const PUT_NEXT_PAIR = 'PUT_NEXT_PAIR';
 export const SHOW_HIGHLIGHTS = 'SHOW_HIGHLIGHTS';
 export const HIDE_HIGHLIGHTS = 'HIDE_HIGHLIGHTS';
@@ -25,6 +26,7 @@ export const CHAIN_FINISHED = 'CHAIN_FINISHED';
 export const UNDO_FIELD = 'UNDO_FIELD';
 export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
+export const SAVE_CONFIG = 'SAVE_CONFIG';
 
 export const putNextPair = (position, rotation) => {
   return {
@@ -46,6 +48,7 @@ export const showHighlights = (position, rotation) => {
   };
 };
 
+export const initializeSimulator = makeActionCreator(INITIALIZE_SIMULATOR);
 export const hideHighlights = makeActionCreator(HIDE_HIGHLIGHTS);
 export const rotateHighlightsLeft = makeActionCreator(ROTATE_HIGHLIGHTS_LEFT);
 export const rotateHighlightsRight = makeActionCreator(ROTATE_HIGHLIGHTS_RIGHT);
@@ -61,3 +64,4 @@ export const chainFinished = makeActionCreator(CHAIN_FINISHED);
 export const undoField = makeActionCreator(UNDO_FIELD);
 export const resetField = makeActionCreator(RESET_FIELD);
 export const restart = makeActionCreator(RESTART);
+export const saveConfig = makeActionCreator(SAVE_CONFIG, 'key', 'value');

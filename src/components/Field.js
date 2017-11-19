@@ -87,11 +87,12 @@ export default class Field extends Component {
           });
         });
 
-      const ghostDoms = ghosts.map(ghost => {
+      const ghostDoms = ghosts.map((ghost, i) => {
         return (
           <GhostPuyo
             size={ puyoSize }
             puyo={ ghost.color }
+            key={ i }
             x={ ghost.col * puyoSize + contentsPadding }
             y={ ghost.row * puyoSize + contentsPadding }/>
         );

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import {
+  initializeSimulator,
   hideHighlights,
   moveHighlightsLeft,
   moveHighlightsRight,
@@ -17,18 +18,22 @@ import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simula
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
-  const simulator = state.simulator;
+  const simulator = state.get('simulator');
   return {
     stack: getStack(simulator),
     current: simulator.getIn(['queue', 0]),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
-    isActive: isActive(state)
+    isActive: isActive(state),
+    moves: simulator.get('moves')
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onSimulatorLaunched: () => {
+      dispatch(initializeSimulator());
+    },
     onSwiping: (position, rotation) => {
       dispatch(showHighlights(position, rotation));
     },

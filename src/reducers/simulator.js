@@ -1,10 +1,6 @@
-/**
- * Show highlights
- * @param state
- * @param action
- */
 import Immutable, { List, Map, Record } from 'immutable';
 import {
+  INITIALIZE_SIMULATOR,
   APPLY_GRAVITY,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
@@ -22,28 +18,18 @@ import {
 import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
+import { loadLastState, saveLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 
-const queueLength = 128;
-
-function generateQueue() {
-  let queue = [];
-  for (let i = 0; i < queueLength; i++) {
-    queue.push([
-      Math.floor(Math.random() * 4) + 1,
-      Math.floor(Math.random() * 4) + 1
-    ]);
-  }
-  return queue;
-}
 
 const HistoryRecord = Record({
   queue: List(),
-  stack: List(),
+  stack: List(), // TODO: stack and queue are redundant
   chain: 0,
   score: 0,
-  chainScore: 0
+  chainScore: 0,
 });
+
 
 function makeHistoryRecord(state) {
   return new HistoryRecord({
@@ -111,6 +97,7 @@ function putNextPair(state, action) {
     return s
       .update('queue', q => q.shift().push(pair))
       .update('history', history => history.unshift(makeHistoryRecord(state)))
+      .update('moves', moves => moves.unshift(Immutable.fromJS({ move: state.get('pendingPair'), pair: pair })))
       .update('pendingPair', pair => pair.resetPosition())
       .set('isDropOperated', true);
   });
@@ -122,6 +109,10 @@ function vanishPuyos(state, action) {
     .filter(c => c.puyos.length >= 4);
 
   if (connections.length === 0) {
+    // save current state
+    // TODO: Redux として正しいか？
+    //saveLastState(makeHistoryRecord(state));
+
     return finishChain(state); // finish chain if nothing to vanish
   }
 
@@ -194,21 +185,28 @@ function finishChain(state, action) {
   return state;
 }
 
-function undoField(state, action) {
-  if (state.get('history').size === 0) {
-    return state;
-  }
+function revertFromRecord(state, record) {
   return state.withMutations(s => {
-    const record = state.getIn(['history', 0]);
     return s
       .set('queue', record.get('queue'))
       .set('stack', record.get('stack'))
       .set('chain', record.get('chain'))
       .set('score', record.get('score'))
       .set('chainScore', record.get('chainScore'))
+  });
+}
+
+function undoField(state, action) {
+  if (state.get('history').size === 0) {
+    return state;
+  }
+  return state.withMutations(s => {
+    const record = state.getIn(['history', 0]);
+    return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .update('history', history => history.shift());
+      .update('history', history => history.shift())
+      .update('moves', moves => moves.shift());
   })
 }
 
@@ -216,13 +214,12 @@ function resetField(state, action) {
   return initialState;
 }
 
-function restart(state, action) {
-  initialState = createInitialState();
-  return initialState;
+function restart(state, action, config) {
+  return createInitialState(config);
 }
 
-function createInitialState() {
-  const queue = generateQueue();
+function createInitialState(config) {
+  const queue = FieldUtils.generateQueue(config);
   return Map({
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
@@ -233,14 +230,30 @@ function createInitialState() {
     pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
-    history: List()
+    history: List(),
+    moves: List()
   });
 }
 
-let initialState = createInitialState();
+function loadOrCreateInitialState(config) {
+  let record = loadLastState();
+  if (record) {
+    // revert last state
+    let state = createInitialState(config);
+    return revertFromRecord(state, Immutable.fromJS(record))
+  } else {
+    return createInitialState(config);
+  }
+}
 
-const simulator = (state = initialState, action) => {
+export function getInitialState(config) {
+  return loadOrCreateInitialState(config);
+};
+
+export const reducer = (state, action, config) => {
   switch (action.type) {
+    case INITIALIZE_SIMULATOR:
+      return state; // not implemented
     case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
     case ROTATE_HIGHLIGHTS_LEFT:
@@ -266,7 +279,7 @@ const simulator = (state = initialState, action) => {
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:
-      return restart(state, action);
+      return restart(state, action, config);
     default:
       return state;
   }
@@ -286,8 +299,8 @@ function hasDrop(state) {
 
 export function isActive(state) {
   return !(
-    state.simulator.get('droppingPuyos').count() > 0 ||
-    state.simulator.get('vanishingPuyos').count() > 0
+    state.get('simulator').get('droppingPuyos').count() > 0 ||
+    state.get('simulator').get('vanishingPuyos').count() > 0
   );
 }
 
@@ -401,5 +414,3 @@ export function getDropPositions(state) {
 
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
 }
-
-export default simulator;
