@@ -63,6 +63,10 @@ export default class Simulator extends Component {
     this.props.navigator.setTitle({ title: "puyosim" })
   }
 
+  componentDidMount() {
+    this.props.onSimulatorLaunched();
+  }
+
   onNavigatorEvent(event) {
     if (event.type === 'NavBarButtonPress') {
       switch (event.id) {

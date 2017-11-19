@@ -8,6 +8,7 @@ function makeActionCreator(type, ...argNames) {
   };
 }
 
+export const INITIALIZE_SIMULATOR = 'INITIALIZE_SIMULATOR';
 export const PUT_NEXT_PAIR = 'PUT_NEXT_PAIR';
 export const SHOW_HIGHLIGHTS = 'SHOW_HIGHLIGHTS';
 export const HIDE_HIGHLIGHTS = 'HIDE_HIGHLIGHTS';
@@ -47,6 +48,7 @@ export const showHighlights = (position, rotation) => {
   };
 };
 
+export const initializeSimulator = makeActionCreator(INITIALIZE_SIMULATOR);
 export const hideHighlights = makeActionCreator(HIDE_HIGHLIGHTS);
 export const rotateHighlightsLeft = makeActionCreator(ROTATE_HIGHLIGHTS_LEFT);
 export const rotateHighlightsRight = makeActionCreator(ROTATE_HIGHLIGHTS_RIGHT);

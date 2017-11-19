@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import {
+  initializeSimulator,
   hideHighlights,
   moveHighlightsLeft,
   moveHighlightsRight,
@@ -30,6 +31,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onSimulatorLaunched: () => {
+      dispatch(initializeSimulator());
+    },
     onSwiping: (position, rotation) => {
       dispatch(showHighlights(position, rotation));
     },

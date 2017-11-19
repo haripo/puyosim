@@ -1,5 +1,6 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
+  INITIALIZE_SIMULATOR,
   APPLY_GRAVITY,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
@@ -20,18 +21,6 @@ import FieldUtils from '../utils/FieldUtils';
 import { loadLastState, saveLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 
-const queueLength = 128;
-
-function generateQueue() {
-  let queue = [];
-  for (let i = 0; i < queueLength; i++) {
-    queue.push([
-      Math.floor(Math.random() * 4) + 1,
-      Math.floor(Math.random() * 4) + 1
-    ]);
-  }
-  return queue;
-}
 
 const HistoryRecord = Record({
   queue: List(),
@@ -225,12 +214,12 @@ function resetField(state, action) {
   return initialState;
 }
 
-function restart(state, action) {
-  return createInitialState();
+function restart(state, action, config) {
+  return createInitialState(config);
 }
 
-function createInitialState() {
-  const queue = generateQueue();
+function createInitialState(config) {
+  const queue = FieldUtils.generateQueue(config);
   return Map({
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
@@ -246,21 +235,25 @@ function createInitialState() {
   });
 }
 
-function loadOrCreateInitialState() {
+function loadOrCreateInitialState(config) {
   let record = loadLastState();
   if (record) {
     // revert last state
-    let state = createInitialState();
+    let state = createInitialState(config);
     return revertFromRecord(state, Immutable.fromJS(record))
   } else {
-    return createInitialState();
+    return createInitialState(config);
   }
 }
 
-export const initialState = loadOrCreateInitialState();
+export function getInitialState(config) {
+  return loadOrCreateInitialState(config);
+};
 
-export const reducer = (state, action) => {
+export const reducer = (state, action, config) => {
   switch (action.type) {
+    case INITIALIZE_SIMULATOR:
+      return state; // not implemented
     case SHOW_HIGHLIGHTS:
       return showHighlights(state, action);
     case ROTATE_HIGHLIGHTS_LEFT:
@@ -286,7 +279,7 @@ export const reducer = (state, action) => {
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:
-      return restart(state, action);
+      return restart(state, action, config);
     default:
       return state;
   }
