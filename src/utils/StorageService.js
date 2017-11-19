@@ -1,4 +1,5 @@
 import Realm from 'realm';
+import _ from 'lodash';
 
 const StackStateSchema = {
   name: 'LastState',
@@ -46,14 +47,13 @@ export function loadLastState() {
 
 export function loadConfig() {
   const config = realm.objects('Config');
-  console.warn(JSON.stringify(config));
-  return config;
+  return _.fromPairs(config.map(c => [c.key, c.value]));
 }
 
-loadConfig();
-
 export function saveConfig(key, value) {
-  const config = realm.objects('Config').filtered(`key = ${key}`);
+  const config = realm.objects('Config').filtered(`key = "${key}"`);
+  value = value.toString();
+
   realm.write(() => {
     if (config[0]) {
       config.value = value;

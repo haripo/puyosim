@@ -25,6 +25,7 @@ export const CHAIN_FINISHED = 'CHAIN_FINISHED';
 export const UNDO_FIELD = 'UNDO_FIELD';
 export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
+export const SAVE_CONFIG = 'SAVE_CONFIG';
 
 export const putNextPair = (position, rotation) => {
   return {
@@ -61,3 +62,4 @@ export const chainFinished = makeActionCreator(CHAIN_FINISHED);
 export const undoField = makeActionCreator(UNDO_FIELD);
 export const resetField = makeActionCreator(RESET_FIELD);
 export const restart = makeActionCreator(RESTART);
+export const saveConfig = makeActionCreator(SAVE_CONFIG, 'key', 'value');
