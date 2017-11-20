@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "npx concurrently \"npx react-native start\" \"npx react-native run-android --no-packager\"",
+    "start": "concurrently \"react-native start\" \"react-native run-android --no-packager\"",
     "test": "jest",
     "build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --variant=release"
   },
