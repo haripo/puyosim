@@ -42,57 +42,61 @@ export default class SettingsPage extends Component {
 
   render() {
     const { config } = this.props;
+    const mapToTitleValue = list => list.map(v => {
+      return { title: I18n.t(v), value: v };
+    });
+
     return (
       <View style={ styles.component }>
         <ModalSelector
           visible={ this.state.balanceModalVisible }
-          items={ configItems.colorBalance.options }
+          items={ mapToTitleValue(configItems.colorBalance) }
           selected={ config.colorBalance }
           onClose={ () => this.setState({ balanceModalVisible: false }) }
           onChanged={ ::this.handleColorBalanceChanged }>
         </ModalSelector>
         <ModalSelector
           visible={ this.state.colorsModalVisible }
-          items={ configItems.initialColors.options }
+          items={ mapToTitleValue(configItems.initialColors) }
           selected={ config.initialColors }
           onClose={ () => this.setState({ colorsModalVisible: false }) }
           onChanged={ ::this.handleInitialColorsChanged }>
         </ModalSelector>
         <ModalSelector
           visible={ this.state.allClearModalVisible }
-          items={ configItems.initialAllClear.options }
+          items={ mapToTitleValue(configItems.initialAllClear) }
           selected={ config.initialAllClear }
           onClose={ () => this.setState({ allClearModalVisible: false }) }
           onChanged={ ::this.handleInitialAllClearChanged }>
         </ModalSelector>
         <SettingsList borderColor='#d6d5d9' defaultItemSize={ 50 }>
           <SettingsList.Item
-            title='ツモ補正'
+            title={ I18n.t('queueBalanceConfig') }
             titleStyle={{ color:'#009688', marginBottom:10, fontWeight:'500' }}
             itemWidth={ 50 }
             hasNavArrow={ false }
             borderHide={ 'Both' }
           />
           <SettingsList.Item
-            title='配色補正'
+            title={ I18n.t('colorBalance') }
             itemWidth={ 70 }
-            titleInfo={ configItems.colorBalance.options.find(v => v.value === config.colorBalance).title }
+            titleInfo={ I18n.t(config.colorBalance) }
             titleStyle={ { color:'black', fontSize: 16 } }
             hasNavArrow={ true }
             onPress={ () => this.setState({ balanceModalVisible: true }) }
           />
           <SettingsList.Item
-            title='初手制限'
+            title={ I18n.t('initialColors') }
             itemWidth={ 70 }
-            titleInfo={ configItems.initialColors.options.find(v => v.value === config.initialColors).title }
+            titleInfo={ I18n.t(config.initialColors) }
             titleStyle={ { color:'black', fontSize: 16 } }
             hasNavArrow={ true }
             onPress={ () => this.setState({ colorsModalVisible: true }) }
           />
           <SettingsList.Item
-            title='全消し制限'
+            title={ I18n.t('initialAllClear') }
             itemWidth={ 70 }
-            titleInfo={ configItems.initialAllClear.options.find(v => v.value === config.initialAllClear).title }
+            titleInfo={ I18n.t(config.initialAllClear) }
             titleStyle={ { color:'black', fontSize: 16 } }
             hasNavArrow={ true }
             onPress={ () => this.setState({ allClearModalVisible: true }) }
