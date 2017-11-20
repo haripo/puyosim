@@ -4,8 +4,6 @@ I18n.fallbacks = true;
 
 I18n.translations = {
   'ja-JP': {
-    nextTitle: 'ネクスト',
-    garbageTitle: 'おじゃまぷよ',
     chain: '連鎖',
     points: '点',
     total: 'トータル',
@@ -29,18 +27,16 @@ I18n.translations = {
     avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
   },
   'en': {
-    nextTitle: 'Next',
-    garbageTitle: 'Nuisance queue',
     chain: 'chain',
     points: 'points',
     total: 'total',
-    undo: 'undo',
-    reset: 'reset',
-    restart: 'restart',
-    settings: 'settings',
-    about: 'about',
+    undo: 'Undo',
+    reset: 'Reset',
+    restart: 'Restart',
+    settings: 'Settings',
+    about: 'About',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?',
-    shareViaTwitter: 'Share ',
+    shareViaTwitter: 'Share',
 
     noLimit: 'no limit',
     queueBalanceConfig: 'Pairs generation',

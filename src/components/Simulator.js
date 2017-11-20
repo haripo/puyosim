@@ -124,13 +124,7 @@ export default class Simulator extends Component {
           </View>
           <View style={ styles.side }>
             <View style={ styles.sideHead }>
-              <Text>
-                { I18n.t('nextTitle') }
-              </Text>
               <NextWindowContainer />
-              <Text>
-                { I18n.t('garbageTitle') }
-              </Text>
               <ChainResultContainer />
             </View>
             <View style={{ flexDirection: 'column' }}>
