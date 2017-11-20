@@ -56,7 +56,7 @@ export function saveConfig(key, value) {
 
   realm.write(() => {
     if (config[0]) {
-      config.value = value;
+      config[0].value = value;
     } else {
       realm.create('Config', { key, value });
     }
