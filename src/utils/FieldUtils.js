@@ -1,6 +1,9 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 import { fieldCols, fieldRows } from './constants';
+import { Client } from 'bugsnag-react-native';
+
+const bugsnag = new Client(); // TODO: create util module
 
 type Stack = Immutable.List<Immutable.List<Number>>;
 type Position = { row: Number, col: Number };
@@ -15,6 +18,52 @@ export default class FieldUtils {
    */
   static createField(row: Number, col: Number) {
     return Array(row).fill(null).map(() => Array(col).fill(0));
+  }
+
+  static rearrangeInitialColor(queue, maxNumColor, numPairs) {
+    let appeared = new Set();
+    let removalPosition = []; // 交換すべきぷよ
+    let exchangePosition = []; // 交換できるぷよ
+    for (let i = 0; i < 16 * 2; i++) {
+      if (appeared.size === maxNumColor) {
+        if (i <= numPairs * 2 && !appeared.has(queue[i])) {
+          removalPosition.push(i);
+        }
+        if (i > numPairs * 2 && appeared.has(queue[i])) {
+          exchangePosition.push(i);
+        }
+      } else {
+        appeared.add(queue[i]);
+      }
+    }
+
+    const oldQueue = _.clone(queue);
+
+    for (let i = 0; i < removalPosition.length; i++) {
+      let target = Math.floor(Math.random() * (exchangePosition.length - 1));
+      exchangePosition.splice(to, 1);
+
+      let from = removalPosition[i];
+      let to = exchangePosition[target];
+
+      // swap
+      let buf =　queue[from];
+      queue[from] = queue[to];
+      queue[to] = buf;
+    }
+
+    // debug
+    if (_.some(queue, q => !q)) {
+      bugsnag.notify(new Error('failed to queue generation'), function(report) {
+        report.metadata = {
+          queue: [
+            JSON.stringify({ queue, oldQueue, removalPosition, exchangePosition })
+          ]
+        }
+      });
+    }
+
+    return queue;
   }
 
   /**
@@ -37,33 +86,7 @@ export default class FieldUtils {
     }
 
     if (configs.initialColors === 'avoid4ColorsIn3Hands') {
-      let appeared = new Set();
-      let removalPosition = []; // 交換すべきぷよ
-      let exchangePosition = []; // 交換できるぷよ
-      for (let i = 0; i < 16 * 2; i++) {
-        if (appeared.size === 3) {
-          if (i <= 6 && !appeared.has(queue[i])) {
-            removalPosition.push(i);
-          }
-          if (i > 6 && appeared.has(queue[i])) {
-            exchangePosition.push(i);
-          }
-        } else {
-          appeared.add(queue[i]);
-        }
-      }
-      for (let i = 0; i < removalPosition.length; i++) {
-        let target = Math.floor(Math.random() * exchangePosition.length);
-        exchangePosition.splice(to, 1);
-
-        let from = removalPosition[i];
-        let to = exchangePosition[target];
-
-        // swap
-        let buf =　queue[from];
-        queue[from] = queue[to];
-        queue[to] = buf;
-      }
+      this.rearrangeInitialColor(queue, 3, 3);
     }
 
     if (configs.initialAllClear === 'avoidIn2Hands') {
