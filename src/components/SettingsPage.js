@@ -3,6 +3,7 @@ import { Modal, Text, StyleSheet, View, CheckBox, Button, Picker } from 'react-n
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SettingsList from 'react-native-settings-list';
 import ModalSelector from './ModalSelector'
+import _ from 'lodash';
 
 import I18n from '../utils/i18n';
 import { themeColor, themeLightColor } from '../utils/constants';
@@ -18,9 +19,7 @@ export default class SettingsPage extends Component {
   constructor() {
     super();
     this.state = {
-      balanceModalVisible: false,
-      colorsModalVisible: false,
-      allClearModalVisible: false
+      modalVisible: _.mapValues(configItems, () => false),
     };
   }
 
@@ -28,47 +27,48 @@ export default class SettingsPage extends Component {
     this.props.navigator.setTitle({ title: "Settings" });
   }
 
-  handleColorBalanceChanged(value) {
-    this.props.onChanged('colorBalance', value);
+  toggleModal(key) {
+    let modalVisible = this.state.modalVisible;
+    modalVisible[key] = !modalVisible[key];
+    this.setState({ modalVisible });
   }
 
-  handleInitialColorsChanged(value) {
-    this.props.onChanged('initialColors', value);
-  }
-
-  handleInitialAllClearChanged(value) {
-    this.props.onChanged('initialAllClear', value);
-  }
-
-  render() {
-    const { config } = this.props;
-    const mapToTitleValue = list => list.map(v => {
+  renderModalSelector(configKey) {
+    const values = configItems[configKey];
+    const titleValues = values.map(v => {
       return { title: I18n.t(v), value: v };
     });
 
     return (
+      <ModalSelector
+        visible={ this.state.modalVisible[configKey] }
+        items={ titleValues }
+        selected={ this.props.config[configKey] }
+        onClose={ () => this.toggleModal(configKey) }
+        onChanged={ v => this.props.onChanged(configKey, v) }>
+      </ModalSelector>
+    );
+  }
+
+  renderConfigItem(configKey) {
+      return (
+        <SettingsList.Item
+          title={ I18n.t(configKey) }
+          itemWidth={ 70 }
+          titleInfo={ I18n.t(this.props.config[configKey]) }
+          titleStyle={ { color:'black', fontSize: 16 } }
+          hasNavArrow={ true }
+          onPress={ () => this.toggleModal(configKey) }
+        />
+      );
+  }
+
+  render() {
+    return (
       <View style={ styles.component }>
-        <ModalSelector
-          visible={ this.state.balanceModalVisible }
-          items={ mapToTitleValue(configItems.colorBalance) }
-          selected={ config.colorBalance }
-          onClose={ () => this.setState({ balanceModalVisible: false }) }
-          onChanged={ ::this.handleColorBalanceChanged }>
-        </ModalSelector>
-        <ModalSelector
-          visible={ this.state.colorsModalVisible }
-          items={ mapToTitleValue(configItems.initialColors) }
-          selected={ config.initialColors }
-          onClose={ () => this.setState({ colorsModalVisible: false }) }
-          onChanged={ ::this.handleInitialColorsChanged }>
-        </ModalSelector>
-        <ModalSelector
-          visible={ this.state.allClearModalVisible }
-          items={ mapToTitleValue(configItems.initialAllClear) }
-          selected={ config.initialAllClear }
-          onClose={ () => this.setState({ allClearModalVisible: false }) }
-          onChanged={ ::this.handleInitialAllClearChanged }>
-        </ModalSelector>
+        { this.renderModalSelector('colorBalance') }
+        { this.renderModalSelector('initialColors') }
+        { this.renderModalSelector('initialAllClear') }
         <SettingsList borderColor='#d6d5d9' defaultItemSize={ 50 }>
           <SettingsList.Item
             title={ I18n.t('queueBalanceConfig') }
@@ -77,30 +77,9 @@ export default class SettingsPage extends Component {
             hasNavArrow={ false }
             borderHide={ 'Both' }
           />
-          <SettingsList.Item
-            title={ I18n.t('colorBalance') }
-            itemWidth={ 70 }
-            titleInfo={ I18n.t(config.colorBalance) }
-            titleStyle={ { color:'black', fontSize: 16 } }
-            hasNavArrow={ true }
-            onPress={ () => this.setState({ balanceModalVisible: true }) }
-          />
-          <SettingsList.Item
-            title={ I18n.t('initialColors') }
-            itemWidth={ 70 }
-            titleInfo={ I18n.t(config.initialColors) }
-            titleStyle={ { color:'black', fontSize: 16 } }
-            hasNavArrow={ true }
-            onPress={ () => this.setState({ colorsModalVisible: true }) }
-          />
-          <SettingsList.Item
-            title={ I18n.t('initialAllClear') }
-            itemWidth={ 70 }
-            titleInfo={ I18n.t(config.initialAllClear) }
-            titleStyle={ { color:'black', fontSize: 16 } }
-            hasNavArrow={ true }
-            onPress={ () => this.setState({ allClearModalVisible: true }) }
-          />
+          { this.renderConfigItem('colorBalance') }
+          { this.renderConfigItem('initialColors') }
+          { this.renderConfigItem('initialAllClear') }
         </SettingsList>
       </View>
     )
