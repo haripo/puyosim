@@ -9,6 +9,7 @@ export const configItems = {
   ],
   initialColors: [
     'noLimit',
+    'avoid4ColorsIn2Hands',
     'avoid4ColorsIn3Hands',
   ],
   initialAllClear: [

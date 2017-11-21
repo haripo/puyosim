@@ -89,6 +89,10 @@ export default class FieldUtils {
       this.rearrangeInitialColor(queue, 3, 3);
     }
 
+    if (configs.initialColors === 'avoid4ColorsIn2Hands') {
+      this.rearrangeInitialColor(queue, 3, 2);
+    }
+
     if (configs.initialAllClear === 'avoidIn2Hands') {
       if (queue[0] === queue[1] &&
         queue[0] === queue[2] &&
