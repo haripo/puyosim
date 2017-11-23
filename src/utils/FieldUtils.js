@@ -3,8 +3,6 @@ import _ from 'lodash';
 import { fieldCols, fieldRows } from './constants';
 import { Client } from 'bugsnag-react-native';
 
-const bugsnag = new Client(); // TODO: create util module
-
 type Stack = Immutable.List<Immutable.List<Number>>;
 type Position = { row: Number, col: Number };
 
@@ -43,17 +41,26 @@ export default class FieldUtils {
       let target = Math.floor(Math.random() * (exchangePosition.length - 1));
       exchangePosition.splice(to, 1);
 
-      let from = removalPosition[i];
-      let to = exchangePosition[target];
+      let from = queue[removalPosition[i]];
+      let to = queue[exchangePosition[target]];
 
-      // swap
-      let buf =　queue[from];
-      queue[from] = queue[to];
-      queue[to] = buf;
+      if (!to || to <= 0) {
+        to = 1;
+      }
+
+      queue[removalPosition[i]] = to;
+      queue[exchangePosition[target]] = from;
     }
 
     // debug
     if (_.some(queue, q => !q)) {
+      try {
+        const bugsnag = new Client(); // TODO: create util module
+      } catch(e) {
+        // ignore bugsnag error, occured in test environment
+        console.warn(e);
+        return queue;
+      }
       bugsnag.notify(new Error('failed to queue generation'), function(report) {
         report.metadata = {
           queue: [
