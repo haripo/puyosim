@@ -211,7 +211,10 @@ function undoField(state, action) {
 }
 
 function resetField(state, action) {
-  return initialState;
+  while (state.get('history').size > 0) {
+    state = undoField(state, null)
+  }
+  return state;
 }
 
 function restart(state, action, config) {
