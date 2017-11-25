@@ -9,13 +9,15 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
+import { Navigation } from 'react-native-navigation';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import Simulator from './src/screens/SimulatorContainer';
 import About from './src/screens/AboutContainer';
 import Settings from './src/screens/SettingsContainer';
 import reducer from './src/reducers';
 import sagas from './src/sagas';
-import { Navigation } from 'react-native-navigation';
+
 
 const stateTransformer = (state) => {
   return mapValues(state, v => v.toJS());
@@ -28,7 +30,7 @@ const logger = createLogger({
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   reducer,
-  applyMiddleware(sagaMiddleware/*, logger*/));
+  composeWithDevTools(applyMiddleware(sagaMiddleware/*, logger*/)));
 
 sagaMiddleware.run(sagas);
 
