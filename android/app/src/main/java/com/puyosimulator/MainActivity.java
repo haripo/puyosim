@@ -6,9 +6,9 @@ import com.bugsnag.BugsnagReactNative;
 import android.os.Bundle;
 
 public class MainActivity extends SplashActivity {
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    BugsnagReactNative.start(this);
-  }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      BugsnagReactNative.start(this);
+    }
 }

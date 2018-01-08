@@ -3,41 +3,74 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.apsl.versionnumber.RNVersionNumberPackage;
-import io.realm.react.RealmReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import io.realm.react.RealmReactPackage;
+import com.apsl.versionnumber.RNVersionNumberPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.bugsnag.BugsnagReactNative;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
 import com.reactnativenavigation.NavigationApplication;
-import com.bugsnag.BugsnagReactNative;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends NavigationApplication {
-     @Override
-     public boolean isDebug() {
-         // Make sure you are using BuildConfig from your own application
-         return BuildConfig.DEBUG;
-     }
 
-     protected List<ReactPackage> getPackages() {
-         // Add additional packages you require here
-         // No need to add RnnPackage and MainReactPackage
-         return Arrays.<ReactPackage>asList(
-             BugsnagReactNative.getPackage(),
-             new RealmReactPackage(),
-             new RNI18nPackage(),
-             new RNVersionNumberPackage()
-         );
-     }
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    @Override
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
+    }
 
-     @Override
-     public List<ReactPackage> createAdditionalReactPackages() {
-         return getPackages();
-     }
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+          new RNI18nPackage(),
+          new RealmReactPackage(),
+          new RNVersionNumberPackage(),
+          new VectorIconsPackage(),
+          BugsnagReactNative.getPackage()
+      );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+  };
+
+  @Override
+  public ReactNativeHost getReactNativeHost() {
+    return mReactNativeHost;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
+  }
+
+  // react-native-navigation methods
+
+  @Override
+  public boolean isDebug() {
+      // Make sure you are using BuildConfig from your own application
+      return BuildConfig.DEBUG;
+  }
+
+  @Override
+  public List<ReactPackage> createAdditionalReactPackages() {
+    return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new RNI18nPackage(),
+        new RealmReactPackage(),
+        new RNVersionNumberPackage(),
+        new VectorIconsPackage(),
+        BugsnagReactNative.getPackage()
+    );
+  }
 }
