@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
+import { Image, Animated } from 'react-native';
 
 const puyoImages = [
   null,
@@ -43,8 +43,16 @@ export default class Puyo extends Component {
   style() {
     return {
       position: 'absolute',
-      top: this.props.y,
-      left: this.props.x,
+      top: 0,
+      left: 0,
+      transform: [
+        {
+          translateX: this.props.x,
+        },
+        {
+          translateY: this.props.y,
+        }
+      ],
       width: this.props.size + 1,
       height: this.props.size + 1,
       opacity: this.props.a === undefined ? 1 : this.props.a
@@ -89,10 +97,10 @@ export default class Puyo extends Component {
     if (image === null) return null;
 
     return (
-      <View style={ this.style() } pointerEvents="none">
+      <Animated.View style={ this.style() } pointerEvents="none">
         <Image style={ this.imageStyle() } source={ image }/>
         { this.renderConnection() }
-      </View>
+      </Animated.View>
     );
   }
 }

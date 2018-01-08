@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { launchAnimation } from '../utils/animation';
+import { View, Animated } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 
@@ -8,7 +7,8 @@ export default class DroppingPuyos extends Component {
   constructor() {
     super();
     this.state = {
-      droppings: []
+      droppings: [], // TODO: remove this
+      progress: new Animated.Value(0)
     };
   }
 
@@ -16,7 +16,7 @@ export default class DroppingPuyos extends Component {
     const { droppings } = this.state;
 
     if (droppings.length === 0 && nextProps.droppings.length !== 0) {
-      this.launchDroppingAnimation(nextProps.droppings);
+      this.launchDroppingAnimation();
     }
 
     if (nextProps.droppings.length === 0) {
@@ -24,45 +24,45 @@ export default class DroppingPuyos extends Component {
     }
   }
 
-  launchDroppingAnimation(droppingPuyos) {
-    const droppingSpeed = puyoSize / 8;
-    const easingFunction = (p, step) => {
-      return Math.min(
-        (p.row - p.altitude) * puyoSize + step * droppingSpeed,
-        p.row * puyoSize
-      );
-    };
-
-    this.setState({
-      droppings: droppingPuyos.map(p => ({ ...p, value: easingFunction(p, 0) }))
-    });
-
-    launchAnimation(step => {
-      const animatingPuyos = this.state.droppings
-        .map(p => ({ ...p, value: easingFunction(p, step) }));
-      this.setState({ droppings: animatingPuyos });
-      return animatingPuyos
-          .filter(p => step * droppingSpeed < p.altitude * puyoSize)
-          .length > 0;
-    }).then(() => {
+  launchDroppingAnimation() {
+    this.state.progress.setValue(0);
+    Animated.timing(
+      this.state.progress,
+      {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true
+      }
+    ).start(() => {
+      // animation is finished
       this.props.onDroppingAnimationFinished();
     });
   }
 
   renderPuyos() {
-    return this.state.droppings.map(dropping => {
+    const { droppings } = this.props;
+
+    return droppings.map(d => {
+      const y = this.state.progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [
+          (d.row - d.altitude) * puyoSize + contentsPadding,
+          d.row * puyoSize + contentsPadding
+        ]
+      });
+
       return (
         <Puyo
-          size={ puyoSize }
-          puyo={ dropping.color }
-          x={ dropping.col * puyoSize + contentsPadding }
-          y={ dropping.value + contentsPadding }
-          key={ `dropping-${dropping.row}-${dropping.col}` }/>
+          size={puyoSize}
+          puyo={d.color}
+          x={d.col * puyoSize + contentsPadding}
+          y={y}
+          key={`dropping-${d.row}-${d.col}`}/>
       );
     });
   }
 
   render() {
-    return <View>{ ::this.renderPuyos() }</View>;
+    return <View>{::this.renderPuyos()}</View>;
   }
 }

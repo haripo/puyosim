@@ -123,11 +123,12 @@ export function createChainPlan(stack: Stack, rows: number, cols: number) {
 
   while (true) {
     const vanishPlans = getVanishPlan(stack, rows, cols);
-    result.plan.push(vanishPlans);
 
     if (vanishPlans.length === 0) {
       break;
     }
+
+    result.plan.push(vanishPlans);
 
     result.chain += 1;
     result.score += calcChainStepScore(result.chain, vanishPlans);

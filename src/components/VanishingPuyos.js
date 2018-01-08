@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { launchAnimation } from '../utils/animation';
+import { View, Animated } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 
@@ -8,7 +7,8 @@ export default class DroppingPuyos extends Component {
   constructor() {
     super();
     this.state = {
-      vanishings: []
+      vanishings: [], // TODO: remove this
+      progress: new Animated.Value(0)
     };
   }
 
@@ -16,7 +16,7 @@ export default class DroppingPuyos extends Component {
     const { vanishings } = this.state;
 
     if (vanishings.length === 0 && nextProps.vanishings.length !== 0) {
-      this.launchVanishingAnimation(nextProps.vanishings);
+      this.launchVanishingAnimation();
     }
 
     if (nextProps.vanishings.length === 0) {
@@ -24,35 +24,37 @@ export default class DroppingPuyos extends Component {
     }
   }
 
-  launchVanishingAnimation(vanishingPuyos) {
-    this.setState({
-      vanishings: vanishingPuyos.map(p => ({ ...p, value: 0 }))
-    });
-    const easingFunction = step => step % 2 === 0 ? 0 : 1;
-    launchAnimation((step) => {
-      const animatingPuyos = this.state.vanishings
-        .filter(p => step < 30)
-        .map(p => {
-          return { ...p, value: easingFunction(step) };
-        });
-      this.setState({ vanishings: animatingPuyos });
-      return animatingPuyos.length > 0;
-    }).then(() => {
+  launchVanishingAnimation() {
+    this.state.progress.setValue(0);
+    Animated.timing(
+      this.state.progress,
+      {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true
+      }
+    ).start(() => {
+      // animation is finished
       this.props.onVanishingAnimationFinished();
     });
   }
 
   renderPuyos() {
-    return this.state.vanishings.map(vanishing => {
+    return this.props.vanishings.map(v => {
+      const a = this.state.progress.interpolate({
+        inputRange: [0, 0.2, 0.2, 0.4, 0.4, 0.6, 0.6, 0.8, 0.8, 1, 1],
+        outputRange: [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1]
+      });
+
       return (
         <Puyo
           size={ puyoSize }
-          puyo={ vanishing.color }
-          connections={ vanishing.connections }
-          x={ vanishing.col * puyoSize + contentsPadding }
-          y={ vanishing.row * puyoSize + contentsPadding }
-          a={ vanishing.value }
-          key={ `vanishing-${vanishing.row}-${vanishing.col}` }/>
+          puyo={ v.color }
+          connections={ v.connections }
+          x={ v.col * puyoSize + contentsPadding }
+          y={ v.row * puyoSize + contentsPadding }
+          a={ a }
+          key={ `vanishing-${v.row}-${v.col}` }/>
       );
     });
   }
