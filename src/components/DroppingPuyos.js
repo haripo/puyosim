@@ -7,21 +7,12 @@ export default class DroppingPuyos extends Component {
   constructor() {
     super();
     this.state = {
-      droppings: [], // TODO: remove this
       progress: new Animated.Value(0)
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { droppings } = this.state;
-
-    if (droppings.length === 0 && nextProps.droppings.length !== 0) {
-      this.launchDroppingAnimation();
-    }
-
-    if (nextProps.droppings.length === 0) {
-      this.setState({ droppings: [] });
-    }
+  componentWillReceiveProps() {
+    this.launchDroppingAnimation();
   }
 
   launchDroppingAnimation() {

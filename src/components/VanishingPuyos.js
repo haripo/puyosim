@@ -7,21 +7,12 @@ export default class DroppingPuyos extends Component {
   constructor() {
     super();
     this.state = {
-      vanishings: [], // TODO: remove this
       progress: new Animated.Value(0)
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { vanishings } = this.state;
-
-    if (vanishings.length === 0 && nextProps.vanishings.length !== 0) {
-      this.launchVanishingAnimation();
-    }
-
-    if (nextProps.vanishings.length === 0) {
-      this.setState({ vanishings: [] });
-    }
+  componentWillReceiveProps() {
+    this.launchVanishingAnimation();
   }
 
   launchVanishingAnimation() {
@@ -34,7 +25,6 @@ export default class DroppingPuyos extends Component {
         useNativeDriver: true
       }
     ).start(() => {
-      // animation is finished
       this.props.onVanishingAnimationFinished();
     });
   }
