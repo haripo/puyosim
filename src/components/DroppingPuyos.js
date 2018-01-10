@@ -8,12 +8,15 @@ export default class DroppingPuyos extends Component {
   constructor() {
     super();
     this.state = {
-      progress: new Animated.Value(0)
+      progress: new Animated.Value(0),
+      isAnimating: false
     };
   }
 
   componentWillReceiveProps() {
-    this.launchDroppingAnimation();
+    if (!this.state.isAnimating) {
+      this.launchDroppingAnimation();
+    }
   }
 
   launchDroppingAnimation() {
@@ -27,8 +30,10 @@ export default class DroppingPuyos extends Component {
       }
     ).start(() => {
       // animation is finished
+      this.setState({ isAnimating: false });
       this.props.onDroppingAnimationFinished();
     });
+    this.setState({ isAnimating: true });
   }
 
   renderPuyos() {
