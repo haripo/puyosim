@@ -14,7 +14,7 @@ import {
   vanishPuyos
 } from '../actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, isActive } from '../reducers/simulator';
+import { getGhost, getPendingPair, getStack, isActive } from '../selectors/simulatorSelectors';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
