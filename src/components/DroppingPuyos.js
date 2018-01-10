@@ -24,8 +24,8 @@ export default class DroppingPuyos extends Component {
     Animated.timing(
       this.state.progress,
       {
-        toValue: 1,
-        duration: 300,
+        toValue: 20,
+        duration: 1000,
         useNativeDriver: true
       }
     ).start(() => {
@@ -38,17 +38,17 @@ export default class DroppingPuyos extends Component {
 
   renderPuyos() {
     const { droppings } = this.props;
-    const altitudeMax = _.max(droppings.map(d => d.altitude));
 
     return droppings.map(d => {
-      const y = this.state.progress.interpolate({
-        inputRange: [0, (d.altitude / altitudeMax), 1],
-        outputRange: [
-          (d.row - d.altitude) * puyoSize + contentsPadding,
-          d.row * puyoSize + contentsPadding,
-          d.row * puyoSize + contentsPadding
-        ]
-      });
+      const y = this.state.progress
+        .interpolate({
+          inputRange: [0, d.altitude, 20],
+          outputRange: [
+            (d.row - d.altitude) * puyoSize + contentsPadding,
+            d.row * puyoSize + contentsPadding,
+            d.row * puyoSize + contentsPadding
+          ]
+        });
 
       return (
         <Puyo
