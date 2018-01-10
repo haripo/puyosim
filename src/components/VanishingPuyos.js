@@ -29,12 +29,23 @@ export default class DroppingPuyos extends Component {
     });
   }
 
+  getInterpolateOption() {
+    let inputRange = [];
+    let outputRange = [];
+    for (let i = 0; i < 10; i++) {
+      inputRange.push(i / 10);
+      inputRange.push((i + 1) / 10);
+      outputRange.push(i % 2);
+      outputRange.push(i % 2)
+    }
+    inputRange.push(1);
+    outputRange.push(0);
+    return { inputRange, outputRange };
+  }
+
   renderPuyos() {
     return this.props.vanishings.map(v => {
-      const a = this.state.progress.interpolate({
-        inputRange: [0, 0.2, 0.2, 0.4, 0.4, 0.6, 0.6, 0.8, 0.8, 1, 1],
-        outputRange: [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1]
-      });
+      const a = this.state.progress.interpolate(this.getInterpolateOption());
 
       return (
         <Puyo

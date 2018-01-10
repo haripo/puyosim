@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Animated } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
+import _ from 'lodash';
 
 export default class DroppingPuyos extends Component {
   constructor() {
@@ -32,12 +33,14 @@ export default class DroppingPuyos extends Component {
 
   renderPuyos() {
     const { droppings } = this.props;
+    const altitudeMax = _.max(droppings.map(d => d.altitude));
 
     return droppings.map(d => {
       const y = this.state.progress.interpolate({
-        inputRange: [0, 1],
+        inputRange: [0, (d.altitude / altitudeMax), 1],
         outputRange: [
           (d.row - d.altitude) * puyoSize + contentsPadding,
+          d.row * puyoSize + contentsPadding,
           d.row * puyoSize + contentsPadding
         ]
       });
