@@ -112,8 +112,6 @@ function vanishPuyos(state, action) {
     // save current state
     // TODO: Redux として正しいか？
     //saveLastState(makeHistoryRecord(state));
-
-    return finishChain(state); // finish chain if nothing to vanish
   }
 
   if (state.get('isDropOperated')) {
@@ -145,10 +143,6 @@ function vanishPuyos(state, action) {
 }
 
 function applyGravity(state, action) {
-  if (!hasDrop(state)) {
-    return finishChain(state); // finish chain if nothing to drop
-  }
-
   return state.withMutations(s => {
     for (let i = 0; i < fieldCols; i++) {
       for (let j = 0; j < fieldRows; j++) {
@@ -179,10 +173,6 @@ function finishDroppingAnimations(state, action) {
 
 function finishVanishingAnimations(state, action) {
   return state.set('vanishingPuyos', List());
-}
-
-function finishChain(state, action) {
-  return state;
 }
 
 function revertFromRecord(state, record) {
@@ -287,18 +277,6 @@ export const reducer = (state, action, config) => {
       return state;
   }
 };
-
-function hasDrop(state) {
-  const stack = state.get('stack');
-  for (let i = 0; i < fieldRows - 1; i++) {
-    for (let j = 0; j < fieldCols; j++) {
-      if (stack.getIn([i, j]) !== 0 && stack.getIn([i + 1, j]) === 0) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
 
 export function isActive(state) {
   return !(
