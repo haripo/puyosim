@@ -112,6 +112,7 @@ function vanishPuyos(state, action) {
     // save current state
     // TODO: Redux として正しいか？
     //saveLastState(makeHistoryRecord(state));
+    return state;
   }
 
   if (state.get('isDropOperated')) {
@@ -124,6 +125,7 @@ function vanishPuyos(state, action) {
   return state.withMutations(s => {
     const chain = s.get('chain');
     const additionalScore = calcChainStepScore(chain + 1, connections);
+    console.log(chain, connections, additionalScore);
 
     connections
       .forEach(connection => {
