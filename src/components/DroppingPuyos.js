@@ -13,19 +13,20 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    if (!this.state.isAnimating) {
-      this.launchDroppingAnimation();
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.isAnimating && nextProps.droppings.length > 0) {
+      this.launchDroppingAnimation(nextProps.droppings);
     }
   }
 
-  launchDroppingAnimation() {
+  launchDroppingAnimation(droppings) {
     this.state.progress.setValue(0);
+    const maxAltitude = _.max(droppings.map(d => d.altitude));
     Animated.timing(
       this.state.progress,
       {
-        toValue: 20,
-        duration: 1000,
+        toValue: maxAltitude,
+        duration: 100 * maxAltitude,
         useNativeDriver: true
       }
     ).start(() => {
@@ -39,10 +40,11 @@ export default class DroppingPuyos extends Component {
   renderPuyos() {
     const { droppings } = this.props;
 
+    const maxAltitude = _.max(this.props.droppings.map(d => d.altitude));
     return droppings.map(d => {
       const y = this.state.progress
         .interpolate({
-          inputRange: [0, d.altitude, 20],
+          inputRange: [0, d.altitude, maxAltitude],
           outputRange: [
             (d.row - d.altitude) * puyoSize + contentsPadding,
             d.row * puyoSize + contentsPadding,
