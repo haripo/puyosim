@@ -19,6 +19,7 @@ import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
+
   return {
     stack: getStack(simulator),
     current: simulator.getIn(['queue', 0]),

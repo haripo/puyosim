@@ -1,7 +1,28 @@
 import FieldUtils from '../utils/FieldUtils';
 import { Map } from "immutable";
 import { fieldCols, fieldRows } from '../utils/constants';
+import _ from 'lodash';
 
+export function wrapCache(f, ...args) {
+  let argsCache = {};
+  let resultCache = null;
+
+  return state => {
+    const isNotUpdated = _.every(args, arg => state.get(arg) === argsCache[arg]);
+
+    if (isNotUpdated && resultCache !== null) {
+      // use cache
+      return resultCache;
+    }
+
+    for (let arg of args) {
+      argsCache[arg] = state.get(arg);
+    }
+
+    resultCache = f(..._.values(_.pick(argsCache, args)));
+    return resultCache;
+  }
+}
 
 export function isActive(state) {
   return !(
@@ -31,8 +52,8 @@ export function getPendingPair(state) {
   ];
 }
 
-export function getVanishingPuyos(state) {
-  const vanishings = state.get('vanishingPuyos');
+export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
+function _getVanishingPuyos(vanishings) {
 
   let field = FieldUtils.createField(fieldRows, fieldCols);
   vanishings.forEach(puyo => {
@@ -59,10 +80,9 @@ export function getVanishingPuyos(state) {
   });
 }
 
-export function getStack(state) {
-  const stack = state.get('stack');
-  const droppings = state.get('droppingPuyos');
 
+export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
+function _getStack(stack, droppings) {
   const isDropping = (row, col) => {
     return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
   };
@@ -95,10 +115,9 @@ export function getStack(state) {
   });
 }
 
-export function getDropPositions(state) {
-  const pair = state.get('pendingPair');
-  const stack = state.get('stack');
-  const queueHead = state.get('queue').get(0);
+export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue');
+function _getDropPositions(pair, stack, queue) {
+  const queueHead = queue.get(0);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
