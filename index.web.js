@@ -12,7 +12,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import Simulator from './src/web/containers/SimulatorContainer';
 import reducer from './src/shared/reducers';
 import sagas from './src/shared/sagas';
-
+import './src/web/misc/icon';
 
 class App extends Component {
   render() {

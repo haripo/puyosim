@@ -10,6 +10,7 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'index.web.js'),
     path.resolve(appDirectory, 'src/web'),
     path.resolve(appDirectory, 'src/shared'),
+    path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
   ],
   use: {
     loader: 'babel-loader',
@@ -31,6 +32,13 @@ const imageLoaderConfiguration = {
   }
 };
 
+const fontLoaderConfiguration = {
+  test: /\.ttf$/,
+  use: {
+    loader: "url-loader"
+  }
+};
+
 module.exports = {
   entry: [path.resolve(appDirectory, 'index.web.js'), 'babel-polyfill'],
   output: {
@@ -41,6 +49,7 @@ module.exports = {
     rules: [
       babelLoaderConfiguration,
       imageLoaderConfiguration,
+      fontLoaderConfiguration
     ]
   },
   plugins: [
