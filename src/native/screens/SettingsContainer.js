@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import {
   saveConfig
-} from '../actions/actions';
+} from '../../shared/actions/actions';
 import SettingsPage from '../components/SettingsPage';
-import toJS from '../utils/toJS';
+import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   return {

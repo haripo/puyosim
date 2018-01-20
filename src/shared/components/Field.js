@@ -113,7 +113,7 @@ export default class Field extends Component {
         style={ [this.props.style, styles.field] }
         { ...this.panResponder.panHandlers }>
         { this.renderStack(this.props.stack) }
-        <Image source={ require('../../assets/cross.png') } style={ styles.cross }/>
+        <Image source={ require('../../../assets/cross.png') } style={ styles.cross }/>
         <DroppingPuyosContainer />
         <VanishingPuyosContainer />
         <View style={ styles.topShadow }></View>

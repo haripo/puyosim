@@ -6,28 +6,28 @@ import { Image, Animated } from 'react-native';
 
 const puyoImages = [
   null,
-  require('../../assets/puyo_red.png'),
-  require('../../assets/puyo_green.png'),
-  require('../../assets/puyo_blue.png'),
-  require('../../assets/puyo_yellow.png')
+  require('../../../assets/puyo_red.png'),
+  require('../../../assets/puyo_green.png'),
+  require('../../../assets/puyo_blue.png'),
+  require('../../../assets/puyo_yellow.png')
 ];
 
 const connectionImages = [
   {
-    horizontal: require('../../assets/puyo_red_connect_horizontal.png'),
-    vertical: require('../../assets/puyo_red_connect_vertical.png')
+    horizontal: require('../../../assets/puyo_red_connect_horizontal.png'),
+    vertical: require('../../../assets/puyo_red_connect_vertical.png')
   },
   {
-    horizontal: require('../../assets/puyo_green_connect_horizontal.png'),
-    vertical: require('../../assets/puyo_green_connect_vertical.png')
+    horizontal: require('../../../assets/puyo_green_connect_horizontal.png'),
+    vertical: require('../../../assets/puyo_green_connect_vertical.png')
   },
   {
-    horizontal: require('../../assets/puyo_blue_connect_horizontal.png'),
-    vertical: require('../../assets/puyo_blue_connect_vertical.png')
+    horizontal: require('../../../assets/puyo_blue_connect_horizontal.png'),
+    vertical: require('../../../assets/puyo_blue_connect_vertical.png')
   },
   {
-    horizontal: require('../../assets/puyo_yellow_connect_horizontal.png'),
-    vertical: require('../../assets/puyo_yellow_connect_vertical.png')
+    horizontal: require('../../../assets/puyo_yellow_connect_horizontal.png'),
+    vertical: require('../../../assets/puyo_yellow_connect_vertical.png')
   }
 ];
 

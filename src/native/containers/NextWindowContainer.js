@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
-import ChainResult from '../components/ChainResult';
-import toJS from '../utils/toJS';
+import NextWindow from '../components/NextWindow';
+import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
   return {
-    score: simulator.get('score'),
-    chain: simulator.get('chain'),
-    chainScore: simulator.get('chainScore')
+    next: simulator.getIn(['queue', 1]),
+    doubleNext: simulator.getIn(['queue', 2])
   };
 };
 
@@ -18,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(ChainResult));
+)(toJS(NextWindow));

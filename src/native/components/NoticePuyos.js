@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
+import { cardBackgroundColor, contentsMargin, contentsPadding } from '../../shared/utils/constants';
 
 /**
  * Component for render notice puyos
@@ -21,12 +21,12 @@ export default class NoticePuyos extends Component {
     ];
 
     this.images = [
-      require('../../assets/ojama_small.png'),
-      require('../../assets/ojama_large.png'),
-      require('../../assets/ojama_stone.png'),
-      require('../../assets/ojama_mushroom.png'),
-      require('../../assets/ojama_star.png'),
-      require('../../assets/ojama_crown.png')
+      require('../../../assets/ojama_small.png'),
+      require('../../../assets/ojama_large.png'),
+      require('../../../assets/ojama_stone.png'),
+      require('../../../assets/ojama_mushroom.png'),
+      require('../../../assets/ojama_star.png'),
+      require('../../../assets/ojama_crown.png')
     ];
   }
 

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import {
-} from '../actions/actions';
+} from '../../shared/actions/actions';
 import AboutContent from '../components/AboutContents';
-import toJS from '../utils/toJS';
+import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   return {

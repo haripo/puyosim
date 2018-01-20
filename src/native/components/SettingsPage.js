@@ -5,9 +5,9 @@ import SettingsList from 'react-native-settings-list';
 import ModalSelector from './ModalSelector'
 import _ from 'lodash';
 
-import I18n from '../utils/i18n';
-import { themeColor, themeLightColor } from '../utils/constants';
-import { configItems } from '../models/Config';
+import I18n from '../../shared/utils/i18n';
+import { themeColor, themeLightColor } from '../../shared/utils/constants';
+import { configItems } from '../../shared/models/Config';
 
 export default class SettingsPage extends Component {
   static navigatorStyle = {

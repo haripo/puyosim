@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
-import I18n from '../utils/i18n';
+import I18n from '../../shared/utils/i18n';
 
 export default class ChainResult extends Component {
   constructor() {

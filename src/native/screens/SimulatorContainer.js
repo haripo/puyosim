@@ -12,10 +12,10 @@ import {
   showHighlights,
   undoField,
   vanishPuyos
-} from '../actions/actions';
+} from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, isActive } from '../selectors/simulatorSelectors';
-import toJS from '../utils/toJS';
+import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
+import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');

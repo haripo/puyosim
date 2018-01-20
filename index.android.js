@@ -12,11 +12,11 @@ import createSagaMiddleware from 'redux-saga';
 import { Navigation } from 'react-native-navigation';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import Simulator from './src/screens/SimulatorContainer';
-import About from './src/screens/AboutContainer';
-import Settings from './src/screens/SettingsContainer';
-import reducer from './src/reducers';
-import sagas from './src/sagas';
+import Simulator from './src/native/screens/SimulatorContainer';
+import About from './src/native/screens/AboutContainer';
+import Settings from './src/native/screens/SettingsContainer';
+import reducer from './src/shared/reducers';
+import sagas from './src/shared/sagas';
 
 
 const stateTransformer = (state) => {
