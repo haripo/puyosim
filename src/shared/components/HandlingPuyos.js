@@ -3,8 +3,8 @@
  */
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { cardBackgroundColor, contentsPadding, fieldCols, puyoSize } from '../../shared/utils/constants';
-import Puyo from '../../shared/components/Puyo';
+import { cardBackgroundColor, contentsPadding, fieldCols, puyoSize } from '../utils/constants';
+import Puyo from './Puyo';
 
 export default class HandlingPuyos extends Component {
   render() {

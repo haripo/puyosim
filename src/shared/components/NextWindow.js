@@ -3,8 +3,8 @@
  */
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { cardBackgroundColor, contentsPadding, puyoSize } from '../../shared/utils/constants';
-import Puyo from '../../shared/components/Puyo';
+import { cardBackgroundColor, contentsPadding, puyoSize } from '../utils/constants';
+import Puyo from './Puyo';
 
 export default class NextWindow extends Component {
   render() {

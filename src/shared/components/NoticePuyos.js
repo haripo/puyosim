@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { cardBackgroundColor, contentsMargin, contentsPadding } from '../../shared/utils/constants';
+import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
 
 /**
  * Component for render notice puyos

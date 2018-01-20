@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     left: puyoSize * 2 + contentsPadding
   },
   topShadow: {
-    width: puyoSize * fieldCols * contentsPadding * 2,
+    width: puyoSize * fieldCols + contentsPadding * 2,
     height: puyoSize + contentsPadding,
     backgroundColor: themeColor,
     opacity: 0.2,

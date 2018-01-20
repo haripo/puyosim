@@ -6,11 +6,11 @@
 import * as _ from 'lodash';
 import React, { Component } from 'react';
 import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import NextWindowContainer from '../containers/NextWindowContainer';
-import ChainResultContainer from '../containers/ChainResultContainer';
+import NextWindowContainer from '../../shared/containers/NextWindowContainer';
+import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
-import HandlingPuyos from './HandlingPuyos';
+import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from '../../shared/utils/i18n';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';

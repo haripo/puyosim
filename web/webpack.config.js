@@ -62,5 +62,8 @@ module.exports = {
   resolve: {
     extensions: [ '.web.js', '.js' ]
   },
+  devServer: {
+    contentBase: path.resolve(appDirectory)
+  },
   devtool: 'inline-source-map'
 };
