@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 import { fieldCols, fieldRows } from './constants';
-import { Client } from 'bugsnag-react-native';
 
 type Stack = Immutable.List<Immutable.List<Number>>;
 type Position = { row: Number, col: Number };
@@ -50,24 +49,6 @@ export default class FieldUtils {
 
       queue[removalPosition[i]] = to;
       queue[exchangePosition[target]] = from;
-    }
-
-    // debug
-    if (_.some(queue, q => !q)) {
-      try {
-        const bugsnag = new Client(); // TODO: create util module
-      } catch(e) {
-        // ignore bugsnag error, occured in test environment
-        console.warn(e);
-        return queue;
-      }
-      bugsnag.notify(new Error('failed to queue generation'), function(report) {
-        report.metadata = {
-          queue: [
-            JSON.stringify({ queue, oldQueue, removalPosition, exchangePosition })
-          ]
-        }
-      });
     }
 
     return queue;
