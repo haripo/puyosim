@@ -16,7 +16,16 @@ const babelLoaderConfiguration = {
     loader: 'babel-loader',
     options: {
       babelrc: false,
-      plugins: ['react-native-web', 'transform-flow-strip-types'],
+      plugins: [
+        'react-native-web',
+        'transform-flow-strip-types',
+        [
+          'module-alias',
+          [
+            { src: path.resolve(appDirectory, 'src/web'), expose: 'specific' }
+          ]
+        ]
+      ],
       presets: ['react-native', 'react-native-stage-0']
     }
   }
@@ -35,7 +44,7 @@ const imageLoaderConfiguration = {
 const fontLoaderConfiguration = {
   test: /\.ttf$/,
   use: {
-    loader: "url-loader"
+    loader: 'url-loader'
   }
 };
 
@@ -60,7 +69,7 @@ module.exports = {
   ],
 
   resolve: {
-    extensions: [ '.web.js', '.js' ]
+    extensions: ['.web.js', '.js'],
   },
   devServer: {
     contentBase: path.resolve(appDirectory)

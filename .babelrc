@@ -4,7 +4,11 @@
     "react-native-stage-0"
   ],
   "plugins": [
-    "react-native-web",
-    "transform-flow-strip-types"
+    [
+      "module-alias",
+      [
+        { "src": "./src/native", "expose": "specific" }
+      ]
+    ]
   ]
 }

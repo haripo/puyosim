@@ -8,7 +8,9 @@
   "build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --no-packager --variant=release"
  },
  "dependencies": {
+  "babel": "^6.23.0",
   "babel-loader": "^7.1.2",
+  "babel-plugin-module-alias": "^1.6.0",
   "babel-plugin-react-native-web": "^0.3.3",
   "babel-polyfill": "^6.26.0",
   "babel-preset-react-native-stage-0": "^1.0.1",
@@ -19,7 +21,7 @@
   "lodash": "^4.17.4",
   "react": "^16.0.0",
   "react-dom": "^16.2.0",
-  "react-native": "^0.52.0",
+  "react-native": "^0.51.0",
   "react-native-i18n": "^2.0.10",
   "react-native-modal-selector": "0.0.24",
   "react-native-navigation": "^1.1.348",
