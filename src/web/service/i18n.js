@@ -10,7 +10,6 @@ function detectLanguage() {
 
 export default translations => {
   const lang = detectLanguage() || 'ja';
-  console.log(lang, detectLanguage());
   return key => {
     return translations[lang][key];
   }
