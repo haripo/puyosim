@@ -1,6 +1,4 @@
 import { connect } from 'react-redux';
-import {
-} from '../../shared/actions/actions';
 import AboutContent from '../components/AboutContents';
 import toJS from '../../shared/utils/toJS';
 

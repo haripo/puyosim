@@ -5,7 +5,7 @@ import SettingsList from 'react-native-settings-list';
 import ModalSelector from './ModalSelector'
 import _ from 'lodash';
 
-import I18n from '../../shared/utils/i18n';
+import I18n from '../../shared/service/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { configItems } from '../../shared/models/Config';
 
@@ -36,7 +36,7 @@ export default class SettingsPage extends Component {
   renderModalSelector(configKey) {
     const values = configItems[configKey];
     const titleValues = values.map(v => {
-      return { title: I18n.t(v), value: v };
+      return { title: t(v), value: v };
     });
 
     return (
@@ -53,9 +53,9 @@ export default class SettingsPage extends Component {
   renderConfigItem(configKey) {
       return (
         <SettingsList.Item
-          title={ I18n.t(configKey) }
+          title={ t(configKey) }
           itemWidth={ 70 }
-          titleInfo={ I18n.t(this.props.config[configKey]) }
+          titleInfo={ t(this.props.config[configKey]) }
           titleStyle={ { color:'black', fontSize: 16 } }
           hasNavArrow={ true }
           onPress={ () => this.toggleModal(configKey) }
@@ -71,7 +71,7 @@ export default class SettingsPage extends Component {
         { this.renderModalSelector('initialAllClear') }
         <SettingsList borderColor='#d6d5d9' defaultItemSize={ 50 }>
           <SettingsList.Item
-            title={ I18n.t('queueBalanceConfig') }
+            title={ t('queueBalanceConfig') }
             titleStyle={{ color:'#009688', marginBottom:10, fontWeight:'500' }}
             itemWidth={ 50 }
             hasNavArrow={ false }

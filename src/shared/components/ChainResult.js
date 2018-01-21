@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
-//import I18n from '../utils/i18n';
+import t from '../service/i18n';
 
 export default class ChainResult extends Component {
   constructor() {
@@ -14,11 +14,10 @@ export default class ChainResult extends Component {
       <View style={ styles.component }>
         <NoticePuyos score={ chainScore } />
         <Text>
-          cainresult
-          {/*{ chain } { I18n.t('chain') } { chainScore } { I18n.t('points') }*/}
+          { chain } { t('chain') } { chainScore } { t('points') }
         </Text>
         <Text>
-          {/*{ I18n.t('total') } { score } { I18n.t('points') }*/}
+          { t('total') } { score } { t('points') }
         </Text>
       </View>
     )

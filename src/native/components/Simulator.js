@@ -12,39 +12,39 @@ import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLig
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import I18n from '../../shared/utils/i18n';
+import t from '../../shared/service/i18n';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
     rightButtons: [
       {
-        title: I18n.t('about'),
+        title: t('about'),
         id: 'about',
         showAsAction: 'never'
       },
       {
-        title: I18n.t('settings'),
+        title: t('settings'),
         id: 'settings',
         showAsAction: 'never'
       },
       {
-        title: I18n.t('shareViaTwitter'),
+        title: t('shareViaTwitter'),
         id: 'share-via-ips',
         showAsAction: 'never'
       },
       {
-        title: I18n.t('restart'),
+        title: t('restart'),
         id: 'restart',
         showAsAction: 'never'
       },
       {
-        title: I18n.t('reset'),
+        title: t('reset'),
         id: 'reset',
         showAsAction: 'never'
       },
       {
-        title: I18n.t('undo'),
+        title: t('undo'),
         id: 'undo',
         showAsAction: 'never'
       }
@@ -78,8 +78,8 @@ export default class Simulator extends Component {
           break;
         case 'restart':
           Alert.alert(
-            I18n.t('restart'),
-            I18n.t('confirmRestart'),
+            t('restart'),
+            t('confirmRestart'),
             [
               { text: 'Cancel', onPress: _.noop, style: 'cancel' },
               { text: 'OK', onPress: this.props.onRestartSelected }

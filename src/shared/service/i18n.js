@@ -1,9 +1,7 @@
-import I18n from 'react-native-i18n';
+import I18n from 'specific/service/i18n';
 
-I18n.fallbacks = true;
-
-I18n.translations = {
-  'ja-JP': {
+const translations = {
+  'ja': {
     chain: '連鎖',
     points: '点',
     total: 'トータル',
@@ -52,4 +50,4 @@ I18n.translations = {
   }
 };
 
-export default I18n;
+export default I18n(translations);

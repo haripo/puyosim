@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, Image, Button, Linking } from 'react-native';
-import I18n from '../../shared/utils/i18n';
 import VersionNumber from 'react-native-version-number';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 
