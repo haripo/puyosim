@@ -12,8 +12,8 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    if (!this.state.isAnimating) {
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.isAnimating && nextProps.vanishings.length > 0) {
       this.launchVanishingAnimation();
     }
   }

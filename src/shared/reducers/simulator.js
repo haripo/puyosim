@@ -21,6 +21,7 @@ import FieldUtils from '../utils/FieldUtils';
 import { loadLastState, saveLastState } from '../../shared/utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
+import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 
 
 const HistoryRecord = Record({
@@ -104,75 +105,58 @@ function putNextPair(state, action) {
 }
 
 function vanishPuyos(state, action) {
-  const connections = FieldUtils
-    .getConnections(state.get('stack'))
-    .filter(c => c.puyos.length >= 4);
+  const stack = state.get('stack').toJS();
+  const plans = getVanishPlan(stack, fieldRows, fieldCols);
 
-  if (connections.length === 0) {
+  if (plans.length === 0) {
     // save current state
     // TODO: Redux として正しいか？
     //saveLastState(makeHistoryRecord(state));
     return state;
   }
 
-  if (state.get('isDropOperated')) {
+  if (state.get('isDropOperated')) { // TODO: わかりにくいのでなおす
     state = state
       .set('isDropOperated', false)
       .set('chain', 0)
       .set('chainScore', 0);
   }
 
-  return state.withMutations(s => {
-    const chain = s.get('chain');
-    const additionalScore = calcChainStepScore(chain + 1, connections);
 
-    connections
-      .forEach(connection => {
-        connection.puyos.forEach(puyo => {
-          s.update('vanishingPuyos', puyos => puyos.push(Map({
-            row: puyo.row,
-            col: puyo.col,
-            color: connection.color
-          })));
-          s.updateIn(['stack', puyo.row, puyo.col], () => 0);
-        });
-      });
+  return state.withMutations(s => {
+    // update vanishingPuyos and stack
+    for (let plan of plans) {
+      for (let puyo of plan.puyos) {
+        s.update('vanishingPuyos', p => p.push(Immutable.fromJS({ ...puyo, color: plan.color })));
+        s.setIn(['stack', puyo.row, puyo.col], 0);
+      }
+    }
+
+    // update scores
+    const additionalScore = calcChainStepScore(s.get('chain') + 1, plans);
     s.update('chain', chain => chain + 1);
     s.update('score', score => score + additionalScore);
     s.update('chainScore', score => score + additionalScore);
   });
 }
 
-function applyGravity(state, action) {
+function applyGravity(state) {
+  // toJS が重いかも？
+  // stack をより軽い形 (stringとか) で保持した方がいいかもしれない
+  const stack = state.get('stack').toJS();
+  const plans = getDropPlan(stack, fieldRows, fieldCols);
+
   return state.withMutations(s => {
-    for (let i = 0; i < fieldCols; i++) {
-      for (let j = 0; j < fieldRows; j++) {
-        let k = fieldRows - j - 1;
-        if (s.getIn(['stack', k, i]) !== 0) continue;
-        while (0 <= k && s.getIn(['stack', k, i]) === 0) k--;
-        if (0 <= k) {
-          const target = s.getIn(['stack', k, i]);
-          s.setIn(['stack', fieldRows - j - 1, i], target);
-          s.setIn(['stack', k, i], 0);
-          s.update('droppingPuyos', puyos => {
-            return puyos.push(Map({
-              row: fieldRows - j - 1,
-              col: i,
-              color: target,
-              altitude: (fieldRows - j - 1) - k
-            }));
-          });
-        }
-      }
-    }
+    s.set('stack', Immutable.fromJS(stack));
+    s.set('droppingPuyos', Immutable.fromJS(plans));
   });
 }
 
-function finishDroppingAnimations(state, action) {
+function finishDroppingAnimations(state) {
   return state.set('droppingPuyos', List());
 }
 
-function finishVanishingAnimations(state, action) {
+function finishVanishingAnimations(state) {
   return state.set('vanishingPuyos', List());
 }
 
