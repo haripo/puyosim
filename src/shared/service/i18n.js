@@ -38,7 +38,7 @@ const translations = {
     shareViaTwitter: 'Share',
 
     noLimit: 'no limit',
-    queueBalanceConfig: 'Pairs generation',
+    queueBalanceConfig: 'Handset generation',
     colorBalance: 'Color balance',
     balancedIn128: 'balanced in 128 pairs',
     balancedIn16: 'balanced in 16 pairs',
