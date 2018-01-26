@@ -22,6 +22,7 @@ import { loadLastState, saveLastState } from '../../shared/utils/StorageService'
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
+import { generateQueue } from '../models/QueueGenerator';
 
 
 const HistoryRecord = Record({
@@ -197,7 +198,7 @@ function restart(state, action, config) {
 }
 
 function createInitialState(config) {
-  const queue = FieldUtils.generateQueue(config);
+  const queue = generateQueue(config);
   return Map({
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
