@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Text, StyleSheet, View, CheckBox, Button, Picker } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { StyleSheet, View } from 'react-native';
 import SettingsList from 'react-native-settings-list';
 import ModalSelector from './ModalSelector'
 import _ from 'lodash';
 
-import I18n from '../../shared/service/i18n';
+import t from '../../shared/service/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { configItems } from '../../shared/models/Config';
 
