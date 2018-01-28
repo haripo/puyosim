@@ -24,6 +24,7 @@ const translations = {
     avoid4ColorsIn3Hands: '初手 3 手で 4 色のツモを禁止',
     initialAllClear: '全消し制限',
     avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
+    custom2Hands: '初手 2 手を固定'
   },
   'en': {
     chain: 'chain',
@@ -40,13 +41,14 @@ const translations = {
     noLimit: 'no limit',
     queueBalanceConfig: 'Handset generation',
     colorBalance: 'Color balance',
-    balancedIn128: 'balanced in 128 pairs',
-    balancedIn16: 'balanced in 16 pairs',
-    initialColors: 'Initial colors',
-    avoid4ColorsIn2Hands: 'avoid 4 colors in first 2 pairs',
-    avoid4ColorsIn3Hands: 'avoid 4 colors in first 3 pairs',
+    balancedIn128: 'balanced in 128 hands',
+    balancedIn16: 'balanced in 16 hands',
+    initialColors: 'Initial handset patterns',
+    avoid4ColorsIn2Hands: 'avoid 4 colors in first 2 hands',
+    avoid4ColorsIn3Hands: 'avoid 4 colors in first 3 hands',
     initialAllClear: 'All clear',
-    avoidIn2Hands: 'avoid in first 2 pairs',
+    avoidIn2Hands: 'avoid in first 2 hands',
+    custom2Hands: 'Custom first 2 hands'
   }
 };
 

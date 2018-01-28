@@ -1,8 +1,7 @@
-import Immutable, { List, Map, Record } from 'immutable';
 import {
   SAVE_CONFIG
 } from '../actions/actions';
-import * as storage from '../../shared/utils/StorageService';
+import * as storage from 'specific/utils/StorageService';
 import Config from '../models/Config';
 
 function saveConfig(state, action) {
@@ -12,7 +11,7 @@ function saveConfig(state, action) {
 
 export const initialState = new Config(storage.loadConfig());
 
-console.info('Loaded config: ', initialState.toJS())
+console.info('Loaded config: ', initialState.toJS());
 
 export const reducer = (state, action) => {
   switch (action.type) {
