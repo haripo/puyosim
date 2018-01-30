@@ -1,4 +1,7 @@
 import { Record } from 'immutable';
+import _ from 'lodash';
+import { generateHandsetPatterns } from '../service/handsetPattern';
+
 
 // config の保存形式はフラットな key-value なので key が重複してはならない
 export const configItems = {
@@ -10,10 +13,7 @@ export const configItems = {
     noLimit: null,
     avoid4ColorsIn2Hands: null,
     avoid4ColorsIn3Hands: null,
-    custom2Hands: {
-      '!i18n AA AB': null,
-      '!i18n AA AA': null,
-    },
+    custom2Hands: _.fromPairs(generateHandsetPatterns(2).map(p => [p, null]))
   },
   initialAllClear: {
     noLimit: null,

@@ -1,4 +1,6 @@
 import I18n from 'specific/service/i18n';
+import { generateHandsetPatterns } from './handsetPattern';
+import _ from 'lodash';
 
 const translations = {
   'ja': {
@@ -24,7 +26,10 @@ const translations = {
     avoid4ColorsIn3Hands: '初手 3 手で 4 色のツモを禁止',
     initialAllClear: '全消し制限',
     avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
-    custom2Hands: '初手 2 手を固定'
+    custom2Hands: '初手 2 手を固定',
+
+    // handset patterns
+    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p]))
   },
   'en': {
     chain: 'chain',
@@ -48,7 +53,10 @@ const translations = {
     avoid4ColorsIn3Hands: 'avoid 4 colors in first 3 hands',
     initialAllClear: 'All clear',
     avoidIn2Hands: 'avoid in first 2 hands',
-    custom2Hands: 'Custom first 2 hands'
+    custom2Hands: 'Custom first 2 hands',
+
+    // handset patterns
+    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p]))
   }
 };
 
