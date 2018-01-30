@@ -2,7 +2,7 @@
 export function generateHandsetPatterns(hand: number): Array<string> {
   if (hand === 2) {
     return [
-      'AA AA',
+      //'AA AA',
       'AA AB',
       'AA BB',
       'AA BC',
@@ -15,10 +15,10 @@ export function generateHandsetPatterns(hand: number): Array<string> {
     ]
   } else {
     return [
-      'AA AA AA',
-      'AA AA AB',
-      'AA AA BB',
-      'AA AA BC',
+      // 'AA AA AA',
+      // 'AA AA AB',
+      // 'AA AA BB',
+      // 'AA AA BC',
       'AA AB AA',
       'AA AB AC',
       'AA AB BB',
