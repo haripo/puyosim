@@ -12,8 +12,8 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    if (!this.state.isAnimating) {
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.isAnimating && nextProps.vanishings.length > 0) {
       this.launchVanishingAnimation();
     }
   }
@@ -24,7 +24,7 @@ export default class DroppingPuyos extends Component {
       this.state.progress,
       {
         toValue: 1,
-        duration: 500,
+        duration: 300,
         useNativeDriver: true
       }
     ).start(() => {

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { handsetStrToColors } from '../service/handsetPattern';
 
 function swapColors(queue: Array<number>, a: number, b: number) {
   const buf = queue[a];
@@ -72,6 +73,20 @@ export function generateQueue(configs) {
 
   if (configs.initialColors === 'avoid4ColorsIn2Hands') {
     limitInitialColors(queue, 3, 2);
+  }
+
+  if (configs.initialColors === 'custom2Hands') {
+    const customHands = handsetStrToColors(configs.custom2Hands);
+    for (let i = 0; i < customHands.length; i++) {
+      queue[i] = customHands[i];
+    }
+  }
+
+  if (configs.initialColors === 'custom3Hands') {
+    const customHands = handsetStrToColors(configs.custom3Hands);
+    for (let i = 0; i < customHands.length; i++) {
+      queue[i] = customHands[i];
+    }
   }
 
   if (configs.initialAllClear === 'avoidIn2Hands') {
