@@ -13,7 +13,8 @@ export const configItems = {
     noLimit: null,
     avoid4ColorsIn2Hands: null,
     avoid4ColorsIn3Hands: null,
-    custom2Hands: _.fromPairs(generateHandsetPatterns(2).map(p => [p, null]))
+    custom2Hands: _.fromPairs(generateHandsetPatterns(2).map(p => [p, null])),
+    custom3Hands: _.fromPairs(generateHandsetPatterns(3).map(p => [p, null]))
   },
   initialAllClear: {
     noLimit: null,
@@ -33,6 +34,7 @@ const recordType = {
   initialColors: 'noLimit',
   initialAllClear: 'noLimit',
   custom2Hands: null,
+  custom3Hands: null,
 };
 
 export default class Config extends Record(recordType) {

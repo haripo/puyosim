@@ -27,9 +27,11 @@ const translations = {
     initialAllClear: '全消し制限',
     avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
     custom2Hands: '初手 2 手を固定',
+    custom3Hands: '初手 3 手を固定',
 
     // handset patterns
-    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p]))
+    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
+    ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
   },
   'en': {
     chain: 'chain',
@@ -54,9 +56,11 @@ const translations = {
     initialAllClear: 'All clear',
     avoidIn2Hands: 'avoid in first 2 hands',
     custom2Hands: 'Custom first 2 hands',
+    custom2Hands: 'Custom first 3 hands',
 
     // handset patterns
-    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p]))
+    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
+    ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
   }
 };
 
