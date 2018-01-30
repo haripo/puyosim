@@ -26,7 +26,7 @@ export default class DroppingPuyos extends Component {
       this.state.progress,
       {
         toValue: maxDistance,
-        duration: 100 * maxDistance,
+        duration: 70 * maxDistance,
         useNativeDriver: true
       }
     ).start(() => {

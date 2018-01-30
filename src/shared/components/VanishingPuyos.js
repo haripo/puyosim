@@ -24,7 +24,7 @@ export default class DroppingPuyos extends Component {
       this.state.progress,
       {
         toValue: 1,
-        duration: 500,
+        duration: 300,
         useNativeDriver: true
       }
     ).start(() => {

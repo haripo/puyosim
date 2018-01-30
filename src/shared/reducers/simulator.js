@@ -148,7 +148,11 @@ function applyGravity(state) {
   const plans = getDropPlan(stack, fieldRows, fieldCols);
 
   return state.withMutations(s => {
-    s.set('stack', Immutable.fromJS(stack));
+    //s.set('stack', Immutable.fromJS(stack));
+    for (let plan of plans) {
+      s.setIn(['stack', plan.row, plan.col], plan.color);
+      s.setIn(['stack', plan.row - plan.distance, plan.col], 0);
+    }
     s.set('droppingPuyos', Immutable.fromJS(plans));
   });
 }
