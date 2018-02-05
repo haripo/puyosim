@@ -93,7 +93,7 @@ export function generateQueue(configs) {
     if (queue[0] === queue[1] &&
       queue[0] === queue[2] &&
       queue[0] === queue[3]) {
-      return this.generateQueue(configs);
+      return generateQueue(configs);
     }
   }
 
