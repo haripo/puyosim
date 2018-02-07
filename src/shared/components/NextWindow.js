@@ -7,34 +7,29 @@ import { cardBackgroundColor, contentsPadding, puyoSize } from '../utils/constan
 import Puyo from './Puyo';
 
 export default class NextWindow extends Component {
+  renderPair(pair) {
+    return (
+      <View style={ styles.nextWindow }>
+        <Puyo
+          puyo={ pair[1] }
+          size={ puyoSize }
+          x={ contentsPadding }
+          y={ contentsPadding }/>
+        <Puyo
+          puyo={ pair[0] }
+          size={ puyoSize }
+          x={ contentsPadding }
+          y={ contentsPadding + puyoSize }/>
+      </View>
+    );
+  }
+
   render() {
     const { next, doubleNext } = this.props;
     return (
       <View style={ styles.component }>
-        <View style={ styles.nextWindow }>
-          <Puyo
-            puyo={ next[1] }
-            size={ puyoSize }
-            x={ contentsPadding }
-            y={ contentsPadding }/>
-          <Puyo
-            puyo={ next[0] }
-            size={ puyoSize }
-            x={ contentsPadding }
-            y={ contentsPadding + puyoSize }/>
-        </View>
-        <View style={ styles.nextWindow }>
-          <Puyo
-            puyo={ doubleNext[1] }
-            size={ puyoSize }
-            x={ contentsPadding }
-            y={ contentsPadding }/>
-          <Puyo
-            puyo={ doubleNext[0] }
-            size={ puyoSize }
-            x={ contentsPadding}
-            y={ contentsPadding + puyoSize}/>
-        </View>
+          { this.renderPair(next) }
+          { doubleNext ? this.renderPair(doubleNext) : null }
       </View>
     );
   }

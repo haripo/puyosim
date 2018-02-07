@@ -52,6 +52,20 @@ export function getPendingPair(state) {
   ];
 }
 
+
+// これだけ simulator state ではなく root state をとっている
+export function getNextHand(state) {
+  return state.getIn(['simulator', 'queue', 1]);
+}
+
+// これだけ simulator state ではなく root state をとっている
+export function getDoubleNextHand(state) {
+  if (state.getIn(['config', 'numVisibleNext']) === 'visibleNextOnly') {
+    return null;
+  }
+  return state.getIn(['simulator', 'queue', 2]);
+}
+
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
 function _getVanishingPuyos(vanishings) {
 

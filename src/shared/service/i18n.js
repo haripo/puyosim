@@ -29,6 +29,10 @@ const translations = {
     custom2Hands: '初手 2 手を固定',
     custom3Hands: '初手 3 手を固定',
 
+    numVisibleNext: 'ネクスト',
+    visibleDoubleNext: 'ダブルネクストを表示',
+    visibleNextOnly: 'ネクストのみ表示',
+
     // handset patterns
     ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
     ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
@@ -56,7 +60,11 @@ const translations = {
     initialAllClear: 'All clear',
     avoidIn2Hands: 'avoid in first 2 hands',
     custom2Hands: 'Custom first 2 hands',
-    custom2Hands: 'Custom first 3 hands',
+    custom3Hands: 'Custom first 3 hands',
+
+    numVisibleNext: 'Next window',
+    visibleDoubleNext: 'Show double next',
+    visibleNextOnly: 'Show next only',
 
     // handset patterns
     ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),

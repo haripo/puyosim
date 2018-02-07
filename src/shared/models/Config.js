@@ -19,13 +19,18 @@ export const configItems = {
   initialAllClear: {
     noLimit: null,
     avoidIn2Hands: null
+  },
+  numVisibleNext: {
+    visibleDoubleNext: null,
+    visibleNextOnly: null,
   }
 };
 
 export const configCategoryItem = new Set([
   `colorBalance`,
   'initialColors',
-  'initialAllClear'
+  'initialAllClear',
+  'numVisibleNext'
 ]);
 
 // default values
@@ -35,6 +40,7 @@ const recordType = {
   initialAllClear: 'noLimit',
   custom2Hands: null,
   custom3Hands: null,
+  numVisibleNext: 'visibleDoubleNext',
 };
 
 export default class Config extends Record(recordType) {
