@@ -40,16 +40,6 @@ export default class SettingsPage extends Component {
     onChanged(configKey, value);
   }
 
-  parseSpecialConfig(value) {
-    if (value === null) {
-      return null;
-    }
-    if (value.startsWith('!i18n')) {
-      return value.slice(6);
-    }
-    return t(value);
-  }
-
   renderSelectChild(configValue) {
     let icon = null;
     if (configValue === this.props.config[this.props.configKey]) {
@@ -64,7 +54,7 @@ export default class SettingsPage extends Component {
 
     return (
       <SettingsList.Item
-        title={ this.parseSpecialConfig(configValue) }
+        title={ configValue }
         key={configValue}
         icon={ icon }
         itemWidth={ 70 }
@@ -92,12 +82,12 @@ export default class SettingsPage extends Component {
 
     return (
       <SettingsList.Item
-        title={ this.parseSpecialConfig(configValue) }
+        title={ configValue }
         key={configValue}
         icon={ icon }
         itemWidth={ 70 }
         titleStyle={ { color:'black', fontSize: 16 } }
-        titleInfo={ this.parseSpecialConfig(this.props.config[configValue]) }
+        titleInfo={ this.props.config[configValue] }
         hasNavArrow={ true }
         onPress={ () => {
           this.updateConfigValue(configValue);
@@ -113,7 +103,7 @@ export default class SettingsPage extends Component {
         title={ t(configKey) }
         key={configKey}
         itemWidth={ 70 }
-        titleInfo={ this.parseSpecialConfig(this.props.config[configKey]) }
+        titleInfo={ this.props.config[configKey] }
         titleStyle={ { color:'black', fontSize: 16 } }
         hasNavArrow={ true }
         onPress={ () => this.openDescendantScreen(configKey) }
