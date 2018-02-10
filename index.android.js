@@ -13,6 +13,7 @@ import { Navigation } from 'react-native-navigation';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import Simulator from './src/native/screens/SimulatorContainer';
+import History from './src/native/screens/HistoryContainer';
 import About from './src/native/screens/AboutContainer';
 import Settings from './src/native/screens/SettingsContainer';
 import reducer from './src/shared/reducers';
@@ -36,13 +37,14 @@ sagaMiddleware.run(sagas);
 
 // Register screen components
 Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
+Navigation.registerComponent('com.puyosimulator.History', () => History, store, Provider);
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
 
 // launch first screen
 Navigation.startSingleScreenApp({
   screen: {
-    screen: 'com.puyosimulator.Simulator',
+    screen: 'com.puyosimulator.History',
   },
   appStyle: {
     orientation: 'portrait'
