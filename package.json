@@ -5,7 +5,7 @@
   "scripts": {
     "start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager\"",
     "build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --no-packager --variant=release",
-    "web:start": "webpack --config web/webpack.config.js",
+    "web:start": "webpack-dev-server --config web/webpack.config.js --watch",
     "web:build": "webpack --config web/webpack.config.js",
     "test": "jest"
   },
