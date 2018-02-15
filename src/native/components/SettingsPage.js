@@ -54,7 +54,7 @@ export default class SettingsPage extends Component {
 
     return (
       <SettingsList.Item
-        title={ configValue }
+        title={ t(configValue) }
         key={configValue}
         icon={ icon }
         itemWidth={ 70 }
@@ -82,12 +82,12 @@ export default class SettingsPage extends Component {
 
     return (
       <SettingsList.Item
-        title={ configValue }
+        title={ t(configValue) }
         key={configValue}
         icon={ icon }
         itemWidth={ 70 }
         titleStyle={ { color:'black', fontSize: 16 } }
-        titleInfo={ this.props.config[configValue] }
+        titleInfo={ t(this.props.config[configValue]) }
         hasNavArrow={ true }
         onPress={ () => {
           this.updateConfigValue(configValue);
@@ -103,7 +103,7 @@ export default class SettingsPage extends Component {
         title={ t(configKey) }
         key={configKey}
         itemWidth={ 70 }
-        titleInfo={ this.props.config[configKey] }
+        titleInfo={ t(this.props.config[configKey]) }
         titleStyle={ { color:'black', fontSize: 16 } }
         hasNavArrow={ true }
         onPress={ () => this.openDescendantScreen(configKey) }
