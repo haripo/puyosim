@@ -44,7 +44,7 @@ Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store
 // launch first screen
 Navigation.startSingleScreenApp({
   screen: {
-    screen: 'com.puyosimulator.History',
+    screen: 'com.puyosimulator.Simulator',
   },
   appStyle: {
     orientation: 'portrait'
