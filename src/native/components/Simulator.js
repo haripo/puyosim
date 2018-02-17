@@ -107,7 +107,9 @@ export default class Simulator extends Component {
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <View>
-            <HandlingPuyos pair={ this.props.pendingPair }>
+            <HandlingPuyos
+              pair={ this.props.pendingPair }
+              puyoSkin={ this.props.puyoSkin }>
             </HandlingPuyos>
             <Field
               stack={ this.props.stack }
@@ -116,6 +118,7 @@ export default class Simulator extends Component {
               vanishingPuyos={ this.props.vanishingPuyos }
               isActive={ this.props.isActive }
               style={ styles.field }
+              puyoSkin={ this.props.puyoSkin }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
               onSwiping={ this.props.onSwiping }

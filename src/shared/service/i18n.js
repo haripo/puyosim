@@ -33,6 +33,10 @@ const translations = {
     visibleDoubleNext: 'ダブルネクストを表示',
     visibleNextOnly: 'ネクストのみ表示',
 
+    puyoSkin: 'ぷよの種類',
+    puyoSkinDefault: 'デフォルト',
+    puyoSkinCharacter: '文字',
+
     // handset patterns
     ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
     ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
@@ -65,6 +69,10 @@ const translations = {
     numVisibleNext: 'Next window',
     visibleDoubleNext: 'Show double next',
     visibleNextOnly: 'Show next only',
+
+    puyoSkin: 'Puyo Skin',
+    puyoSkinDefault: 'Default',
+    puyoSkinCharacter: 'Character',
 
     // handset patterns
     ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),

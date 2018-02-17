@@ -26,7 +26,8 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    moves: simulator.get('moves')
+    moves: simulator.get('moves'),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 

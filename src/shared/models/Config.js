@@ -23,6 +23,10 @@ export const configItems = {
   numVisibleNext: {
     visibleDoubleNext: null,
     visibleNextOnly: null,
+  },
+  puyoSkin: {
+    puyoSkinDefault: null,
+    puyoSkinCharacter: null,
   }
 };
 
@@ -30,7 +34,8 @@ export const configCategoryItem = new Set([
   `colorBalance`,
   'initialColors',
   'initialAllClear',
-  'numVisibleNext'
+  'numVisibleNext',
+  'puyoSkin'
 ]);
 
 // default values
@@ -41,6 +46,7 @@ const recordType = {
   custom2Hands: null,
   custom3Hands: null,
   numVisibleNext: 'visibleDoubleNext',
+  puyoSkin: 'puyoSkinDefault'
 };
 
 export default class Config extends Record(recordType) {

@@ -6,7 +6,8 @@ import { getDoubleNextHand, getNextHand } from '../selectors/simulatorSelectors'
 const mapStateToProps = (state) => {
   return {
     next: getNextHand(state),
-    doubleNext: getDoubleNextHand(state)
+    doubleNext: getDoubleNextHand(state),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 

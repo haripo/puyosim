@@ -7,7 +7,8 @@ import { getVanishingPuyos } from '../selectors/simulatorSelectors';
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
   return {
-    vanishings: getVanishingPuyos(simulator)
+    vanishings: getVanishingPuyos(simulator),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 

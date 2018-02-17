@@ -4,32 +4,61 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Image, Animated } from 'react-native';
 
-const puyoImages = [
-  null,
-  require('../../../assets/puyo_red.png'),
-  require('../../../assets/puyo_green.png'),
-  require('../../../assets/puyo_blue.png'),
-  require('../../../assets/puyo_yellow.png')
-];
+const puyoImages = {
+  'puyoSkinDefault': [
+    null,
+    require('../../../assets/puyo_red.png'),
+    require('../../../assets/puyo_green.png'),
+    require('../../../assets/puyo_blue.png'),
+    require('../../../assets/puyo_yellow.png')
+  ],
+  'puyoSkinCharacter': [
+    null,
+    require('../../../assets/puyo_red_char.png'),
+    require('../../../assets/puyo_green_char.png'),
+    require('../../../assets/puyo_blue_char.png'),
+    require('../../../assets/puyo_yellow_char.png')
+  ]
+};
 
-const connectionImages = [
-  {
-    horizontal: require('../../../assets/puyo_red_connect_horizontal.png'),
-    vertical: require('../../../assets/puyo_red_connect_vertical.png')
-  },
-  {
-    horizontal: require('../../../assets/puyo_green_connect_horizontal.png'),
-    vertical: require('../../../assets/puyo_green_connect_vertical.png')
-  },
-  {
-    horizontal: require('../../../assets/puyo_blue_connect_horizontal.png'),
-    vertical: require('../../../assets/puyo_blue_connect_vertical.png')
-  },
-  {
-    horizontal: require('../../../assets/puyo_yellow_connect_horizontal.png'),
-    vertical: require('../../../assets/puyo_yellow_connect_vertical.png')
-  }
-];
+const connectionImages = {
+  'puyoSkinDefault': [
+    {
+      horizontal: require('../../../assets/puyo_red_connect_horizontal.png'),
+      vertical: require('../../../assets/puyo_red_connect_vertical.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_green_connect_horizontal.png'),
+      vertical: require('../../../assets/puyo_green_connect_vertical.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_blue_connect_horizontal.png'),
+      vertical: require('../../../assets/puyo_blue_connect_vertical.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_yellow_connect_horizontal.png'),
+      vertical: require('../../../assets/puyo_yellow_connect_vertical.png')
+    }
+  ],
+  'puyoSkinCharacter': [
+    {
+      horizontal: require('../../../assets/puyo_red_connect_horizontal_char.png'),
+      vertical: require('../../../assets/puyo_red_connect_vertical_char.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_green_connect_horizontal_char.png'),
+      vertical: require('../../../assets/puyo_green_connect_vertical_char.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_blue_connect_horizontal_char.png'),
+      vertical: require('../../../assets/puyo_blue_connect_vertical_char.png')
+    },
+    {
+      horizontal: require('../../../assets/puyo_yellow_connect_horizontal_char.png'),
+      vertical: require('../../../assets/puyo_yellow_connect_vertical_char.png')
+    }
+  ]
+};
 
 
 /**
@@ -77,7 +106,7 @@ export default class Puyo extends Component {
       height: this.props.size
     };
     const half = this.props.size / 2;
-    const image = connectionImages[puyo - 1];
+    const image = connectionImages[this.props.skin][puyo - 1];
     const render = (source, style, key) => {
       return (
         <Image source={ source } style={ [base, style] } key={ key }/>
@@ -93,7 +122,7 @@ export default class Puyo extends Component {
   }
 
   render() {
-    const image = puyoImages[this.props.puyo];
+    const image = puyoImages[this.props.skin][this.props.puyo];
     if (image === null) return null;
 
     return (

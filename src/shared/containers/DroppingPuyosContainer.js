@@ -6,7 +6,8 @@ import toJS from '../utils/toJS';
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
   return {
-    droppings: simulator.get('droppingPuyos')
+    droppings: simulator.get('droppingPuyos'),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 

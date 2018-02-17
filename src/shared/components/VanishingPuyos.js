@@ -56,6 +56,7 @@ export default class DroppingPuyos extends Component {
         <Puyo
           size={ puyoSize }
           puyo={ v.color }
+          skin={this.props.puyoSkin}
           connections={ v.connections }
           x={ v.col * puyoSize + contentsPadding }
           y={ v.row * puyoSize + contentsPadding }

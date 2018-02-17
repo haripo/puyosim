@@ -38,7 +38,7 @@ export default class DroppingPuyos extends Component {
   }
 
   renderPuyos() {
-    const { droppings } = this.props;
+    const { droppings, puyoSkin } = this.props;
 
     const maxDistance = _.max(this.props.droppings.map(d => d.distance));
     return droppings.map(d => {
@@ -56,6 +56,7 @@ export default class DroppingPuyos extends Component {
         <Puyo
           size={puyoSize}
           puyo={d.color}
+          skin={puyoSkin}
           x={d.col * puyoSize + contentsPadding}
           y={y}
           key={`dropping-${d.row}-${d.col}`}/>

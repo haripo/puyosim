@@ -82,6 +82,7 @@ export default class Field extends Component {
                 x={ col * puyoSize + contentsPadding }
                 y={ row * puyoSize + contentsPadding }
                 connections={ puyo.connections }
+                skin={ this.props.puyoSkin }
                 key={ `puyo-${row}-${col}` }/>
             );
           });
@@ -92,6 +93,7 @@ export default class Field extends Component {
           <GhostPuyo
             size={ puyoSize }
             puyo={ ghost.color }
+            skin={ this.props.puyoSkin }
             key={ i }
             x={ ghost.col * puyoSize + contentsPadding }
             y={ ghost.row * puyoSize + contentsPadding }/>

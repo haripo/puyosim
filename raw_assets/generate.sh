@@ -14,6 +14,21 @@ mv cropped_puyo_021.png ../assets/puyo_green_connect_vertical.png
 mv cropped_puyo_022.png ../assets/puyo_blue_connect_vertical.png
 mv cropped_puyo_023.png ../assets/puyo_yellow_connect_vertical.png
 
+mv cropped_puyo_030.png ../assets/puyo_red_char.png
+mv cropped_puyo_031.png ../assets/puyo_green_char.png
+mv cropped_puyo_032.png ../assets/puyo_blue_char.png
+mv cropped_puyo_033.png ../assets/puyo_yellow_char.png
+
+mv cropped_puyo_040.png ../assets/puyo_red_connect_horizontal_char.png
+mv cropped_puyo_041.png ../assets/puyo_green_connect_horizontal_char.png
+mv cropped_puyo_042.png ../assets/puyo_blue_connect_horizontal_char.png
+mv cropped_puyo_043.png ../assets/puyo_yellow_connect_horizontal_char.png
+
+mv cropped_puyo_050.png ../assets/puyo_red_connect_vertical_char.png
+mv cropped_puyo_051.png ../assets/puyo_green_connect_vertical_char.png
+mv cropped_puyo_052.png ../assets/puyo_blue_connect_vertical_char.png
+mv cropped_puyo_053.png ../assets/puyo_yellow_connect_vertical_char.png
+
 convert noticingPuyos.xcf -crop 16x16 -sample 400% cropped_ojama_%03d.png
 mv cropped_ojama_000.png ../assets/ojama_small.png
 mv cropped_ojama_001.png ../assets/ojama_large.png
