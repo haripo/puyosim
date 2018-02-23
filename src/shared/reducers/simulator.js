@@ -11,7 +11,6 @@ import {
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
   ROTATE_HIGHLIGHTS_RIGHT,
-  SHOW_HIGHLIGHTS,
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
@@ -42,26 +41,6 @@ function makeHistoryRecord(state) {
     score: state.get('score'),
     chainScore: state.get('chainScore')
   });
-}
-
-function showHighlights(state, action) {
-  let { position, rotation } = action.payload;
-
-  if (position.col === 0 && rotation === 'left') {
-    position.col = 1;
-  }
-
-  if (position.col === 5 && rotation === 'right') {
-    position.col = 4;
-  }
-
-  return state
-    .set('pendingPair', new PendingPair(
-      position.col,
-      rotation,
-      state.getIn(['queue', 0, 0]),
-      state.getIn(['queue', 0, 1])
-    ));
 }
 
 function rotateHighlightsLeft(state, action) {
@@ -237,8 +216,6 @@ export const reducer = (state, action, config) => {
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
-    case SHOW_HIGHLIGHTS:
-      return showHighlights(state, action);
     case ROTATE_HIGHLIGHTS_LEFT:
       return rotateHighlightsLeft(state, action);
     case ROTATE_HIGHLIGHTS_RIGHT:
