@@ -130,6 +130,7 @@ function _getStack(stack, droppings) {
 }
 
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue');
+
 function _getDropPositions(pair, stack, queue) {
   const queueHead = queue.get(0);
 

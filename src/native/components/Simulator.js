@@ -88,9 +88,9 @@ export default class Simulator extends Component {
           );
           break;
         case 'share-via-ips':
-          const simulatorURL = generateIPSSimulatorURL(this.props.moves);
+          const simulatorURL = generateIPSSimulatorURL(this.props.history);
           const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
-          Linking.openURL(tweetURL);
+          Linking.openURL(simulatorURL);
           break;
         case 'settings':
           this.props.navigator.push({ screen: 'com.puyosimulator.Settings' });

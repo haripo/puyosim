@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    moves: simulator.get('moves')
+    history: simulator.get('history'),
   };
 };
 

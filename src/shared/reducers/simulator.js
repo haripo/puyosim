@@ -26,20 +26,25 @@ import { generateQueue } from '../models/QueueGenerator';
 
 const HistoryRecord = Record({
   queue: List(),
-  stack: List(), // TODO: stack and queue are redundant
+  stack: List(), // TODO: queue are redundant
   chain: 0,
   score: 0,
   chainScore: 0,
+
+  move: null,
+  pair: List()
 });
 
 
-function makeHistoryRecord(state) {
+function makeHistoryRecord(state, pair) {
   return new HistoryRecord({
     queue: state.get('queue'),
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
-    chainScore: state.get('chainScore')
+    chainScore: state.get('chainScore'),
+    move: state.get('pendingPair'),
+    pair: pair
   });
 }
 
@@ -75,10 +80,10 @@ function putNextPair(state, action) {
     for (let i = 0; i < positions.length; i++) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
+
     return s
       .update('queue', q => q.shift().push(pair))
-      .update('history', history => history.unshift(makeHistoryRecord(state)))
-      .update('moves', moves => moves.unshift(Immutable.fromJS({ move: state.get('pendingPair'), pair: pair })))
+      .update('history', history => history.unshift(makeHistoryRecord(state, pair)))
       .update('pendingPair', pair => pair.resetPosition())
       .set('isDropOperated', true);
   });
@@ -164,8 +169,7 @@ function undoField(state, action) {
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .update('history', history => history.shift())
-      .update('moves', moves => moves.shift());
+      .update('history', history => history.shift());
   })
 }
 
@@ -192,8 +196,7 @@ function createInitialState(config) {
     pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
-    history: List(),
-    moves: List()
+    history: List()
   });
 }
 
@@ -210,7 +213,7 @@ function loadOrCreateInitialState(config) {
 
 export function getInitialState(config) {
   return loadOrCreateInitialState(config);
-};
+}
 
 export const reducer = (state, action, config) => {
   switch (action.type) {

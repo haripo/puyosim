@@ -19,7 +19,7 @@ function generateMovesString(history) {
 }
 
 function generateIPSSimulatorURL(history) {
-  return 'http://ips.karou.jp/simu/ps.html?_' + generateMovesString(history);
+  return 'http://ishikawapuyo.net/simu/ps.html?_' + generateMovesString(history);
 }
 
 export default generateIPSSimulatorURL;
