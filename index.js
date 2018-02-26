@@ -19,6 +19,9 @@ import Settings from './src/native/screens/SettingsContainer';
 import reducer from './src/shared/reducers';
 import sagas from './src/shared/sagas';
 
+import { Client } from 'bugsnag-react-native';
+Client.releaseStage = 'development';
+Client.notifyReleaseStages = ['production'];
 
 const stateTransformer = (state) => {
   return mapValues(state, v => v.toJS());
