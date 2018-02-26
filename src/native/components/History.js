@@ -7,10 +7,14 @@ import React, { Component } from 'react';
 import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../../shared/utils/constants';
+import {
+  buttonColor, contentsHeight, contentsMargin, controllerButtonSize, themeColor,
+  themeLightColor
+} from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
+import RecordList from '../../shared/components/RecordList';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -69,39 +73,31 @@ export default class Simulator extends Component {
               vanishingPuyos={ this.props.vanishingPuyos }
               isActive={ this.props.isActive }
               style={ styles.field }
+              puyoSkin={ this.props.puyoSkin }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-              onSwiping={ this.props.onSwiping }
               onSwipeEnd={ this.props.onSwipeEnd }>
             </Field>
           </View>
           <View style={ styles.side }>
-            <View style={ styles.sideHead }>
-              <NextWindowContainer />
-              <ChainResultContainer />
-            </View>
-            <View style={{ flexDirection: 'column' }}>
-              <View style={ styles.buttonGroup }>
-                <TouchableOpacity
-                  style={ styles.controllerFullWidthButton }
-                  onPress={ this.props.onUndoSelected }>
-                  <Icon name="undo" size={30} color="#FFF" />
-                  <Text style={{ color: '#FFF' }}>Undo</Text>
-                </TouchableOpacity>
-              </View>
+            <NextWindowContainer/>
+            <RecordList
+              history={ this.props.history }
+              puyoSkin={ this.props.puyoSkin } />
+            <View style={{ flexDirection: 'column', height: controllerButtonSize + contentsMargin * 2, flex: 0 }}>
               <View style={styles.buttons}>
                 <View style={ styles.buttonGroup }>
                   <TouchableOpacity
                     style={ styles.controllerButton }
                     onPress={ this.props.onNextPressed }
                     disabled={ !this.props.isActive }>
-                    <Icon name="arrow-back" size={30} color="#FFF" />
+                    <Icon name="undo" size={30} color="#FFF" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={ styles.controllerButton }
                     onPress={ this.props.onPrevPressed }
                     disabled={ !this.props.isActive }>
-                    <Icon name="arrow-forward" size={30} color="#FFF" />
+                    <Icon name="redo" size={30} color="#FFF" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -118,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#F5F5F5'
+    backgroundColor: '#F5F5F5',
   },
   contents: {
     flex: 1,
@@ -133,7 +129,11 @@ const styles = StyleSheet.create({
     marginRight: contentsMargin,
     marginBottom: contentsMargin
   },
-  sideHead: {
+  nextWindow: {
+    marginBottom: contentsMargin,
+  },
+  recordList: {
+    marginBottom: contentsMargin,
     flex: 1
   },
   buttons: {

@@ -44,6 +44,11 @@ export default class Simulator extends Component {
         showAsAction: 'never'
       },
       {
+        title: t('history'),
+        id: 'history',
+        showAsAction: 'never'
+      },
+      {
         title: t('undo'),
         id: 'undo',
         showAsAction: 'never'
@@ -86,6 +91,9 @@ export default class Simulator extends Component {
             ],
             { cancelable: false }
           );
+          break;
+        case 'history':
+          this.props.navigator.push({ screen: 'com.puyosimulator.History' });
           break;
         case 'share-via-ips':
           const simulatorURL = generateIPSSimulatorURL(this.props.history);
