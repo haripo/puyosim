@@ -89,15 +89,17 @@ export default class Simulator extends Component {
                 <View style={ styles.buttonGroup }>
                   <TouchableOpacity
                     style={ styles.controllerButton }
-                    onPress={ this.props.onNextPressed }
+                    onPress={ this.props.onPrevPressed }
                     disabled={ !this.props.isActive }>
                     <Icon name="undo" size={30} color="#FFF" />
+                    <Text>undo</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={ styles.controllerButton }
-                    onPress={ this.props.onPrevPressed }
+                    onPress={ this.props.onNextPressed }
                     disabled={ !this.props.isActive }>
                     <Icon name="redo" size={30} color="#FFF" />
+                    <Text>redo</Text>
                   </TouchableOpacity>
                 </View>
               </View>

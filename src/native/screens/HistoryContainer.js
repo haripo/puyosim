@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  initializeSimulator,
+  initializeSimulator, redoField, undoField,
 } from '../../shared/actions/actions';
 import History from '../components/History';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
@@ -26,10 +26,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(initializeSimulator());
     },
     onPrevPressed: () => {
-
+      dispatch(undoField());
     },
     onNextPressed: () => {
-
+      dispatch(redoField());
     },
   };
 };
