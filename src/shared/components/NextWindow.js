@@ -1,40 +1,38 @@
 /**
  * Component for render next and double-next pairs
  */
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { cardBackgroundColor, contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 
-export default class NextWindow extends Component {
-  renderPair(pair, puyoSkin) {
-    return (
-      <View style={ styles.nextWindow }>
-        <Puyo
-          puyo={ pair[1] }
-          size={ puyoSize }
-          skin={ puyoSkin }
-          x={ contentsPadding }
-          y={ contentsPadding }/>
-        <Puyo
-          puyo={ pair[0] }
-          size={ puyoSize }
-          skin={ puyoSkin }
-          x={ contentsPadding }
-          y={ contentsPadding + puyoSize }/>
-      </View>
-    );
-  }
+function renderPair(pair, puyoSkin) {
+  return (
+    <View style={ styles.nextWindow }>
+      <Puyo
+        puyo={ pair[1] }
+        size={ puyoSize }
+        skin={ puyoSkin }
+        x={ contentsPadding }
+        y={ contentsPadding }/>
+      <Puyo
+        puyo={ pair[0] }
+        size={ puyoSize }
+        skin={ puyoSkin }
+        x={ contentsPadding }
+        y={ contentsPadding + puyoSize }/>
+    </View>
+  );
+}
 
-  render() {
-    const { next, doubleNext, puyoSkin } = this.props;
-    return (
-      <View style={ styles.component }>
-          { this.renderPair(next, puyoSkin) }
-          { doubleNext ? this.renderPair(doubleNext, puyoSkin) : null }
-      </View>
-    );
-  }
+function render(props) {
+  const { next, doubleNext, puyoSkin } = props;
+  return (
+    <View style={ styles.component }>
+        { renderPair(next, puyoSkin) }
+        { doubleNext ? renderPair(doubleNext, puyoSkin) : null }
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -50,3 +48,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+export default NextWindow = render;
