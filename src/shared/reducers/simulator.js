@@ -32,11 +32,23 @@ const HistoryRecord = Record({
   chainScore: 0,
 
   move: null,
-  pair: List()
+  pair: List(),
+
+  prev: List(),
+  next: List()
 });
 
+// history helpers
 
-function makeHistoryRecord(state, pair) {
+/**
+ * Creates history record
+ * @param state
+ * @param pair
+ * @param prev
+ * @param next
+ * @returns {Immutable.Map<string, any>}
+ */
+function makeHistoryRecord(state, pair, prev, next) {
   return new HistoryRecord({
     queue: state.get('queue'),
     stack: state.get('stack'),
@@ -44,9 +56,36 @@ function makeHistoryRecord(state, pair) {
     score: state.get('score'),
     chainScore: state.get('chainScore'),
     move: state.get('pendingPair'),
-    pair: pair
+    pair: pair,
+    prev: List(prev),
+    next: List(next)
   });
 }
+
+/**
+ * Appends history record to history tree
+ * @param state
+ * @param pair
+ */
+function appendHistoryRecord(state, pair) {
+  const prevIndex = state.get('historyIndex');
+  const nextIndex = state.get('history').size;
+
+  const record = makeHistoryRecord(state, pair, [prevIndex], []);
+
+  return state
+    .updateIn(['history', prevIndex, 'next'], indexes => {
+      if (!indexes) {
+        return indexes;
+      }
+      return indexes.push(nextIndex);
+    })
+    .update('history', h => h.push(record))
+    .set('historyIndex', nextIndex);
+}
+
+
+// reducer functions
 
 function rotateHighlightsLeft(state, action) {
   return state.update('pendingPair', pair => pair.rotateLeft());
@@ -81,11 +120,10 @@ function putNextPair(state, action) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
 
-    return s
-      .update('queue', q => q.shift().push(pair))
-      .update('history', history => history.unshift(makeHistoryRecord(state, pair)))
-      .update('pendingPair', pair => pair.resetPosition())
-      .set('isDropOperated', true);
+    s.update('queue', q => q.shift().push(pair))
+    s.update('pendingPair', pair => pair.resetPosition())
+    s.set('isDropOperated', true);
+    return appendHistoryRecord(s, pair)
   });
 }
 
@@ -161,20 +199,28 @@ function revertFromRecord(state, record) {
 }
 
 function undoField(state, action) {
-  if (state.get('history').size === 0) {
+  const currentIndex = state.get('historyIndex');
+  const prevIndex = state.getIn(['history', currentIndex, 'prev', 0]);
+
+  if (prevIndex === null) {
+    // There is no history
     return state;
   }
+
   return state.withMutations(s => {
-    const record = state.getIn(['history', 0]);
+    const record = state.getIn(['history', prevIndex]);
+    console.log("R", record.toJS());
+    console.log("H", s.get('history').toJS());
+    console.log("I", currentIndex, prevIndex);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .update('history', history => history.shift());
+      .set('historyIndex', prevIndex);
   })
 }
 
 function resetField(state, action) {
-  while (state.get('history').size > 0) {
+  while (!state.getIn(['history', 'prev'])) {
     state = undoField(state, null)
   }
   return state;
@@ -186,7 +232,7 @@ function restart(state, action, config) {
 
 function createInitialState(config) {
   const queue = generateQueue(config);
-  return Map({
+  let state = Map({
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
@@ -196,8 +242,10 @@ function createInitialState(config) {
     pendingPair: new PendingPair(queue[0][0], queue[0][1]),
     droppingPuyos: List(),
     vanishingPuyos: List(),
-    history: List()
+    history: List(),
+    historyIndex: 0
   });
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, [], [])));
 }
 
 function loadOrCreateInitialState(config) {
