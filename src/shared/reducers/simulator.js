@@ -200,22 +200,21 @@ function revertFromRecord(state, record) {
 
 function undoField(state, action) {
   const currentIndex = state.get('historyIndex');
-  const prevIndex = state.getIn(['history', currentIndex, 'prev', 0]);
+  const prevIndexes = state.getIn(['history', currentIndex, 'prev']);
 
-  if (prevIndex === null) {
+  if (prevIndexes.size === 0) {
     // There is no history
     return state;
   }
 
+  const prev = prevIndexes.get(0);
+
   return state.withMutations(s => {
-    const record = state.getIn(['history', prevIndex]);
-    console.log("R", record.toJS());
-    console.log("H", s.get('history').toJS());
-    console.log("I", currentIndex, prevIndex);
+    const record = state.getIn(['history', prev]);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .set('historyIndex', prevIndex);
+      .set('historyIndex', prev);
   })
 }
 
