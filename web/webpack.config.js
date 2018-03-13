@@ -74,4 +74,5 @@ module.exports = {
     contentBase: path.resolve(appDirectory, 'web/'),
     publicPath: '/build/'
   },
+  devtool: 'inline-source-map'
 };

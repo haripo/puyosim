@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
     history: simulator.get('history'),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 
