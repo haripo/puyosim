@@ -67,12 +67,11 @@ module.exports = {
       __DEV__: process.env.NODE_ENV === 'production' || true
     })
   ],
-
   resolve: {
     extensions: ['.web.js', '.js'],
   },
   devServer: {
-    contentBase: path.resolve(appDirectory)
+    contentBase: path.resolve(appDirectory, 'web/'),
+    publicPath: '/build/'
   },
-  devtool: 'inline-source-map'
 };
