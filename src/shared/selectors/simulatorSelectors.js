@@ -1,5 +1,5 @@
 import FieldUtils from '../utils/FieldUtils';
-import { Map } from "immutable";
+import { Map } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 

@@ -2,15 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import {
-  buttonColor, contentsMargin, contentsWidth, controllerButtonSize, themeColor,
-  themeLightColor
-} from '../../shared/utils/constants';
+import { buttonColor, contentsMargin, contentsWidth, controllerButtonSize } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-//import I18n from '../../shared/utils/i18n';
-import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 
 export default class Simulator extends Component {
   constructor(props) {

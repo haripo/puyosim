@@ -1,6 +1,4 @@
-import {
-  SAVE_CONFIG
-} from '../actions/actions';
+import { SAVE_CONFIG } from '../actions/actions';
 import * as storage from 'specific/utils/StorageService';
 import Config from '../models/Config';
 

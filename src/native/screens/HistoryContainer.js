@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  initializeSimulator, redoField, undoField,
-} from '../../shared/actions/actions';
+import { initializeSimulator, redoField, undoField, } from '../../shared/actions/actions';
 import History from '../components/History';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';

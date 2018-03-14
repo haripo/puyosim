@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';
 import _ from 'lodash';

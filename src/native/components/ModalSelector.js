@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Text, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SettingsList from 'react-native-settings-list';
 

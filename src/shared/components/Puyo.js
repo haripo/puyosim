@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Image, Animated } from 'react-native';
+import { Animated, Image } from 'react-native';
 
 const puyoImages = {
   'puyoSkinDefault': [

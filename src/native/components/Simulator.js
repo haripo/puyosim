@@ -8,7 +8,13 @@ import React, { Component } from 'react';
 import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { buttonColor, contentsMargin, controllerButtonSize, themeColor, themeLightColor } from '../../shared/utils/constants';
+import {
+  buttonColor,
+  contentsMargin,
+  controllerButtonSize,
+  themeColor,
+  themeLightColor
+} from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';

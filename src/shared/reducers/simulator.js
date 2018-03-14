@@ -1,9 +1,9 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
-  INITIALIZE_SIMULATOR,
   APPLY_GRAVITY,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
+  INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
   MOVE_HIGHLIGHTS_RIGHT,
   PUT_NEXT_PAIR,
@@ -17,7 +17,7 @@ import {
 import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
-import { loadLastState, saveLastState } from '../../shared/utils/StorageService';
+import { loadLastState } from '../../shared/utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';

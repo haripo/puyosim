@@ -4,11 +4,13 @@
  */
 
 import React, { Component } from 'react';
-import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import {
-  buttonColor, contentsHeight, contentsMargin, controllerButtonSize, themeColor,
+  buttonColor,
+  contentsMargin,
+  controllerButtonSize,
+  themeColor,
   themeLightColor
 } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
