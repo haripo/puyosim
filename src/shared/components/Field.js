@@ -54,17 +54,17 @@ export default class Field extends Component {
 
   handlePanResponderMove(e: Object, gestureState: Object) {
     if (this.props.isActive) {
-      this.props.onSwiping(
-        this.eventToPosition(e),
-        this.gestureStateToDirection(gestureState));
+      // this.props.onSwiping(
+      //   this.eventToPosition(e),
+      //   this.gestureStateToDirection(gestureState));
     }
   }
 
   handlePanResponderEnd(e: Object, gestureState: Object) {
     if (this.props.isActive) {
-      this.props.onSwipeEnd(
-        this.eventToPosition(e),
-        this.gestureStateToDirection(gestureState));
+      // this.props.onSwipeEnd(
+      //   this.eventToPosition(e),
+      //   this.gestureStateToDirection(gestureState));
     }
   }
 

@@ -11,6 +11,9 @@ function generateMovesString(history) {
   return history
     .reverse()
     .map(record => {
+      if (record.pair === null) {
+        return '';
+      }
       const color = (record.pair[0] - 1) + (record.pair[1] - 1) * 6;
       const position = record.move.col + rotation[record.move.rotation] * 6;
       return colorChars[color] + colorChars[position];

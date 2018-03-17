@@ -5,7 +5,7 @@
 
 import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import {
@@ -19,7 +19,6 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
-import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -102,9 +101,7 @@ export default class Simulator extends Component {
           this.props.navigator.push({ screen: 'com.puyosimulator.History' });
           break;
         case 'share-via-ips':
-          const simulatorURL = generateIPSSimulatorURL(this.props.history);
-          const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
-          Linking.openURL(simulatorURL);
+          this.props.onShareSelected();
           break;
         case 'settings':
           this.props.navigator.push({ screen: 'com.puyosimulator.Settings' });

@@ -23,6 +23,7 @@ export const REDO_FIELD = 'REDO_FIELD';
 export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
 export const SAVE_CONFIG = 'SAVE_CONFIG';
+export const OPEN_TWITTER_SHARE = 'OPEN_TWITTER_SHARE';
 
 export const putNextPair = (position, rotation) => {
   return {
@@ -48,3 +49,4 @@ export const redoField = makeActionCreator(REDO_FIELD);
 export const resetField = makeActionCreator(RESET_FIELD);
 export const restart = makeActionCreator(RESTART);
 export const saveConfig = makeActionCreator(SAVE_CONFIG, 'key', 'value');
+export const openTwitterShare = makeActionCreator(OPEN_TWITTER_SHARE);

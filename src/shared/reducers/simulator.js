@@ -5,7 +5,7 @@ import {
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
-  MOVE_HIGHLIGHTS_RIGHT,
+  MOVE_HIGHLIGHTS_RIGHT, OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR,
   RESET_FIELD,
   RESTART,
@@ -22,6 +22,10 @@ import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../models/QueueGenerator';
+
+// TODO: ここで react-native を import しない
+import { Linking } from 'react-native';
+import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 
 
 const HistoryRecord = Record({
@@ -120,8 +124,8 @@ function putNextPair(state, action) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
 
-    s.update('queue', q => q.shift().push(pair))
-    s.update('pendingPair', pair => pair.resetPosition())
+    s.update('queue', q => q.shift().push(pair));
+    s.update('pendingPair', pair => pair.resetPosition());
     s.set('isDropOperated', true);
     return appendHistoryRecord(s, pair)
   });
@@ -229,6 +233,13 @@ function restart(state, action, config) {
   return createInitialState(config);
 }
 
+function openTwitterShare(state, action) {
+  const simulatorURL = generateIPSSimulatorURL(state.get('history').toJS());
+  const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
+  Linking.openURL(tweetURL);
+  return state;
+}
+
 function createInitialState(config) {
   const queue = generateQueue(config);
   let state = Map({
@@ -290,6 +301,8 @@ export const reducer = (state, action, config) => {
       return resetField(state, action);
     case RESTART:
       return restart(state, action, config);
+    case OPEN_TWITTER_SHARE:
+      return openTwitterShare(state, action);
     default:
       return state;
   }
