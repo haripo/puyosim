@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  saveConfig
-} from '../../shared/actions/actions';
+import { saveConfig } from '../../shared/actions/actions';
 import SettingsPage from '../components/SettingsPage';
 import toJS from '../../shared/utils/toJS';
 

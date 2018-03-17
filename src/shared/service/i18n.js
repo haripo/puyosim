@@ -11,6 +11,7 @@ const translations = {
     reset: '初手に戻す',
     restart: 'リスタート',
     settings: '設定',
+    history: '履歴モード',
     about: 'puyosim について',
     confirmRestart: 'ツモが再生成されます。よろしいですか？',
     shareViaTwitter: 'Twitter で手順をシェア',
@@ -50,6 +51,7 @@ const translations = {
     restart: 'Restart',
     settings: 'Settings',
     about: 'About',
+    history: 'History mode',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?',
     shareViaTwitter: 'Share',
 

@@ -1,68 +1,95 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
-  INITIALIZE_SIMULATOR,
   APPLY_GRAVITY,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
+  INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
-  MOVE_HIGHLIGHTS_RIGHT,
+  MOVE_HIGHLIGHTS_RIGHT, OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR,
   RESET_FIELD,
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
   ROTATE_HIGHLIGHTS_RIGHT,
-  SHOW_HIGHLIGHTS,
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
 import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
-import { loadLastState, saveLastState } from '../../shared/utils/StorageService';
+import { loadLastState } from '../../shared/utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../models/QueueGenerator';
 
+// TODO: ここで react-native を import しない
+import { Linking } from 'react-native';
+import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
+
 
 const HistoryRecord = Record({
   queue: List(),
-  stack: List(), // TODO: stack and queue are redundant
+  stack: List(), // TODO: queue are redundant
   chain: 0,
   score: 0,
   chainScore: 0,
+
+  move: null,
+  pair: List(),
+
+  prev: List(),
+  next: List()
 });
 
+// history helpers
 
-function makeHistoryRecord(state) {
+/**
+ * Creates history record
+ * @param state
+ * @param pair
+ * @param prev
+ * @param next
+ * @returns {Immutable.Map<string, any>}
+ */
+function makeHistoryRecord(state, pair, prev, next) {
   return new HistoryRecord({
     queue: state.get('queue'),
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
-    chainScore: state.get('chainScore')
+    chainScore: state.get('chainScore'),
+    move: state.get('pendingPair'),
+    pair: pair,
+    prev: List(prev),
+    next: List(next)
   });
 }
 
-function showHighlights(state, action) {
-  let { position, rotation } = action.payload;
+/**
+ * Appends history record to history tree
+ * @param state
+ * @param pair
+ */
+function appendHistoryRecord(state, pair) {
+  const prevIndex = state.get('historyIndex');
+  const nextIndex = state.get('history').size;
 
-  if (position.col === 0 && rotation === 'left') {
-    position.col = 1;
-  }
-
-  if (position.col === 5 && rotation === 'right') {
-    position.col = 4;
-  }
+  const record = makeHistoryRecord(state, pair, [prevIndex], []);
 
   return state
-    .set('pendingPair', new PendingPair(
-      position.col,
-      rotation,
-      state.getIn(['queue', 0, 0]),
-      state.getIn(['queue', 0, 1])
-    ));
+    .updateIn(['history', prevIndex, 'next'], indexes => {
+      if (!indexes) {
+        return indexes;
+      }
+      return indexes.push(nextIndex);
+    })
+    .update('history', h => h.push(record))
+    .set('historyIndex', nextIndex);
 }
+
+
+// reducer functions
 
 function rotateHighlightsLeft(state, action) {
   return state.update('pendingPair', pair => pair.rotateLeft());
@@ -96,12 +123,11 @@ function putNextPair(state, action) {
     for (let i = 0; i < positions.length; i++) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
-    return s
-      .update('queue', q => q.shift().push(pair))
-      .update('history', history => history.unshift(makeHistoryRecord(state)))
-      .update('moves', moves => moves.unshift(Immutable.fromJS({ move: state.get('pendingPair'), pair: pair })))
-      .update('pendingPair', pair => pair.resetPosition())
-      .set('isDropOperated', true);
+
+    s.update('queue', q => q.shift().push(pair));
+    s.update('pendingPair', pair => pair.resetPosition());
+    s.set('isDropOperated', true);
+    return appendHistoryRecord(s, pair)
   });
 }
 
@@ -177,21 +203,27 @@ function revertFromRecord(state, record) {
 }
 
 function undoField(state, action) {
-  if (state.get('history').size === 0) {
+  const currentIndex = state.get('historyIndex');
+  const prevIndexes = state.getIn(['history', currentIndex, 'prev']);
+
+  if (prevIndexes.size === 0) {
+    // There is no history
     return state;
   }
+
+  const prev = prevIndexes.get(0);
+
   return state.withMutations(s => {
-    const record = state.getIn(['history', 0]);
+    const record = state.getIn(['history', prev]);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .update('history', history => history.shift())
-      .update('moves', moves => moves.shift());
+      .set('historyIndex', prev);
   })
 }
 
 function resetField(state, action) {
-  while (state.get('history').size > 0) {
+  while (!state.getIn(['history', 'prev'])) {
     state = undoField(state, null)
   }
   return state;
@@ -201,9 +233,16 @@ function restart(state, action, config) {
   return createInitialState(config);
 }
 
+function openTwitterShare(state, action) {
+  const simulatorURL = generateIPSSimulatorURL(state.get('history').toJS());
+  const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
+  Linking.openURL(tweetURL);
+  return state;
+}
+
 function createInitialState(config) {
   const queue = generateQueue(config);
-  return Map({
+  let state = Map({
     queue: Immutable.fromJS(queue),
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
@@ -214,8 +253,9 @@ function createInitialState(config) {
     droppingPuyos: List(),
     vanishingPuyos: List(),
     history: List(),
-    moves: List()
+    historyIndex: 0
   });
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, [], [])));
 }
 
 function loadOrCreateInitialState(config) {
@@ -231,14 +271,12 @@ function loadOrCreateInitialState(config) {
 
 export function getInitialState(config) {
   return loadOrCreateInitialState(config);
-};
+}
 
 export const reducer = (state, action, config) => {
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
-    case SHOW_HIGHLIGHTS:
-      return showHighlights(state, action);
     case ROTATE_HIGHLIGHTS_LEFT:
       return rotateHighlightsLeft(state, action);
     case ROTATE_HIGHLIGHTS_RIGHT:
@@ -263,6 +301,8 @@ export const reducer = (state, action, config) => {
       return resetField(state, action);
     case RESTART:
       return restart(state, action, config);
+    case OPEN_TWITTER_SHARE:
+      return openTwitterShare(state, action);
     default:
       return state;
   }

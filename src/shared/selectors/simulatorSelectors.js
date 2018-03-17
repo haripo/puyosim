@@ -1,5 +1,5 @@
 import FieldUtils from '../utils/FieldUtils';
-import { Map } from "immutable";
+import { Map } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 
@@ -130,6 +130,7 @@ function _getStack(stack, droppings) {
 }
 
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue');
+
 function _getDropPositions(pair, stack, queue) {
   const queueHead = queue.get(0);
 

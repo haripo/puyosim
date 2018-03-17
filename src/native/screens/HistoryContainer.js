@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  initializeSimulator,
-} from '../../shared/actions/actions';
+import { initializeSimulator, redoField, undoField, } from '../../shared/actions/actions';
 import History from '../components/History';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';
@@ -15,7 +13,8 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    moves: simulator.get('moves')
+    history: simulator.get('history'),
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 
@@ -25,10 +24,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(initializeSimulator());
     },
     onPrevPressed: () => {
-
+      dispatch(undoField());
     },
     onNextPressed: () => {
-
+      dispatch(redoField());
     },
   };
 };

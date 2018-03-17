@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
   initializeSimulator,
-  hideHighlights,
   moveHighlightsLeft,
   moveHighlightsRight,
   putNextPair,
@@ -9,9 +8,9 @@ import {
   restart,
   rotateHighlightsLeft,
   rotateHighlightsRight,
-  showHighlights,
   undoField,
-  vanishPuyos
+  vanishPuyos,
+  openTwitterShare
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
@@ -26,7 +25,7 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    moves: simulator.get('moves')
+    puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 
@@ -34,14 +33,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onSimulatorLaunched: () => {
       dispatch(initializeSimulator());
-    },
-    onSwiping: (position, rotation) => {
-      dispatch(showHighlights(position, rotation));
-    },
-    onSwipeEnd: (position, rotation) => {
-      dispatch(hideHighlights());
-      dispatch(putNextPair(position, rotation));
-      dispatch(vanishPuyos());
     },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());

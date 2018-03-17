@@ -19,6 +19,7 @@ if (isWeb) {
 }
 
 export const contentsWidth = screen.width; // for web
+export const contentsHeight = screen.height;
 
 export const fieldRows = 13;
 export const fieldCols = 6;
