@@ -6,7 +6,7 @@ import {
   INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
   MOVE_HIGHLIGHTS_RIGHT, OPEN_TWITTER_SHARE,
-  PUT_NEXT_PAIR,
+  PUT_NEXT_PAIR, REDO_FIELD,
   RESET_FIELD,
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
@@ -222,6 +222,26 @@ function undoField(state, action) {
   })
 }
 
+function redoField(state, action) {
+  const currentIndex = state.get('historyIndex');
+  const nextIndexes = state.getIn(['history', currentIndex, 'next']);
+
+  if (nextIndexes.size === 0) {
+    // There is no history
+    return state;
+  }
+
+  const next = nextIndexes.get(0);
+
+  return state.withMutations(s => {
+    const record = state.getIn(['history', next]);
+    return revertFromRecord(s, record)
+      .set('vanishingPuyos', List())
+      .set('droppingPuyos', List())
+      .set('historyIndex', next);
+  })
+}
+
 function resetField(state, action) {
   while (!state.getIn(['history', 'prev'])) {
     state = undoField(state, null)
@@ -297,6 +317,8 @@ export const reducer = (state, action, config) => {
       return finishVanishingAnimations(state, action);
     case UNDO_FIELD:
       return undoField(state, action);
+    case REDO_FIELD:
+      return redoField(state, action);
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:

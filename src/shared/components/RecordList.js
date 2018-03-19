@@ -45,14 +45,17 @@ export default class RecordList extends Component {
 
   render() {
     const { history, puyoSkin } = this.props;
-    const records = history.reverse().map((item, i) => ({ ...item, index: i }));
+    const records = history
+      .slice(1)
+      .reverse()
+      .map((item, i) => ({ ...item, index: i }));
 
     return (
       <View style={ styles.component }>
         <FlatList
           data={ records }
           renderItem={ ({ item }) => this.renderItem(item, puyoSkin) }
-          keyExtractor={ item => item.index }
+          keyExtractor={ item => String(item.index) }
         />
       </View>
     );
