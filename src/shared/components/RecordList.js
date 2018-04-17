@@ -23,7 +23,6 @@ export default class RecordList extends Component {
   }
 
   renderItem(record, puyoSkin) {
-    console.log(record);
     return (
       <View style={ styles.puyos } key={ record.index }>
         <Puyo
