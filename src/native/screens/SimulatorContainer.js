@@ -9,7 +9,7 @@ import {
   rotateHighlightsLeft,
   rotateHighlightsRight,
   undoField,
-  vanishPuyos
+  vanishPuyos,
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShareSelected: () => {
       dispatch(openTwitterShare());
-    }
+    },
   };
 };
 

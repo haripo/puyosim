@@ -18,6 +18,10 @@ export default class AboutContents extends Component {
     this.licensesURL  = "http://puyos.im/license.txt";
   }
 
+  handleKennyPressed() {
+    this.props.onSetKennySelected();
+  }
+
   render() {
     return (
       <View style={ styles.component }>
@@ -38,6 +42,11 @@ export default class AboutContents extends Component {
           <Button style={ styles.button }
                   onPress={ () => Linking.openURL(this.licensesURL) }
                   title="open source licenses" />
+        </View>
+        <View style={ styles.row } >
+          <Button style={ styles.button }
+                  onPress={ () => this.handleKennyPressed() }
+                  title="DEBUG: kenny19" />
         </View>
       </View>
     )

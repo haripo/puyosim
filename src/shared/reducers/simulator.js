@@ -1,6 +1,6 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
-  APPLY_GRAVITY,
+  APPLY_GRAVITY, DEBUG_ACTION, DEBUG_SET_KENNY,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
@@ -260,6 +260,12 @@ function openTwitterShare(state, action) {
   return state;
 }
 
+function setKenny(state, action, config) {
+  state = createInitialState(config);
+  console.warn('kenny');
+  return state.setIn(['stack', 0, 0], 1);
+}
+
 function createInitialState(config) {
   const queue = generateQueue(config);
   let state = Map({
@@ -325,6 +331,8 @@ export const reducer = (state, action, config) => {
       return restart(state, action, config);
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
+    case DEBUG_SET_KENNY:
+      return setKenny(state, action, config);
     default:
       return state;
   }
