@@ -47,3 +47,5 @@ setTimeout(() => {
     rootTag: document.getElementById('root')
   });
 });
+
+window.store = store; // for debug
