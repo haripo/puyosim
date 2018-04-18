@@ -262,8 +262,32 @@ function openTwitterShare(state, action) {
 
 function setKenny(state, action, config) {
   state = createInitialState(config);
-  console.warn('kenny');
-  return state.setIn(['stack', 0, 0], 1);
+  const kenny =
+    '  YPGG' +
+    'YBBYPB' +
+    'PBYPGG' +
+    'YBYPGB' +
+    'PGBYPB' +
+    'GBYPGB' +
+    'PGBYPG' +
+    'PGBYPG' +
+    'PYYBYB' +
+    'YGBPBB' +
+    'PYGBPY' +
+    'PYGBPY' +
+    'PYGBPY';
+  const colorToNumber = {
+    ' ': 0,
+    'Y': 1,
+    'P': 2,
+    'G': 3,
+    'B': 4
+  };
+
+  for (let i = 0; i < kenny.length; i++) {
+    state = state.setIn(['stack', i / 6, i % 6], colorToNumber[kenny[i]]);
+  }
+  return state;
 }
 
 function createInitialState(config) {
