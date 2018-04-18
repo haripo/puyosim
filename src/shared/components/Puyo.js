@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Animated, Image } from 'react-native';
+import _ from 'lodash';
 
 const puyoImages = {
   'puyoSkinDefault': [
@@ -63,7 +64,7 @@ const connectionImages = {
 /**
  * Component for render single puyo
  */
-export default class Puyo extends PureComponent {
+export default class Puyo extends Component {
   style() {
     return {
       position: 'absolute',
@@ -81,6 +82,10 @@ export default class Puyo extends PureComponent {
       height: this.props.size + 1,
       opacity: this.props.a === undefined ? 1 : this.props.a
     };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !_.isEqual(this.props, nextProps);
   }
 
   imageStyle() {
