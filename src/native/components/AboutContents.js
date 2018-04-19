@@ -22,6 +22,10 @@ export default class AboutContents extends Component {
     this.props.onSetKennySelected();
   }
 
+  handleSnakePressed() {
+    this.props.onSetSnakeSelected();
+  }
+
   render() {
     return (
       <View style={ styles.component }>
@@ -47,6 +51,9 @@ export default class AboutContents extends Component {
           <Button style={ styles.button }
                   onPress={ () => this.handleKennyPressed() }
                   title="DEBUG: kenny19" />
+          <Button style={ styles.button }
+                  onPress={ () => this.handleSnakePressed() }
+                  title="DEBUG: snake" />
         </View>
       </View>
     )

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import AboutContent from '../components/AboutContents';
 import toJS from '../../shared/utils/toJS';
-import { debugSetKenny } from '../../shared/actions/actions';
+import { debugSetPattern } from '../../shared/actions/actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -11,7 +11,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSetKennySelected: () => {
-      dispatch(debugSetKenny());
+      dispatch(debugSetPattern('kenny'));
+    },
+    onSetSnakeSelected: () => {
+      dispatch(debugSetPattern('snake'));
     }
   };
 };

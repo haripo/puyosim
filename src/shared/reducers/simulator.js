@@ -1,6 +1,6 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
-  APPLY_GRAVITY, DEBUG_ACTION, DEBUG_SET_KENNY,
+  APPLY_GRAVITY, DEBUG_ACTION, DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
@@ -22,6 +22,7 @@ import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../models/QueueGenerator';
+import { snake, kenny } from '../service/chainPatterns';
 
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
@@ -260,33 +261,23 @@ function openTwitterShare(state, action) {
   return state;
 }
 
-function setKenny(state, action, config) {
-  state = createInitialState(config);
-  const kenny =
-    '  YPGG' +
-    'YBBYPB' +
-    'PBYPGG' +
-    'YBYPGB' +
-    'PGBYPB' +
-    'GBYPGB' +
-    'PGBYPG' +
-    'PGBYPG' +
-    'PYYBYB' +
-    'YGBPBB' +
-    'PYGBPY' +
-    'PYGBPY' +
-    'PYGBPY';
-  const colorToNumber = {
-    ' ': 0,
-    'Y': 1,
-    'P': 2,
-    'G': 3,
-    'B': 4
-  };
+function setPattern(state, action, config) {
+  let pattern = null;
 
-  for (let i = 0; i < kenny.length; i++) {
-    state = state.setIn(['stack', i / 6, i % 6], colorToNumber[kenny[i]]);
+  switch (action.name) {
+    case 'kenny':
+      pattern = kenny;
+      break;
+    case 'snake':
+      pattern = snake;
+      break;
   }
+
+  state = createInitialState(config);
+  for (let i = 0; i < fieldRows * fieldCols; i++) {
+    state = state.setIn(['stack', i / 6, i % 6], pattern(i));
+  }
+
   return state;
 }
 
@@ -355,8 +346,8 @@ export const reducer = (state, action, config) => {
       return restart(state, action, config);
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
-    case DEBUG_SET_KENNY:
-      return setKenny(state, action, config);
+    case DEBUG_SET_PATTERN:
+      return setPattern(state, action, config);
     default:
       return state;
   }
