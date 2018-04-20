@@ -37,5 +37,5 @@ const snakePattern =
   'RPPPPR' +
   'GGGRGG';
 
-export const kennR = (i) => colorToNumber[kennRPattern[i]];
+export const kenny = (i) => colorToNumber[kennRPattern[i]];
 export const snake = (i) => colorToNumber[snakePattern[i]];
