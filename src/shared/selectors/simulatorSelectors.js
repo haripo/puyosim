@@ -37,7 +37,9 @@ export function getGhost(state) {
 
 export function getPendingPair(state) {
   const pair = state.get('pendingPair');
-  const queue = state.getIn(['queue', 0]);
+  const numHands = state.get('numHands');
+  const queue = state.get('queue');
+  const hand = queue.get(numHands % queue.size);
 
   let secondRow = 1;
   if (pair.rotation === 'bottom') {
@@ -47,23 +49,9 @@ export function getPendingPair(state) {
   }
 
   return [
-    { row: 1, col: pair.firstCol, color: queue.get(0) },
-    { row: secondRow, col: pair.secondCol, color: queue.get(1) }
+    { row: 1, col: pair.firstCol, color: hand.get(0) },
+    { row: secondRow, col: pair.secondCol, color: hand.get(1) }
   ];
-}
-
-
-// これだけ simulator state ではなく root state をとっている
-export function getNextHand(state) {
-  return state.getIn(['simulator', 'queue', 1]);
-}
-
-// これだけ simulator state ではなく root state をとっている
-export function getDoubleNextHand(state) {
-  if (state.getIn(['config', 'numVisibleNext']) === 'visibleNextOnly') {
-    return null;
-  }
-  return state.getIn(['simulator', 'queue', 2]);
 }
 
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
@@ -129,10 +117,22 @@ function _getStack(stack, droppings) {
   });
 }
 
-export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue');
+export const getCurrentHand = wrapCache(
+  (queue, numHands) => queue.get(numHands % queue.size),
+  'queue', 'numHands');
 
-function _getDropPositions(pair, stack, queue) {
-  const queueHead = queue.get(0);
+export const getNextHand = wrapCache(
+  (queue, numHands) => queue.get((numHands + 1) % queue.size),
+  'queue', 'numHands');
+
+export const getDoubleNextHand = wrapCache(
+  (queue, numHands) => queue.get((numHands + 2) % queue.size),
+  'queue', 'numHands');
+
+export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
+
+function _getDropPositions(pair, stack, queue, numHands) {
+  const hand = queue.get(numHands % queue.size);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
@@ -142,8 +142,8 @@ function _getDropPositions(pair, stack, queue) {
     return i;
   };
 
-  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: queueHead.get(0) };
-  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: queueHead.get(1) };
+  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: hand.get(0) };
+  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: hand.get(1) };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
     if (pair.rotation === 'bottom') {
       drop1.row -= 1;

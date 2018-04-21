@@ -32,8 +32,8 @@ import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL'
 
 
 const HistoryRecord = Record({
-  queue: List(),
-  stack: List(), // TODO: queue are redundant
+  stack: List(),
+  numHands: 0,
   chain: 0,
   score: 0,
   chainScore: 0,
@@ -57,7 +57,7 @@ const HistoryRecord = Record({
  */
 function makeHistoryRecord(state, pair, prev, next) {
   return new HistoryRecord({
-    queue: state.get('queue'),
+    numHands: state.get('numHands'),
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
@@ -114,7 +114,8 @@ function moveHighlightsRight(state, action) {
  * Put pair
  */
 function putNextPair(state, action) {
-  const pair = state.get('queue').get(0);
+  const numHands = state.get('numHands');
+  const pair = state.getIn(['queue', numHands]);
 
   const positions = getDropPositions(state);
 
@@ -127,7 +128,7 @@ function putNextPair(state, action) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
 
-    s.update('queue', q => q.shift().push(pair));
+    s.update('numHands', n => n + 1);
     s.update('pendingPair', pair => pair.resetPosition());
     s.set('isDropOperated', true);
     return appendHistoryRecord(s, pair)
@@ -197,7 +198,7 @@ function finishVanishingAnimations(state) {
 function revertFromRecord(state, record) {
   return state.withMutations(s => {
     return s
-      .set('queue', record.get('queue'))
+      .set('numHands', record.get('numHands'))
       .set('stack', record.get('stack'))
       .set('chain', record.get('chain'))
       .set('score', record.get('score'))
@@ -287,6 +288,7 @@ function createInitialState(config) {
   const queue = generateQueue(config);
   let state = Map({
     queue: Immutable.fromJS(queue),
+    numHands: 0,
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
     chainScore: 0,
