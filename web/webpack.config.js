@@ -69,6 +69,9 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.web.js', '.js'],
+    alias: {
+      'react-native-svg': 'react-native-svg-web'
+    }
   },
   devServer: {
     contentBase: path.resolve(appDirectory, 'web/'),

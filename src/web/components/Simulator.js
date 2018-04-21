@@ -6,6 +6,7 @@ import { contentsMargin, contentsWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
+import HistoryTree from '../../shared/components/HistoryTree';
 
 export default class Simulator extends Component {
   constructor(props) {
@@ -51,6 +52,9 @@ export default class Simulator extends Component {
             />
           </View>
         </View>
+        <View style={ styles.historyTree }>
+          <HistoryTree />
+        </View>
       </View>
     );
   }
@@ -59,13 +63,15 @@ export default class Simulator extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
-    width: contentsWidth
+    display: 'flex',
+    flexDirection: 'row',
   },
   contents: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'stretch',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: contentsWidth - contentsMargin
   },
   side: {
     flex: 1,
@@ -77,4 +83,7 @@ const styles = StyleSheet.create({
   sideHead: {
     flex: 1
   },
+  historyTree: {
+    flex: 1
+  }
 });
