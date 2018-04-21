@@ -18,7 +18,9 @@ if (isWeb) {
   screen.width = screen.height * 0.65;
 }
 
-export const contentsWidth = screen.width; // for web
+export const simulatorWidth = screen.width; // for web
+export const screenWidth = screen.width;
+export const screenHeight = screen.height;
 
 export const fieldRows = 13;
 export const fieldCols = 6;
