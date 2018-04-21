@@ -19,7 +19,7 @@ export function wrapCache(f, ...args) {
       argsCache[arg] = state.get(arg);
     }
 
-    resultCache = f(..._.values(_.pick(argsCache, args)));
+    resultCache = f(..._.values(_.pick(argsCache, args)), state);
     return resultCache;
   }
 }
@@ -37,9 +37,7 @@ export function getGhost(state) {
 
 export function getPendingPair(state) {
   const pair = state.get('pendingPair');
-  const numHands = state.get('numHands');
-  const queue = state.get('queue');
-  const hand = queue.get(numHands % queue.size);
+  const hand = getCurrentHand(state);
 
   let secondRow = 1;
   if (pair.rotation === 'bottom') {
@@ -131,8 +129,8 @@ export const getDoubleNextHand = wrapCache(
 
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
 
-function _getDropPositions(pair, stack, queue, numHands) {
-  const hand = queue.get(numHands % queue.size);
+function _getDropPositions(pair, stack, queue, numHands, state) {
+  const hand = getCurrentHand(state);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
