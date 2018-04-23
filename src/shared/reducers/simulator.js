@@ -55,15 +55,17 @@ const HistoryRecord = Record({
  * @param next
  * @returns {Immutable.Map<string, any>}
  */
-function makeHistoryRecord(state, pair, prev, next) {
+function makeHistoryRecord(state, pair, move, prev, next) {
   return new HistoryRecord({
+    move: move,
+    pair: pair,
+    // move, pair は操作、それ以外のプロパティは操作の結果を表している。
+    // 操作後の move, pair は初期値にリセットされるので、これらは state から取得できない。
     numHands: state.get('numHands'),
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
     chainScore: state.get('chainScore'),
-    move: state.get('pendingPair'),
-    pair: pair,
     prev: List(prev),
     next: List(next)
   });
@@ -72,13 +74,13 @@ function makeHistoryRecord(state, pair, prev, next) {
 /**
  * Appends history record to history tree
  * @param state
- * @param pair
+ * @param hand
  */
-function appendHistoryRecord(state, pair) {
+function appendHistoryRecord(state, hand, move) {
   const prevIndex = state.get('historyIndex');
   const nextIndex = state.get('history').size;
 
-  const record = makeHistoryRecord(state, pair, [prevIndex], []);
+  const record = makeHistoryRecord(state, hand, move, [prevIndex], []);
 
   return state
     .updateIn(['history', prevIndex, 'next'], indexes => {
@@ -115,7 +117,8 @@ function moveHighlightsRight(state, action) {
  */
 function putNextPair(state, action) {
   const numHands = state.get('numHands');
-  const pair = state.getIn(['queue', numHands]);
+  const hand = state.getIn(['queue', numHands]);
+  const move = state.get('pendingPair');
 
   const positions = getDropPositions(state);
 
@@ -131,7 +134,7 @@ function putNextPair(state, action) {
     s.update('numHands', n => n + 1);
     s.update('pendingPair', pair => pair.resetPosition());
     s.set('isDropOperated', true);
-    return appendHistoryRecord(s, pair)
+    return appendHistoryRecord(s, hand, move);
   });
 }
 
@@ -300,7 +303,7 @@ function createInitialState(config) {
     history: List(),
     historyIndex: 0
   });
-  return state.update('history', history => history.push(makeHistoryRecord(state, null, [], [])));
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, [], [])));
 }
 
 function loadOrCreateInitialState(config) {

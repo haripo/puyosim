@@ -10,7 +10,6 @@ import {
   rotateHighlightsRight,
   undoField,
   vanishPuyos,
-  openTwitterShare
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
 import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
@@ -21,11 +20,11 @@ const mapStateToProps = (state) => {
 
   return {
     stack: getStack(simulator),
-    current: simulator.getIn(['queue', 0]),
+    history: simulator.get('history'),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    puyoSkin: state.getIn(['config', 'puyoSkin']),
   };
 };
 

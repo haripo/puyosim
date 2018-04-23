@@ -53,7 +53,7 @@ export default class Simulator extends Component {
           </View>
         </View>
         <View style={ styles.historyTree }>
-          <HistoryTree />
+          <HistoryTree history={ this.props.history } />
         </View>
       </View>
     );
