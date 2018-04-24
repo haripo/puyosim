@@ -32,43 +32,65 @@ const numberImages = [
 export default class HistoryTree extends React.Component {
 
   // layout constants
-  baseX = 20;
-  baseY = 20;
+  graphX = 100;
+  graphY = 20;
   iconSize = 32;
   nodeWidth = this.iconSize * 2 - 6;
   iconPadding = -8;
-  nodePaddingX = 100;
-  nodePaddingY = 100;
-  pathRound = 40;
+  nodePaddingX = 70;
+  nodePaddingY = 70;
+  pathRound = 20;
 
-  renderHands() {
-    const x = 10;
-    const y = 10;
+  handsX = 20;
+  handsY = 16;
+  puyoSize = 32;
+
+  renderHand(hand, row) {
+    const x = this.handsX;
+    const y = this.handsY;
     const puyoSkin = 'puyoSkinDefault';
     return (
-      <React.Fragment>
+      <React.Fragment key={ row }>
         <SvgPuyo
-          size={ 30 }
-          puyo={ 1 }
+          size={ this.puyoSize }
+          puyo={ hand[0] }
           x={ x }
-          y={ y }
+          y={ y + this.nodePaddingY * row }
           skin={ puyoSkin }/>
         <SvgPuyo
-          size={ 30 }
-          puyo={ 1 }
-          x={ x + 30 }
-          y={ y }
+          size={ this.puyoSize }
+          puyo={ hand[1] }
+          x={ x + this.puyoSize }
+          y={ y + this.nodePaddingY * row }
           skin={ puyoSkin }/>
       </React.Fragment>
     );
+  }
+
+  renderHands(history) {
+    // extract hands from history
+    let hands = [];
+    const searchHands = (index, depth) => {
+      const record = history[index];
+      if (depth > 0) {
+        hands[depth - 1] = record.pair;
+      }
+      record.next.map(nextIndex => {
+        searchHands(nextIndex, depth + 1);
+      });
+    };
+    searchHands(0, 0);
+
+    // render hands
+    return hands.map((hand, i) => this.renderHand(hand, i))
   }
 
   renderNode(row, col, move) {
     if (move === null) {
       return null; // root node
     }
-    const x = row * this.nodePaddingX + this.baseX;
-    const y = col * this.nodePaddingY + this.baseY;
+    const x = row * this.nodePaddingX + this.graphX;
+    const y = col * this.nodePaddingY + this.graphY;
 
     return (
       <G>
@@ -101,10 +123,10 @@ export default class HistoryTree extends React.Component {
   }
 
   renderPath(row1, row2, col1, col2) {
-    const x1 = row1 * this.nodePaddingX + this.baseX + this.nodeWidth / 2;
-    const y1 = col1 * this.nodePaddingY + this.baseY + this.iconSize;
-    const x2 = row2 * this.nodePaddingX + this.baseX + this.nodeWidth / 2;
-    const y2 = col2 * this.nodePaddingY + this.baseY;
+    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize;
+    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y2 = col2 * this.nodePaddingY + this.graphY;
     return (
       <Path
         d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
@@ -144,6 +166,7 @@ export default class HistoryTree extends React.Component {
     return (
       <View style={ styles.component }>
         <Svg height="100%">
+          { this.renderHands(this.props.history) }
           { this.renderTree(this.props.history) }
         </Svg>
       </View>
