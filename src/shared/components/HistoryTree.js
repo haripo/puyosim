@@ -30,6 +30,17 @@ const numberImages = [
 ];
 
 export default class HistoryTree extends React.Component {
+
+  // layout constants
+  baseX = 20;
+  baseY = 20;
+  iconSize = 32;
+  nodeWidth = this.iconSize * 2 - 6;
+  iconPadding = -8;
+  nodePaddingX = 100;
+  nodePaddingY = 100;
+  pathRound = 40;
+
   renderHands() {
     const x = 10;
     const y = 10;
@@ -52,37 +63,51 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderNode(x, y, move) {
-    const size = 32;
-    const iconSize = 32;
+  renderNode(row, col, move) {
     if (move === null) {
       return null; // root node
     }
+    const x = row * this.nodePaddingX + this.baseX;
+    const y = col * this.nodePaddingY + this.baseY;
+
     return (
-      <G key={ x + move.rotation + move.col }>
+      <G>
         <Rect
           x={ x }
           y={ y }
-          width={ size * 2 - 6 }
-          height={ size }
+          width={ this.nodeWidth }
+          height={ this.iconSize }
           stroke={ themeColor }
           strokeWidth="2"
           fill="none"
           rx="4"
           ry="4"/>
-        <Image x={ x } y={ y } width={ iconSize } height={ iconSize } href={ numberImages[move.col] }/>
-        <Image x={ x + size - 8 } y={ y } width={ iconSize } height={ iconSize } href={ arrowImages[move.rotation] }/>
+        <Image
+          x={ x }
+          y={ y }
+          width={ this.iconSize }
+          height={ this.iconSize }
+          href={ numberImages[move.col] }
+        />
+        <Image
+          x={ x + this.iconSize + this.iconPadding }
+          y={ y }
+          width={ this.iconSize }
+          height={ this.iconSize }
+          href={ arrowImages[move.rotation] }
+        />
       </G>
     );
   }
 
-  renderPath(x1, x2, y1, y2) {
-    x1 += 58 / 2;
-    y1 += 32;
-    x2 += 58 / 2;
+  renderPath(row1, row2, col1, col2) {
+    const x1 = row1 * this.nodePaddingX + this.baseX + this.nodeWidth / 2;
+    const y1 = col1 * this.nodePaddingY + this.baseY + this.iconSize;
+    const x2 = row2 * this.nodePaddingX + this.baseX + this.nodeWidth / 2;
+    const y2 = col2 * this.nodePaddingY + this.baseY;
     return (
       <Path
-        d={ `M ${x1} ${y1} C ${x1} ${y1 + 30} ${x2} ${y2 - 30} ${x2} ${y2}` }
+        d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
         stroke={ themeColor }
         strokeWidth="2"
         fill="none"
@@ -103,9 +128,9 @@ export default class HistoryTree extends React.Component {
           width += 1;
         }
         return (
-          <React.Fragment>
-            { historyIndex === 0 ? null : this.renderPath(parentWidth * 100 + 20, width * 100 + 20, (depth - 1) * 100 + 20, depth * 100 + 20) }
-            { this.renderNode(width * 100 + 20, depth * 100 + 20, history[nextIndex].move) }
+          <React.Fragment key={ index }>
+            { historyIndex === 0 ? null : this.renderPath(parentWidth, width, depth - 1, depth) }
+            { this.renderNode(width, depth, history[nextIndex].move) }
             { renderChildren(nextIndex, depth + 1, width) }
           </React.Fragment>
         );
