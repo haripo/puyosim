@@ -3,6 +3,7 @@ import {
   initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight,
+  moveHistory,
   putNextPair,
   resetField,
   restart,
@@ -21,6 +22,7 @@ const mapStateToProps = (state) => {
   return {
     stack: getStack(simulator),
     history: simulator.get('history'),
+    historyIndex: simulator.get('historyIndex'),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
@@ -57,7 +59,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRestartSelected: () => {
       dispatch(restart());
-    }
+    },
+    onHistoryNodePressed: (index) => {
+      dispatch(moveHistory(index));
+      dispatch(vanishPuyos());
+    },
   };
 };
 

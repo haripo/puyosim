@@ -3,7 +3,10 @@
  */
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { cardBackgroundColor, contentsPadding, puyoSize, screenHeight, themeColor } from '../utils/constants';
+import {
+  cardBackgroundColor, contentsPadding, isWeb, puyoSize, screenHeight, themeColor,
+  themeLightColor, themeSemiColor
+} from '../utils/constants';
 import SvgPuyo from './SvgPuyo';
 import Svg, {
   Image,
@@ -45,6 +48,22 @@ export default class HistoryTree extends React.Component {
   handsY = 16;
   puyoSize = 32;
 
+  handleNodePressed(historyIndex) {
+    this.props.onNodePressed(historyIndex);
+  }
+
+  extractCurrentPath() {
+    const { history, currentIndex } = this.props;
+    let index = currentIndex;
+    let result = {};
+    while (index) {
+      const p = history[index];
+      result[p.prev] = index;
+      index = p.prev;
+    }
+    return result;
+  }
+
   renderHand(hand, row) {
     const x = this.handsX;
     const y = this.handsY;
@@ -85,23 +104,30 @@ export default class HistoryTree extends React.Component {
     return hands.map((hand, i) => this.renderHand(hand, i))
   }
 
-  renderNode(row, col, move) {
+  renderNode(row, col, move, historyIndex) {
     if (move === null) {
       return null; // root node
     }
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
 
+    const eventName = isWeb ? 'onClick' : 'onPress';
+    const events = {
+      [eventName]: () => this.handleNodePressed(historyIndex)
+    };
+
+    const isCurrentNode = historyIndex === this.props.currentIndex;
+
     return (
-      <G>
+      <G { ...events }>
         <Rect
           x={ x }
           y={ y }
           width={ this.nodeWidth }
           height={ this.iconSize }
           stroke={ themeColor }
-          strokeWidth="2"
-          fill="none"
+          strokeWidth={ isCurrentNode ? 4 : 2 }
+          fill={ 'none' }
           rx="4"
           ry="4"/>
         <Image
@@ -122,7 +148,7 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderPath(row1, row2, col1, col2) {
+  renderPath(row1, row2, col1, col2, isCurrentPath) {
     const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize;
     const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
@@ -131,7 +157,8 @@ export default class HistoryTree extends React.Component {
       <Path
         d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
         stroke={ themeColor }
-        strokeWidth="2"
+        strokeWidth={ 2 }
+        strokeDasharray={ isCurrentPath ? "none" : "4, 4" }
         fill="none"
       />
     );
@@ -139,6 +166,7 @@ export default class HistoryTree extends React.Component {
 
   renderTree(history) {
     let width = 0;
+    const currentPath = this.extractCurrentPath();
     const renderChildren = (historyIndex, depth, parentWidth) => {
       const record = history[historyIndex];
       if (!record) {
@@ -149,10 +177,11 @@ export default class HistoryTree extends React.Component {
         if (index > 0) {
           width += 1;
         }
+        const isCurrentPath = currentPath[historyIndex] === nextIndex;
         return (
           <React.Fragment key={ index }>
-            { historyIndex === 0 ? null : this.renderPath(parentWidth, width, depth - 1, depth) }
-            { this.renderNode(width, depth, history[nextIndex].move) }
+            { historyIndex === 0 ? null : this.renderPath(parentWidth, width, depth - 1, depth, isCurrentPath) }
+            { this.renderNode(width, depth, history[nextIndex].move, nextIndex) }
             { renderChildren(nextIndex, depth + 1, width) }
           </React.Fragment>
         );

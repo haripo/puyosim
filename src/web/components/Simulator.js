@@ -38,8 +38,8 @@ export default class Simulator extends Component {
           </View>
           <View style={ styles.side }>
             <View style={ styles.sideHead }>
-              <NextWindowContainer />
-              <ChainResultContainer />
+              <NextWindowContainer/>
+              <ChainResultContainer/>
             </View>
             <SimulatorControls
               onUndoSelected={ this.props.onUndoSelected }
@@ -53,7 +53,11 @@ export default class Simulator extends Component {
           </View>
         </View>
         <View style={ styles.historyTree }>
-          <HistoryTree history={ this.props.history } />
+          <HistoryTree
+            history={ this.props.history }
+            currentIndex={ this.props.historyIndex }
+            onNodePressed={ this.props.onHistoryNodePressed }
+          />
         </View>
       </View>
     );

@@ -6,7 +6,7 @@ import {
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
-  MOVE_HIGHLIGHTS_RIGHT,
+  MOVE_HIGHLIGHTS_RIGHT, MOVE_HISTORY,
   OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR, REDO_FIELD,
   RESET_FIELD,
@@ -41,7 +41,7 @@ const HistoryRecord = Record({
   move: null,
   pair: List(),
 
-  prev: List(),
+  prev: null,
   next: List()
 });
 
@@ -66,7 +66,7 @@ function makeHistoryRecord(state, pair, move, prev, next) {
     chain: state.get('chain'),
     score: state.get('score'),
     chainScore: state.get('chainScore'),
-    prev: List(prev),
+    prev: prev,
     next: List(next)
   });
 }
@@ -80,7 +80,7 @@ function appendHistoryRecord(state, hand, move) {
   const prevIndex = state.get('historyIndex');
   const nextIndex = state.get('history').size;
 
-  const record = makeHistoryRecord(state, hand, move, [prevIndex], []);
+  const record = makeHistoryRecord(state, hand, move, prevIndex, []);
 
   return state
     .updateIn(['history', prevIndex, 'next'], indexes => {
@@ -211,21 +211,19 @@ function revertFromRecord(state, record) {
 
 function undoField(state, action) {
   const currentIndex = state.get('historyIndex');
-  const prevIndexes = state.getIn(['history', currentIndex, 'prev']);
+  const prevIndex = state.getIn(['history', currentIndex, 'prev']);
 
-  if (prevIndexes.size === 0) {
+  if (prevIndex === null) {
     // There is no history
     return state;
   }
 
-  const prev = prevIndexes.get(0);
-
   return state.withMutations(s => {
-    const record = state.getIn(['history', prev]);
+    const record = state.getIn(['history', prevIndex]);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .set('historyIndex', prev);
+      .set('historyIndex', prevIndex);
   })
 }
 
@@ -240,6 +238,17 @@ function redoField(state, action) {
 
   const next = nextIndexes.get(0);
 
+  return state.withMutations(s => {
+    const record = state.getIn(['history', next]);
+    return revertFromRecord(s, record)
+      .set('vanishingPuyos', List())
+      .set('droppingPuyos', List())
+      .set('historyIndex', next);
+  })
+}
+
+function moveHistory(state, action) {
+  const next = action.index;
   return state.withMutations(s => {
     const record = state.getIn(['history', next]);
     return revertFromRecord(s, record)
@@ -347,6 +356,8 @@ export const reducer = (state, action, config) => {
       return undoField(state, action);
     case REDO_FIELD:
       return redoField(state, action);
+    case MOVE_HISTORY:
+      return moveHistory(state, action);
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:
