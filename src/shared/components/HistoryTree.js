@@ -48,8 +48,52 @@ export default class HistoryTree extends React.Component {
   handsY = 16;
   puyoSize = 32;
 
-  handleNodePressed(historyIndex) {
+  constructor() {
+    super();
+    this.state = {
+      baseX: 0,
+      baseY: 0,
+      swiping: false,
+      lastPositionX: null,
+      lastPositionY: null
+    }
+  }
+
+  handleNodePressed(historyIndex, e) {
+    e.stopPropagation();
     this.props.onNodePressed(historyIndex);
+  }
+
+  handlePressIn(e) {
+    const { pageX, pageY } = e;
+    this.setState({
+      swiping: true,
+      lastPositionX: pageX,
+      lastPositionY: pageY
+    });
+  }
+
+  handlePressOut() {
+    this.setState({ swiping: false });
+  }
+
+  handlePressMove(e) {
+    if (!this.state.swiping) {
+      return;
+    }
+
+    let { baseX, baseY } = this.state;
+    const { lastPositionX, lastPositionY } = this.state;
+    const { pageX, pageY } = e;
+
+    if (lastPositionX !== null && lastPositionY !== null) {
+      this.setState({
+        baseX: baseX + pageX - lastPositionX,
+        baseY: baseY + pageY - lastPositionY,
+        lastPositionX: pageX,
+        lastPositionY: pageY
+      });
+    }
   }
 
   extractCurrentPath() {
@@ -67,9 +111,19 @@ export default class HistoryTree extends React.Component {
   renderHand(hand, row) {
     const x = this.handsX;
     const y = this.handsY;
+    const padding = 10;
     const puyoSkin = 'puyoSkinDefault';
     return (
       <React.Fragment key={ row }>
+        <Rect
+          x={ x - padding}
+          y={ y + this.nodePaddingY * row - padding }
+          width={ this.puyoSize * 2 + padding * 2 }
+          height={ this.puyoSize + padding * 2 }
+          stroke={ 'none' }
+          fill={ themeLightColor }
+          rx="20"
+          ry="20"/>
         <SvgPuyo
           size={ this.puyoSize }
           puyo={ hand[0] }
@@ -108,12 +162,12 @@ export default class HistoryTree extends React.Component {
     if (move === null) {
       return null; // root node
     }
-    const x = row * this.nodePaddingX + this.graphX;
-    const y = col * this.nodePaddingY + this.graphY;
+    const x = row * this.nodePaddingX + this.graphX + this.state.baseX;
+    const y = col * this.nodePaddingY + this.graphY + this.state.baseY;
 
     const eventName = isWeb ? 'onClick' : 'onPress';
     const events = {
-      [eventName]: () => this.handleNodePressed(historyIndex)
+      [eventName]: e => this.handleNodePressed(historyIndex, e)
     };
 
     const isCurrentNode = historyIndex === this.props.currentIndex;
@@ -127,7 +181,7 @@ export default class HistoryTree extends React.Component {
           height={ this.iconSize }
           stroke={ themeColor }
           strokeWidth={ isCurrentNode ? 4 : 2 }
-          fill={ 'none' }
+          fill={ themeLightColor }
           rx="4"
           ry="4"/>
         <Image
@@ -149,10 +203,10 @@ export default class HistoryTree extends React.Component {
   }
 
   renderPath(row1, row2, col1, col2, isCurrentPath) {
-    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
-    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize;
-    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
-    const y2 = col2 * this.nodePaddingY + this.graphY;
+    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2 + this.state.baseX;
+    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize + this.state.baseY;
+    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2 + this.state.baseX;
+    const y2 = col2 * this.nodePaddingY + this.graphY + this.state.baseY;
     return (
       <Path
         d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
@@ -194,9 +248,14 @@ export default class HistoryTree extends React.Component {
   render() {
     return (
       <View style={ styles.component }>
-        <Svg height="100%">
-          { this.renderHands(this.props.history) }
+        <Svg
+          height="100%"
+          onMouseDown={ ::this.handlePressIn }
+          onMouseUp={ ::this.handlePressOut }
+          onMouseMove={ ::this.handlePressMove }
+        >
           { this.renderTree(this.props.history) }
+          { this.renderHands(this.props.history) }
         </Svg>
       </View>
     );
