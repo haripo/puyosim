@@ -2,7 +2,7 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, PanResponder } from 'react-native';
 import {
   cardBackgroundColor, contentsPadding, isWeb, puyoSize, screenHeight, themeColor,
   themeLightColor, themeSemiColor
@@ -59,41 +59,53 @@ export default class HistoryTree extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderGrant: ::this.handleResponderGrant,
+      onPanResponderMove: ::this.handleResponderMove,
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
+      onPanResponderRelease: ::this.handleResponderRelease,
+      onPanResponderTerminate: ::this.handleResponderTerminate,
+      onShouldBlockNativeResponder: (evt, gestureState) => true
+    });
+  }
+
   handleNodePressed(historyIndex, e) {
     e.stopPropagation();
     this.props.onNodePressed(historyIndex);
   }
 
-  handlePressIn(e) {
-    const { pageX, pageY } = e;
+  handleResponderGrant(evt, gestureState) {
     this.setState({
       swiping: true,
-      lastPositionX: pageX,
-      lastPositionY: pageY
+      originalX: this.state.baseX,
+      originalY: this.state.baseY
     });
   }
 
-  handlePressOut() {
-    this.setState({ swiping: false });
+  handleResponderMove(evt, gestureState) {
+    this.setState({
+      baseX: this.state.originalX + gestureState.dx,
+      baseY: this.state.originalY + gestureState.dy
+    });
   }
 
-  handlePressMove(e) {
-    if (!this.state.swiping) {
-      return;
-    }
+  handleResponderRelease(evt, gestureState) {
+    this.setState({
+      swiping: false,
+    });
+  }
 
-    let { baseX, baseY } = this.state;
-    const { lastPositionX, lastPositionY } = this.state;
-    const { pageX, pageY } = e;
-
-    if (lastPositionX !== null && lastPositionY !== null) {
-      this.setState({
-        baseX: baseX + pageX - lastPositionX,
-        baseY: baseY + pageY - lastPositionY,
-        lastPositionX: pageX,
-        lastPositionY: pageY
-      });
-    }
+  handleResponderTerminate (evt, gestureState) {
+    this.setState({
+      swiping: false,
+      baseX: this.state.originalX,
+      baseY: this.state.originalY
+    });
   }
 
   extractCurrentPath() {
@@ -116,7 +128,7 @@ export default class HistoryTree extends React.Component {
     return (
       <React.Fragment key={ row }>
         <Rect
-          x={ x - padding}
+          x={ x - padding }
           y={ y + this.nodePaddingY * row - padding }
           width={ this.puyoSize * 2 + padding * 2 }
           height={ this.puyoSize + padding * 2 }
@@ -212,7 +224,7 @@ export default class HistoryTree extends React.Component {
         d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
         stroke={ themeColor }
         strokeWidth={ 2 }
-        strokeDasharray={ isCurrentPath ? "none" : "4, 4" }
+        strokeDasharray={ isCurrentPath ? 'none' : '4, 4' }
         fill="none"
       />
     );
@@ -247,12 +259,12 @@ export default class HistoryTree extends React.Component {
 
   render() {
     return (
-      <View style={ styles.component }>
+      <View
+        style={ styles.component }
+        { ...this._panResponder.panHandlers }
+      >
         <Svg
           height="100%"
-          onMouseDown={ ::this.handlePressIn }
-          onMouseUp={ ::this.handlePressOut }
-          onMouseMove={ ::this.handlePressMove }
         >
           { this.renderTree(this.props.history) }
           { this.renderHands(this.props.history) }
