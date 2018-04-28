@@ -9,7 +9,7 @@ import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import {
   buttonColor,
   contentsMargin,
-  controllerButtonSize,
+  controllerButtonSize, screenHeight, screenWidth,
   themeColor,
   themeLightColor
 } from '../../shared/utils/constants';
@@ -17,6 +17,7 @@ import Field from '../../shared/components/Field';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
 import RecordList from '../../shared/components/RecordList';
+import HistoryTree from '../../shared/components/HistoryTree';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -43,11 +44,7 @@ export default class Simulator extends Component {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(::this.onNavigatorEvent);
-    this.props.navigator.setTitle({ title: "puyosim" })
-  }
-
-  componentDidMount() {
-    this.props.onSimulatorLaunched();
+    this.props.navigator.setTitle({ title: 'puyosim' })
   }
 
   onNavigatorEvent(event) {
@@ -67,46 +64,13 @@ export default class Simulator extends Component {
     return (
       <View style={ styles.container }>
         <View style={ styles.contents }>
-          <View>
-            <Field
-              stack={ this.props.stack }
-              ghosts={ this.props.ghosts }
-              droppingPuyos={ this.props.droppingPuyos }
-              vanishingPuyos={ this.props.vanishingPuyos }
-              isActive={ this.props.isActive }
-              style={ styles.field }
-              puyoSkin={ this.props.puyoSkin }
-              onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-              onSwipeEnd={ this.props.onSwipeEnd }>
-            </Field>
-          </View>
-          <View style={ styles.side }>
-            <NextWindowContainer/>
-            <RecordList
-              history={ this.props.history }
-              puyoSkin={ this.props.puyoSkin } />
-            <View style={{ flexDirection: 'column', height: controllerButtonSize + contentsMargin * 2, flex: 0 }}>
-              <View style={styles.buttons}>
-                <View style={ styles.buttonGroup }>
-                  <TouchableOpacity
-                    style={ styles.controllerButton }
-                    onPress={ this.props.onPrevPressed }
-                    disabled={ !this.props.isActive }>
-                    <Icon name="undo" size={30} color="#FFF" />
-                    <Text>undo</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={ styles.controllerButton }
-                    onPress={ this.props.onNextPressed }
-                    disabled={ !this.props.isActive }>
-                    <Icon name="redo" size={30} color="#FFF" />
-                    <Text>redo</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
+          <HistoryTree
+            history={ this.props.history }
+            width={ screenWidth }
+            height={ screenHeight }
+            currentIndex={ this.props.historyIndex }
+            onNodePressed={ this.props.onHistoryNodePressed }
+          />
         </View>
       </View>
     );
@@ -140,8 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: contentsMargin,
     flex: 1
   },
-  buttons: {
-  },
+  buttons: {},
   buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',

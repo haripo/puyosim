@@ -2,34 +2,32 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { StyleSheet, View, PanResponder } from 'react-native';
+import { PanResponder, StyleSheet, View } from 'react-native';
 import {
-  cardBackgroundColor, contentsPadding, isWeb, puyoSize, screenHeight, themeColor,
-  themeLightColor, themeSemiColor
+  cardBackgroundColor,
+  contentsPadding,
+  isWeb,
+  themeColor,
+  themeLightColor,
+  themeSemiColor
 } from '../utils/constants';
 import SvgPuyo from './SvgPuyo';
-import Svg, {
-  Image,
-  Line,
-  Rect,
-  G,
-  Path,
-} from 'react-native-svg';
+import Svg, { G, Image, Path, Rect, } from 'react-native-svg';
 
 const arrowImages = {
-  top: require('../../../assets/history_tree/arrow-top.svg'),
-  bottom: require('../../../assets/history_tree/arrow-bottom.svg'),
-  left: require('../../../assets/history_tree/arrow-left.svg'),
-  right: require('../../../assets/history_tree/arrow-right.svg')
+  top: require('../../../assets/history_tree/arrow-top.png'),
+  bottom: require('../../../assets/history_tree/arrow-bottom.png'),
+  left: require('../../../assets/history_tree/arrow-left.png'),
+  right: require('../../../assets/history_tree/arrow-right.png')
 };
 
 const numberImages = [
-  require('../../../assets/history_tree/number1.svg'),
-  require('../../../assets/history_tree/number2.svg'),
-  require('../../../assets/history_tree/number3.svg'),
-  require('../../../assets/history_tree/number4.svg'),
-  require('../../../assets/history_tree/number5.svg'),
-  require('../../../assets/history_tree/number6.svg')
+  require('../../../assets/history_tree/number1.png'),
+  require('../../../assets/history_tree/number2.png'),
+  require('../../../assets/history_tree/number3.png'),
+  require('../../../assets/history_tree/number4.png'),
+  require('../../../assets/history_tree/number5.png'),
+  require('../../../assets/history_tree/number6.png')
 ];
 
 export default class HistoryTree extends React.Component {
@@ -61,10 +59,12 @@ export default class HistoryTree extends React.Component {
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => false,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return Math.abs(gestureState.dx) >= 2 || Math.abs(gestureState.dy) >= 2;
+      },
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
       onPanResponderGrant: ::this.handleResponderGrant,
       onPanResponderMove: ::this.handleResponderMove,
       onPanResponderTerminationRequest: (evt, gestureState) => true,
@@ -177,6 +177,8 @@ export default class HistoryTree extends React.Component {
     const x = row * this.nodePaddingX + this.graphX + this.state.baseX;
     const y = col * this.nodePaddingY + this.graphY + this.state.baseY;
 
+    // Android では G 要素の onPress がとれなかったので、
+    // onClick のみでよさそう
     const eventName = isWeb ? 'onClick' : 'onPress';
     const events = {
       [eventName]: e => this.handleNodePressed(historyIndex, e)
@@ -187,6 +189,7 @@ export default class HistoryTree extends React.Component {
     return (
       <G { ...events }>
         <Rect
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
           x={ x }
           y={ y }
           width={ this.nodeWidth }
@@ -264,7 +267,8 @@ export default class HistoryTree extends React.Component {
         { ...this._panResponder.panHandlers }
       >
         <Svg
-          height="100%"
+          width={ this.props.width }
+          height={ this.props.height }
         >
           { this.renderTree(this.props.history) }
           { this.renderHands(this.props.history) }

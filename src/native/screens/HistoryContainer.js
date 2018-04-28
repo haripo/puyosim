@@ -1,34 +1,41 @@
 import { connect } from 'react-redux';
-import { initializeSimulator, redoField, undoField, } from '../../shared/actions/actions';
+import {
+  moveHistory,
+  openTwitterShare,
+  resetField,
+  restart,
+  undoField,
+  vanishPuyos,
+} from '../../shared/actions/actions';
 import History from '../components/History';
-import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
 
   return {
-    stack: getStack(simulator),
     current: simulator.getIn(['queue', 0]),
-    ghosts: getGhost(simulator),
-    pendingPair: getPendingPair(simulator),
-    isActive: isActive(state),
     history: simulator.get('history'),
+    historyIndex: simulator.get('historyIndex'),
     puyoSkin: state.getIn(['config', 'puyoSkin'])
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSimulatorLaunched: () => {
-      dispatch(initializeSimulator());
-    },
-    onPrevPressed: () => {
+    onUndoSelected: () => {
       dispatch(undoField());
     },
-    onNextPressed: () => {
-      dispatch(redoField());
+    onResetSelected: () => {
+      dispatch(resetField());
     },
+    onRestartSelected: () => {
+      dispatch(restart());
+    },
+    onHistoryNodePressed: (index) => {
+      dispatch(moveHistory(index));
+      dispatch(vanishPuyos());
+    }
   };
 };
 
