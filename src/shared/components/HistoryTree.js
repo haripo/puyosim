@@ -13,6 +13,8 @@ import {
 } from '../utils/constants';
 import SvgPuyo from './SvgPuyo';
 import Svg, { G, Image, Path, Rect, } from 'react-native-svg';
+import TimerMixin from 'react-timer-mixin';
+import reactMixin from 'react-mixin';
 
 const arrowImages = {
   top: require('../../../assets/history_tree/arrow-top.png'),
@@ -88,9 +90,11 @@ export default class HistoryTree extends React.Component {
   }
 
   handleResponderMove(evt, gestureState) {
-    this.setState({
-      baseX: this.state.originalX + gestureState.dx,
-      baseY: this.state.originalY + gestureState.dy
+    this.requestAnimationFrame(() => {
+      this.setState({
+        baseX: this.state.originalX + gestureState.dx,
+        baseY: this.state.originalY + gestureState.dy
+      });
     });
   }
 
@@ -174,8 +178,8 @@ export default class HistoryTree extends React.Component {
     if (move === null) {
       return null; // root node
     }
-    const x = row * this.nodePaddingX + this.graphX + this.state.baseX;
-    const y = col * this.nodePaddingY + this.graphY + this.state.baseY;
+    const x = row * this.nodePaddingX + this.graphX;
+    const y = col * this.nodePaddingY + this.graphY;
 
     // Android では G 要素の onPress がとれなかったので、
     // onClick のみでよさそう
@@ -218,10 +222,10 @@ export default class HistoryTree extends React.Component {
   }
 
   renderPath(row1, row2, col1, col2, isCurrentPath) {
-    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2 + this.state.baseX;
-    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize + this.state.baseY;
-    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2 + this.state.baseX;
-    const y2 = col2 * this.nodePaddingY + this.graphY + this.state.baseY;
+    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize;
+    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y2 = col2 * this.nodePaddingY + this.graphY;
     return (
       <Path
         d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
@@ -257,7 +261,12 @@ export default class HistoryTree extends React.Component {
       });
     };
 
-    return renderChildren(0, 0);
+    const { baseX, baseY } = this.state;
+    return (
+      <G transform={ `translate(${baseX}, ${baseY})` }>
+        { renderChildren(0, 0) }
+      </G>
+    );
   }
 
   render() {
@@ -277,6 +286,8 @@ export default class HistoryTree extends React.Component {
     );
   }
 }
+
+reactMixin(HistoryTree.prototype, TimerMixin);
 
 const styles = StyleSheet.create({
   component: {

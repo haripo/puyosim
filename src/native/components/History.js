@@ -4,19 +4,17 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import NextWindowContainer from '../../shared/containers/NextWindowContainer';
+import { StyleSheet, View } from 'react-native';
 import {
   buttonColor,
   contentsMargin,
-  controllerButtonSize, screenHeight, screenWidth,
+  controllerButtonSize,
+  screenHeight,
+  screenWidth,
   themeColor,
   themeLightColor
 } from '../../shared/utils/constants';
-import Field from '../../shared/components/Field';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
-import RecordList from '../../shared/components/RecordList';
 import HistoryTree from '../../shared/components/HistoryTree';
 
 export default class Simulator extends Component {
