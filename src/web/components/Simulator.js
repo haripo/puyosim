@@ -6,7 +6,7 @@ import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
-import HistoryTree from '../../shared/components/HistoryTree';
+import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 
 export default class Simulator extends Component {
   constructor(props) {

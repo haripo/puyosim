@@ -10,26 +10,28 @@ import {
   themeColor,
   themeLightColor,
   themeSemiColor
-} from '../utils/constants';
-import SvgPuyo from './SvgPuyo';
+} from '../../utils/constants';
+import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Image, Path, Rect, } from 'react-native-svg';
 import TimerMixin from 'react-timer-mixin';
 import reactMixin from 'react-mixin';
+import HistoryTreePath from './HistoryTreePath';
+import HistoryTreeNode from './HistoryTreeNode';
 
 const arrowImages = {
-  top: require('../../../assets/history_tree/arrow-top.png'),
-  bottom: require('../../../assets/history_tree/arrow-bottom.png'),
-  left: require('../../../assets/history_tree/arrow-left.png'),
-  right: require('../../../assets/history_tree/arrow-right.png')
+  top: require('../../../../assets/history_tree/arrow-top.png'),
+  bottom: require('../../../../assets/history_tree/arrow-bottom.png'),
+  left: require('../../../../assets/history_tree/arrow-left.png'),
+  right: require('../../../../assets/history_tree/arrow-right.png')
 };
 
 const numberImages = [
-  require('../../../assets/history_tree/number1.png'),
-  require('../../../assets/history_tree/number2.png'),
-  require('../../../assets/history_tree/number3.png'),
-  require('../../../assets/history_tree/number4.png'),
-  require('../../../assets/history_tree/number5.png'),
-  require('../../../assets/history_tree/number6.png')
+  require('../../../../assets/history_tree/number1.png'),
+  require('../../../../assets/history_tree/number2.png'),
+  require('../../../../assets/history_tree/number3.png'),
+  require('../../../../assets/history_tree/number4.png'),
+  require('../../../../assets/history_tree/number5.png'),
+  require('../../../../assets/history_tree/number6.png')
 ];
 
 export default class HistoryTree extends React.Component {
@@ -37,12 +39,9 @@ export default class HistoryTree extends React.Component {
   // layout constants
   graphX = 100;
   graphY = 20;
-  iconSize = 32;
-  nodeWidth = this.iconSize * 2 - 6;
-  iconPadding = -8;
+  nodeWidth = 64;
   nodePaddingX = 70;
   nodePaddingY = 70;
-  pathRound = 20;
 
   handsX = 20;
   handsY = 16;
@@ -104,7 +103,7 @@ export default class HistoryTree extends React.Component {
     });
   }
 
-  handleResponderTerminate (evt, gestureState) {
+  handleResponderTerminate(evt, gestureState) {
     this.setState({
       swiping: false,
       baseX: this.state.originalX,
@@ -180,59 +179,33 @@ export default class HistoryTree extends React.Component {
     }
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
-
-    // Android では G 要素の onPress がとれなかったので、
-    // onClick のみでよさそう
-    const eventName = isWeb ? 'onClick' : 'onPress';
-    const events = {
-      [eventName]: e => this.handleNodePressed(historyIndex, e)
-    };
-
     const isCurrentNode = historyIndex === this.props.currentIndex;
 
     return (
-      <G { ...events }>
-        <Rect
-          onPress={ e => this.handleNodePressed(historyIndex, e) }
-          x={ x }
-          y={ y }
-          width={ this.nodeWidth }
-          height={ this.iconSize }
-          stroke={ themeColor }
-          strokeWidth={ isCurrentNode ? 4 : 2 }
-          fill={ themeLightColor }
-          rx="4"
-          ry="4"/>
-        <Image
-          x={ x }
-          y={ y }
-          width={ this.iconSize }
-          height={ this.iconSize }
-          href={ numberImages[move.col] }
-        />
-        <Image
-          x={ x + this.iconSize + this.iconPadding }
-          y={ y }
-          width={ this.iconSize }
-          height={ this.iconSize }
-          href={ arrowImages[move.rotation] }
-        />
-      </G>
+      <HistoryTreeNode
+        x={ x }
+        y={ y }
+        col={ move.col }
+        rotation={ move.rotation }
+        nodeWidth={ this.nodeWidth }
+        isCurrentNode={ isCurrentNode }
+//        onPress={ e => this.handleNodePressed(historyIndex, e) }
+      />
     );
   }
 
   renderPath(row1, row2, col1, col2, isCurrentPath) {
     const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
-    const y1 = col1 * this.nodePaddingY + this.graphY + this.iconSize;
+    const y1 = col1 * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
     const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y2 = col2 * this.nodePaddingY + this.graphY;
     return (
-      <Path
-        d={ `M ${x1} ${y1} C ${x1} ${y1 + this.pathRound} ${x2} ${y2 - this.pathRound} ${x2} ${y2}` }
-        stroke={ themeColor }
-        strokeWidth={ 2 }
-        strokeDasharray={ isCurrentPath ? 'none' : '4, 4' }
-        fill="none"
+      <HistoryTreePath
+        startX={ x1 }
+        startY={ y1 }
+        endX={ x2 }
+        endY={ y2 }
+        isCurrentPath={ isCurrentPath }
       />
     );
   }
