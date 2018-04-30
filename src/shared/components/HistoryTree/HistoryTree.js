@@ -3,36 +3,14 @@
  */
 import React from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
-import {
-  cardBackgroundColor,
-  contentsPadding,
-  isWeb,
-  themeColor,
-  themeLightColor,
-  themeSemiColor
-} from '../../utils/constants';
+import { cardBackgroundColor, contentsPadding, themeLightColor, themeSemiColor } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
-import Svg, { G, Image, Path, Rect, } from 'react-native-svg';
+import Svg, { G, Rect, } from 'react-native-svg';
 import TimerMixin from 'react-timer-mixin';
 import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
 
-const arrowImages = {
-  top: require('../../../../assets/history_tree/arrow-top.png'),
-  bottom: require('../../../../assets/history_tree/arrow-bottom.png'),
-  left: require('../../../../assets/history_tree/arrow-left.png'),
-  right: require('../../../../assets/history_tree/arrow-right.png')
-};
-
-const numberImages = [
-  require('../../../../assets/history_tree/number1.png'),
-  require('../../../../assets/history_tree/number2.png'),
-  require('../../../../assets/history_tree/number3.png'),
-  require('../../../../assets/history_tree/number4.png'),
-  require('../../../../assets/history_tree/number5.png'),
-  require('../../../../assets/history_tree/number6.png')
-];
 
 export default class HistoryTree extends React.Component {
 
@@ -62,10 +40,8 @@ export default class HistoryTree extends React.Component {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => false,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        return Math.abs(gestureState.dx) >= 2 || Math.abs(gestureState.dy) >= 2;
-      },
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
       onPanResponderGrant: ::this.handleResponderGrant,
       onPanResponderMove: ::this.handleResponderMove,
       onPanResponderTerminationRequest: (evt, gestureState) => true,
@@ -90,10 +66,12 @@ export default class HistoryTree extends React.Component {
 
   handleResponderMove(evt, gestureState) {
     this.requestAnimationFrame(() => {
-      this.setState({
-        baseX: this.state.originalX + gestureState.dx,
-        baseY: this.state.originalY + gestureState.dy
-      });
+      if (this.state.swiping) {
+        this.setState({
+          baseX: this.state.originalX + gestureState.dx,
+          baseY: this.state.originalY + gestureState.dy
+        });
+      }
     });
   }
 
@@ -189,7 +167,7 @@ export default class HistoryTree extends React.Component {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
-//        onPress={ e => this.handleNodePressed(historyIndex, e) }
+        onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
   }
