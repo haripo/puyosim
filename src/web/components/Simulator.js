@@ -55,6 +55,7 @@ export default class Simulator extends Component {
         <View style={ styles.historyTree }>
           <HistoryTree
             history={ this.props.history }
+            historyTreeLayout={ this.props.historyTreeLayout }
             currentIndex={ this.props.historyIndex }
             onNodePressed={ this.props.onHistoryNodePressed }
           />

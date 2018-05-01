@@ -167,12 +167,13 @@ export default class HistoryTree extends React.Component {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
+        key={ `${x}-${y}` }
         onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
   }
 
-  renderPath(row1, row2, col1, col2, isCurrentPath) {
+  renderPath(row1, col1, row2, col2, isCurrentPath) {
     const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y1 = col1 * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
     const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
@@ -188,34 +189,14 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderTree(history) {
-    let width = 0;
-    const currentPath = this.extractCurrentPath();
-    const renderChildren = (historyIndex, depth, parentWidth) => {
-      const record = history[historyIndex];
-      if (!record) {
-        return null;
-      }
-
-      return record.next.map((nextIndex, index) => {
-        if (index > 0) {
-          width += 1;
-        }
-        const isCurrentPath = currentPath[historyIndex] === nextIndex;
-        return (
-          <React.Fragment key={ index }>
-            { historyIndex === 0 ? null : this.renderPath(parentWidth, width, depth - 1, depth, isCurrentPath) }
-            { this.renderNode(width, depth, history[nextIndex].move, nextIndex) }
-            { renderChildren(nextIndex, depth + 1, width) }
-          </React.Fragment>
-        );
-      });
-    };
+  renderTree() {
+    const layout = this.props.historyTreeLayout;
 
     const { baseX, baseY } = this.state;
     return (
       <G transform={ `translate(${baseX}, ${baseY})` }>
-        { renderChildren(0, 0) }
+        { layout.nodes.map(node => this.renderNode(node.row, node.column, node.move, node.isCurrentNode)) }
+        { layout.paths.map(node => this.renderPath(node.from.row, node.from.column, node.to.row, node.to.column, node.isCurrentPath)) }
       </G>
     );
   }
@@ -230,7 +211,7 @@ export default class HistoryTree extends React.Component {
           width={ this.props.width }
           height={ this.props.height }
         >
-          { this.renderTree(this.props.history) }
+          { this.renderTree() }
           { this.renderHands(this.props.history) }
         </Svg>
       </View>

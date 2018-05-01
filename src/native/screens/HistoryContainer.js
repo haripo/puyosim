@@ -9,6 +9,7 @@ import {
 } from '../../shared/actions/actions';
 import History from '../components/History';
 import toJS from '../../shared/utils/toJS';
+import { getHistoryTreeLayout } from '../../shared/selectors/simulatorSelectors';
 
 const mapStateToProps = (state) => {
   const simulator = state.get('simulator');
@@ -16,6 +17,7 @@ const mapStateToProps = (state) => {
   return {
     current: simulator.getIn(['queue', 0]),
     history: simulator.get('history'),
+    historyTreeLayout: getHistoryTreeLayout(simulator),
     historyIndex: simulator.get('historyIndex'),
     puyoSkin: state.getIn(['config', 'puyoSkin'])
   };

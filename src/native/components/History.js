@@ -64,6 +64,7 @@ export default class Simulator extends Component {
         <View style={ styles.contents }>
           <HistoryTree
             history={ this.props.history }
+            historyTreeLayout={ this.props.historyTreeLayout }
             width={ screenWidth }
             height={ screenHeight }
             currentIndex={ this.props.historyIndex }

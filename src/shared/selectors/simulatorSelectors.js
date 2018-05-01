@@ -1,5 +1,5 @@
 import FieldUtils from '../utils/FieldUtils';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 
@@ -151,4 +151,47 @@ function _getDropPositions(pair, stack, queue, numHands, state) {
   }
 
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
+}
+
+export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
+function _getHistoryTreeLayout(history, historyIndex) {
+  let nodes = List();
+  let paths = List();
+  let rightmostRow = 0;
+
+  const calcLayout = (historyIndex, depth, parentRow) => {
+    const record = history.get(historyIndex);
+    if (!record) {
+      return;
+    }
+
+    return record.next.map((nextIndex, index) => {
+      if (index > 0) {
+        rightmostRow += 1;
+      }
+      //const isCurrentPath = currentPath[historyIndex] === nextIndex;
+      const isCurrentPath = true;
+      if (historyIndex > 0) {
+        paths = paths.push(Map({
+          from: Map({ row: parentRow, column: depth - 1 }),
+          to: Map({ row: rightmostRow, column: depth }),
+          isCurrentPath
+        }));
+      }
+      nodes = nodes.push(Map({
+        row: rightmostRow,
+        column: depth,
+        move: history.getIn([nextIndex, 'move']),
+        isCurrentNode: false,
+      }));
+      calcLayout(nextIndex, depth + 1, rightmostRow);
+    });
+  };
+
+  calcLayout(0, 0, 0);
+
+  return Map({
+    nodes,
+    paths
+  });
 }

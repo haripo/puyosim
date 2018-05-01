@@ -13,7 +13,10 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
+import {
+  getGhost, getHistoryTreeLayout, getPendingPair, getStack,
+  isActive
+} from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
@@ -23,6 +26,7 @@ const mapStateToProps = (state) => {
     stack: getStack(simulator),
     history: simulator.get('history'),
     historyIndex: simulator.get('historyIndex'),
+    historyTreeLayout: getHistoryTreeLayout(simulator),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
