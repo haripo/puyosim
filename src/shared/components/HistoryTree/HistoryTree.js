@@ -67,12 +67,17 @@ export default class HistoryTree extends React.Component {
   handleResponderMove(evt, gestureState) {
     this.requestAnimationFrame(() => {
       if (this.state.swiping) {
-        this.wrapperView.setNativeProps({
+        this.wrapperTreeView.setNativeProps({
           style: {
             marginLeft: this.state.originalX + gestureState.dx,
             marginTop: this.state.originalY + gestureState.dy,
           }
-        })
+        });
+        this.wrapperHandView.setNativeProps({
+          style: {
+            marginTop: this.state.originalY + gestureState.dy,
+          }
+        });
       }
     });
   }
@@ -108,19 +113,9 @@ export default class HistoryTree extends React.Component {
   renderHand(hand, row) {
     const x = this.handsX;
     const y = this.handsY;
-    const padding = 10;
     const puyoSkin = 'puyoSkinDefault';
     return (
       <React.Fragment key={ row }>
-        <Rect
-          x={ x - padding }
-          y={ y + this.nodePaddingY * row - padding }
-          width={ this.puyoSize * 2 + padding * 2 }
-          height={ this.puyoSize + padding * 2 }
-          stroke={ 'none' }
-          fill={ themeLightColor }
-          rx="20"
-          ry="20"/>
         <SvgPuyo
           size={ this.puyoSize }
           puyo={ hand[0] }
@@ -209,17 +204,36 @@ export default class HistoryTree extends React.Component {
   render() {
     const { nodes, paths, width, height } = this.props.historyTreeLayout;
     return (
-      <View style={ styles.component }>
+      <View
+        style={ styles.component }
+        { ...this._panResponder.panHandlers }
+      >
         <View
-          ref={ component => this.wrapperView = component }
-          { ...this._panResponder.panHandlers }
-          style={ { borderWidth: 2, borderColor: 'blue' } }
+          ref={ component => this.wrapperTreeView = component }
+          style={ { position: 'absolute' } }
         >
           <Svg
             width={ (width + 1) * this.nodePaddingX + this.graphX }
             height={ (height + 1) * this.nodePaddingY + this.graphY }
           >
             { this.renderTree(nodes, paths) }
+          </Svg>
+        </View>
+        <View
+          ref={ component => this.wrapperHandView = component }
+          style={ { position: 'absolute', borderColor: 'lightgray', borderRightWidth: 1 } }
+        >
+          <Svg
+            width={ this.graphX }
+            height={ (height + 1) * this.nodePaddingY + this.graphY }
+          >
+            <Rect
+              x={ 0 }
+              y={ 0 }
+              width={ this.graphX }
+              height={ (height + 1) * this.nodePaddingY + this.graphY }
+              fill={ themeLightColor }
+            />
             { this.renderHands(this.props.history) }
           </Svg>
         </View>
