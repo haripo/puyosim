@@ -197,8 +197,7 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderTree() {
-    const { nodes, paths } = this.props.historyTreeLayout;
+  renderTree(nodes, paths) {
     return (
       <G>
         { nodes.map(node => this.renderNode(node)) }
@@ -208,19 +207,22 @@ export default class HistoryTree extends React.Component {
   }
 
   render() {
+    const { nodes, paths, width, height } = this.props.historyTreeLayout;
     return (
-      <View
-        style={ styles.component }
-        ref={ component => this.wrapperView = component }
-        { ...this._panResponder.panHandlers }
-      >
-        <Svg
-          width={ this.props.width }
-          height={ this.props.height }
+      <View style={ styles.component }>
+        <View
+          ref={ component => this.wrapperView = component }
+          { ...this._panResponder.panHandlers }
+          style={ { borderWidth: 2, borderColor: 'blue' } }
         >
-          { this.renderTree() }
-          { this.renderHands(this.props.history) }
-        </Svg>
+          <Svg
+            width={ (width + 1) * this.nodePaddingX + this.graphX }
+            height={ (height + 1) * this.nodePaddingY + this.graphY }
+          >
+            { this.renderTree(nodes, paths) }
+            { this.renderHands(this.props.history) }
+          </Svg>
+        </View>
       </View>
     );
   }

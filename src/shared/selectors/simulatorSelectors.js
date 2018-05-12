@@ -158,6 +158,7 @@ function _getHistoryTreeLayout(history, historyIndex) {
   let nodes = List();
   let paths = List();
   let rightmostRow = 0;
+  let deepestColumn = 0;
 
   const calcLayout = (historyIndex, depth, parentRow) => {
     const record = history.get(historyIndex);
@@ -178,6 +179,9 @@ function _getHistoryTreeLayout(history, historyIndex) {
           isCurrentPath
         }));
       }
+      if (depth > deepestColumn) {
+        deepestColumn = depth;
+      }
       nodes = nodes.push(Map({
         row: rightmostRow,
         col: depth,
@@ -192,6 +196,8 @@ function _getHistoryTreeLayout(history, historyIndex) {
 
   return Map({
     nodes,
-    paths
+    paths,
+    width: rightmostRow,
+    height: deepestColumn
   });
 }
