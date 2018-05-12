@@ -173,14 +173,14 @@ function _getHistoryTreeLayout(history, historyIndex) {
       const isCurrentPath = true;
       if (historyIndex > 0) {
         paths = paths.push(Map({
-          from: Map({ row: parentRow, column: depth - 1 }),
-          to: Map({ row: rightmostRow, column: depth }),
+          from: Map({ row: parentRow, col: depth - 1 }),
+          to: Map({ row: rightmostRow, col: depth }),
           isCurrentPath
         }));
       }
       nodes = nodes.push(Map({
         row: rightmostRow,
-        column: depth,
+        col: depth,
         move: history.getIn([nextIndex, 'move']),
         isCurrentNode: false,
       }));

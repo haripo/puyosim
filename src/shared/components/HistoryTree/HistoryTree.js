@@ -67,10 +67,12 @@ export default class HistoryTree extends React.Component {
   handleResponderMove(evt, gestureState) {
     this.requestAnimationFrame(() => {
       if (this.state.swiping) {
-        this.setState({
-          baseX: this.state.originalX + gestureState.dx,
-          baseY: this.state.originalY + gestureState.dy
-        });
+        this.wrapperView.setNativeProps({
+          style: {
+            marginLeft: this.state.originalX + gestureState.dx,
+            marginTop: this.state.originalY + gestureState.dy,
+          }
+        })
       }
     });
   }
@@ -78,14 +80,16 @@ export default class HistoryTree extends React.Component {
   handleResponderRelease(evt, gestureState) {
     this.setState({
       swiping: false,
+      baseX: this.state.originalX + gestureState.dx,
+      baseY: this.state.originalY + gestureState.dy
     });
   }
 
   handleResponderTerminate(evt, gestureState) {
     this.setState({
       swiping: false,
-      baseX: this.state.originalX,
-      baseY: this.state.originalY
+      baseX: this.state.originalX + gestureState.dx,
+      baseY: this.state.originalY + gestureState.dy
     });
   }
 
@@ -151,10 +155,13 @@ export default class HistoryTree extends React.Component {
     return hands.map((hand, i) => this.renderHand(hand, i))
   }
 
-  renderNode(row, col, move, historyIndex) {
+  renderNode(node) {
+    const { row, col, move, historyIndex } = node;
+
     if (move === null) {
       return null; // root node
     }
+
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
     const isCurrentNode = historyIndex === this.props.currentIndex;
@@ -173,11 +180,12 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderPath(row1, col1, row2, col2, isCurrentPath) {
-    const x1 = row1 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
-    const y1 = col1 * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
-    const x2 = row2 * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
-    const y2 = col2 * this.nodePaddingY + this.graphY;
+  renderPath(path) {
+    const { from, to, isCurrentPath } = path;
+    const x1 = from.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y1 = from.col * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
+    const x2 = to.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
+    const y2 = to.col * this.nodePaddingY + this.graphY;
     return (
       <HistoryTreePath
         startX={ x1 }
@@ -190,13 +198,11 @@ export default class HistoryTree extends React.Component {
   }
 
   renderTree() {
-    const layout = this.props.historyTreeLayout;
-
-    const { baseX, baseY } = this.state;
+    const { nodes, paths } = this.props.historyTreeLayout;
     return (
-      <G transform={ `translate(${baseX}, ${baseY})` }>
-        { layout.nodes.map(node => this.renderNode(node.row, node.column, node.move, node.isCurrentNode)) }
-        { layout.paths.map(node => this.renderPath(node.from.row, node.from.column, node.to.row, node.to.column, node.isCurrentPath)) }
+      <G>
+        { nodes.map(node => this.renderNode(node)) }
+        { paths.map(path => this.renderPath(path)) }
       </G>
     );
   }
@@ -205,6 +211,7 @@ export default class HistoryTree extends React.Component {
     return (
       <View
         style={ styles.component }
+        ref={ component => this.wrapperView = component }
         { ...this._panResponder.panHandlers }
       >
         <Svg
