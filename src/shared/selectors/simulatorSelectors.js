@@ -53,6 +53,7 @@ export function getPendingPair(state) {
 }
 
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
+
 function _getVanishingPuyos(vanishings) {
 
   let field = FieldUtils.createField(fieldRows, fieldCols);
@@ -82,6 +83,7 @@ function _getVanishingPuyos(vanishings) {
 
 
 export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
+
 function _getStack(stack, droppings) {
   const isDropping = (row, col) => {
     return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
@@ -154,12 +156,25 @@ function _getDropPositions(pair, stack, queue, numHands, state) {
 }
 
 export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
+
 function _getHistoryTreeLayout(history, historyIndex) {
   let nodes = List();
   let paths = List();
   let rightmostRow = 0;
   let deepestColumn = 0;
 
+  // calc indexMap
+  let indexMap = {};
+  {
+    let index = historyIndex;
+    while (index) {
+      const p = history.get(index);
+      indexMap[p.prev] = index;
+      index = p.prev;
+    }
+  }
+
+  // calc graph layout
   const calcLayout = (historyIndex, depth, parentRow) => {
     const record = history.get(historyIndex);
     if (!record) {
@@ -170,8 +185,8 @@ function _getHistoryTreeLayout(history, historyIndex) {
       if (index > 0) {
         rightmostRow += 1;
       }
-      //const isCurrentPath = currentPath[historyIndex] === nextIndex;
-      const isCurrentPath = true;
+      const isCurrentPath = indexMap[historyIndex] === nextIndex;
+
       if (historyIndex > 0) {
         paths = paths.push(Map({
           from: Map({ row: parentRow, col: depth - 1 }),
@@ -187,16 +202,32 @@ function _getHistoryTreeLayout(history, historyIndex) {
         col: depth,
         move: history.getIn([nextIndex, 'move']),
         isCurrentNode: false,
+        historyIndex: nextIndex
       }));
       calcLayout(nextIndex, depth + 1, rightmostRow);
     });
   };
-
   calcLayout(0, 0, 0);
+
+  // extract hands from history
+  let hands = List();
+  hands = hands.withMutations(h => {
+    const searchHands = (index, depth) => {
+      const record = history.get(index);
+      if (depth > 0) {
+        h.set(depth - 1, record.pair);
+      }
+      record.next.map(nextIndex => {
+        searchHands(nextIndex, depth + 1);
+      });
+    };
+    searchHands(0, 0);
+  });
 
   return Map({
     nodes,
     paths,
+    hands,
     width: rightmostRow,
     height: deepestColumn
   });

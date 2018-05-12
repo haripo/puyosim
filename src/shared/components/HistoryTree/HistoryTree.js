@@ -100,13 +100,6 @@ export default class HistoryTree extends React.Component {
 
   extractCurrentPath() {
     const { history, currentIndex } = this.props;
-    let index = currentIndex;
-    let result = {};
-    while (index) {
-      const p = history[index];
-      result[p.prev] = index;
-      index = p.prev;
-    }
     return result;
   }
 
@@ -132,26 +125,8 @@ export default class HistoryTree extends React.Component {
     );
   }
 
-  renderHands(history) {
-    // extract hands from history
-    let hands = [];
-    const searchHands = (index, depth) => {
-      const record = history[index];
-      if (depth > 0) {
-        hands[depth - 1] = record.pair;
-      }
-      record.next.map(nextIndex => {
-        searchHands(nextIndex, depth + 1);
-      });
-    };
-    searchHands(0, 0);
-
-    // render hands
-    return hands.map((hand, i) => this.renderHand(hand, i))
-  }
-
   renderNode(node) {
-    const { row, col, move, historyIndex } = node;
+    const { row, col, move, historyIndex, isCurrentNode } = node;
 
     if (move === null) {
       return null; // root node
@@ -159,7 +134,6 @@ export default class HistoryTree extends React.Component {
 
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
-    const isCurrentNode = historyIndex === this.props.currentIndex;
 
     return (
       <HistoryTreeNode
@@ -183,6 +157,7 @@ export default class HistoryTree extends React.Component {
     const y2 = to.col * this.nodePaddingY + this.graphY;
     return (
       <HistoryTreePath
+        key={ `${x1}-${y1}-${x2}-${y2}` }
         startX={ x1 }
         startY={ y1 }
         endX={ x2 }
@@ -202,7 +177,7 @@ export default class HistoryTree extends React.Component {
   }
 
   render() {
-    const { nodes, paths, width, height } = this.props.historyTreeLayout;
+    const { nodes, paths, hands, width, height } = this.props.historyTreeLayout;
     return (
       <View
         style={ styles.component }
@@ -210,7 +185,7 @@ export default class HistoryTree extends React.Component {
       >
         <View
           ref={ component => this.wrapperTreeView = component }
-          style={ { position: 'absolute' } }
+          style={ styles.treeView }
         >
           <Svg
             width={ (width + 1) * this.nodePaddingX + this.graphX }
@@ -221,7 +196,7 @@ export default class HistoryTree extends React.Component {
         </View>
         <View
           ref={ component => this.wrapperHandView = component }
-          style={ { position: 'absolute', borderColor: 'lightgray', borderRightWidth: 1 } }
+          style={ styles.handView }
         >
           <Svg
             width={ this.graphX }
@@ -234,7 +209,7 @@ export default class HistoryTree extends React.Component {
               height={ (height + 1) * this.nodePaddingY + this.graphY }
               fill={ themeLightColor }
             />
-            { this.renderHands(this.props.history) }
+            { hands.map((hand, i) => this.renderHand(hand, i)) }
           </Svg>
         </View>
       </View>
@@ -252,6 +227,14 @@ const styles = StyleSheet.create({
     marginRight: contentsPadding,
     marginBottom: contentsPadding
   },
+  treeView: {
+    position: 'absolute'
+  },
+  handView: {
+    position: 'absolute',
+    borderColor: themeSemiColor,
+    borderRightWidth: 1
+  }
 });
 
 
