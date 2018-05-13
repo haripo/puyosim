@@ -1,7 +1,7 @@
 import { Dimensions, Platform } from 'react-native';
 
-const isAndroid = Platform.OS === 'android';
-const isWeb = Platform.OS === 'web';
+export const isAndroid = Platform.OS === 'android';
+export const isWeb = Platform.OS === 'web';
 
 const windowSize = Dimensions.get('window');
 
@@ -18,8 +18,9 @@ if (isWeb) {
   screen.width = screen.height * 0.65;
 }
 
-export const contentsWidth = screen.width; // for web
-export const contentsHeight = screen.height;
+export const simulatorWidth = screen.width; // for web
+export const screenWidth = screen.width;
+export const screenHeight = screen.height;
 
 export const fieldRows = 13;
 export const fieldCols = 6;
@@ -35,4 +36,3 @@ export const cardBackgroundColor = '#EFEBE9';
 export const buttonColor = '#8D6E63';
 export const themeColor = '#6D4C41';
 export const themeLightColor = '#EFEBE9';
-

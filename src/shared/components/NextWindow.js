@@ -26,11 +26,11 @@ function renderPair(pair, puyoSkin) {
 }
 
 function render(props) {
-  const { next, doubleNext, puyoSkin } = props;
+  const { next, doubleNext, puyoSkin, numVisibleNext } = props;
   return (
     <View style={ styles.component }>
         { renderPair(next, puyoSkin) }
-        { doubleNext ? renderPair(doubleNext, puyoSkin) : null }
+        { numVisibleNext !== 'visibleNextOnly' ? renderPair(doubleNext, puyoSkin) : null }
     </View>
   );
 }

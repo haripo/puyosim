@@ -95,6 +95,10 @@ export default class Puyo extends Component {
     };
   }
 
+  getImage() {
+    return puyoImages[this.props.skin][this.props.puyo];
+  }
+
   renderConnection() {
     const { connections, puyo } = this.props;
     if (!connections) return null;
@@ -122,7 +126,7 @@ export default class Puyo extends Component {
   }
 
   render() {
-    const image = puyoImages[this.props.skin][this.props.puyo];
+    const image = this.getImage();
     if (image === null) return null;
 
     return (

@@ -6,7 +6,7 @@ import {
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
-  MOVE_HIGHLIGHTS_RIGHT,
+  MOVE_HIGHLIGHTS_RIGHT, MOVE_HISTORY,
   OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR, REDO_FIELD,
   RESET_FIELD,
@@ -32,8 +32,8 @@ import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL'
 
 
 const HistoryRecord = Record({
-  queue: List(),
-  stack: List(), // TODO: queue are redundant
+  stack: List(),
+  numHands: 0,
   chain: 0,
   score: 0,
   chainScore: 0,
@@ -41,7 +41,7 @@ const HistoryRecord = Record({
   move: null,
   pair: List(),
 
-  prev: List(),
+  prev: null,
   next: List()
 });
 
@@ -55,16 +55,18 @@ const HistoryRecord = Record({
  * @param next
  * @returns {Immutable.Map<string, any>}
  */
-function makeHistoryRecord(state, pair, prev, next) {
+function makeHistoryRecord(state, pair, move, prev, next) {
   return new HistoryRecord({
-    queue: state.get('queue'),
+    move: move,
+    pair: pair,
+    // move, pair は操作、それ以外のプロパティは操作の結果を表している。
+    // 操作後の move, pair は初期値にリセットされるので、これらは state から取得できない。
+    numHands: state.get('numHands'),
     stack: state.get('stack'),
     chain: state.get('chain'),
     score: state.get('score'),
     chainScore: state.get('chainScore'),
-    move: state.get('pendingPair'),
-    pair: pair,
-    prev: List(prev),
+    prev: prev,
     next: List(next)
   });
 }
@@ -72,13 +74,13 @@ function makeHistoryRecord(state, pair, prev, next) {
 /**
  * Appends history record to history tree
  * @param state
- * @param pair
+ * @param hand
  */
-function appendHistoryRecord(state, pair) {
+function appendHistoryRecord(state, hand, move) {
   const prevIndex = state.get('historyIndex');
   const nextIndex = state.get('history').size;
 
-  const record = makeHistoryRecord(state, pair, [prevIndex], []);
+  const record = makeHistoryRecord(state, hand, move, prevIndex, []);
 
   return state
     .updateIn(['history', prevIndex, 'next'], indexes => {
@@ -114,7 +116,9 @@ function moveHighlightsRight(state, action) {
  * Put pair
  */
 function putNextPair(state, action) {
-  const pair = state.get('queue').get(0);
+  const numHands = state.get('numHands');
+  const hand = state.getIn(['queue', numHands]);
+  const move = state.get('pendingPair');
 
   const positions = getDropPositions(state);
 
@@ -127,10 +131,10 @@ function putNextPair(state, action) {
       s.updateIn(['stack', positions[i].row, positions[i].col], () => positions[i].color)
     }
 
-    s.update('queue', q => q.shift().push(pair));
+    s.update('numHands', n => n + 1);
     s.update('pendingPair', pair => pair.resetPosition());
     s.set('isDropOperated', true);
-    return appendHistoryRecord(s, pair)
+    return appendHistoryRecord(s, hand, move);
   });
 }
 
@@ -197,7 +201,7 @@ function finishVanishingAnimations(state) {
 function revertFromRecord(state, record) {
   return state.withMutations(s => {
     return s
-      .set('queue', record.get('queue'))
+      .set('numHands', record.get('numHands'))
       .set('stack', record.get('stack'))
       .set('chain', record.get('chain'))
       .set('score', record.get('score'))
@@ -207,21 +211,19 @@ function revertFromRecord(state, record) {
 
 function undoField(state, action) {
   const currentIndex = state.get('historyIndex');
-  const prevIndexes = state.getIn(['history', currentIndex, 'prev']);
+  const prevIndex = state.getIn(['history', currentIndex, 'prev']);
 
-  if (prevIndexes.size === 0) {
+  if (prevIndex === null) {
     // There is no history
     return state;
   }
 
-  const prev = prevIndexes.get(0);
-
   return state.withMutations(s => {
-    const record = state.getIn(['history', prev]);
+    const record = state.getIn(['history', prevIndex]);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
-      .set('historyIndex', prev);
+      .set('historyIndex', prevIndex);
   })
 }
 
@@ -236,6 +238,17 @@ function redoField(state, action) {
 
   const next = nextIndexes.get(0);
 
+  return state.withMutations(s => {
+    const record = state.getIn(['history', next]);
+    return revertFromRecord(s, record)
+      .set('vanishingPuyos', List())
+      .set('droppingPuyos', List())
+      .set('historyIndex', next);
+  })
+}
+
+function moveHistory(state, action) {
+  const next = action.index;
   return state.withMutations(s => {
     const record = state.getIn(['history', next]);
     return revertFromRecord(s, record)
@@ -287,6 +300,7 @@ function createInitialState(config) {
   const queue = generateQueue(config);
   let state = Map({
     queue: Immutable.fromJS(queue),
+    numHands: 0,
     stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
     chain: 0,
     chainScore: 0,
@@ -298,7 +312,7 @@ function createInitialState(config) {
     history: List(),
     historyIndex: 0
   });
-  return state.update('history', history => history.push(makeHistoryRecord(state, null, [], [])));
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, null, [])));
 }
 
 function loadOrCreateInitialState(config) {
@@ -342,6 +356,8 @@ export const reducer = (state, action, config) => {
       return undoField(state, action);
     case REDO_FIELD:
       return redoField(state, action);
+    case MOVE_HISTORY:
+      return moveHistory(state, action);
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:

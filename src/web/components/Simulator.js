@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { contentsMargin, contentsWidth } from '../../shared/utils/constants';
+import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
+import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 
 export default class Simulator extends Component {
   constructor(props) {
@@ -37,19 +38,30 @@ export default class Simulator extends Component {
           </View>
           <View style={ styles.side }>
             <View style={ styles.sideHead }>
-              <NextWindowContainer />
-              <ChainResultContainer />
+              <NextWindowContainer/>
+              <ChainResultContainer/>
             </View>
             <SimulatorControls
               onUndoSelected={ this.props.onUndoSelected }
+              onRedoSelected={ this.props.onRedoSelected }
               onRotateLeftPressed={ this.props.onRotateLeftPressed }
               onRotateRightPressed={ this.props.onRotateRightPressed }
               onMoveLeftPressed={ this.props.onMoveLeftPressed }
               onMoveRightPressed={ this.props.onMoveRightPressed }
               onDropPressed={ this.props.onDropPressed }
               isActive={ this.props.isActive }
+              canUndo={ this.props.canUndo }
+              canRedo={ this.props.canRedo }
             />
           </View>
+        </View>
+        <View style={ styles.historyTree }>
+          <HistoryTree
+            history={ this.props.history }
+            historyTreeLayout={ this.props.historyTreeLayout }
+            currentIndex={ this.props.historyIndex }
+            onNodePressed={ this.props.onHistoryNodePressed }
+          />
         </View>
       </View>
     );
@@ -59,13 +71,15 @@ export default class Simulator extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
-    width: contentsWidth
+    display: 'flex',
+    flexDirection: 'row',
   },
   contents: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'stretch',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: simulatorWidth - contentsMargin
   },
   side: {
     flex: 1,
@@ -77,4 +91,7 @@ const styles = StyleSheet.create({
   sideHead: {
     flex: 1
   },
+  historyTree: {
+    flex: 1
+  }
 });

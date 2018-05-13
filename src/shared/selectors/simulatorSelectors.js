@@ -1,5 +1,5 @@
 import FieldUtils from '../utils/FieldUtils';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 
@@ -19,7 +19,7 @@ export function wrapCache(f, ...args) {
       argsCache[arg] = state.get(arg);
     }
 
-    resultCache = f(..._.values(_.pick(argsCache, args)));
+    resultCache = f(..._.values(_.pick(argsCache, args)), state);
     return resultCache;
   }
 }
@@ -31,13 +31,25 @@ export function isActive(state) {
   );
 }
 
+export function canUndo(state) {
+  const history = state.get('history');
+  const historyIndex = state.get('historyIndex');
+  return history.get(historyIndex).get('prev') !== null;
+}
+
+export function canRedo(state) {
+  const history = state.get('history');
+  const historyIndex = state.get('historyIndex');
+  return history.get(historyIndex).get('next').size > 0;
+}
+
 export function getGhost(state) {
   return getDropPositions(state);
 }
 
 export function getPendingPair(state) {
   const pair = state.get('pendingPair');
-  const queue = state.getIn(['queue', 0]);
+  const hand = getCurrentHand(state);
 
   let secondRow = 1;
   if (pair.rotation === 'bottom') {
@@ -47,26 +59,13 @@ export function getPendingPair(state) {
   }
 
   return [
-    { row: 1, col: pair.firstCol, color: queue.get(0) },
-    { row: secondRow, col: pair.secondCol, color: queue.get(1) }
+    { row: 1, col: pair.firstCol, color: hand.get(0) },
+    { row: secondRow, col: pair.secondCol, color: hand.get(1) }
   ];
 }
 
-
-// これだけ simulator state ではなく root state をとっている
-export function getNextHand(state) {
-  return state.getIn(['simulator', 'queue', 1]);
-}
-
-// これだけ simulator state ではなく root state をとっている
-export function getDoubleNextHand(state) {
-  if (state.getIn(['config', 'numVisibleNext']) === 'visibleNextOnly') {
-    return null;
-  }
-  return state.getIn(['simulator', 'queue', 2]);
-}
-
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
+
 function _getVanishingPuyos(vanishings) {
 
   let field = FieldUtils.createField(fieldRows, fieldCols);
@@ -96,6 +95,7 @@ function _getVanishingPuyos(vanishings) {
 
 
 export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
+
 function _getStack(stack, droppings) {
   const isDropping = (row, col) => {
     return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
@@ -129,10 +129,22 @@ function _getStack(stack, droppings) {
   });
 }
 
-export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue');
+export const getCurrentHand = wrapCache(
+  (queue, numHands) => queue.get(numHands % queue.size),
+  'queue', 'numHands');
 
-function _getDropPositions(pair, stack, queue) {
-  const queueHead = queue.get(0);
+export const getNextHand = wrapCache(
+  (queue, numHands) => queue.get((numHands + 1) % queue.size),
+  'queue', 'numHands');
+
+export const getDoubleNextHand = wrapCache(
+  (queue, numHands) => queue.get((numHands + 2) % queue.size),
+  'queue', 'numHands');
+
+export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
+
+function _getDropPositions(pair, stack, queue, numHands, state) {
+  const hand = getCurrentHand(state);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
@@ -142,8 +154,8 @@ function _getDropPositions(pair, stack, queue) {
     return i;
   };
 
-  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: queueHead.get(0) };
-  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: queueHead.get(1) };
+  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: hand.get(0) };
+  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: hand.get(1) };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
     if (pair.rotation === 'bottom') {
       drop1.row -= 1;
@@ -153,4 +165,82 @@ function _getDropPositions(pair, stack, queue) {
   }
 
   return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
+}
+
+export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
+
+function _getHistoryTreeLayout(history, historyIndexBase) {
+  let nodes = List();
+  let paths = List();
+  let rightmostRow = 0;
+  let deepestColumn = 0;
+
+  // calc indexMap
+  let indexMap = {};
+  {
+    let index = historyIndexBase;
+    while (index) {
+      const p = history.get(index);
+      indexMap[p.prev] = index;
+      index = p.prev;
+    }
+  }
+
+  // calc graph layout
+  const calcLayout = (historyIndex, depth, parentRow) => {
+    const record = history.get(historyIndex);
+    if (!record) {
+      return;
+    }
+
+    return record.next.map((nextIndex, index) => {
+      if (index > 0) {
+        rightmostRow += 1;
+      }
+      const isCurrentPath = indexMap[historyIndex] === nextIndex;
+
+      if (historyIndex > 0) {
+        paths = paths.push(Map({
+          from: Map({ row: parentRow, col: depth - 1 }),
+          to: Map({ row: rightmostRow, col: depth }),
+          isCurrentPath
+        }));
+      }
+      if (depth > deepestColumn) {
+        deepestColumn = depth;
+      }
+      nodes = nodes.push(Map({
+        row: rightmostRow,
+        col: depth,
+        move: history.getIn([nextIndex, 'move']),
+        isCurrentNode: nextIndex === historyIndexBase,
+        historyIndex: nextIndex
+      }));
+      calcLayout(nextIndex, depth + 1, rightmostRow);
+    });
+  };
+  calcLayout(0, 0, 0);
+
+  // extract hands from history
+  let hands = List();
+  hands = hands.withMutations(h => {
+    const searchHands = (index, depth) => {
+      const record = history.get(index);
+      if (depth > 0) {
+        h.set(depth - 1, record.pair);
+      }
+      record.next.map(nextIndex => {
+        searchHands(nextIndex, depth + 1);
+      });
+    };
+    searchHands(0, 0);
+  });
+
+  return Map({
+    nodes,
+    paths,
+    hands,
+    width: rightmostRow,
+    height: deepestColumn
+  });
 }

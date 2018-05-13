@@ -3,17 +3,22 @@ import {
   initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight,
-  putNextPair,
+  moveHistory,
+  putNextPair, redoField,
   resetField,
   restart,
   rotateHighlightsLeft,
   rotateHighlightsRight,
   undoField,
   vanishPuyos,
-  openTwitterShare
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
+import {
+  canRedo,
+  canUndo,
+  getGhost, getHistoryTreeLayout, getPendingPair, getStack,
+  isActive
+} from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
@@ -21,11 +26,15 @@ const mapStateToProps = (state) => {
 
   return {
     stack: getStack(simulator),
-    current: simulator.getIn(['queue', 0]),
+    history: simulator.get('history'),
+    historyIndex: simulator.get('historyIndex'),
+    historyTreeLayout: getHistoryTreeLayout(simulator),
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    puyoSkin: state.getIn(['config', 'puyoSkin']),
+    canUndo: canUndo(simulator),
+    canRedo: canRedo(simulator)
   };
 };
 
@@ -53,12 +62,19 @@ const mapDispatchToProps = (dispatch) => {
     onUndoSelected: () => {
       dispatch(undoField());
     },
+    onRedoSelected: () => {
+      dispatch(redoField());
+    },
     onResetSelected: () => {
       dispatch(resetField());
     },
     onRestartSelected: () => {
       dispatch(restart());
-    }
+    },
+    onHistoryNodePressed: (index) => {
+      dispatch(moveHistory(index));
+      dispatch(vanishPuyos());
+    },
   };
 };
 
