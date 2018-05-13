@@ -12,7 +12,10 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
-import { getGhost, getPendingPair, getStack, isActive } from '../../shared/selectors/simulatorSelectors';
+import {
+  canRedo, canUndo, getGhost, getPendingPair, getStack,
+  isActive
+} from '../../shared/selectors/simulatorSelectors';
 import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
@@ -24,7 +27,9 @@ const mapStateToProps = (state) => {
     ghosts: getGhost(simulator),
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    puyoSkin: state.getIn(['config', 'puyoSkin']),
+    canUndo: canUndo(simulator),
+    conRedo: canRedo(simulator)
   };
 };
 

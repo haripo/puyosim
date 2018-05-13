@@ -9,6 +9,7 @@ export default class SimulatorControls extends PureComponent {
       <View style={{ flexDirection: 'column' }}>
         <View style={ styles.buttonGroup }>
           <TouchableOpacity
+            disabled={ !this.props.canUndo }
             style={ styles.controllerFullWidthButton }
             onPress={ this.props.onUndoSelected }>
             <Icon name="undo" size={30} color="#FFF" />

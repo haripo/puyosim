@@ -49,6 +49,8 @@ export default class Simulator extends Component {
               onMoveRightPressed={ this.props.onMoveRightPressed }
               onDropPressed={ this.props.onDropPressed }
               isActive={ this.props.isActive }
+              canUndo={ this.props.canUndo }
+              canRedo={ this.props.canRedo }
             />
           </View>
         </View>

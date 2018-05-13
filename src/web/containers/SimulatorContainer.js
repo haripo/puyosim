@@ -14,6 +14,8 @@ import {
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
 import {
+  canRedo,
+  canUndo,
   getGhost, getHistoryTreeLayout, getPendingPair, getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
@@ -31,6 +33,8 @@ const mapStateToProps = (state) => {
     pendingPair: getPendingPair(simulator),
     isActive: isActive(state),
     puyoSkin: state.getIn(['config', 'puyoSkin']),
+    canUndo: canUndo(simulator),
+    canRedo: canRedo(simulator)
   };
 };
 

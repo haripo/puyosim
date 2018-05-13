@@ -19,6 +19,7 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
+import SimulatorControls from '../../shared/components/SimulatorControls';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -141,52 +142,17 @@ export default class Simulator extends Component {
               <NextWindowContainer />
               <ChainResultContainer />
             </View>
-            <View style={{ flexDirection: 'column' }}>
-              <View style={ styles.buttonGroup }>
-                <TouchableOpacity
-                  style={ styles.controllerFullWidthButton }
-                  onPress={ this.props.onUndoSelected }>
-                  <Icon name="undo" size={30} color="#FFF" />
-                  <Text style={{ color: '#FFF' }}>Undo</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={ styles.buttonGroup }>
-                <TouchableOpacity
-                  style={ styles.controllerButton }
-                  onPress={ this.props.onRotateLeftPressed }
-                  disabled={ !this.props.isActive }>
-                  <Icon name="rotate-left" size={30} color="#FFF" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={ styles.controllerButton }
-                  onPress={ this.props.onRotateRightPressed }
-                  disabled={ !this.props.isActive }>
-                  <Icon name="rotate-right" size={30} color="#FFF" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.buttons}>
-                <View style={ styles.buttonGroup }>
-                  <TouchableOpacity
-                    style={ styles.controllerButton }
-                    onPress={ this.props.onMoveLeftPressed }
-                    disabled={ !this.props.isActive }>
-                    <Icon name="arrow-back" size={30} color="#FFF" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={ styles.controllerButton }
-                    onPress={ this.props.onMoveRightPressed }
-                    disabled={ !this.props.isActive }>
-                    <Icon name="arrow-forward" size={30} color="#FFF" />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={ styles.controllerFullWidthButton }
-                  onPress={ this.props.onDropPressed }
-                  disabled={ !this.props.isActive }>
-                  <Icon name="arrow-downward" size={30} color="#FFF" />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <SimulatorControls
+              onUndoSelected={ this.props.onUndoSelected }
+              onRotateLeftPressed={ this.props.onRotateLeftPressed }
+              onRotateRightPressed={ this.props.onRotateRightPressed }
+              onMoveLeftPressed={ this.props.onMoveLeftPressed }
+              onMoveRightPressed={ this.props.onMoveRightPressed }
+              onDropPressed={ this.props.onDropPressed }
+              isActive={ this.props.isActive }
+              canUndo={ this.props.canUndo }
+              canRedo={ this.props.canRedo }
+            />
           </View>
         </View>
       </View>

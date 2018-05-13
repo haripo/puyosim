@@ -312,7 +312,7 @@ function createInitialState(config) {
     history: List(),
     historyIndex: 0
   });
-  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, [], [])));
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, null, [])));
 }
 
 function loadOrCreateInitialState(config) {

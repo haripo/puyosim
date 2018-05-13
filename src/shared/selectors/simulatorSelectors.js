@@ -31,6 +31,18 @@ export function isActive(state) {
   );
 }
 
+export function canUndo(state) {
+  const history = state.get('history');
+  const historyIndex = state.get('historyIndex');
+  return history.get(historyIndex).get('prev') !== null;
+}
+
+export function canRedo(state) {
+  const history = state.get('history');
+  const historyIndex = state.get('historyIndex');
+  return history.get(historyIndex).get('next').size > 0;
+}
+
 export function getGhost(state) {
   return getDropPositions(state);
 }
