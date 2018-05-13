@@ -5,6 +5,7 @@ import React from 'react';
 import { isWeb, themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
 import _ from 'lodash';
+import compareWith from '../../utils/compareWith';
 
 const arrowImages = {
   top: require('../../../../assets/history_tree/arrow-top.png'),
@@ -24,7 +25,15 @@ const numberImages = [
 
 export default class HistoryTreeNode extends React.Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return !_.isEqual(nextProps, this.props);
+    return !compareWith(
+      this.props,
+      nextProps,
+      'x',
+      'y',
+      'col',
+      'rotation',
+      'nodeWidth',
+      'isCurrentNode');
   }
 
   render() {

@@ -65,7 +65,7 @@ export default class HistoryTree extends React.Component {
   }
 
   handleResponderMove(evt, gestureState) {
-    this.requestAnimationFrame(() => {
+    this.requestAnimationFrame(() => { // TODO: これいる？
       if (this.state.swiping) {
         this.wrapperTreeView.setNativeProps({
           style: {
@@ -96,11 +96,6 @@ export default class HistoryTree extends React.Component {
       baseX: this.state.originalX + gestureState.dx,
       baseY: this.state.originalY + gestureState.dy
     });
-  }
-
-  extractCurrentPath() {
-    const { history, currentIndex } = this.props;
-    return result;
   }
 
   renderHand(hand, row) {
@@ -236,5 +231,3 @@ const styles = StyleSheet.create({
     borderRightWidth: 1
   }
 });
-
-

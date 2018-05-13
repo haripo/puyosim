@@ -157,7 +157,7 @@ function _getDropPositions(pair, stack, queue, numHands, state) {
 
 export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
 
-function _getHistoryTreeLayout(history, historyIndex) {
+function _getHistoryTreeLayout(history, historyIndexBase) {
   let nodes = List();
   let paths = List();
   let rightmostRow = 0;
@@ -166,7 +166,7 @@ function _getHistoryTreeLayout(history, historyIndex) {
   // calc indexMap
   let indexMap = {};
   {
-    let index = historyIndex;
+    let index = historyIndexBase;
     while (index) {
       const p = history.get(index);
       indexMap[p.prev] = index;
@@ -201,7 +201,7 @@ function _getHistoryTreeLayout(history, historyIndex) {
         row: rightmostRow,
         col: depth,
         move: history.getIn([nextIndex, 'move']),
-        isCurrentNode: false,
+        isCurrentNode: nextIndex === historyIndexBase,
         historyIndex: nextIndex
       }));
       calcLayout(nextIndex, depth + 1, rightmostRow);

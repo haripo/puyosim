@@ -2,7 +2,7 @@
  * Component for render history-tree node
  */
 import React from 'react';
-import { themeColor, themeSemiColor } from '../../utils/constants';
+import { themeColor } from '../../utils/constants';
 import { Path } from 'react-native-svg';
 import _ from 'lodash';
 
