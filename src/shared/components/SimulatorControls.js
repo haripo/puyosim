@@ -6,21 +6,23 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 export default class SimulatorControls extends PureComponent {
   render() {
     return (
-      <View style={{ flexDirection: 'column' }}>
+      <View style={ { flexDirection: 'column' } }>
         <View style={ styles.buttonGroup }>
           <TouchableOpacity
             disabled={ !this.props.canUndo }
             style={ styles.controllerButton }
+            activeOpacity={ this.props.canUndo ? 0.7 : 1 }
             onPress={ this.props.onUndoSelected }>
-            <Icon name="undo" size={30} color="#FFF" />
-            <Text style={{ color: '#FFF' }}>Undo</Text>
+            <Icon name="undo" size={ 30 } color="#FFF"/>
+            <Text style={ { color: '#FFF' } }>Undo</Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={ !this.props.canRedo }
             style={ styles.controllerButton }
+            activeOpacity={ this.props.canRedo ? 0.7 : 1 }
             onPress={ this.props.onRedoSelected }>
-            <Icon name="redo" size={30} color="#FFF" />
-            <Text style={{ color: '#FFF' }}>Redo</Text>
+            <Icon name="redo" size={ 30 } color="#FFF"/>
+            <Text style={ { color: '#FFF' } }>Redo</Text>
           </TouchableOpacity>
         </View>
         <View style={ styles.buttonGroup }>
@@ -28,35 +30,35 @@ export default class SimulatorControls extends PureComponent {
             style={ styles.controllerButton }
             onPress={ this.props.onRotateLeftPressed }
             disabled={ !this.props.isActive }>
-            <Icon name="rotate-left" size={30} color="#FFF" />
+            <Icon name="rotate-left" size={ 30 } color="#FFF"/>
           </TouchableOpacity>
           <TouchableOpacity
             style={ styles.controllerButton }
             onPress={ this.props.onRotateRightPressed }
             disabled={ !this.props.isActive }>
-            <Icon name="rotate-right" size={30} color="#FFF" />
+            <Icon name="rotate-right" size={ 30 } color="#FFF"/>
           </TouchableOpacity>
         </View>
-        <View style={styles.buttons}>
+        <View style={ styles.buttons }>
           <View style={ styles.buttonGroup }>
             <TouchableOpacity
               style={ styles.controllerButton }
               onPress={ this.props.onMoveLeftPressed }
               disabled={ !this.props.isActive }>
-              <Icon name="arrow-back" size={30} color="#FFF" />
+              <Icon name="arrow-back" size={ 30 } color="#FFF"/>
             </TouchableOpacity>
             <TouchableOpacity
               style={ styles.controllerButton }
               onPress={ this.props.onMoveRightPressed }
               disabled={ !this.props.isActive }>
-              <Icon name="arrow-forward" size={30} color="#FFF" />
+              <Icon name="arrow-forward" size={ 30 } color="#FFF"/>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
             style={ styles.controllerFullWidthButton }
             onPress={ this.props.onDropPressed }
             disabled={ !this.props.isActive }>
-            <Icon name="arrow-downward" size={30} color="#FFF" />
+            <Icon name="arrow-downward" size={ 30 } color="#FFF"/>
           </TouchableOpacity>
         </View>
       </View>
