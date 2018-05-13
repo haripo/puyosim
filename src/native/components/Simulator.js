@@ -144,6 +144,7 @@ export default class Simulator extends Component {
             </View>
             <SimulatorControls
               onUndoSelected={ this.props.onUndoSelected }
+              onRedoSelected={ this.props.onRedoSelected }
               onRotateLeftPressed={ this.props.onRotateLeftPressed }
               onRotateRightPressed={ this.props.onRotateRightPressed }
               onMoveLeftPressed={ this.props.onMoveLeftPressed }

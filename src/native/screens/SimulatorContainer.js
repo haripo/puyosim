@@ -3,7 +3,7 @@ import {
   initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight, openTwitterShare,
-  putNextPair,
+  putNextPair, redoField,
   resetField,
   restart,
   rotateHighlightsLeft,
@@ -29,7 +29,7 @@ const mapStateToProps = (state) => {
     isActive: isActive(state),
     puyoSkin: state.getIn(['config', 'puyoSkin']),
     canUndo: canUndo(simulator),
-    conRedo: canRedo(simulator)
+    canRedo: canRedo(simulator)
   };
 };
 
@@ -56,6 +56,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onUndoSelected: () => {
       dispatch(undoField());
+    },
+    onRedoSelected: () => {
+      dispatch(redoField());
     },
     onResetSelected: () => {
       dispatch(resetField());

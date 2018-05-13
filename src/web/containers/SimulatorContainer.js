@@ -4,7 +4,7 @@ import {
   moveHighlightsLeft,
   moveHighlightsRight,
   moveHistory,
-  putNextPair,
+  putNextPair, redoField,
   resetField,
   restart,
   rotateHighlightsLeft,
@@ -61,6 +61,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onUndoSelected: () => {
       dispatch(undoField());
+    },
+    onRedoSelected: () => {
+      dispatch(redoField());
     },
     onResetSelected: () => {
       dispatch(resetField());

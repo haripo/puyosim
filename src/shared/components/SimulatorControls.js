@@ -10,10 +10,17 @@ export default class SimulatorControls extends PureComponent {
         <View style={ styles.buttonGroup }>
           <TouchableOpacity
             disabled={ !this.props.canUndo }
-            style={ styles.controllerFullWidthButton }
+            style={ styles.controllerButton }
             onPress={ this.props.onUndoSelected }>
             <Icon name="undo" size={30} color="#FFF" />
             <Text style={{ color: '#FFF' }}>Undo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={ !this.props.canRedo }
+            style={ styles.controllerButton }
+            onPress={ this.props.onRedoSelected }>
+            <Icon name="redo" size={30} color="#FFF" />
+            <Text style={{ color: '#FFF' }}>Redo</Text>
           </TouchableOpacity>
         </View>
         <View style={ styles.buttonGroup }>
