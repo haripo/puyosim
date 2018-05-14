@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { buttonColor, contentsMargin, controllerButtonSize } from '../../shared/utils/constants';
+import { buttonColor, contentsMargin, controllerButtonHeight, controllerButtonWidth } from '../../shared/utils/constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class SimulatorControls extends PureComponent {
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   controllerButton: {
-    width: controllerButtonSize,
-    height: controllerButtonSize,
+    width: controllerButtonWidth,
+    height: controllerButtonHeight,
     marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center',
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
   },
   controllerFullWidthButton: {
     backgroundColor: buttonColor,
-    width: controllerButtonSize * 2 + contentsMargin,
-    height: controllerButtonSize,
+    width: controllerButtonWidth * 2 + contentsMargin,
+    height: controllerButtonHeight,
     marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center',
