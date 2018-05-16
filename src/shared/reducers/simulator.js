@@ -42,7 +42,8 @@ const HistoryRecord = Record({
   pair: List(),
 
   prev: null,
-  next: List()
+  next: List(),
+  defaultNext: null
 });
 
 // history helpers
@@ -67,7 +68,8 @@ function makeHistoryRecord(state, pair, move, prev, next) {
     score: state.get('score'),
     chainScore: state.get('chainScore'),
     prev: prev,
-    next: List(next)
+    next: List(next),
+    defaultNext: null
   });
 }
 
@@ -236,7 +238,10 @@ function redoField(state, action) {
     return state;
   }
 
-  const next = nextIndexes.get(0);
+  let next = state.getIn(['history', currentIndex, 'defaultNext']);
+  if (next === null) {
+    next = nextIndexes.get(nextIndexes.size - 1);
+  }
 
   return state.withMutations(s => {
     const record = state.getIn(['history', next]);
@@ -249,13 +254,24 @@ function redoField(state, action) {
 
 function moveHistory(state, action) {
   const next = action.index;
-  return state.withMutations(s => {
+
+  state = state.withMutations(s => {
     const record = state.getIn(['history', next]);
     return revertFromRecord(s, record)
       .set('vanishingPuyos', List())
       .set('droppingPuyos', List())
       .set('historyIndex', next);
-  })
+  });
+
+  // update defaultNext
+  return state.withMutations(s => {
+    let index = state.get('historyIndex');
+    while (index !== null) {
+      let next = index;
+      index = state.getIn(['history', index, 'prev']);
+      s.setIn(['history', index, 'defaultNext'], next);
+    }
+  });
 }
 
 function resetField(state, action) {
