@@ -1,5 +1,5 @@
 import I18n from 'specific/service/i18n';
-import { generateHandsetPatterns } from './handsetPattern';
+import { handsetPatterns } from './handsetPattern';
 import _ from 'lodash';
 
 const translations = {
@@ -27,8 +27,11 @@ const translations = {
     avoid4ColorsIn3Hands: '初手 3 手で 4 色のツモを禁止',
     initialAllClear: '全消し制限',
     avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
-    custom2Hands: '初手 2 手を固定',
-    custom3Hands: '初手 3 手を固定',
+    specifyInitialHands: '初手を固定',
+    specify1stHand: '1 手目',
+    specify2ndHand: '2 手目',
+    specify3rdHand: '3 手目',
+    notSpecified: 'フリー',
 
     numVisibleNext: 'ネクスト',
     visibleDoubleNext: 'ダブルネクストを表示',
@@ -39,8 +42,7 @@ const translations = {
     puyoSkinCharacter: '文字',
 
     // handset patterns
-    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
-    ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
   },
   'en': {
     chain: 'chain',
@@ -65,8 +67,11 @@ const translations = {
     avoid4ColorsIn3Hands: 'Avoid 4 colors in first 3 hands',
     initialAllClear: 'All clear',
     avoidIn2Hands: 'Avoid in first 2 hands',
-    custom2Hands: 'Custom first 2 hands',
-    custom3Hands: 'Custom first 3 hands',
+    specifyInitialHands: 'Fix initial hands',
+    specify1stHand: '1st',
+    specify2ndHand: '2nd',
+    specify3rdHand: '3rd',
+    notSpecified: 'free',
 
     numVisibleNext: 'Next window',
     visibleDoubleNext: 'Show double next',
@@ -77,8 +82,7 @@ const translations = {
     puyoSkinCharacter: 'Character',
 
     // handset patterns
-    ..._.fromPairs(generateHandsetPatterns(2).map(p => [p, p])),
-    ..._.fromPairs(generateHandsetPatterns(3).map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
   }
 };
 

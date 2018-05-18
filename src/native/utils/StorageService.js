@@ -15,7 +15,7 @@ const configSchema = {
     key: { type: 'string' },
     value: { type: 'string' }
   }
-}
+};
 
 let realm = new Realm({
   schema: [
