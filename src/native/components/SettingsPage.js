@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SettingsList from 'react-native-settings-list';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import _ from 'lodash';
 
 import t from '../../shared/service/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
-import { configCategoryItem, configItems } from '../../shared/models/Config';
 
 export default class SettingsPage extends Component {
   static navigatorStyle = {
@@ -15,124 +13,107 @@ export default class SettingsPage extends Component {
     navBarButtonColor: themeLightColor
   };
 
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
     const { configKey } = this.props;
-    const title = configKey ? t(configKey) : "Settings";
+    const title = configKey ? t(configKey) : 'Settings';
     this.props.navigator.setTitle({ title });
   }
 
-  openDescendantScreen(key) {
+  openDescendantScreen(descendantItems) {
     this.props.navigator.push({
       screen: 'com.puyosimulator.Settings',
       passProps: {
-        configKey: key,
-        menu: (this.props.menu || configItems)[key]
+        targetItems: descendantItems,
       }
     });
   }
 
-  updateConfigValue(value) {
-    const { onChanged, configKey } = this.props;
-    onChanged(configKey, value);
+  updateConfigValue(key, value) {
+    const { onChanged } = this.props;
+    onChanged(key, value);
   }
 
-  renderSelectChild(configValue) {
-    let icon = null;
-    if (configValue === this.props.config[this.props.configKey]) {
-      icon = (
-        <Icon name="check" size={30} color="green" style={ { top: 20 , left: 20, width: 50 } }/>
+  handlePressed(parent, configItem) {
+    if (parent && parent.type === 'radio') {
+      this.updateConfigValue(parent.key, configItem.value);
+    }
+    if (!configItem.children) {
+      this.props.navigator.pop();
+    } else {
+      this.openDescendantScreen(configItem);
+    }
+  }
+
+  renderCheckBox(isChecked) {
+    if (isChecked) {
+      return (
+        <Icon name="check" size={ 30 } color="green" style={ styles.checkBox }/>
       );
     } else {
-      icon = (
-        <View style={ { top: 20 , left: 20, width: 50 } }/>
-      )
+      return (
+        <View style={ styles.checkBox }/>
+      );
+    }
+  }
+
+  renderDirectoryItem(parent, item) {
+    const selectedChild = this.props.config[item.key];
+
+    return (
+      <SettingsList.Item
+        title={ item.name }
+        titleInfo={ t(selectedChild) }
+        key={ item.key + item.value }
+        itemWidth={ 70 }
+        titleStyle={ styles.title }
+        hasNavArrow={ true }
+        onPress={ () => this.handlePressed(parent, item) }
+      />
+    );
+  }
+
+  renderRadioItem(parent, item) {
+    const selected = this.props.config[parent.key];
+    const selectedChild = this.props.config[item.key];
+
+    const isChecked = selected === item.value;
+    const hasNavArrow = !!item.children;
+
+    let s = selectedChild && t(selectedChild);
+    if (item.selectedValue) {
+      s = item.selectedValue(this.props.config);
     }
 
     return (
       <SettingsList.Item
-        title={ t(configValue) }
-        key={configValue}
-        icon={ icon }
+        title={ item.name }
+        titleInfo={ s }
+        key={ item.key + item.value }
+        icon={ this.renderCheckBox(isChecked) }
         itemWidth={ 70 }
-        titleStyle={ { color:'black', fontSize: 16 } }
-        hasNavArrow={ false }
-        onPress={ () => {
-          this.updateConfigValue(configValue);
-          this.props.navigator.pop();
-        } }
+        titleStyle={ styles.title }
+        hasNavArrow={ hasNavArrow }
+        onPress={ () => this.handlePressed(parent, item) }
       />
     );
   }
 
-  renderSelectChild2(configValue) {
-    let icon = null;
-    if (configValue === this.props.config[this.props.configKey]) {
-      icon = (
-        <Icon name="check" size={30} color="green" style={ { top: 20 , left: 20, width: 50 } }/>
-      );
-    } else {
-      icon = (
-        <View style={ { top: 20 , left: 20, width: 50 } }/>
-      )
+  renderItem(item) {
+    switch (item.type) {
+      case 'directory':
+        return item.children.map(child => this.renderDirectoryItem(item, child));
+      case 'radio':
+        return item.children.map(child => this.renderRadioItem(item, child));
     }
-
-    return (
-      <SettingsList.Item
-        title={ t(configValue) }
-        key={configValue}
-        icon={ icon }
-        itemWidth={ 70 }
-        titleStyle={ { color:'black', fontSize: 16 } }
-        titleInfo={ t(this.props.config[configValue]) }
-        hasNavArrow={ true }
-        onPress={ () => {
-          this.updateConfigValue(configValue);
-          this.openDescendantScreen(configValue);
-        } }
-      />
-    );
-  }
-
-  renderSelectParent(configKey) {
-    return (
-      <SettingsList.Item
-        title={ t(configKey) }
-        key={configKey}
-        itemWidth={ 70 }
-        titleInfo={ t(this.props.config[configKey]) }
-        titleStyle={ { color:'black', fontSize: 16 } }
-        hasNavArrow={ true }
-        onPress={ () => this.openDescendantScreen(configKey) }
-      />
-    );
-  }
-
-  /**
-   * Render config menu
-   * @param menu config object
-   * @returns {Array} vDOM nodes
-   */
-  renderConfigItems(menu) {
-    return _.map(menu, (v, k) => {
-      if (configCategoryItem.has(k)) {
-        return this.renderSelectParent(k);
-      } else if (v === null) {
-        return this.renderSelectChild(k);
-      } else {
-        return this.renderSelectChild2(k);
-      }
-    });
   }
 
   render() {
+    const { configItems, targetItems } = this.props;
+    const item = targetItems || configItems;
     return (
       <View style={ styles.component }>
         <SettingsList borderColor='#d6d5d9' defaultItemSize={ 50 }>
-          { this.renderConfigItems(this.props.menu || configItems) }
+          { this.renderItem(item) }
         </SettingsList>
       </View>
     )
@@ -142,5 +123,14 @@ export default class SettingsPage extends Component {
 const styles = StyleSheet.create({
   component: {
     alignItems: 'stretch'
+  },
+  checkBox: {
+    top: 20,
+    left: 20,
+    width: 50
+  },
+  title: {
+    color: 'black',
+    fontSize: 16
   }
 });

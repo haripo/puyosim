@@ -75,17 +75,21 @@ export function generateQueue(configs) {
     limitInitialColors(queue, 3, 2);
   }
 
-  if (configs.initialColors === 'custom2Hands' && configs.custom2Hands) {
-    const customHands = handsetStrToColors(configs.custom2Hands);
-    for (let i = 0; i < customHands.length; i++) {
-      queue[i] = customHands[i];
+  if (configs.initialColors === 'specifyHands') {
+    if (configs.specify1stHand) {
+      const hand = handsetStrToColors(configs.specify1stHand);
+      queue[0] = hand[0];
+      queue[1] = hand[1]
     }
-  }
-
-  if (configs.initialColors === 'custom3Hands' && configs.custom3Hands) {
-    const customHands = handsetStrToColors(configs.custom3Hands);
-    for (let i = 0; i < customHands.length; i++) {
-      queue[i] = customHands[i];
+    if (configs.specify2ndHand) {
+      const hand = handsetStrToColors(configs.specify2ndHand);
+      queue[2] = hand[2];
+      queue[3] = hand[3];
+    }
+    if (configs.specify3rdHand) {
+      const hand = handsetStrToColors(configs.specify3rdHand);
+      queue[4] = hand[4];
+      queue[5] = hand[5];
     }
   }
 

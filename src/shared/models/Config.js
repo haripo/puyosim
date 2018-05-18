@@ -1,50 +1,122 @@
 import { Record } from 'immutable';
-import _ from 'lodash';
-import { generateHandsetPatterns } from '../service/handsetPattern';
+import t from '../../shared/service/i18n';
+import { handsetPatterns } from '../service/handsetPattern';
 
+function generateChildren(patterns) {
+  return [
+    { value: 'notSpecified', name: t('notSpecified') },
+    ...patterns.map(p => ({ value: p, name: p }))
+  ];
+}
 
-// config の保存形式はフラットな key-value なので key が重複してはならない
 export const configItems = {
-  colorBalance: {
-    balancedIn128: null,
-    balancedIn16: null,
-  },
-  initialColors: {
-    noLimit: null,
-    avoid4ColorsIn2Hands: null,
-    avoid4ColorsIn3Hands: null,
-    custom2Hands: _.fromPairs(generateHandsetPatterns(2).map(p => [p, null])),
-    custom3Hands: _.fromPairs(generateHandsetPatterns(3).map(p => [p, null]))
-  },
-  initialAllClear: {
-    noLimit: null,
-    avoidIn2Hands: null
-  },
-  numVisibleNext: {
-    visibleDoubleNext: null,
-    visibleNextOnly: null,
-  },
-  puyoSkin: {
-    puyoSkinDefault: null,
-    puyoSkinCharacter: null,
-  }
+  key: 'root',
+  type: 'directory',
+  children: [
+    {
+      key: 'colorBalance',
+      name: t('colorBalance'),
+      type: 'radio',
+      children: [
+        {
+          value: 'balancedIn128',
+          name: t('balancedIn128')
+        },
+        {
+          value: 'balancedIn16',
+          name: t('balancedIn16')
+        }
+      ]
+    },
+    {
+      key: 'initialColors',
+      name: t('initialColors'),
+      type: 'radio',
+      children: [
+        {
+          value: 'noLimit',
+          name: t('noLimit')
+        },
+        {
+          value: 'avoid4ColorsIn2Hands',
+          name: t('avoid4ColorsIn2Hands')
+        },
+        {
+          value: 'avoid4ColorsIn3Hands',
+          name: t('avoid4ColorsIn3Hands')
+        },
+        {
+          key: 'specifyInitialHands',
+          value: 'specifyInitialHands',
+          name: t('specifyInitialHands'),
+          selectedValue: c => `${t(c['specify1stHand'])}-${t(c['specify2ndHand'])}-${t(c['specify3rdHand'])}`,
+          type: 'directory',
+          children: [
+            {
+              name: t('specify1stHand'),
+              key: 'specify1stHand',
+              value: 'specify1stHand',
+              type: 'radio',
+              children: generateChildren(handsetPatterns[0])
+            },
+            {
+              name: t('specify2ndHand'),
+              key: 'specify2ndHand',
+              value: 'specify2ndHand',
+              type: 'radio',
+              children: generateChildren(handsetPatterns[1])
+            },
+            {
+              name: t('specify3rdHand'),
+              key: 'specify3rdHand',
+              value: 'specify3rdHand',
+              type: 'radio',
+              children: generateChildren(handsetPatterns[2])
+            }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'initialAllClear',
+      name: t('initialAllClear'),
+      type: 'radio',
+      children: [
+        { value: 'noLimit', name: t('noLimit') },
+        { value: 'avoidIn2Hands', name: t('avoidIn2Hands') }
+      ]
+    },
+    {
+      key: 'numVisibleNext',
+      name: t('numVisibleNext'),
+      type: 'radio',
+      children: [
+        { value: 'visibleDoubleNext', name: t('visibleDoubleNext') },
+        { value: 'visibleNextOnly', name: t('visibleNextOnly') }
+      ]
+    },
+    {
+      key: 'puyoSkin',
+      name: t('puyoSkin'),
+      type: 'radio',
+      children: [
+        { value: 'puyoSkinDefault', name: t('puyoSkinDefault') },
+        { value: 'puyoSkinCharacter', name: t('puyoSkinCharacter') }
+      ]
+    }
+  ]
 };
-
-export const configCategoryItem = new Set([
-  `colorBalance`,
-  'initialColors',
-  'initialAllClear',
-  'numVisibleNext',
-  'puyoSkin'
-]);
 
 // default values
 const recordType = {
   colorBalance: 'balancedIn128',
   initialColors: 'noLimit',
   initialAllClear: 'noLimit',
-  custom2Hands: null,
-  custom3Hands: null,
+
+  specifyInitialHands: null,
+  specify1stHand: null,
+  specify2ndHand: null,
+  specify3rdHand: null,
   numVisibleNext: 'visibleDoubleNext',
   puyoSkin: 'puyoSkinDefault'
 };
