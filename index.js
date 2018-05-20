@@ -23,9 +23,7 @@ import { Client } from 'bugsnag-react-native';
 Client.releaseStage = 'development';
 Client.notifyReleaseStages = ['production'];
 
-const stateTransformer = (state) => {
-  return mapValues(state, v => v.toJS());
-};
+const stateTransformer = state => state.toJS();
 
 const logger = createLogger({
   stateTransformer
@@ -34,7 +32,7 @@ const logger = createLogger({
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware/*, logger*/)));
+  composeWithDevTools(applyMiddleware(sagaMiddleware, logger)));
 
 sagaMiddleware.run(sagas);
 

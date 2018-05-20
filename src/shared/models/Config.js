@@ -14,6 +14,25 @@ export const configItems = {
   type: 'directory',
   children: [
     {
+      key: 'numColors',
+      name: t('numColors'),
+      type: 'radio',
+      children: [
+        {
+          value: '3',
+          name: '3'
+        },
+        {
+          value: '4',
+          name: '4'
+        },
+        {
+          value: '5',
+          name: '5'
+        }
+      ]
+    },
+    {
       key: 'colorBalance',
       name: t('colorBalance'),
       type: 'radio',
@@ -109,6 +128,7 @@ export const configItems = {
 
 // default values
 const recordType = {
+  numColors: 4,
   colorBalance: 'balancedIn128',
   initialColors: 'noLimit',
   initialAllClear: 'noLimit',

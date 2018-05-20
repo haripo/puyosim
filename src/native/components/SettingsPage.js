@@ -57,12 +57,13 @@ export default class SettingsPage extends Component {
   }
 
   renderDirectoryItem(parent, item) {
-    const selectedChild = this.props.config[item.key];
+    const { config } = this.props;
+    const selectedChild = item.children.find(c => c.value === config[item.key]);
 
     return (
       <SettingsList.Item
         title={ item.name }
-        titleInfo={ t(selectedChild) }
+        titleInfo={ selectedChild.name }
         key={ item.key + item.value }
         itemWidth={ 70 }
         titleStyle={ styles.title }

@@ -18,15 +18,16 @@ const translations = {
 
     // settings
     noLimit: '制限なし',
+    numColors: '色数',
     queueBalanceConfig: 'ツモ補正',
     colorBalance: '配色補正',
     balancedIn128: '128 手で均等',
     balancedIn16: '16 手で均等',
     initialColors: '初手制限',
-    avoid4ColorsIn2Hands: '初手 2 手で 4 色のツモを禁止',
-    avoid4ColorsIn3Hands: '初手 3 手で 4 色のツモを禁止',
+    avoid4ColorsIn2Hands: '2 手 4 色のツモを禁止',
+    avoid4ColorsIn3Hands: '3 手 4 色のツモを禁止',
     initialAllClear: '全消し制限',
-    avoidIn2Hands: '初手 2 手で全消しのツモを禁止',
+    avoidIn2Hands: '2 手全消しのツモを禁止',
     specifyInitialHands: '初手を固定',
     specify1stHand: '1 手目',
     specify2ndHand: '2 手目',
@@ -58,6 +59,7 @@ const translations = {
     shareViaTwitter: 'Share',
 
     noLimit: 'No limit',
+    numColors: 'The number of colors',
     queueBalanceConfig: 'Handset generation',
     colorBalance: 'Color balance',
     balancedIn128: 'Balanced in 128 hands',

@@ -52,16 +52,17 @@ export function limitInitialColors(
  * Create queue
  */
 export function generateQueue(configs) {
+  const numColors = parseInt(configs.numColors);
   let queue = [];
   if (configs.colorBalance === '128') {
     for (let i = 0; i < 128 * 2; i++) {
-      queue.push(Math.floor(Math.random() * 4) + 1);
+      queue.push(Math.floor(Math.random() * numColors) + 1);
     }
   } else {
     for (let i = 0; i < 8; i++) {
       let subQueue = [];
       for (let j = 0; j < 16 * 2; j++) {
-        subQueue.push(j % 4 + 1);
+        subQueue.push(j % numColors + 1);
       }
       queue = queue.concat(_.shuffle(subQueue));
     }
