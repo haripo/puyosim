@@ -22,7 +22,7 @@ import FieldUtils from '../utils/FieldUtils';
 import { loadLastState } from '../../shared/utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
-import { getDropPlan, getVanishPlan } from '../models/ChainPlanner';
+import { createChainPlan, getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../models/QueueGenerator';
 import { snake, kenny } from '../service/chainPatterns';
 
@@ -201,10 +201,14 @@ function finishVanishingAnimations(state) {
 }
 
 function revertFromRecord(state, record) {
+  // simulate chain
+  const stack = record.get('stack').toJS();
+  createChainPlan(stack, fieldRows, fieldCols); // stack が連鎖後の状態に変更される
+
   return state.withMutations(s => {
     return s
       .set('numHands', record.get('numHands'))
-      .set('stack', record.get('stack'))
+      .set('stack', Immutable.fromJS(stack))
       .set('chain', record.get('chain'))
       .set('score', record.get('score'))
       .set('chainScore', record.get('chainScore'))
