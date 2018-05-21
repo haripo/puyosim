@@ -128,7 +128,7 @@ export const configItems = {
 
 // default values
 const recordType = {
-  numColors: 4,
+  numColors: '4',
   colorBalance: 'balancedIn128',
   initialColors: 'noLimit',
   initialAllClear: 'noLimit',
