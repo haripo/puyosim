@@ -11,11 +11,11 @@ export default class AboutContents extends Component {
   };
 
   componentDidMount() {
-    this.props.navigator.setTitle({ title: "About" });
+    this.props.navigator.setTitle({ title: 'About' });
 
-    this.websiteURL = "http://puyos.im";
-    this.feedbackURL = "http://puyos.im/feedback.html";
-    this.licensesURL  = "http://puyos.im/license.txt";
+    this.websiteURL = 'http://puyos.im';
+    this.feedbackURL = 'http://puyos.im/feedback.html';
+    this.licensesURL = 'http://puyos.im/license.txt';
   }
 
   handleKennyPressed() {
@@ -35,26 +35,28 @@ export default class AboutContents extends Component {
         <View style={ styles.row }>
           <Button style={ styles.button }
                   onPress={ () => Linking.openURL(this.websiteURL) }
-                  title="view website" />
+                  title="view website"/>
         </View>
         <View style={ styles.row }>
           <Button style={ styles.button }
                   onPress={ () => Linking.openURL(this.feedbackURL) }
-                  title="send feedback" />
+                  title="send feedback"/>
         </View>
-        <View style={ styles.row } >
+        <View style={ styles.row }>
           <Button style={ styles.button }
                   onPress={ () => Linking.openURL(this.licensesURL) }
-                  title="open source licenses" />
+                  title="open source licenses"/>
         </View>
-        <View style={ styles.row } >
-          <Button style={ styles.button }
-                  onPress={ () => this.handleKennyPressed() }
-                  title="DEBUG: kenny19" />
-          <Button style={ styles.button }
-                  onPress={ () => this.handleSnakePressed() }
-                  title="DEBUG: snake" />
-        </View>
+        { __DEV__ &&
+          <View style={ styles.row }>
+            <Button style={ styles.button }
+                    onPress={ () => this.handleKennyPressed() }
+                    title="DEBUG: kenny19"/>
+            <Button style={ styles.button }
+                    onPress={ () => this.handleSnakePressed() }
+                    title="DEBUG: snake"/>
+          </View>
+        }
       </View>
     )
   }
