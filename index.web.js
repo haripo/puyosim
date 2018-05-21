@@ -33,7 +33,7 @@ const logger = createLogger({
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware, logger)));
+  composeWithDevTools(applyMiddleware(sagaMiddleware/*, logger*/)));
 
 sagaMiddleware.run(sagas);
 
