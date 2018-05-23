@@ -80,8 +80,17 @@ function makeHistoryRecord(state, pair, move, prev, next) {
  */
 function appendHistoryRecord(state, hand, move) {
   const prevIndex = state.get('historyIndex');
-  const nextIndex = state.get('history').size;
 
+  {
+    const nextIndexes = state.getIn(['history', prevIndex, 'next']);
+    for (let nextIndex of nextIndexes) {
+      if (state.getIn(['history', nextIndex, 'move']).equals(move)) {
+        return state.set('historyIndex', nextIndex);
+      }
+    }
+  }
+
+  const nextIndex = state.get('history').size;
   const record = makeHistoryRecord(state, hand, move, prevIndex, []);
 
   return state
