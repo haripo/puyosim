@@ -1,10 +1,10 @@
 
-const colorChars = '02468acegikmoqsuwyACEGIK';
+const colorChars = '02468acegikmoqsuwyACEGIKMOQSUWY';
 const rotation = {
   top: 0,
   right: 1,
   bottom: 2,
-  left: 3,
+  left: 3
 };
 
 function generateMovesString(history) {

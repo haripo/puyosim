@@ -299,7 +299,17 @@ function restart(state, action, config) {
 }
 
 function openTwitterShare(state, action) {
-  const simulatorURL = generateIPSSimulatorURL(state.get('history').toJS());
+  // traverse history
+  let i = state.get('historyIndex');
+  let record = null;
+  let records = [];
+  do {
+    record = state.getIn(['history', i]);
+    i = record.get('prev');
+    records.push(record);
+  } while (i > 0);
+
+  const simulatorURL = generateIPSSimulatorURL(records.map(r => r.toJS()));
   const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
   Linking.openURL(tweetURL);
   return state;
