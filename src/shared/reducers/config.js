@@ -2,9 +2,20 @@ import { SAVE_CONFIG } from '../actions/actions';
 import * as storage from 'specific/utils/StorageService';
 import Config from '../models/Config';
 
-function saveConfig(state, action) {
-  storage.saveConfig(action.key, action.value);
-  return state.setValue(action.key, action.value);
+function setValue(state, key, value) {
+  storage.saveConfig(key, value);
+  return state.setValue(key, value);
+}
+
+function saveConfig(state, { key, value }) {
+  if (key === 'numColors') {
+    // 初手固定の設定をリセットする
+    state = setValue(state, 'initialColors', 'noLimit');
+    state = setValue(state, 'specify1stHand', 'AA');
+    state = setValue(state, 'specify2ndHand', 'notSpecified');
+    state = setValue(state, 'specify3rdHand', 'notSpecified');
+  }
+  return setValue(state, key, value);
 }
 
 export const initialState = new Config(storage.loadConfig());

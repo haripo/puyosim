@@ -2,11 +2,29 @@ import { Record } from 'immutable';
 import t from '../../shared/service/i18n';
 import { handsetPatterns } from '../service/handsetPattern';
 
-function generateChildren(patterns) {
-  return [
-    { value: 'notSpecified', name: t('notSpecified') },
-    ...patterns.map(p => ({ value: p, name: p }))
+function generateChildren(config, patterns, allowNotSpecified) {
+  const numColors = parseInt(config['numColors']);
+  let children = patterns
+    .filter(p => 4 < numColors || !p.includes('E'))
+    .filter(p => 3 < numColors || !p.includes('D'))
+    .map(p => ({ value: p, name: p }));
+  if (allowNotSpecified) {
+    children = [
+      ...children,
+      { value: 'notSpecified', name: t('notSpecified') }
+    ];
+  }
+  return children;
+}
+
+function generateSpecifiedFirstHandText(config) {
+  const keys = [
+    'specify1stHand',
+    'specify2ndHand',
+    'specify3rdHand'
   ];
+
+  return keys.map(key => t(config[key])).join('-');
 }
 
 export const configItems = {
@@ -68,7 +86,7 @@ export const configItems = {
           key: 'specifyInitialHands',
           value: 'specifyInitialHands',
           name: t('specifyInitialHands'),
-          selectedValue: c => `${t(c['specify1stHand'])}-${t(c['specify2ndHand'])}-${t(c['specify3rdHand'])}`,
+          selectedValue: generateSpecifiedFirstHandText,
           type: 'directory',
           children: [
             {
@@ -76,21 +94,21 @@ export const configItems = {
               key: 'specify1stHand',
               value: 'specify1stHand',
               type: 'radio',
-              children: generateChildren(handsetPatterns[0])
+              children: config => generateChildren(config, handsetPatterns[0], false)
             },
             {
               name: t('specify2ndHand'),
               key: 'specify2ndHand',
               value: 'specify2ndHand',
               type: 'radio',
-              children: generateChildren(handsetPatterns[1])
+              children: config => generateChildren(config, handsetPatterns[1], true)
             },
             {
               name: t('specify3rdHand'),
               key: 'specify3rdHand',
               value: 'specify3rdHand',
               type: 'radio',
-              children: generateChildren(handsetPatterns[2])
+              children: config => generateChildren(config, handsetPatterns[2], true)
             }
           ]
         }
@@ -133,10 +151,9 @@ const recordType = {
   initialColors: 'noLimit',
   initialAllClear: 'noLimit',
 
-  specifyInitialHands: null,
-  specify1stHand: null,
-  specify2ndHand: null,
-  specify3rdHand: null,
+  specify1stHand: 'AA',
+  specify2ndHand: 'notSpecified',
+  specify3rdHand: 'notSpecified',
   numVisibleNext: 'visibleDoubleNext',
   puyoSkin: 'puyoSkinDefault'
 };

@@ -32,7 +32,7 @@ const translations = {
     specify1stHand: '1 手目',
     specify2ndHand: '2 手目',
     specify3rdHand: '3 手目',
-    notSpecified: 'フリー',
+    notSpecified: 'Any',
 
     numVisibleNext: 'ネクスト',
     visibleDoubleNext: 'ダブルネクストを表示',
@@ -73,7 +73,7 @@ const translations = {
     specify1stHand: '1st',
     specify2ndHand: '2nd',
     specify3rdHand: '3rd',
-    notSpecified: 'free',
+    notSpecified: 'Any',
 
     numVisibleNext: 'Next window',
     visibleDoubleNext: 'Show double next',

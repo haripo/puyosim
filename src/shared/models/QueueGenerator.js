@@ -77,17 +77,17 @@ export function generateQueue(configs) {
   }
 
   if (configs.initialColors === 'specifyInitialHands') {
-    if (configs.specify1stHand) {
+    if (configs.specify1stHand !== 'notSpecified') {
       const hand = handsetStrToColors(configs.specify1stHand);
       queue[0] = hand[0];
       queue[1] = hand[1];
     }
-    if (configs.specify2ndHand) {
+    if (configs.specify2ndHand !== 'notSpecified') {
       const hand = handsetStrToColors(configs.specify2ndHand);
       queue[2] = hand[0];
       queue[3] = hand[1];
     }
-    if (configs.specify3rdHand) {
+    if (configs.specify3rdHand !== 'notSpecified') {
       const hand = handsetStrToColors(configs.specify3rdHand);
       queue[4] = hand[0];
       queue[5] = hand[1];

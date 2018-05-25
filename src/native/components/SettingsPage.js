@@ -6,6 +6,13 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 
+function evalItem(configItem, config) {
+  if (typeof configItem === 'function') {
+    return configItem(config);
+  }
+  return configItem;
+}
+
 export default class SettingsPage extends Component {
   static navigatorStyle = {
     navBarBackgroundColor: themeColor,
@@ -58,7 +65,7 @@ export default class SettingsPage extends Component {
 
   renderDirectoryItem(parent, item) {
     const { config } = this.props;
-    const selectedChild = item.children.find(c => c.value === config[item.key]);
+    const selectedChild = evalItem(item.children, config).find(c => c.value === config[item.key]);
 
     return (
       <SettingsList.Item
@@ -100,11 +107,12 @@ export default class SettingsPage extends Component {
   }
 
   renderItem(item) {
+    const children = evalItem(item.children, this.props.config);
     switch (item.type) {
       case 'directory':
-        return item.children.map(child => this.renderDirectoryItem(item, child));
+        return children.map(child => this.renderDirectoryItem(item, child));
       case 'radio':
-        return item.children.map(child => this.renderRadioItem(item, child));
+        return children.map(child => this.renderRadioItem(item, child));
     }
   }
 
