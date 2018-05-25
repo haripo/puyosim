@@ -38,7 +38,7 @@ const translations = {
     visibleDoubleNext: 'ダブルネクストを表示',
     visibleNextOnly: 'ネクストのみ表示',
 
-    puyoSkin: 'ぷよの種類',
+    puyoSkin: 'ぷよのテーマ',
     puyoSkinDefault: 'デフォルト',
     puyoSkinCharacter: '文字',
 
@@ -79,7 +79,7 @@ const translations = {
     visibleDoubleNext: 'Show double next',
     visibleNextOnly: 'Show next only',
 
-    puyoSkin: 'Puyo Skin',
+    puyoSkin: 'Puyo Theme',
     puyoSkinDefault: 'Default',
     puyoSkinCharacter: 'Character',
 
