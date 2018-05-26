@@ -52,11 +52,11 @@ const HistoryRecord = Record({
  * Creates history record
  * @param state
  * @param pair
+ * @param move
  * @param prev
- * @param next
  * @returns {Immutable.Map<string, any>}
  */
-function makeHistoryRecord(state, pair, move, prev, next) {
+function makeHistoryRecord(state, pair, move, prev) {
   return new HistoryRecord({
     move: move,
     pair: pair,
@@ -68,7 +68,7 @@ function makeHistoryRecord(state, pair, move, prev, next) {
     score: state.get('score'),
     chainScore: state.get('chainScore'),
     prev: prev,
-    next: List(next),
+    next: List(),
     defaultNext: null
   });
 }
@@ -81,19 +81,22 @@ function makeHistoryRecord(state, pair, move, prev, next) {
 function appendHistoryRecord(state, hand, move) {
   const prevIndex = state.get('historyIndex');
 
-  {
+  { // 同じパスの場合
     const nextIndexes = state.getIn(['history', prevIndex, 'next']);
     for (let nextIndex of nextIndexes) {
       if (state.getIn(['history', nextIndex, 'move']).equals(move)) {
-        return state.set('historyIndex', nextIndex);
+        return state
+          .setIn(['history', prevIndex, 'defaultNext'], nextIndex)
+          .set('historyIndex', nextIndex);
       }
     }
   }
 
   const nextIndex = state.get('history').size;
-  const record = makeHistoryRecord(state, hand, move, prevIndex, []);
+  const record = makeHistoryRecord(state, hand, move, prevIndex);
 
   return state
+    .setIn(['history', prevIndex, 'defaultNext'], nextIndex)
     .updateIn(['history', prevIndex, 'next'], indexes => {
       if (!indexes) {
         return indexes;
@@ -251,10 +254,7 @@ function redoField(state, action) {
     return state;
   }
 
-  let next = state.getIn(['history', currentIndex, 'defaultNext']);
-  if (next === null) {
-    next = nextIndexes.get(nextIndexes.size - 1);
-  }
+  const next = state.getIn(['history', currentIndex, 'defaultNext']);
 
   return state.withMutations(s => {
     const record = state.getIn(['history', next]);
@@ -288,10 +288,7 @@ function moveHistory(state, action) {
 }
 
 function resetField(state, action) {
-  while (!state.getIn(['history', 'prev'])) {
-    state = undoField(state, null)
-  }
-  return state;
+  return moveHistory(state, { index: 0 });
 }
 
 function restart(state, action, config) {
@@ -351,7 +348,7 @@ function createInitialState(config) {
     history: List(),
     historyIndex: 0
   });
-  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, null, [])));
+  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, null)));
 }
 
 function loadOrCreateInitialState(config) {
