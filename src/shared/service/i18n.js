@@ -79,7 +79,7 @@ const translations = {
     visibleDoubleNext: 'Show double next',
     visibleNextOnly: 'Show next only',
 
-    puyoSkin: 'Puyo Theme',
+    puyoSkin: 'Puyo theme',
     puyoSkinDefault: 'Default',
     puyoSkinCharacter: 'Character',
 
