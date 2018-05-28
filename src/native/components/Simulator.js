@@ -5,19 +5,16 @@
 
 import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import {
-  buttonColor,
   contentsMargin,
-  controllerButtonSize,
   themeColor,
   themeLightColor
 } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import t from '../../shared/service/i18n';
 import SimulatorControls from '../../shared/components/SimulatorControls';
 
@@ -49,11 +46,11 @@ export default class Simulator extends Component {
         id: 'reset',
         showAsAction: 'never'
       },
-      {
-        title: t('history'),
-        id: 'history',
-        showAsAction: 'never'
-      },
+      // {
+      //   title: t('history'),
+      //   id: 'history',
+      //   showAsAction: 'never'
+      // },
       {
         title: t('undo'),
         id: 'undo',
@@ -183,37 +180,6 @@ const styles = StyleSheet.create({
   },
   sideHead: {
     flex: 1
-  },
-  buttons: {
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  controllerButton: {
-    width: controllerButtonSize,
-    height: controllerButtonSize,
-    marginTop: contentsMargin,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: buttonColor,
-    borderRadius: 3,
-    elevation: 3,
-  },
-  controllerFullWidthButton: {
-    backgroundColor: buttonColor,
-    width: controllerButtonSize * 2 + contentsMargin,
-    height: controllerButtonSize,
-    marginTop: contentsMargin,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 3,
-    elevation: 3,
-  },
-  controllerButtonImage: {
-    width: '25%',
-    height: '25%',
-    resizeMode: 'contain'
   },
   field: {
     margin: contentsMargin
