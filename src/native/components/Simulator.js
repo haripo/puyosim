@@ -46,11 +46,11 @@ export default class Simulator extends Component {
         id: 'reset',
         showAsAction: 'never'
       },
-      // {
-      //   title: t('history'),
-      //   id: 'history',
-      //   showAsAction: 'never'
-      // },
+      {
+        title: t('history'),
+        id: 'history',
+        showAsAction: 'never'
+      },
       {
         title: t('undo'),
         id: 'undo',
