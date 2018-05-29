@@ -3,7 +3,9 @@
  */
 import React from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
-import { cardBackgroundColor, contentsPadding, themeLightColor, themeSemiColor } from '../../utils/constants';
+import {
+  cardBackgroundColor, contentsPadding, themeLightColor,
+} from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Rect, } from 'react-native-svg';
 import TimerMixin from 'react-timer-mixin';
@@ -15,15 +17,16 @@ import HistoryTreeNode from './HistoryTreeNode';
 export default class HistoryTree extends React.Component {
 
   // layout constants
-  graphX = 100;
+  graphX = 95;
   graphY = 20;
-  nodeWidth = 64;
-  nodePaddingX = 70;
-  nodePaddingY = 70;
+  nodeWidth = 48;
+  handWidth = 80;
+  nodePaddingX = 48;
+  nodePaddingY = 48;
 
   handsX = 20;
   handsY = 16;
-  puyoSize = 32;
+  puyoSize = 24;
 
   constructor() {
     super();
@@ -108,13 +111,13 @@ export default class HistoryTree extends React.Component {
           size={ this.puyoSize }
           puyo={ hand[0] }
           x={ x }
-          y={ y + this.nodePaddingY * row }
+          y={ y + this.nodePaddingY * row + 2 }
           skin={ puyoSkin }/>
         <SvgPuyo
           size={ this.puyoSize }
           puyo={ hand[1] }
           x={ x + this.puyoSize }
-          y={ y + this.nodePaddingY * row }
+          y={ y + this.nodePaddingY * row + 2 }
           skin={ puyoSkin }/>
       </React.Fragment>
     );
@@ -183,24 +186,24 @@ export default class HistoryTree extends React.Component {
           style={ styles.treeView }
         >
           <Svg
-            width={ (width + 1) * this.nodePaddingX + this.graphX }
+            width={ (width + 1) * this.nodePaddingX + this.graphX + 2 } // border の分をたす
             height={ (height + 1) * this.nodePaddingY + this.graphY }
           >
             { this.renderTree(nodes, paths) }
           </Svg>
         </View>
         <View
-          ref={ component => this.wrapperHandView = component }
           style={ styles.handView }
         >
           <Svg
-            width={ this.graphX }
+            ref={ component => this.wrapperHandView = component }
+            width={ this.handWidth }
             height={ (height + 1) * this.nodePaddingY + this.graphY }
           >
             <Rect
               x={ 0 }
               y={ 0 }
-              width={ this.graphX }
+              width={ this.handWidth }
               height={ (height + 1) * this.nodePaddingY + this.graphY }
               fill={ themeLightColor }
             />
@@ -227,7 +230,8 @@ const styles = StyleSheet.create({
   },
   handView: {
     position: 'absolute',
-    borderColor: themeSemiColor,
-    borderRightWidth: 1
+    borderColor: '#D1CDCB',
+    borderRightWidth: 2,
+    height: '100%'
   }
 });
