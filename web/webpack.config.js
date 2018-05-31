@@ -48,6 +48,26 @@ const fontLoaderConfiguration = {
   }
 };
 
+
+const tsLoaderConfiguration = {
+  test: /\.tsx?$/,
+  exclude: [
+    "/node_modules/"
+  ],
+  use: {
+    loader: 'ts-loader',
+    options: {
+      compilerOptions: {
+        allowJs: true,
+        target: "ES5",
+        jsx: "react",
+        outDir: "webroot",
+        lib: ["dom", "ES2017"],
+      }
+    }
+  }
+};
+
 module.exports = {
   entry: [path.resolve(appDirectory, 'index.web.js'), 'babel-polyfill'],
   output: {
@@ -56,6 +76,7 @@ module.exports = {
   },
   module: {
     rules: [
+      tsLoaderConfiguration,
       babelLoaderConfiguration,
       imageLoaderConfiguration,
       fontLoaderConfiguration
@@ -68,7 +89,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.web.js', '.js'],
+    extensions: ['.web.js', '.js', '.ts', '.tsx'],
     alias: {
       'react-native-svg': 'react-native-svg-web'
     }
