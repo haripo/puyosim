@@ -1,8 +1,9 @@
-/* @flow */
-
-import React, { Component } from 'react';
+import React from 'react';
+import { Component } from 'react';
 import { Animated, Image } from 'react-native';
 import _ from 'lodash';
+
+declare function require(x: string): any;
 
 const puyoImages = {
   'puyoSkinDefault': [
@@ -70,11 +71,30 @@ const connectionImages = {
   ]
 };
 
+interface PuyoConnection {
+  top: boolean,
+  left: boolean,
+  bottom: boolean,
+  right: boolean
+}
+
+export interface Props {
+  puyo: number,
+  connections: PuyoConnection,
+  x: number,
+  y: number,
+  a: number,
+  size: number,
+  skin: string
+}
+
+interface State {
+}
 
 /**
  * Component for render single puyo
  */
-export default class Puyo extends Component {
+export default class Puyo extends Component<Props, State> {
   style() {
     return {
       position: 'absolute',

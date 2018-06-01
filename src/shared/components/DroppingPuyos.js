@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Component } from 'react';
 import { Animated, View } from 'react-native';
 import { contentsPadding, puyoSize } from '../utils/constants';
 import Puyo from './Puyo';

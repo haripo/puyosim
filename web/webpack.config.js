@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const appDirectory = path.resolve(__dirname, '../');
 
 const babelLoaderConfiguration = {
-  test: /\.js$/,
+  test: /\.[jt]sx?$/,
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
     path.resolve(appDirectory, 'index.web.js'),
@@ -60,8 +60,9 @@ const tsLoaderConfiguration = {
       compilerOptions: {
         allowJs: true,
         target: "ES5",
+        module: "es2015",
         jsx: "react",
-        outDir: "webroot",
+        outDir: "web/build",
         lib: ["dom", "ES2017"],
       }
     }
@@ -76,8 +77,8 @@ module.exports = {
   },
   module: {
     rules: [
-      tsLoaderConfiguration,
       babelLoaderConfiguration,
+      tsLoaderConfiguration,
       imageLoaderConfiguration,
       fontLoaderConfiguration
     ]
