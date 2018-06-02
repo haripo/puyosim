@@ -1,6 +1,6 @@
 import Immutable, { List, Map, Record } from 'immutable';
 import {
-  APPLY_GRAVITY,
+  APPLY_GRAVITY, DEBUG_SET_HISTORY,
   DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
@@ -332,6 +332,18 @@ function setPattern(state, action, config) {
   return state;
 }
 
+function setHistory(state, action, config) {
+  switch (action.name) {
+    case 'complex':
+      for (let i = 0; i < 100; i++) {
+        state = appendHistoryRecord(state, [i % 4 + 1, i % 3 + 1], new PendingPair(1, 1));
+      }
+      break;
+  }
+
+  return state;
+}
+
 function createInitialState(config) {
   const queue = generateQueue(config);
   let state = Map({
@@ -402,6 +414,8 @@ export const reducer = (state, action, config) => {
       return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:
       return setPattern(state, action, config);
+    case DEBUG_SET_HISTORY:
+      return setHistory(state, action, config);
     default:
       return state;
   }

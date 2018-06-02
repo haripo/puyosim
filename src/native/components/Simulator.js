@@ -47,11 +47,6 @@ export default class Simulator extends Component {
         showAsAction: 'never'
       },
       {
-        title: t('history'),
-        id: 'history',
-        showAsAction: 'never'
-      },
-      {
         title: t('undo'),
         id: 'undo',
         showAsAction: 'never'

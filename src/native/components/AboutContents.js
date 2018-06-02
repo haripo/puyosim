@@ -26,6 +26,10 @@ export default class AboutContents extends Component {
     this.props.onSetSnakeSelected();
   }
 
+  handleComplexHistoryPressed() {
+    this.props.onSetComplexHistorySelected();
+  }
+
   render() {
     return (
       <View style={ styles.component }>
@@ -55,6 +59,9 @@ export default class AboutContents extends Component {
             <Button style={ styles.button }
                     onPress={ () => this.handleSnakePressed() }
                     title="DEBUG: snake"/>
+            <Button style={ styles.button }
+                    onPress={ () => this.handleComplexHistoryPressed() }
+                    title="DEBUG: complex history"/>
           </View>
         }
       </View>
@@ -74,6 +81,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   row: {
-    padding: 10
+    margin: 10
   }
 });

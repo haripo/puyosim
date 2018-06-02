@@ -2,9 +2,9 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { PanResponder, StyleSheet, View } from 'react-native';
+import { Animated, FlatList, PanResponder, ScrollView, StyleSheet, View } from 'react-native';
 import {
-  cardBackgroundColor, contentsPadding, themeLightColor,
+  cardBackgroundColor, contentsPadding, screenHeight, screenWidth, themeLightColor,
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Rect, } from 'react-native-svg';
@@ -13,7 +13,6 @@ import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
 
-
 export default class HistoryTree extends React.Component {
 
   // layout constants
@@ -21,7 +20,7 @@ export default class HistoryTree extends React.Component {
   graphY = 20;
   nodeWidth = 48;
   handWidth = 80;
-  nodePaddingX = 48;
+  nodePaddingX = 64;
   nodePaddingY = 48;
 
   handsX = 20;
@@ -31,27 +30,9 @@ export default class HistoryTree extends React.Component {
   constructor() {
     super();
     this.state = {
-      baseX: 0,
-      baseY: 0,
-      swiping: false,
-      lastPositionX: null,
-      lastPositionY: null
+      top: 0,
+      left: 0
     }
-  }
-
-  componentWillMount() {
-    this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => false,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onPanResponderGrant: ::this.handleResponderGrant,
-      onPanResponderMove: ::this.handleResponderMove,
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
-      onPanResponderRelease: ::this.handleResponderRelease,
-      onPanResponderTerminate: ::this.handleResponderTerminate,
-      onShouldBlockNativeResponder: (evt, gestureState) => true
-    });
   }
 
   handleNodePressed(historyIndex, e) {
@@ -59,52 +40,11 @@ export default class HistoryTree extends React.Component {
     this.props.onNodePressed(historyIndex);
   }
 
-  handleResponderGrant(evt, gestureState) {
-    this.setState({
-      swiping: true,
-      originalX: this.state.baseX,
-      originalY: this.state.baseY
-    });
-  }
-
-  handleResponderMove(evt, gestureState) {
-    this.requestAnimationFrame(() => { // TODO: これいる？
-      if (this.state.swiping) {
-        this.wrapperTreeView.setNativeProps({
-          style: {
-            marginLeft: this.state.originalX + gestureState.dx,
-            marginTop: this.state.originalY + gestureState.dy,
-          }
-        });
-        this.wrapperHandView.setNativeProps({
-          style: {
-            marginTop: this.state.originalY + gestureState.dy,
-          }
-        });
-      }
-    });
-  }
-
-  handleResponderRelease(evt, gestureState) {
-    this.setState({
-      swiping: false,
-      baseX: this.state.originalX + gestureState.dx,
-      baseY: this.state.originalY + gestureState.dy
-    });
-  }
-
-  handleResponderTerminate(evt, gestureState) {
-    this.setState({
-      swiping: false,
-      baseX: this.state.originalX + gestureState.dx,
-      baseY: this.state.originalY + gestureState.dy
-    });
-  }
-
   renderHand(hand, row) {
     const x = this.handsX;
     const y = this.handsY;
     const puyoSkin = 'puyoSkinDefault';
+
     return (
       <React.Fragment key={ row }>
         <SvgPuyo
@@ -141,7 +81,7 @@ export default class HistoryTree extends React.Component {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
-        key={ `${x}-${y}` }
+        key={ `${row}-${col}` }
         onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
@@ -153,9 +93,10 @@ export default class HistoryTree extends React.Component {
     const y1 = from.col * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
     const x2 = to.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y2 = to.col * this.nodePaddingY + this.graphY;
+
     return (
       <HistoryTreePath
-        key={ `${x1}-${y1}-${x2}-${y2}` }
+        key={ `${from.row}-${from.col}` }
         startX={ x1 }
         startY={ y1 }
         endX={ x2 }
@@ -176,27 +117,19 @@ export default class HistoryTree extends React.Component {
 
   render() {
     const { nodes, paths, hands, width, height } = this.props.historyTreeLayout;
+
     return (
       <View
         style={ styles.component }
-        { ...this._panResponder.panHandlers }
       >
-        <View
-          ref={ component => this.wrapperTreeView = component }
-          style={ styles.treeView }
+        <Svg
+          width={ screenWidth }
+          height={ screenHeight }
         >
+          { this.renderTree(nodes, paths) }
+        </Svg>
+        <View style={ styles.handView }>
           <Svg
-            width={ (width + 1) * this.nodePaddingX + this.graphX + 2 } // border の分をたす
-            height={ (height + 1) * this.nodePaddingY + this.graphY }
-          >
-            { this.renderTree(nodes, paths) }
-          </Svg>
-        </View>
-        <View
-          style={ styles.handView }
-        >
-          <Svg
-            ref={ component => this.wrapperHandView = component }
             width={ this.handWidth }
             height={ (height + 1) * this.nodePaddingY + this.graphY }
           >
