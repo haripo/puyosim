@@ -78,6 +78,7 @@ export default class Simulator extends Component {
                 isActive={ this.props.isActive }
                 canUndo={ this.props.canUndo }
                 canRedo={ this.props.canRedo }
+                shortcuts={ keyMap }
               />
             </View>
           </View>
