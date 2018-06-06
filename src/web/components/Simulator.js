@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   contents: {
     flex: 0,
