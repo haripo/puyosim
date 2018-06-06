@@ -8,6 +8,7 @@ import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
 import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
+import WebToolbar from './WebToolbar';
 
 export default class Simulator extends Component {
   constructor(props) {
@@ -37,6 +38,9 @@ export default class Simulator extends Component {
 
     return (
       <HotKeys keyMap={ keyMap } handlers={ keyHandlers }>
+        <View>
+          <WebToolbar/>
+        </View>
         <View style={ styles.container }>
           <View style={ styles.contents }>
             <View>
