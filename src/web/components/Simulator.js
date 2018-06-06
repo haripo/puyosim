@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   contents: {
     flex: 0,
@@ -115,6 +117,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   historyTree: {
-    flex: 1
+    flex: 0
   }
 });

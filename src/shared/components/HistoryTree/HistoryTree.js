@@ -2,9 +2,10 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { Animated, FlatList, PanResponder, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
-  cardBackgroundColor, contentsPadding, screenHeight, screenWidth, themeLightColor,
+  cardBackgroundColor, contentsPadding, screenHeight, screenWidth,
+  themeLightColor,
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Rect, } from 'react-native-svg';
@@ -81,7 +82,7 @@ export default class HistoryTree extends React.Component {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
-        key={ `${row}-${col}` }
+        key={ `${row}-${col}-${historyIndex}` }
         onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
@@ -161,7 +162,8 @@ const styles = StyleSheet.create({
     marginRight: contentsPadding,
     marginBottom: contentsPadding,
     overflow: 'scroll',
-    height: screenHeight
+    height: screenHeight - contentsPadding * 4,
+    width: screenWidth - contentsPadding * 2
   },
   treeView: {
     position: 'absolute'
