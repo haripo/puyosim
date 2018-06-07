@@ -15,6 +15,13 @@ export default class Simulator extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    // enable hotkeys
+    if (this.hotkeyElementRef) {
+      this.hotkeyElementRef.focus();
+    }
+  }
+
   render() {
     const keyMap = {
       'moveLeft': 'left',
@@ -37,7 +44,16 @@ export default class Simulator extends Component {
     };
 
     return (
-      <HotKeys keyMap={ keyMap } handlers={ keyHandlers }>
+      <HotKeys
+          keyMap={ keyMap }
+          handlers={ keyHandlers }
+          style={{ outline: '0' }}
+          focused>
+        {/* Focused on mounted to enable hotkeys */}
+        <div
+          ref={ c => this.hotkeyElementRef = c }
+          tabIndex={-1}
+          style={{outline: '0'}}>
         <View>
           <WebToolbar/>
         </View>
@@ -91,6 +107,7 @@ export default class Simulator extends Component {
             />
           </View>
         </View>
+        </div>
       </HotKeys>
     );
   }
@@ -102,14 +119,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    outline: '0'
   },
   contents: {
     flex: 0,
     justifyContent: 'center',
     alignItems: 'stretch',
     flexDirection: 'row',
-    width: simulatorWidth - contentsMargin
+    width: simulatorWidth - contentsMargin,
+    outline: '0'
   },
   side: {
     flex: 1,
@@ -123,5 +142,8 @@ const styles = StyleSheet.create({
   },
   historyTree: {
     flex: 0
+  },
+  hotkeyElement: {
+    borderWidth: 0
   }
 });

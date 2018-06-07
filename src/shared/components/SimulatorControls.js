@@ -12,7 +12,6 @@ import _ from 'lodash';
 export default class SimulatorControls extends PureComponent {
   render() {
     const shortcuts = _.mapValues(this.props.shortcuts || {},(shortcut) => `(${shortcut})`);
-    console.log(shortcuts);
 
     return (
       <View style={ { flexDirection: 'column' } }>
