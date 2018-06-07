@@ -10,6 +10,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 
 export default class SimulatorControls extends PureComponent {
+  renderShortcut(key) {
+    if (key) {
+      return (
+        <Text style={ styles.shortcut }>{ key }</Text>
+      )
+    }
+    return null;
+  }
+
   render() {
     const shortcuts = _.mapValues(this.props.shortcuts || {},(shortcut) => `(${shortcut})`);
 
@@ -23,7 +32,7 @@ export default class SimulatorControls extends PureComponent {
             onPress={ this.props.onUndoSelected }>
             <Icon name="undo" size={ 30 } color="#FFF"/>
             <Text style={ { color: '#FFF' } }>Undo</Text>
-            <Text style={ styles.shortcut }>{ shortcuts.undo }</Text>
+            { this.renderShortcut(shortcuts.undo) }
           </TouchableOpacity>
           <TouchableOpacity
             disabled={ !this.props.canRedo }
@@ -32,7 +41,7 @@ export default class SimulatorControls extends PureComponent {
             onPress={ this.props.onRedoSelected }>
             <Icon name="redo" size={ 30 } color="#FFF"/>
             <Text style={ { color: '#FFF' } }>Redo</Text>
-            <Text style={ styles.shortcut }>{ shortcuts.redo }</Text>
+            { this.renderShortcut(shortcuts.redo) }
           </TouchableOpacity>
         </View>
         <View style={ styles.buttonGroup }>
@@ -41,14 +50,14 @@ export default class SimulatorControls extends PureComponent {
             onPress={ this.props.onRotateLeftPressed }
             disabled={ !this.props.isActive }>
             <Icon name="rotate-left" size={ 30 } color="#FFF"/>
-            <Text style={ styles.shortcut }>{ shortcuts.rotateLeft }</Text>
+            { this.renderShortcut(shortcuts.rotateLeft) }
           </TouchableOpacity>
           <TouchableOpacity
             style={ styles.controllerButton }
             onPress={ this.props.onRotateRightPressed }
             disabled={ !this.props.isActive }>
             <Icon name="rotate-right" size={ 30 } color="#FFF"/>
-            <Text style={ styles.shortcut }>{ shortcuts.rotateRight }</Text>
+            { this.renderShortcut(shortcuts.rotateRight) }
           </TouchableOpacity>
         </View>
         <View style={ styles.buttons }>
@@ -110,6 +119,6 @@ const styles = StyleSheet.create({
   },
   shortcut: {
     color : 'white',
-    fontSize: '80%'
+    fontSize: 12
   }
 });
