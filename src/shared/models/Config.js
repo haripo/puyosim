@@ -145,7 +145,7 @@ export const configItems = {
 };
 
 // default values
-const recordType = {
+export const defaultValues = {
   numColors: '4',
   colorBalance: 'balancedIn128',
   initialColors: 'noLimit',
@@ -158,7 +158,7 @@ const recordType = {
   puyoSkin: 'puyoSkinDefault'
 };
 
-export default class Config extends Record(recordType) {
+export default class Config extends Record(defaultValues) {
   constructor(loadedConfig) {
     super(loadedConfig); // overwrite default values
   }

@@ -23,6 +23,18 @@ import { Client } from 'bugsnag-react-native';
 Client.releaseStage = 'development';
 Client.notifyReleaseStages = ['production'];
 
+import { Sentry } from 'react-native-sentry';
+import Raven from "raven-js";
+import createRavenMiddleware from "raven-for-redux";
+
+Sentry.config('https://d03216589dad4ea9ac7a2431b901ff11:772e66c1594b42969f68d524e683a3b1@sentry.io/1222354').install();
+
+ravenMiddleware = createRavenMiddleware(Raven, {
+  // stateTransformer: state => {
+  //   return JSON.stringify(state, null, 2)
+  // }
+});
+
 const stateTransformer = state => state.toJS();
 
 const logger = createLogger({
@@ -32,7 +44,7 @@ const logger = createLogger({
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware/*, logger*/)));
+  composeWithDevTools(applyMiddleware(sagaMiddleware, ravenMiddleware/*, logger*/)));
 
 sagaMiddleware.run(sagas);
 
