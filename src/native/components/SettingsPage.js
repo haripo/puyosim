@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import t from '../../shared/service/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
+import { defaultValues } from '../../shared/models/Config';
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {
@@ -65,7 +66,12 @@ export default class SettingsPage extends Component {
 
   renderDirectoryItem(parent, item) {
     const { config } = this.props;
-    const selectedChild = evalItem(item.children, config).find(c => c.value === config[item.key]);
+    let selectedChild = evalItem(item.children, config).find(c => c.value === config[item.key]);
+
+    if (selectedChild === undefined) {
+      // バージョン更新によって保存データの構造が変化したなどの理由で見つからない
+      selectedChild = evalItem(item.children, config).find(c => c.value === defaultValues[item.key]);
+    }
 
     return (
       <SettingsList.Item
