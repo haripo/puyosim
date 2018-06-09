@@ -99,5 +99,5 @@ module.exports = {
     contentBase: path.resolve(appDirectory, 'web/'),
     publicPath: '/build/'
   },
-  devtool: 'inline-source-map'
+  devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map'
 };

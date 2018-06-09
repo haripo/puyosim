@@ -2,9 +2,10 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { Animated, FlatList, PanResponder, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
-  cardBackgroundColor, contentsPadding, screenHeight, screenWidth, themeLightColor,
+  cardBackgroundColor, contentsPadding, screenHeight, screenWidth,
+  themeLightColor,
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Rect, } from 'react-native-svg';
@@ -81,7 +82,7 @@ export default class HistoryTree extends React.Component {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
-        key={ `${row}-${col}` }
+        key={ `${row}-${col}-${historyIndex}` }
         onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
@@ -118,26 +119,29 @@ export default class HistoryTree extends React.Component {
   render() {
     const { nodes, paths, hands, width, height } = this.props.historyTreeLayout;
 
+    const svgWidth = (width + 1) * this.nodePaddingX + this.graphX;
+    const svgHeight = (height + 1) * this.nodePaddingY + this.graphY;
+
     return (
       <View
         style={ styles.component }
       >
-        <Svg
-          width={ screenWidth }
-          height={ screenHeight }
-        >
-          { this.renderTree(nodes, paths) }
-        </Svg>
-        <View style={ styles.handView }>
-          <Svg
-            width={ this.handWidth }
-            height={ (height + 1) * this.nodePaddingY + this.graphY }
-          >
+        { /*<!--
+          SVG elements has "overflow: hidden" implicitly.
+          To ignore this, wrap Svg by View and specifying its size.
+        */ }
+        <View width={ svgWidth } height={ svgHeight }>
+          <Svg width={ svgWidth } height={ svgHeight }>
+            { this.renderTree(nodes, paths) }
+          </Svg>
+        </View>
+        <View style={ styles.handView } height={ svgHeight }>
+          <Svg width={ this.handWidth } height={ svgHeight }>
             <Rect
               x={ 0 }
               y={ 0 }
               width={ this.handWidth }
-              height={ (height + 1) * this.nodePaddingY + this.graphY }
+              height={ svgHeight }
               fill={ themeLightColor }
             />
             { hands.map((hand, i) => this.renderHand(hand, i)) }
@@ -156,7 +160,10 @@ const styles = StyleSheet.create({
     backgroundColor: cardBackgroundColor,
     marginTop: contentsPadding,
     marginRight: contentsPadding,
-    marginBottom: contentsPadding
+    marginBottom: contentsPadding,
+    overflow: 'scroll',
+    height: screenHeight - contentsPadding * 4,
+    width: screenWidth - contentsPadding * 2
   },
   treeView: {
     position: 'absolute'
@@ -164,7 +171,6 @@ const styles = StyleSheet.create({
   handView: {
     position: 'absolute',
     borderColor: '#D1CDCB',
-    borderRightWidth: 2,
-    height: '100%'
+    borderRightWidth: 2
   }
 });

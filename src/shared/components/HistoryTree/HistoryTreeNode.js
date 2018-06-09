@@ -49,9 +49,9 @@ export default class HistoryTreeNode extends React.Component {
     };
 
     return (
-      <G { ...events }>
+      <G { ...events } >
         <Rect
-          onPress={ onPress }
+          { ...events }
           x={ x }
           y={ y }
           width={ nodeWidth }

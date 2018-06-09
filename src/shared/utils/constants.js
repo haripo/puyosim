@@ -7,6 +7,7 @@ const windowSize = Dimensions.get('window');
 
 const androidStatusBar = 24;
 const androidToolBar = 56;
+export const webToolbarSize = 64;
 
 let screen = {
   width: windowSize.width,
@@ -14,7 +15,7 @@ let screen = {
 };
 
 if (isWeb) {
-  screen.height = Math.max(600, windowSize.height);
+  screen.height = Math.max(600, windowSize.height) - webToolbarSize;
   screen.width = screen.height * 0.65;
 }
 
