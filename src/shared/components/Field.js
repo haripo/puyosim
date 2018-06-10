@@ -1,6 +1,5 @@
 /**
  * Base component
- * @flow
  */
 
 import React, { Component } from 'react';

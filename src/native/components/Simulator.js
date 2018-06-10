@@ -1,6 +1,5 @@
 /**
  * Base component
- * @flow
  */
 
 import * as _ from 'lodash';
