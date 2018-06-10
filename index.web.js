@@ -1,17 +1,12 @@
-import "babel-polyfill";
-
-import _ from 'lodash';
+import 'babel-polyfill';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { AppRegistry } from 'react-native';
-import { applyMiddleware, createStore } from 'redux';
-import { createLogger } from 'redux-logger';
-import createSagaMiddleware from 'redux-saga';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 import Simulator from './src/web/containers/SimulatorContainer';
-import reducer from './src/shared/reducers';
+import { getStore } from './src/shared/store/store';
 import sagas from './src/shared/sagas';
+import reducers from './src/shared/reducers'
 import './src/web/misc/icon';
 
 class App extends Component {
@@ -24,20 +19,9 @@ class App extends Component {
   }
 }
 
-const stateTransformer = state => state.toJS();
-
-const logger = createLogger({
-  stateTransformer
-});
-
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-  reducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware/*, logger*/)));
-
-sagaMiddleware.run(sagas);
-
 AppRegistry.registerComponent('App', () => App);
+
+const store = getStore(reducers, sagas);
 
 setTimeout(() => {
   AppRegistry.runApplication('App', {
