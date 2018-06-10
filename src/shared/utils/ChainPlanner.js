@@ -1,4 +1,4 @@
-import { calcChainStepScore } from '../utils/scoreCalculator';
+import { calcChainStepScore } from './scoreCalculator';
 
 type Stack = Array<Array<number>>;
 

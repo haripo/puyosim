@@ -22,9 +22,9 @@ import FieldUtils from '../utils/FieldUtils';
 import { loadLastState } from '../../shared/utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
-import { createChainPlan, getDropPlan, getVanishPlan } from '../models/ChainPlanner';
-import { generateQueue } from '../models/QueueGenerator';
-import { snake, kenny } from '../service/chainPatterns';
+import { createChainPlan, getDropPlan, getVanishPlan } from '../utils/ChainPlanner';
+import { generateQueue } from '../utils/QueueGenerator';
+import { snake, kenny } from '../utils/chainPatterns';
 
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';

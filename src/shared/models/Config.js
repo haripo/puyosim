@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
-import t from '../../shared/service/i18n';
-import { handsetPatterns } from '../service/handsetPattern';
+import t from '../utils/i18n';
+import { handsetPatterns } from '../utils/handsetPattern';
 
 function generateChildren(config, patterns, allowNotSpecified) {
   const numColors = parseInt(config['numColors']);

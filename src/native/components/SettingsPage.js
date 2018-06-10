@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import SettingsList from 'react-native-settings-list';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import t from '../../shared/service/i18n';
+import t from '../../shared/utils/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { defaultValues } from '../../shared/models/Config';
 

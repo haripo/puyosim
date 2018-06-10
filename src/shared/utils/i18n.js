@@ -1,4 +1,4 @@
-import I18n from 'specific/service/i18n';
+import I18n from 'specific/utils/i18n';
 import { handsetPatterns } from './handsetPattern';
 import _ from 'lodash';
 
