@@ -8,6 +8,10 @@ const StackStateSchema = {
   }
 };
 
+interface StackState {
+  history: string;
+}
+
 const configSchema = {
   name: 'Config',
   primaryKey: 'key',
@@ -16,6 +20,11 @@ const configSchema = {
     value: { type: 'string' }
   }
 };
+
+interface Config {
+  key: string;
+  value: string;
+}
 
 let realm = new Realm({
   schema: [
@@ -37,7 +46,7 @@ export function saveLastState(history) {
 }
 
 export function loadLastState() {
-  const json = realm.objects('LastState');
+  const json = realm.objects<StackState>('LastState');
   if (json[0]) {
     return JSON.parse(json[0].history);
   } else {
@@ -46,12 +55,12 @@ export function loadLastState() {
 }
 
 export function loadConfig() {
-  const config = realm.objects('Config');
+  const config = realm.objects<Config>('Config');
   return _.fromPairs(config.map(c => [c.key, c.value]));
 }
 
-export function saveConfig(key, value) {
-  const config = realm.objects('Config').filtered(`key = "${key}"`);
+export function saveConfig(key: string, value: string) {
+  const config = realm.objects<Config>('Config').filtered(`key = "${key}"`);
   value = value.toString();
 
   realm.write(() => {
