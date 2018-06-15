@@ -1,4 +1,3 @@
-import I18n from 'specific/service/i18n';
 import { handsetPatterns } from './handsetPattern';
 import _ from 'lodash';
 
@@ -88,4 +87,4 @@ const translations = {
   }
 };
 
-export default I18n(translations);
+export default translations;

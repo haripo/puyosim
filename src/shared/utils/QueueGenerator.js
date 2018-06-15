@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { handsetStrToColors } from '../service/handsetPattern';
+import { handsetStrToColors } from './handsetPattern';
 
 function swapColors(queue: Array<number>, a: number, b: number) {
   const buf = queue[a];

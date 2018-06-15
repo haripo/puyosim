@@ -1,5 +1,5 @@
 import { SAVE_CONFIG } from '../actions/actions';
-import * as storage from 'specific/utils/StorageService';
+import * as storage from '../utils/StorageService';
 import Config from '../models/Config';
 
 function setValue(state, key, value) {
