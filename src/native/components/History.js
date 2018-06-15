@@ -13,7 +13,7 @@ import {
   themeColor,
   themeLightColor
 } from '../../shared/utils/constants';
-import t from '../../shared/service/i18n';
+import t from '../../shared/utils/i18n';
 import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 
 export default class Simulator extends Component {
