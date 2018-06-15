@@ -19,7 +19,7 @@ import {
 import PendingPair from '../models/PendingPair';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
-import { loadLastState } from '../../shared/utils/StorageService';
+import { loadLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, getDropPlan, getVanishPlan } from '../utils/ChainPlanner';
