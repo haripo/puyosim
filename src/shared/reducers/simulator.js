@@ -25,7 +25,11 @@ import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, getDropPlan, getVanishPlan } from '../utils/ChainPlanner';
 import { generateQueue } from '../utils/QueueGenerator';
 import { snake, kenny } from '../utils/chainPatterns';
-import { HistoryRecord, appendHistoryRecord, makeHistoryRecord } from '../models/History';
+import {
+  createHistoryRecord,
+  appendHistoryRecord,
+  createInitialHistoryRecord
+} from '../models/History';
 
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
@@ -72,7 +76,25 @@ function putNextPair(state, action) {
     s.update('numHands', n => n + 1);
     s.update('pendingPair', pair => pair.resetPosition());
     s.set('isDropOperated', true);
-    return appendHistoryRecord(s, hand, move);
+
+    const record = createHistoryRecord(
+      move.toJS(),
+      hand.toJS(),
+      s.get('numHands'),
+      s.get('stack').toJS(),
+      s.get('chain'),
+      s.get('score'),
+      s.get('chainScore'));
+    const history = s.get('history').toJS();
+    let result = appendHistoryRecord({
+      version: 0,
+      records: history,
+      currentIndex: s.get('historyIndex')
+    }, record);
+
+    return s
+      .set('history', Immutable.fromJS(result.records))
+      .set('historyIndex', result.currentIndex);
   });
 }
 
@@ -284,7 +306,10 @@ function createInitialState(config) {
     history: List(),
     historyIndex: 0
   });
-  return state.update('history', history => history.push(makeHistoryRecord(state, null, null, null)));
+  return state.update('history', history => {
+    const stack = state.get('stack');
+    return history.push(Immutable.fromJS(createInitialHistoryRecord(stack)));
+  });
 }
 
 function loadOrCreateInitialState(config) {
