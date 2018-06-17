@@ -181,10 +181,11 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     let index = historyIndexBase;
     while (index) {
       const p = history.get(index);
-      indexMap[p.prev] = index;
-      index = p.prev;
+      indexMap[p.get('prev')] = index;
+      index = p.get('prev');
     }
   }
+  console.log(indexMap);
 
   // calc graph layout
   const calcLayout = (historyIndex, depth, parentRow) => {
@@ -193,7 +194,7 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
       return;
     }
 
-    return record.next.map((nextIndex, index) => {
+    return record.get('next').map((nextIndex, index) => {
       if (index > 0) {
         rightmostRow += 1;
       }
@@ -227,9 +228,9 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     const searchHands = (index, depth) => {
       const record = history.get(index);
       if (depth > 0) {
-        h.set(depth - 1, record.pair);
+        h.set(depth - 1, record.get('pair'));
       }
-      record.next.map(nextIndex => {
+      record.get('next').map(nextIndex => {
         searchHands(nextIndex, depth + 1);
       });
     };
