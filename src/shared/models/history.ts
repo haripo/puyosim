@@ -87,3 +87,11 @@ export function appendHistoryRecord(
   history.currentIndex = nextIndex;
   return history;
 }
+
+export function serialize(history: History): string {
+  return JSON.stringify(history);
+}
+
+export function deserialize(serialized: string): History {
+  return JSON.parse(serialized);
+}
