@@ -9,7 +9,7 @@ export default class FieldUtils {
    * @param col col size
    * @returns {Array.<Array.<Number>>} pairQueue object
    */
-  static createField(row: Number, col: Number): Array<Array<Number>> {
+  static createField(row: number, col: number): number[][] {
     return Array(row).fill(null).map(() => Array(col).fill(0));
   }
 
