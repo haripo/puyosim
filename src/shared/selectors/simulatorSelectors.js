@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import Immutable, { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 import { getFirstCol, getSecondCol } from '../models/move';
@@ -68,31 +68,43 @@ export function getPendingPair(state) {
 
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
 
-function _getVanishingPuyos(vanishings) {
+function _getVanishingPuyos(_vanishings) {
 
-  let field = FieldUtils.createField(fieldRows, fieldCols);
-  vanishings.forEach(puyo => {
-    field[puyo.get('row')][puyo.get('col')] = puyo.get('color');
-  });
+  const vanishings = _vanishings.toJS();
+  let field = createField(fieldRows, fieldCols);
+
+  for (let plan of vanishings) {
+    for (let puyo of plan.puyos) {
+      field[puyo.row][puyo.col] = plan.color;
+    }
+  }
 
   const hasConnection = (row, col, color) => {
-    return FieldUtils.isValidPosition({ row, col }) &&
-      field[row][col] === color;
+    return isValidPosition({ row, col }) && field[row][col] === color;
   };
 
-  return vanishings.map(puyo => {
-    const color = puyo.get('color');
-    const row = puyo.get('row');
-    const col = puyo.get('col');
-    const connections = {
-      top: hasConnection(row - 1, col, color),
-      bottom: hasConnection(row + 1, col, color),
-      left: hasConnection(row, col - 1, color),
-      right: hasConnection(row, col + 1, color)
-    };
+  let result = [];
 
-    return puyo.set('connections', Map(connections));
-  });
+  for (let plan of vanishings) {
+    for (let puyo of plan.puyos) {
+      const row = puyo.row;
+      const col = puyo.col;
+      const color = plan.color;
+      result.push({
+        row: row,
+        col: col,
+        color: plan.color,
+        connections: {
+          top: hasConnection(row - 1, col, color),
+          bottom: hasConnection(row + 1, col, color),
+          left: hasConnection(row, col - 1, color),
+          right: hasConnection(row, col + 1, color)
+        }
+      });
+    }
+  }
+
+  return Immutable.fromJS(result);
 }
 
 
