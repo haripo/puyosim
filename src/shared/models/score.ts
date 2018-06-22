@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { VanishingPlan } from "./chainPlanner";
 
 const chainBonusTable = [
   0,
@@ -41,7 +42,7 @@ const colorBonusTable = [
   24
 ];
 
-function getConnectionBonus(vanished) {
+function getConnectionBonus(vanished: VanishingPlan[]): number {
   return _.sum(vanished
     .map(c => {
       const connection = c.puyos.length;
@@ -49,17 +50,17 @@ function getConnectionBonus(vanished) {
     }));
 }
 
-function getColorBonus(vanished) {
+function getColorBonus(vanished: VanishingPlan[]): number {
   const colorCount = _.uniq(vanished.map(c => c.color)).length;
   return colorBonusTable[colorCount - 1];
 }
 
-function getChainBonus(chainCount) {
+function getChainBonus(chainCount: number): number {
   return chainBonusTable[chainCount - 1];
 }
 
-export function calcChainStepScore(chainCount, connections) {
-  const vanished = connections.filter(c => c.puyos.length >= 4);
+export function calcChainStepScore(chainCount: number, vanishingPlans: VanishingPlan[]): number {
+  const vanished = vanishingPlans.filter(c => c.puyos.length >= 4);
   const score = 10 * vanished.reduce((acc, c) => acc + c.puyos.length, 0) * (
     getConnectionBonus(vanished) +
     getColorBonus(vanished) +
