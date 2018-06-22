@@ -16,7 +16,7 @@ import {
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
-import PendingPair from '../models/PendingPair';
+import { rotateLeft, rotateRight, moveLeft, moveRight, getDefaultMove } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import FieldUtils from '../utils/FieldUtils';
 import { loadLastState } from '../utils/StorageService';
@@ -36,22 +36,20 @@ import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 
 
-// reducer functions
-
 function rotateHighlightsLeft(state, action) {
-  return state.update('pendingPair', pair => pair.rotateLeft());
+  return state.update('pendingPair', pair => Immutable.fromJS(rotateLeft(pair.toJS())));
 }
 
 function rotateHighlightsRight(state, action) {
-  return state.update('pendingPair', pair => pair.rotateRight());
+  return state.update('pendingPair', pair => Immutable.fromJS(rotateRight(pair.toJS())));
 }
 
 function moveHighlightsLeft(state, action) {
-  return state.update('pendingPair', pair => pair.moveLeft());
+  return state.update('pendingPair', pair => Immutable.fromJS(moveLeft(pair.toJS())));
 }
 
 function moveHighlightsRight(state, action) {
-  return state.update('pendingPair', pair => pair.moveRight());
+  return state.update('pendingPair', pair => Immutable.fromJS(moveRight(pair.toJS())));
 }
 
 /**
@@ -74,7 +72,7 @@ function putNextPair(state, action) {
     }
 
     s.update('numHands', n => n + 1);
-    s.update('pendingPair', pair => pair.resetPosition());
+    s.update('pendingPair', pair => Immutable.fromJS(getDefaultMove()));
     s.set('isDropOperated', true);
 
     const record = createHistoryRecord(
@@ -281,8 +279,9 @@ function setPattern(state, action, config) {
 function setHistory(state, action, config) {
   switch (action.name) {
     case 'complex':
+      console.warn('currently disabled');
       for (let i = 0; i < 100; i++) {
-        state = appendHistoryRecord(state, [i % 4 + 1, i % 3 + 1], new PendingPair(1, 1));
+        //state = appendHistoryRecord(state, [i % 4 + 1, i % 3 + 1], new PendingPair(1, 1));
       }
       break;
   }
@@ -300,7 +299,7 @@ function createInitialState(config) {
     chainScore: 0,
     score: 0,
     isDropOperated: false,
-    pendingPair: new PendingPair(queue[0][0], queue[0][1]),
+    pendingPair: Immutable.fromJS(getDefaultMove()),
     droppingPuyos: List(),
     vanishingPuyos: List(),
     history: List(),
