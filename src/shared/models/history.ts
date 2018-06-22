@@ -1,9 +1,10 @@
-type Pair = number[];
-type Rotation = 'top' | 'right' | 'bottom' | 'left';
-type Move = { col: number, rotation: Rotation };
-type Stack = number[][];
+import { Stack } from './stack';
 
-type HistoryRecord = {
+export type Pair = number[];
+export type Rotation = 'top' | 'right' | 'bottom' | 'left';
+export type Move = { col: number, rotation: Rotation };
+
+export type HistoryRecord = {
   move: Move,
   pair: Pair,
   numHands: number,
@@ -16,7 +17,7 @@ type HistoryRecord = {
   defaultNext: number | null
 }
 
-type History = {
+export type History = {
   version: number;
   records: Array<HistoryRecord>;
   currentIndex: number;

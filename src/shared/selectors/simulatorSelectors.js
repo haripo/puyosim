@@ -1,8 +1,9 @@
-import FieldUtils from '../utils/FieldUtils';
 import { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 import { getFirstCol, getSecondCol } from '../models/move';
+import { createField, isValidPosition } from '../models/stack';
+import { VanishingPlan } from '../models/chainPlanner';
 
 export function wrapCache(f, ...args) {
   let argsCache = {};
@@ -103,7 +104,7 @@ function _getStack(stack, droppings) {
   };
 
   const hasConnection = (row, col, color) => {
-    return FieldUtils.isValidPosition({ row, col }) &&
+    return isValidPosition({ row, col }) &&
       0 < row &&
       stack.getIn([row, col]) === color &&
       color !== 0 &&
@@ -168,7 +169,7 @@ function _getDropPositions(_pair, stack, queue, numHands, state) {
     }
   }
 
-  return [drop1, drop2].filter(d => FieldUtils.isValidPosition(d));
+  return [drop1, drop2].filter(d => isValidPosition(d));
 }
 
 export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');

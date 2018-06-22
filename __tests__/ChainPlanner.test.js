@@ -3,7 +3,7 @@ import {
   createChainPlan,
   getDropPlan,
   getVanishPlan
-} from '../src/shared/utils/ChainPlanner';
+} from '../src/shared/models/ChainPlanner';
 
 describe('getDropPlan', () => {
   test('generate drop plans', () => {
