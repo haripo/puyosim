@@ -1,17 +1,22 @@
-import { calcChainStepScore } from './scoreCalculator';
+import { calcChainStepScore } from '../utils/scoreCalculator';
+import { Stack, Position, Color } from './stack';
 
-type Stack = Array<Array<number>>;
-
-type DroppingPlan = {
+export type DroppingPlan = {
   row: number,
   col: number,
-  color: number,
+  color: Color,
   distance: number
 }
 
-type VanishingPlan = {
-  puyos: Array<{ row: number, col: number }>,
-  color: number
+export type VanishingPlan = {
+  puyos: Position[],
+  color: Color
+}
+
+export type ChainPlan = {
+  plan: (DroppingPlan | VanishingPlan)[],
+  score: number,
+  chain: number
 }
 
 /**
@@ -21,7 +26,7 @@ type VanishingPlan = {
  * @param cols stack size
  * @returns {Array} plans
  */
-export function getDropPlan(stack: Stack, rows: number, cols: number): Array<DroppingPlan> {
+export function getDropPlan(stack: Stack, rows: number, cols: number): DroppingPlan[] {
   let plan = [];
   for (let i = 0; i < cols; i++) {
     for (let j = rows - 1; 0 < j; j--) {
@@ -55,7 +60,7 @@ export function getDropPlan(stack: Stack, rows: number, cols: number): Array<Dro
  * @param cols
  * @returns {Array}
  */
-export function getVanishPlan(stack: Stack, rows: number, cols: number): Array<VanishingPlan> {
+export function getVanishPlan(stack: Stack, rows: number, cols: number): VanishingPlan[] {
   const connections = getConnections(stack, rows, cols).filter(c => c.puyos.length >= 4);
 
   if (connections.length === 0) {
@@ -98,7 +103,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
       if (stack[row][col] === 0) continue;
       if (connectionIds[row][col] === 0) {
         id++;
-        search(row, col, stack[row][col], id);
+        search(row, col, stack[row][col]);
 
         connectionIds[row][col] = id;
         result[id - 1] = {
@@ -114,7 +119,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
   return result;
 }
 
-export function createChainPlan(stack: Stack, rows: number, cols: number) {
+export function createChainPlan(stack: Stack, rows: number, cols: number): ChainPlan {
   let result = {
     plan: [],
     score: 0,

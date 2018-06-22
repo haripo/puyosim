@@ -18,11 +18,10 @@ import {
 } from '../actions/actions';
 import { rotateLeft, rotateRight, moveLeft, moveRight, getDefaultMove } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import FieldUtils from '../utils/FieldUtils';
 import { loadLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../utils/scoreCalculator';
 import { getDropPositions } from '../selectors/simulatorSelectors';
-import { createChainPlan, getDropPlan, getVanishPlan } from '../utils/ChainPlanner';
+import { createChainPlan, getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../utils/QueueGenerator';
 import { snake, kenny } from '../utils/chainPatterns';
 import {
@@ -34,6 +33,7 @@ import {
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
+import { applyDropPlans, createField } from '../models/stack';
 
 
 function rotateHighlightsLeft(state, action) {
@@ -133,19 +133,12 @@ function vanishPuyos(state, action) {
 }
 
 function applyGravity(state) {
-  // toJS が重いかも？
-  // stack をより軽い形 (stringとか) で保持した方がいいかもしれない
   const stack = state.get('stack').toJS();
   const plans = getDropPlan(stack, fieldRows, fieldCols);
 
-  return state.withMutations(s => {
-    //s.set('stack', Immutable.fromJS(stack));
-    for (let plan of plans) {
-      s.setIn(['stack', plan.row, plan.col], plan.color);
-      s.setIn(['stack', plan.row - plan.distance, plan.col], 0);
-    }
-    s.set('droppingPuyos', Immutable.fromJS(plans));
-  });
+  return state
+    .set('stack', Immutable.fromJS(applyDropPlans(stack, plans)))
+    .set('droppingPuyos', Immutable.fromJS(plans));
 }
 
 function finishDroppingAnimations(state) {
@@ -294,7 +287,7 @@ function createInitialState(config) {
   let state = Map({
     queue: Immutable.fromJS(queue),
     numHands: 0,
-    stack: Immutable.fromJS(FieldUtils.createField(fieldRows, fieldCols)),
+    stack: Immutable.fromJS(createField(fieldRows, fieldCols)),
     chain: 0,
     chainScore: 0,
     score: 0,
