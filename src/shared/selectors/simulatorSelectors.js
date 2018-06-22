@@ -2,6 +2,7 @@ import FieldUtils from '../utils/FieldUtils';
 import { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
+import { getFirstCol, getSecondCol } from '../models/move';
 
 export function wrapCache(f, ...args) {
   let argsCache = {};
@@ -48,7 +49,7 @@ export function getGhost(state) {
 }
 
 export function getPendingPair(state) {
-  const pair = state.get('pendingPair');
+  const pair = state.get('pendingPair').toJS(); // as Move
   const hand = getCurrentHand(state);
 
   let secondRow = 1;
@@ -59,8 +60,8 @@ export function getPendingPair(state) {
   }
 
   return [
-    { row: 1, col: pair.firstCol, color: hand.get(0) },
-    { row: secondRow, col: pair.secondCol, color: hand.get(1) }
+    { row: 1, col: getFirstCol(pair), color: hand.get(0) },
+    { row: secondRow, col: getSecondCol(pair), color: hand.get(1) }
   ];
 }
 
@@ -143,8 +144,11 @@ export const getDoubleNextHand = wrapCache(
 
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
 
-function _getDropPositions(pair, stack, queue, numHands, state) {
+function _getDropPositions(_pair, stack, queue, numHands, state) {
   const hand = getCurrentHand(state);
+  const pair = _pair.toJS();
+  const firstCol = getFirstCol(pair);
+  const secondCol = getSecondCol(pair);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
@@ -154,8 +158,8 @@ function _getDropPositions(pair, stack, queue, numHands, state) {
     return i;
   };
 
-  const drop1 = { row: getDropRow(pair.firstCol), col: pair.firstCol, color: hand.get(0) };
-  const drop2 = { row: getDropRow(pair.secondCol), col: pair.secondCol, color: hand.get(1) };
+  const drop1 = { row: getDropRow(firstCol), col: firstCol, color: hand.get(0) };
+  const drop2 = { row: getDropRow(secondCol), col: secondCol, color: hand.get(1) };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
     if (pair.rotation === 'bottom') {
       drop1.row -= 1;
@@ -185,7 +189,6 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
       index = p.get('prev');
     }
   }
-  console.log(indexMap);
 
   // calc graph layout
   const calcLayout = (historyIndex, depth, parentRow) => {
