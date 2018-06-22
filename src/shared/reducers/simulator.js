@@ -19,7 +19,7 @@ import {
 import { rotateLeft, rotateRight, moveLeft, moveRight, getDefaultMove } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { loadLastState } from '../utils/StorageService';
-import { calcChainStepScore } from '../utils/scoreCalculator';
+import { calcChainStepScore } from '../models/score';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, getDropPlan, getVanishPlan } from '../models/ChainPlanner';
 import { generateQueue } from '../utils/QueueGenerator';

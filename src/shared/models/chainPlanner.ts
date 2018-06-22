@@ -1,4 +1,4 @@
-import { calcChainStepScore } from '../utils/scoreCalculator';
+import { calcChainStepScore } from './score';
 import { Stack, Position, Color } from './stack';
 
 export type DroppingPlan = {
