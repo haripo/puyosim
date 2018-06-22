@@ -33,7 +33,7 @@ import {
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
-import { applyDropPlans, createField } from '../models/stack';
+import { applyDropPlans, applyVanishPlans, createField } from '../models/stack';
 
 
 function rotateHighlightsLeft(state, action) {
@@ -117,12 +117,8 @@ function vanishPuyos(state, action) {
 
   return state.withMutations(s => {
     // update vanishingPuyos and stack
-    for (let plan of plans) {
-      for (let puyo of plan.puyos) {
-        s.update('vanishingPuyos', p => p.push(Immutable.fromJS({ ...puyo, color: plan.color })));
-        s.setIn(['stack', puyo.row, puyo.col], 0);
-      }
-    }
+    s.set('stack', Immutable.fromJS(applyVanishPlans(stack, plans)));
+    s.set('vanishingPuyos', Immutable.fromJS(plans));
 
     // update scores
     const additionalScore = calcChainStepScore(s.get('chain') + 1, plans);
