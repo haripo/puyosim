@@ -158,6 +158,7 @@ export const getDoubleNextHand = wrapCache(
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
 
 function _getDropPositions(_pair, stack, queue, numHands, state) {
+  // TODO: use model/stack.ts 's getDropPositions
   const hand = getCurrentHand(state);
   const pair = _pair.toJS();
   const firstCol = getFirstCol(pair);

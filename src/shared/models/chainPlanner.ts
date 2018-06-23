@@ -14,7 +14,7 @@ export type VanishingPlan = {
 }
 
 export type ChainPlan = {
-  plan: (DroppingPlan | VanishingPlan)[],
+  plan: (DroppingPlan | VanishingPlan)[][],
   score: number,
   chain: number
 }
@@ -27,7 +27,7 @@ export type ChainPlan = {
  * @returns {Array} plans
  */
 export function getDropPlan(stack: Stack, rows: number, cols: number): DroppingPlan[] {
-  let plan = [];
+  let plan: DroppingPlan[] = [];
   for (let i = 0; i < cols; i++) {
     for (let j = rows - 1; 0 < j; j--) {
       if (stack[j][i] !== 0) {
@@ -44,7 +44,7 @@ export function getDropPlan(stack: Stack, rows: number, cols: number): DroppingP
         plan.push({
           row: to,
           col: i,
-          color: stack[to][i],
+          color: stack[to][i] as Color,
           distance: to - from
         });
       }
@@ -67,7 +67,7 @@ export function getVanishPlan(stack: Stack, rows: number, cols: number): Vanishi
     return [];
   }
 
-  let plan = [];
+  let plan: VanishingPlan[] = [];
 
   connections.forEach(connection => {
     plan.push(connection);
@@ -95,7 +95,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
     }
   };
 
-  let result = [];
+  let result: { color: Color, puyos: Position[] }[] = [];
   let id = 0;
 
   for (let row = 0; row < rows; row++) {
@@ -107,7 +107,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
 
         connectionIds[row][col] = id;
         result[id - 1] = {
-          color: stack[row][col],
+          color: stack[row][col] as Color,
           puyos: [{ row, col }]
         };
       } else {
@@ -121,7 +121,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
 
 export function createChainPlan(stack: Stack, rows: number, cols: number): ChainPlan {
   let result = {
-    plan: [],
+    plan: [] as (VanishingPlan | DroppingPlan)[][],
     score: 0,
     chain: 0
   };

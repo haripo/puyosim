@@ -1,12 +1,9 @@
-import { Stack } from './stack';
-
-export type Pair = number[];
-export type Rotation = 'top' | 'right' | 'bottom' | 'left';
-export type Move = { col: number, rotation: Rotation };
+import { Pair, Stack } from './stack';
+import { Move } from "./move";
 
 export type HistoryRecord = {
-  move: Move,
-  pair: Pair,
+  move: Move | null,
+  pair: Pair | null,
   numHands: number,
   stack: Stack,
   score: number,
@@ -23,7 +20,10 @@ export type History = {
   currentIndex: number;
 }
 
-function isEqualMove(a: Move, b: Move) {
+function isEqualMove(a: Move | null, b: Move | null) {
+  if (a === null || b === null) {
+    return false;
+  }
   return a.col === b.col && a.rotation === b.rotation;
 }
 
