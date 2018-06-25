@@ -75,7 +75,7 @@ function putNextPair(state: SimulatorState, action) {
   const hand = state.queue[numHands];
   const move = state.pendingPair;
 
-  const positions = getDropPositions(state);
+  const positions = getDropPositions(Immutable.fromJS(state));
 
   if (positions.length === 0) {
     return state;
@@ -198,16 +198,17 @@ function redoField(state: SimulatorState, action) {
   return revert(state, next);
 }
 
-function moveHistory(state, action) {
+function moveHistory(state: SimulatorState, action): SimulatorState {
   const next = action.index;
 
   state = revert(state, next);
 
   // update defaultNext path
-  let index = state.historyIndex;
+  let index: number | null = state.historyIndex;
   while (index !== null) {
     let next = index;
     index = state.history[index].prev;
+    if (index === null) break;
     state.history[index].defaultNext = next;
   }
 
