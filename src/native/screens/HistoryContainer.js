@@ -12,14 +12,12 @@ import toJS from '../../shared/utils/toJS';
 import { getHistoryTreeLayout } from '../../shared/selectors/simulatorSelectors';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
-
   return {
-    current: simulator.getIn(['queue', 0]),
-    history: simulator.get('history'),
-    historyTreeLayout: getHistoryTreeLayout(simulator),
-    historyIndex: simulator.get('historyIndex'),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    current: state.simulator.queue[0],
+    history: state.simulator.history,
+    historyTreeLayout: getHistoryTreeLayout(state.simulator),
+    historyIndex: state.simulator.historyIndex,
+    puyoSkin: state.config.puyoSkin
   };
 };
 

@@ -5,10 +5,9 @@ import toJS from '../utils/toJS';
 import { getVanishingPuyos } from '../selectors/simulatorSelectors';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
   return {
-    vanishings: getVanishingPuyos(simulator),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    vanishings: getVanishingPuyos(state.simulator),
+    puyoSkin: state.config.puyoSkin
   };
 };
 

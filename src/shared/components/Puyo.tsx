@@ -126,6 +126,7 @@ export default class Puyo extends Component<Props, State> {
   }
 
   getImage() {
+    console.log(this.props.puyo, this.props.skin);
     return puyoImages[this.props.skin][this.props.puyo];
   }
 

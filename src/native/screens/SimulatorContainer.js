@@ -19,17 +19,15 @@ import {
 import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
-
   return {
-    stack: getStack(simulator),
-    current: simulator.getIn(['queue', 0]),
-    ghosts: getGhost(simulator),
-    pendingPair: getPendingPair(simulator),
+    stack: getStack(state.simulator),
+    current: state.simulator.queue[0],
+    ghosts: getGhost(state.simulator),
+    pendingPair: getPendingPair(state.simulator),
     isActive: isActive(state),
-    puyoSkin: state.getIn(['config', 'puyoSkin']),
-    canUndo: canUndo(simulator),
-    canRedo: canRedo(simulator)
+    puyoSkin: state.config.puyoSkin,
+    canUndo: canUndo(state.simulator),
+    canRedo: canRedo(state.simulator)
   };
 };
 

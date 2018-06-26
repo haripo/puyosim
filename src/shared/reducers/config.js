@@ -1,6 +1,6 @@
 import { SAVE_CONFIG } from '../actions/actions';
 import * as storage from '../utils/StorageService';
-import Config from '../models/Config';
+import getInitialState from '../models/Config';
 
 function setValue(state, key, value) {
   storage.saveConfig(key, value);
@@ -18,9 +18,9 @@ function saveConfig(state, { key, value }) {
   return setValue(state, key, value);
 }
 
-export const initialState = new Config(storage.loadConfig());
+export const initialState = getInitialState(storage.loadConfig());
 
-console.info('Loaded config: ', initialState.toJS());
+console.info('Loaded config: ', initialState);
 
 export const reducer = (state, action) => {
   switch (action.type) {
