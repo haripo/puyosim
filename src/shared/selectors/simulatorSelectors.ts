@@ -1,16 +1,15 @@
-import Immutable, { Map, List } from 'immutable';
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 import { getFirstCol, getSecondCol } from '../models/move';
 import { createField, isValidPosition } from '../models/stack';
-import { VanishingPlan } from '../models/chainPlanner';
+import { SimulatorState } from '../reducers/simulator';
 
-export function wrapCache(f, ...args) {
+export function wrapCache(f, ...args): any {
   let argsCache = {};
   let resultCache = null;
 
   return state => {
-    const isNotUpdated = _.every(args, arg => state.get(arg) === argsCache[arg]);
+    const isNotUpdated = _.every(args, arg => state[arg] === argsCache[arg]);
 
     if (isNotUpdated && resultCache !== null) {
       // use cache
@@ -18,39 +17,37 @@ export function wrapCache(f, ...args) {
     }
 
     for (let arg of args) {
-      argsCache[arg] = state.get(arg);
+      argsCache[arg] = state[arg];
     }
+
+    console.log(argsCache, args, state);
 
     resultCache = f(..._.values(_.pick(argsCache, args)), state);
     return resultCache;
   }
 }
 
-export function isActive(state) {
+export function isActive(state): boolean {
   return !(
-    state.get('simulator').get('droppingPuyos').count() > 0 ||
-    state.get('simulator').get('vanishingPuyos').count() > 0
+    state.simulator.droppingPuyos.length > 0 ||
+    state.simulator.vanishingPuyos.length > 0
   );
 }
 
-export function canUndo(state) {
-  const history = state.get('history');
-  const historyIndex = state.get('historyIndex');
-  return history.get(historyIndex).get('prev') !== null;
+export function canUndo(state: SimulatorState): boolean {
+  return state.history[state.historyIndex].prev !== null;
 }
 
-export function canRedo(state) {
-  const history = state.get('history');
-  const historyIndex = state.get('historyIndex');
-  return history.get(historyIndex).get('next').size > 0;
+export function canRedo(state: SimulatorState): boolean {
+  return state.history[state.historyIndex].next.length > 0;
 }
 
-export function getGhost(state) {
+export function getGhost(state: SimulatorState) {
   return getDropPositions(state);
 }
 
-export function getPendingPair(state) {
-  const pair = state.get('pendingPair').toJS(); // as Move
+export function getPendingPair(state: SimulatorState) {
+  const pair = state.pendingPair; // as Move
   const hand = getCurrentHand(state);
 
   let secondRow = 1;
@@ -61,16 +58,14 @@ export function getPendingPair(state) {
   }
 
   return [
-    { row: 1, col: getFirstCol(pair), color: hand.get(0) },
-    { row: secondRow, col: getSecondCol(pair), color: hand.get(1) }
+    { row: 1, col: getFirstCol(pair), color: hand[0] },
+    { row: secondRow, col: getSecondCol(pair), color: hand[1] }
   ];
 }
 
 export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
 
-function _getVanishingPuyos(_vanishings) {
-
-  const vanishings = _vanishings.toJS();
+function _getVanishingPuyos(vanishings) {
   let field = createField(fieldRows, fieldCols);
 
   for (let plan of vanishings) {
@@ -83,7 +78,7 @@ function _getVanishingPuyos(_vanishings) {
     return isValidPosition({ row, col }) && field[row][col] === color;
   };
 
-  let result = [];
+  let result: any[] = [];
 
   for (let plan of vanishings) {
     for (let puyo of plan.puyos) {
@@ -104,7 +99,7 @@ function _getVanishingPuyos(_vanishings) {
     }
   }
 
-  return Immutable.fromJS(result);
+  return result;
 }
 
 
@@ -112,68 +107,67 @@ export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
 
 function _getStack(stack, droppings) {
   const isDropping = (row, col) => {
-    return !!droppings.find(p => p.get('row') === row && p.get('col') === col);
+    return !!droppings.find(p => p.row === row && p.col === col);
   };
 
   const hasConnection = (row, col, color) => {
     return isValidPosition({ row, col }) &&
       0 < row &&
-      stack.getIn([row, col]) === color &&
+      stack[row][col] === color &&
       color !== 0 &&
       !isDropping(row, col);
   };
 
   return stack.map((cols, row) => {
     return cols.map((color, col) => {
-      let connections = {
+      let connections: any = {
         top: hasConnection(row - 1, col, color),
         bottom: hasConnection(row + 1, col, color),
         left: hasConnection(row, col - 1, color),
         right: hasConnection(row, col + 1, color)
       };
       if (row === 0) connections = {}; // puyos on row = 0 have no connection
-      return Map({
+      return {
         row: row,
         col: col,
         color: color,
-        connections: Map(connections),
+        connections: connections,
         isDropping: isDropping(row, col)
-      });
+      };
     });
   });
 }
 
 export const getCurrentHand = wrapCache(
-  (queue, numHands) => queue.get(numHands % queue.size),
+  (queue, numHands) => queue[numHands % queue.length],
   'queue', 'numHands');
 
 export const getNextHand = wrapCache(
-  (queue, numHands) => queue.get((numHands + 1) % queue.size),
+  (queue, numHands) => queue[(numHands + 1) % queue.length],
   'queue', 'numHands');
 
 export const getDoubleNextHand = wrapCache(
-  (queue, numHands) => queue.get((numHands + 2) % queue.size),
+  (queue, numHands) => queue[(numHands + 2) % queue.length],
   'queue', 'numHands');
 
 export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
 
-function _getDropPositions(_pair, stack, queue, numHands, state) {
+function _getDropPositions(pair, stack, queue, numHands, state): any[] {
   // TODO: use model/stack.ts 's getDropPositions
-  const hand = getCurrentHand(state);
-  const pair = _pair.toJS();
+  const hand: any = getCurrentHand(state);
   const firstCol = getFirstCol(pair);
   const secondCol = getSecondCol(pair);
 
   const getDropRow = (col) => {
     let i = fieldRows - 1;
-    while (stack.get(i) && stack.getIn([i, col]) !== 0) {
+    while (stack[i] && stack[i][col] !== 0) {
       i--;
     }
     return i;
   };
 
-  const drop1 = { row: getDropRow(firstCol), col: firstCol, color: hand.get(0) };
-  const drop2 = { row: getDropRow(secondCol), col: secondCol, color: hand.get(1) };
+  const drop1 = { row: getDropRow(firstCol), col: firstCol, color: hand[0] };
+  const drop2 = { row: getDropRow(secondCol), col: secondCol, color: hand[1] };
   if (drop1.col === drop2.col && drop1.row === drop2.row) {
     if (pair.rotation === 'bottom') {
       drop1.row -= 1;
@@ -188,8 +182,8 @@ function _getDropPositions(_pair, stack, queue, numHands, state) {
 export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
 
 function _getHistoryTreeLayout(history, historyIndexBase) {
-  let nodes = List();
-  let paths = List();
+  let nodes: any[] = [];
+  let paths: any[] = [];
   let rightmostRow = 0;
   let deepestColumn = 0;
 
@@ -199,66 +193,65 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     let index = historyIndexBase;
     while (index) {
       const p = history.get(index);
-      indexMap[p.get('prev')] = index;
-      index = p.get('prev');
+      indexMap[p.prev] = index;
+      index = p.prev;
     }
   }
 
   // calc graph layout
   const calcLayout = (historyIndex, depth, parentRow) => {
-    const record = history.get(historyIndex);
+    const record = history[historyIndex];
     if (!record) {
       return;
     }
 
-    return record.get('next').map((nextIndex, index) => {
+    return record.next.map((nextIndex, index) => {
       if (index > 0) {
         rightmostRow += 1;
       }
       const isCurrentPath = indexMap[historyIndex] === nextIndex;
 
       if (historyIndex > 0) {
-        paths = paths.push(Map({
-          from: Map({ row: parentRow, col: depth - 1 }),
-          to: Map({ row: rightmostRow, col: depth }),
+        paths.push({
+          from: { row: parentRow, col: depth - 1 },
+          to: { row: rightmostRow, col: depth },
           isCurrentPath
-        }));
+        });
       }
       if (depth > deepestColumn) {
         deepestColumn = depth;
       }
-      nodes = nodes.push(Map({
+      nodes.push({
         row: rightmostRow,
         col: depth,
-        move: history.getIn([nextIndex, 'move']),
+        move: history[nextIndex].move,
         isCurrentNode: nextIndex === historyIndexBase,
         historyIndex: nextIndex
-      }));
+      });
       calcLayout(nextIndex, depth + 1, rightmostRow);
     });
   };
   calcLayout(0, 0, 0);
 
   // extract hands from history
-  let hands = List();
-  hands = hands.withMutations(h => {
-    const searchHands = (index, depth) => {
-      const record = history.get(index);
-      if (depth > 0) {
-        h.set(depth - 1, record.get('pair'));
-      }
-      record.get('next').map(nextIndex => {
-        searchHands(nextIndex, depth + 1);
-      });
-    };
-    searchHands(0, 0);
-  });
+  let hands: any[] = [];
 
-  return Map({
+  const searchHands = (index, depth) => {
+    const record = history[index];
+    if (depth > 0) {
+      hands[depth - 1] = record.pair;
+    }
+    record.next.map(nextIndex => {
+      searchHands(nextIndex, depth + 1);
+    });
+  };
+  searchHands(0, 0);
+
+  return {
     nodes,
     paths,
     hands,
     width: rightmostRow,
     height: deepestColumn
-  });
+  };
 }

@@ -1,4 +1,3 @@
-import Immutable, { List, Map, Record } from 'immutable';
 import {
   APPLY_GRAVITY, DEBUG_SET_HISTORY,
   DEBUG_SET_PATTERN,
@@ -35,7 +34,7 @@ import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 import { applyDropPlans, applyVanishPlans, createField, Stack } from '../models/stack';
 
-type SimulatorState = {
+export type SimulatorState = {
   queue: number[][],
   numHands: number,
   stack: Stack,
@@ -75,7 +74,7 @@ function putNextPair(state: SimulatorState, action) {
   const hand = state.queue[numHands];
   const move = state.pendingPair;
 
-  const positions = getDropPositions(Immutable.fromJS(state));
+  const positions: any[] = getDropPositions(state);
 
   if (positions.length === 0) {
     return state;
@@ -292,12 +291,14 @@ function createInitialState(config): SimulatorState {
   };
 }
 
+
 function loadOrCreateInitialState(config) {
   let record = loadLastState();
+  return createInitialState(config);
   if (record) {
     // revert last state
     let state = createInitialState(config);
-    return revertFromRecord(state, Immutable.fromJS(record))
+    return revertFromRecord(state, record)
   } else {
     return createInitialState(config);
   }
@@ -307,7 +308,8 @@ export function getInitialState(config) {
   return loadOrCreateInitialState(config);
 }
 
-export const _reducer = (state, action, config) => {
+export const reducer = (state, action, config) => {
+  console.log("REDUCER", JSON.parse(JSON.stringify(state)), action, JSON.parse(JSON.stringify(config)));
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
@@ -348,8 +350,4 @@ export const _reducer = (state, action, config) => {
     default:
       return state;
   }
-};
-
-export const reducer = (state, action, config) => {
-  return Immutable.fromJS(_reducer(state.toJS(), action, config.toJS()));
 };

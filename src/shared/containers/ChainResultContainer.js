@@ -3,11 +3,10 @@ import ChainResult from '../components/ChainResult';
 import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
   return {
-    score: simulator.get('score'),
-    chain: simulator.get('chain'),
-    chainScore: simulator.get('chainScore')
+    score: state.simulator.score,
+    chain: state.simulator.chain,
+    chainScore: state.simulator.chainScore
   };
 };
 

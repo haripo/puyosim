@@ -6,7 +6,7 @@ import { configItems } from '../../shared/models/Config';
 
 const mapStateToProps = (state) => {
   return {
-    config: state.get('config'),
+    config: state.config,
     configItems: configItems
   };
 };
