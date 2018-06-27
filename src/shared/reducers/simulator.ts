@@ -295,13 +295,13 @@ function createInitialState(config): SimulatorState {
 function loadOrCreateInitialState(config) {
   let record = loadLastState();
   return createInitialState(config);
-  if (record) {
-    // revert last state
-    let state = createInitialState(config);
-    return revertFromRecord(state, record)
-  } else {
-    return createInitialState(config);
-  }
+  // if (record) {
+  //   // revert last state
+  //   let state = createInitialState(config);
+  //   return revertFromRecord(state, record)
+  // } else {
+  //   return createInitialState(config);
+  // }
 }
 
 export function getInitialState(config) {
@@ -309,7 +309,6 @@ export function getInitialState(config) {
 }
 
 export const reducer = (state, action, config) => {
-  console.log("REDUCER", JSON.parse(JSON.stringify(state)), action, JSON.parse(JSON.stringify(config)));
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
