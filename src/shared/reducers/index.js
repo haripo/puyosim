@@ -1,5 +1,6 @@
 import * as simulator from './simulator';
 import * as config from './config';
+import produce from 'immer';
 
 let initialState = {
   simulator: simulator.getInitialState(config.initialState),
@@ -7,7 +8,8 @@ let initialState = {
 };
 
 export default function(state = initialState, action) {
-  simulator.reducer(state.simulator, action, state.config);
-  config.reducer(state.config, action);
-  return state;
+  return produce(state, _state => {
+    simulator.reducer(_state.simulator, action, _state.config);
+    config.reducer(_state.config, action);
+  });
 };

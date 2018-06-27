@@ -20,8 +20,6 @@ export function wrapCache(f, ...args): any {
       argsCache[arg] = state[arg];
     }
 
-    console.log(argsCache, args, state);
-
     resultCache = f(..._.values(_.pick(argsCache, args)), state);
     return resultCache;
   }
@@ -192,7 +190,7 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   {
     let index = historyIndexBase;
     while (index) {
-      const p = history.get(index);
+      const p = history[index];
       indexMap[p.prev] = index;
       index = p.prev;
     }
