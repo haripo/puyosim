@@ -9,7 +9,8 @@ let initialState = {
 
 export default function(state = initialState, action) {
   return produce(state, _state => {
-    simulator.reducer(_state.simulator, action, _state.config);
-    config.reducer(_state.config, action);
+    _state.simulator = simulator.reducer(_state.simulator, action, _state.config);
+    _state.config = config.reducer(_state.config, action);
+    return _state;
   });
 };
