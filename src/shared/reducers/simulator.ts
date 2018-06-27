@@ -20,14 +20,14 @@ import { fieldCols, fieldRows } from '../utils/constants';
 import { loadLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../models/score';
 import { getDropPositions } from '../selectors/simulatorSelectors';
-import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/ChainPlanner';
+import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
 import { generateQueue } from '../utils/QueueGenerator';
 import { snake, kenny } from '../utils/chainPatterns';
 import {
   createHistoryRecord,
   appendHistoryRecord,
   createInitialHistoryRecord, History, HistoryRecord
-} from '../models/History';
+} from '../models/history';
 
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
