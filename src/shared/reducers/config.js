@@ -1,19 +1,20 @@
 import { SAVE_CONFIG } from '../actions/actions';
 import * as storage from '../utils/StorageService';
-import getInitialState from '../models/Config';
+import getInitialState from '../models/config';
 
 function setValue(state, key, value) {
   storage.saveConfig(key, value);
-  return state.setValue(key, value);
+  state[key] = value;
+  return state;
 }
 
 function saveConfig(state, { key, value }) {
   if (key === 'numColors') {
     // 初手固定の設定をリセットする
-    state = setValue(state, 'initialColors', 'noLimit');
-    state = setValue(state, 'specify1stHand', 'AA');
-    state = setValue(state, 'specify2ndHand', 'notSpecified');
-    state = setValue(state, 'specify3rdHand', 'notSpecified');
+    state.initialColors = 'noLimit';
+    state.specify1stHand = 'AA';
+    state.specify2ndHand = 'notSpecified';
+    state.specify3rdHand = 'notSpecified';
   }
   return setValue(state, key, value);
 }

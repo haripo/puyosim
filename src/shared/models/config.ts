@@ -158,7 +158,11 @@ export const defaultValues = {
 };
 
 export default function getInitialState(loadedConfig) {
-  return defaultValues;
+  let value = defaultValues;
+  for (let item of loadedConfig) {
+    value[item] = loadedConfig[item];
+  }
+  return value;
 }
 
 // export default class Config {

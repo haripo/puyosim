@@ -1,13 +1,16 @@
 import {
-  APPLY_GRAVITY, DEBUG_SET_HISTORY,
+  APPLY_GRAVITY,
+  DEBUG_SET_HISTORY,
   DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
   MOVE_HIGHLIGHTS_LEFT,
-  MOVE_HIGHLIGHTS_RIGHT, MOVE_HISTORY,
+  MOVE_HIGHLIGHTS_RIGHT,
+  MOVE_HISTORY,
   OPEN_TWITTER_SHARE,
-  PUT_NEXT_PAIR, REDO_FIELD,
+  PUT_NEXT_PAIR,
+  REDO_FIELD,
   RESET_FIELD,
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
@@ -15,9 +18,15 @@ import {
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
-import { rotateLeft, rotateRight, moveLeft, moveRight, getDefaultMove, Move } from '../models/move';
+import {
+  rotateLeft,
+  rotateRight,
+  moveLeft,
+  moveRight,
+  getDefaultMove,
+  Move
+} from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import { loadLastState } from '../utils/StorageService';
 import { calcChainStepScore } from '../models/score';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
@@ -293,15 +302,8 @@ function createInitialState(config): SimulatorState {
 
 
 function loadOrCreateInitialState(config) {
-  let record = loadLastState();
+  // TODO : load last state
   return createInitialState(config);
-  // if (record) {
-  //   // revert last state
-  //   let state = createInitialState(config);
-  //   return revertFromRecord(state, record)
-  // } else {
-  //   return createInitialState(config);
-  // }
 }
 
 export function getInitialState(config) {
