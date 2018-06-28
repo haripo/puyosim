@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import t from '../../shared/utils/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
-import { defaultValues } from '../../shared/models/Config';
+import { defaultValues } from '../../shared/models/config';
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {
