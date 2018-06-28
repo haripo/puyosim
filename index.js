@@ -14,12 +14,6 @@ import reducers from './src/shared/reducers'
 import { Client } from 'bugsnag-react-native';
 import { Sentry } from 'react-native-sentry';
 
-global.Symbol = require('core-js/es6/symbol');
-require('core-js/fn/symbol/iterator');
-require('core-js/fn/map');
-require('core-js/fn/set');
-require('core-js/fn/array/find');
-
 Client.releaseStage = 'development';
 Client.notifyReleaseStages = ['production'];
 
