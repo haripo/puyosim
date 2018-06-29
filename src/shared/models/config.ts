@@ -159,27 +159,10 @@ export const defaultValues = {
 
 export default function getInitialState(loadedConfig) {
   let value = defaultValues;
-  for (let item of loadedConfig) {
-    value[item] = loadedConfig[item];
+  for (let item in loadedConfig) {
+    if (loadedConfig.hasOwnProperty(item)) {
+      value[item] = loadedConfig[item];
+    }
   }
   return value;
 }
-
-// export default class Config {
-//   constructor(loadedConfig) {
-//     this.config = defaultValues;
-//     //super(loadedConfig); // overwrite default values
-//     //console.log(loadedConfig, defaultValues)
-//     //for (item of loadedConfig) {
-//     //  this.config[item] = loadedConfig[item];
-//     //}
-//   }
-//
-//   setValue(key, value) {
-//     return this.config[key] = value;
-//   }
-//
-//   getValue(key, value) {
-//     return this.config[key];
-//   }
-// }
