@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { handsetStrToColors } from './handsetPattern';
+import { handsetStrToColors } from '../utils/handsetPattern';
 
-function swapColors(queue: Array<number>, a: number, b: number) {
+function swapColors(queue: number[], a: number, b: number) {
   const buf = queue[a];
   queue[a] = queue[b] || 1;
   queue[b] = buf || 1;
@@ -15,7 +15,7 @@ function swapColors(queue: Array<number>, a: number, b: number) {
  * @param limitLength 制限範囲のぷよ数
  * @returns {Array<number>} modified queue
  */
-function rearrangeQueue(queue: Array<number>, tabooColors: Set<number>, limitLength) {
+function rearrangeQueue(queue: number[], tabooColors: Set<number>, limitLength) {
   for (let i = 0; i < limitLength; i++) {
     if (tabooColors.has(queue[i])) {
       const target = _.findLastIndex(queue, color => !tabooColors.has(color));
@@ -32,7 +32,7 @@ function rearrangeQueue(queue: Array<number>, tabooColors: Set<number>, limitLen
 
 /// 初手配色制限
 export function limitInitialColors(
-  queue: Array<number>,
+  queue: number[],
   numColorLimit: number,
   numLimitPairs: number) {
 
@@ -53,14 +53,14 @@ export function limitInitialColors(
  */
 export function generateQueue(configs) {
   const numColors = parseInt(configs.numColors);
-  let queue = [];
+  let queue: number[] = [];
   if (configs.colorBalance === '128') {
     for (let i = 0; i < 128 * 2; i++) {
       queue.push(Math.floor(Math.random() * numColors) + 1);
     }
   } else {
     for (let i = 0; i < 8; i++) {
-      let subQueue = [];
+      let subQueue: number[] = [];
       for (let j = 0; j < 16 * 2; j++) {
         subQueue.push(j % numColors + 1);
       }
