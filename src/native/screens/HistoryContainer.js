@@ -8,7 +8,6 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import History from '../components/History';
-import toJS from '../../shared/utils/toJS';
 import { getHistoryTreeLayout } from '../../shared/selectors/simulatorSelectors';
 
 const mapStateToProps = (state) => {
@@ -42,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(History));
+)(History);

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { finishDroppingAnimations, vanishPuyos } from '../actions/actions';
 import DroppingPuyos from '../components/DroppingPuyos';
-import toJS from '../utils/toJS';
 
 const mapStateToProps = (state) => {
   return {
@@ -22,4 +21,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(DroppingPuyos));
+)(DroppingPuyos);

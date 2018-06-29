@@ -19,7 +19,6 @@ import {
   getGhost, getHistoryTreeLayout, getPendingPair, getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
-import toJS from '../../shared/utils/toJS';
 
 const mapStateToProps = (state) => {
   return {
@@ -79,4 +78,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(Simulator));
+)(Simulator);
