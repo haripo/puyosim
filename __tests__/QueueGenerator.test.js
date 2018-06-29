@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { limitInitialColors } from '../src/shared/utils/QueueGenerator';
+import { limitInitialColors } from '../src/shared/models/queue';
 
 describe('limitInitialColors', () => {
   test('do nothing', () => {

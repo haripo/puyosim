@@ -30,7 +30,7 @@ import { fieldCols, fieldRows } from '../utils/constants';
 import { calcChainStepScore } from '../models/score';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
-import { generateQueue } from '../utils/QueueGenerator';
+import { generateQueue } from '../models/queue';
 import { snake, kenny } from '../utils/chainPatterns';
 import {
   createHistoryRecord,
