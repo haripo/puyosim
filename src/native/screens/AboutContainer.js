@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import AboutContent from '../components/AboutContents';
-import toJS from '../../shared/utils/toJS';
 import { debugSetPattern, debugSetHistory } from '../../shared/actions/actions';
 
 const mapStateToProps = (state) => {
@@ -25,4 +24,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(AboutContent));
+)(AboutContent);
