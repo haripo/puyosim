@@ -4,7 +4,6 @@
 import React from 'react';
 import { isWeb, themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
-import _ from 'lodash';
 import compareWith from '../../utils/compareWith';
 
 const arrowImages = {

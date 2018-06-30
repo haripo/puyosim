@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import NextWindow from '../components/NextWindow';
-import toJS from '../utils/toJS';
 import { getDoubleNextHand, getNextHand } from '../selectors/simulatorSelectors';
 
 const mapStateToProps = (state) => {
   return {
-    next: getNextHand(state.get('simulator')),
-    doubleNext: getDoubleNextHand(state.get('simulator')),
-    puyoSkin: state.getIn(['config', 'puyoSkin']),
-    numVisibleNext: state.getIn(['config', 'numVisibleNext']),
+    next: getNextHand(state.simulator),
+    doubleNext: getDoubleNextHand(state.simulator),
+    puyoSkin: state.config.puyoSkin,
+    numVisibleNext: state.config.numVisibleNext,
   };
 };
 
@@ -19,4 +18,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(NextWindow));
+)(NextWindow);

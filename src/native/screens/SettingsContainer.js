@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import { saveConfig } from '../../shared/actions/actions';
 import SettingsPage from '../components/SettingsPage';
-import toJS from '../../shared/utils/toJS';
-import { configItems } from '../../shared/models/Config';
+import { configItems } from '../../shared/models/config';
 
 const mapStateToProps = (state) => {
   return {
-    config: state.get('config'),
+    config: state.config,
     configItems: configItems
   };
 };
@@ -22,4 +21,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(SettingsPage));
+)(SettingsPage);
