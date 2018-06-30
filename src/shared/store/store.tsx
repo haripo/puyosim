@@ -16,7 +16,7 @@ function getRavenMiddleware() {
 }
 
 function getLoggerMiddleware() {
-  const stateTransformer = state => state.toJS();
+  const stateTransformer = state => state;
   return createLogger({
     stateTransformer
   });

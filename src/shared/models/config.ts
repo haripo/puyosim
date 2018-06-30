@@ -1,4 +1,3 @@
-import { Record } from 'immutable';
 import t from '../utils/i18n';
 import { handsetPatterns } from '../utils/handsetPattern';
 
@@ -158,16 +157,12 @@ export const defaultValues = {
   puyoSkin: 'puyoSkinDefault'
 };
 
-export default class Config extends Record(defaultValues) {
-  constructor(loadedConfig) {
-    super(loadedConfig); // overwrite default values
+export default function getInitialState(loadedConfig) {
+  let value = defaultValues;
+  for (let item in loadedConfig) {
+    if (loadedConfig.hasOwnProperty(item)) {
+      value[item] = loadedConfig[item];
+    }
   }
-
-  setValue(key, value) {
-    return this.set(key, value)
-  }
-
-  getValue(key, value) {
-    return this.get(key);
-  }
+  return value;
 }

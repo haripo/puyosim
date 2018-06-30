@@ -97,7 +97,7 @@ export default class HistoryTree extends React.Component {
 
     return (
       <HistoryTreePath
-        key={ `${from.row}-${from.col}` }
+        key={ `${from.row}-${from.col}-${to.row}-${to.col}` }
         startX={ x1 }
         startY={ y1 }
         endX={ x2 }

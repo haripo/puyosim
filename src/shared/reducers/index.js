@@ -1,14 +1,16 @@
-import Immutable from 'immutable';
 import * as simulator from './simulator';
 import * as config from './config';
+import produce from 'immer';
 
-let initialState = Immutable.fromJS({
+let initialState = {
   simulator: simulator.getInitialState(config.initialState),
   config: config.initialState
-});
+};
 
 export default function(state = initialState, action) {
-  return state
-    .update('simulator', s => simulator.reducer(s, action, state.get('config')))
-    .update('config', s => config.reducer(s, action));
+  return produce(state, _state => {
+    _state.simulator = simulator.reducer(_state.simulator, action, _state.config);
+    _state.config = config.reducer(_state.config, action);
+    return _state;
+  });
 };
