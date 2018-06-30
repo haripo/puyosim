@@ -29,6 +29,7 @@ export default class SimulatorControls extends PureComponent {
             disabled={ !this.props.canUndo }
             style={ styles.controllerButton }
             activeOpacity={ this.props.canUndo ? 0.7 : 1 }
+            onClick={ this.props.onUndoSelected }
             onPress={ this.props.onUndoSelected }>
             <Icon name="undo" size={ 30 } color="#FFF"/>
             <Text style={ { color: '#FFF' } }>Undo</Text>
@@ -38,6 +39,7 @@ export default class SimulatorControls extends PureComponent {
             disabled={ !this.props.canRedo }
             style={ styles.controllerButton }
             activeOpacity={ this.props.canRedo ? 0.7 : 1 }
+            onClick={ this.props.onRedoSelected }
             onPress={ this.props.onRedoSelected }>
             <Icon name="redo" size={ 30 } color="#FFF"/>
             <Text style={ { color: '#FFF' } }>Redo</Text>
@@ -47,6 +49,7 @@ export default class SimulatorControls extends PureComponent {
         <View style={ styles.buttonGroup }>
           <TouchableOpacity
             style={ styles.controllerButton }
+            onClick={ this.props.onRotateLeftPressed }
             onPress={ this.props.onRotateLeftPressed }
             disabled={ !this.props.isActive }>
             <Icon name="rotate-left" size={ 30 } color="#FFF"/>
@@ -54,6 +57,7 @@ export default class SimulatorControls extends PureComponent {
           </TouchableOpacity>
           <TouchableOpacity
             style={ styles.controllerButton }
+            onClick={ this.props.onRotateRightPressed }
             onPress={ this.props.onRotateRightPressed }
             disabled={ !this.props.isActive }>
             <Icon name="rotate-right" size={ 30 } color="#FFF"/>
@@ -64,12 +68,14 @@ export default class SimulatorControls extends PureComponent {
           <View style={ styles.buttonGroup }>
             <TouchableOpacity
               style={ styles.controllerButton }
+              onClick={ this.props.onMoveLeftPressed }
               onPress={ this.props.onMoveLeftPressed }
               disabled={ !this.props.isActive }>
               <Icon name="arrow-back" size={ 30 } color="#FFF"/>
             </TouchableOpacity>
             <TouchableOpacity
               style={ styles.controllerButton }
+              onClick={ this.props.onMoveRightPressed }
               onPress={ this.props.onMoveRightPressed }
               disabled={ !this.props.isActive }>
               <Icon name="arrow-forward" size={ 30 } color="#FFF"/>
@@ -77,6 +83,7 @@ export default class SimulatorControls extends PureComponent {
           </View>
           <TouchableOpacity
             style={ styles.controllerFullWidthButton }
+            onClick={ this.props.onDropPressed }
             onPress={ this.props.onDropPressed }
             disabled={ !this.props.isActive }>
             <Icon name="arrow-downward" size={ 30 } color="#FFF"/>
