@@ -16,7 +16,10 @@ import Simulator from '../components/Simulator';
 import {
   canRedo,
   canUndo,
-  getGhost, getHistoryTreeLayout, getPendingPair, getStack,
+  getGhost,
+  getHistoryTreeLayout,
+  getPendingPair,
+  getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 
