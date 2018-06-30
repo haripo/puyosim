@@ -16,13 +16,13 @@ export let handsetPatterns = [
   ]
 ];
 
-export function handsetStrToColors(pattern: string): Array<number> {
-  let result = [];
+export function handsetStrToColors(pattern: string): number[] {
+  let result: number[] = [];
   for (let i = 0; i < pattern.length; i++) {
     if (pattern[i] === ' ') {
       continue;
     }
-    result.push(pattern[i].charCodeAt() - 'A'.charCodeAt() + 1);
+    result.push(pattern[i].charCodeAt(0) - 'A'.charCodeAt(0) + 1);
   }
   return result;
 }
