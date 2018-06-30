@@ -31,11 +31,16 @@ import { calcChainStepScore } from '../models/score';
 import { getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
-import { snake, kenny } from '../utils/chainPatterns';
+import {
+  setPatternByName,
+  setRandomHistory
+} from '../models/debug';
 import {
   createHistoryRecord,
   appendHistoryRecord,
-  createInitialHistoryRecord, History, HistoryRecord
+  createInitialHistoryRecord,
+  History,
+  HistoryRecord
 } from '../models/history';
 
 // TODO: ここで react-native を import しない
@@ -248,36 +253,20 @@ function openTwitterShare(state: SimulatorState, action) {
   return state;
 }
 
-function setPattern(state, action, config) {
-  // let pattern = null;
-  //
-  // switch (action.name) {
-  //   case 'kenny':
-  //     pattern = kenny;
-  //     break;
-  //   case 'snake':
-  //     pattern = snake;
-  //     break;
-  // }
-  //
-  // state = createInitialState(config);
-  // for (let i = 0; i < fieldRows * fieldCols; i++) {
-  //   state = state.setIn(['stack', i / 6, i % 6], pattern(i));
-  // }
-
+function setPattern(state: SimulatorState, action) {
+  state.stack = setPatternByName(state.stack, action.name);
   return state;
 }
 
-function setHistory(state, action, config) {
-  // switch (action.name) {
-  //   case 'complex':
-  //     console.warn('currently disabled');
-  //     for (let i = 0; i < 100; i++) {
-  //       //state = appendHistoryRecord(state, [i % 4 + 1, i % 3 + 1], new PendingPair(1, 1));
-  //     }
-  //     break;
-  // }
-
+function setHistory(state: SimulatorState, action) {
+  const history: History = {
+    records: state.history,
+    currentIndex: state.historyIndex,
+    version: 0
+  };
+  const result = setRandomHistory(history, state.stack);
+  state.history = result.records;
+  state.historyIndex = result.currentIndex;
   return state;
 }
 
@@ -345,9 +334,9 @@ export const reducer = (state, action, config) => {
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:
-      return setPattern(state, action, config);
+      return setPattern(state, action);
     case DEBUG_SET_HISTORY:
-      return setHistory(state, action, config);
+      return setHistory(state, action);
     default:
       return state;
   }
