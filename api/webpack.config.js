@@ -43,6 +43,7 @@ module.exports = {
     filename: 'bundle.api.js',
     path: path.resolve(appDirectory, 'api/build')
   },
+  target: 'node',
   module: {
     rules: [
       babelLoaderConfiguration,
