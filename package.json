@@ -40,7 +40,7 @@
     "react-native-web": "^0.8.5",
     "react-redux": "^5.0.7",
     "react-timer-mixin": "^0.13.3",
-    "realm": "^2.10.0",
+    "realm": "^2.11.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "redux-logger": "^3.0.6",
