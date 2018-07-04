@@ -1,14 +1,16 @@
-import * as Router from 'koa-router';
+import * as KoaRouter from 'koa-router';
 
-const router = new Router();
+namespace api {
+  const router = new KoaRouter();
 
-router.get('/', async (ctx) => {
-  ctx.body = 'Hello World!';
-});
+  router.get('/', async (ctx) => {
+    ctx.body = 'Hello World!';
+  });
 
-router.get('/test', async (ctx) => {
-  ctx.status = 201;
-  ctx.body = 'test';
-});
+  router.get('/test', async (ctx) => {
+    ctx.status = 201;
+    ctx.body = 'test';
+  });
 
-export const routes = router.routes();
+  export const routes = router.routes();
+}
