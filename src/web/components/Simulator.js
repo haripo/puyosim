@@ -59,7 +59,7 @@ export default class Simulator extends Component {
         </View>
         <View style={ styles.container }>
           <View style={ styles.contents }>
-            <View>
+            <View style={{ backgroundColor: 'red' }}>
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }>
@@ -123,9 +123,7 @@ const styles = StyleSheet.create({
     outline: '0'
   },
   contents: {
-    flex: 0,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+    display: 'flex',
     flexDirection: 'row',
     width: simulatorWidth - contentsMargin,
     outline: '0'
