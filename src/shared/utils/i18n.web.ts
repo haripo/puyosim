@@ -8,10 +8,10 @@ function detectLanguage() {
       .substr(0, 2);
   }
   catch (e) {
-    return undefined;
+    return 'en';
   }
 }
 
-const lang = detectLanguage() || 'ja';
+const lang = detectLanguage();
 
-export default (key: string): string => translations[lang][key];
+export default (key: string): string => (translations[lang] || translations['en'])[key];
