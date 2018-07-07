@@ -9,12 +9,22 @@ export namespace Routes {
     ctx.body = 'Hello World!';
   });
 
-  router.get('/test', async (ctx) => {
-    ctx.status = 201;
-    ctx.body = 'test';
+  router.get('/api/entries/:id', async ctx => {
+    const { id } = ctx.params;
+
+    const entryRepository: Repository<Entry> = getManager().getRepository(Entry);
+    const entry = await entryRepository.findOne(id);
+
+    if (entry) {
+      ctx.status = 200;
+      ctx.body = entry;
+    } else {
+      ctx.status = 404;
+      ctx.body = 'Not found';
+    }
   });
 
-  router.post('/api/entry', async ctx => {
+  router.post('/api/entries', async ctx => {
     const { history } = ctx.request.body;
 
     const entry = new Entry();
