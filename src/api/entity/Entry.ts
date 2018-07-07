@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Entry {
@@ -8,9 +8,9 @@ export class Entry {
   @Column()
   history: string;
 
-  @Column()
+  @CreateDateColumn()
   created_at: string;
 
-  @Column()
+  @UpdateDateColumn()
   updated_at: string;
 }
