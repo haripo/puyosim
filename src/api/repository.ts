@@ -3,23 +3,6 @@ import { createConnection, getConnectionOptions } from "typeorm";
 import { Entry } from "./entity/Entry";
 
 
-createConnection({
-  type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "admin",
-  database: "test",
-  entities: [
-    Entry
-  ],
-  synchronize: true,
-  logging: false
-}).then(connection => {
-  console.info('Connection created', connection)
-}).catch(error => {
-  console.error(error)
-});
 
 async function connect() {
   const option = await getConnectionOptions('rdbms');
