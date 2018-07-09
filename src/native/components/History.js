@@ -98,11 +98,6 @@ const styles = StyleSheet.create({
   nextWindow: {
     marginBottom: contentsMargin,
   },
-  recordList: {
-    marginBottom: contentsMargin,
-    flex: 1
-  },
-  buttons: {},
   buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
