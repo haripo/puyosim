@@ -2,7 +2,7 @@
  * Component for render history-tree
  */
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import {
   cardBackgroundColor, contentsPadding, screenHeight, screenWidth,
   themeLightColor,
@@ -130,6 +130,7 @@ export default class HistoryTree extends React.Component {
           SVG elements has "overflow: hidden" implicitly.
           To ignore this, wrap Svg by View and specifying its size.
         */ }
+        <ScrollView>
         <View width={ svgWidth } height={ svgHeight }>
           <Svg width={ svgWidth } height={ svgHeight }>
             { this.renderTree(nodes, paths) }
@@ -147,6 +148,7 @@ export default class HistoryTree extends React.Component {
             { hands.map((hand, i) => this.renderHand(hand, i)) }
           </Svg>
         </View>
+        </ScrollView>
       </View>
     );
   }

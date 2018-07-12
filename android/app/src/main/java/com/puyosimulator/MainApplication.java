@@ -34,7 +34,7 @@ public class MainApplication extends NavigationApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new RNSentryPackage(MainApplication.this),
+          new RNSentryPackage(),
           new SvgPackage(),
           new RNI18nPackage(),
           new RealmReactPackage(),
@@ -73,7 +73,7 @@ public class MainApplication extends NavigationApplication {
   public List<ReactPackage> createAdditionalReactPackages() {
     return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
-        new RNSentryPackage(MainApplication.this),
+        new RNSentryPackage(),
         new SvgPackage(),
         new RNI18nPackage(),
         new RealmReactPackage(),
