@@ -11,11 +11,7 @@ import { getStore } from './src/shared/store/store';
 import sagas from './src/shared/sagas';
 import reducers from './src/shared/reducers'
 
-import { Client } from 'bugsnag-react-native';
 import { Sentry } from 'react-native-sentry';
-
-Client.releaseStage = 'development';
-Client.notifyReleaseStages = ['production'];
 
 Sentry.config('https://***REMOVED***').install();
 

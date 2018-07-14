@@ -12,7 +12,6 @@ import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.bugsnag.BugsnagReactNative;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -39,8 +38,7 @@ public class MainApplication extends NavigationApplication {
           new RNI18nPackage(),
           new RealmReactPackage(),
           new RNVersionNumberPackage(),
-          new VectorIconsPackage(),
-          BugsnagReactNative.getPackage()
+          new VectorIconsPackage()
       );
     }
 
@@ -78,8 +76,7 @@ public class MainApplication extends NavigationApplication {
         new RNI18nPackage(),
         new RealmReactPackage(),
         new RNVersionNumberPackage(),
-        new VectorIconsPackage(),
-        BugsnagReactNative.getPackage()
+        new VectorIconsPackage()
     );
   }
 }
