@@ -80,7 +80,7 @@ interface PuyoConnection {
 
 export interface Props {
   puyo: number,
-  connections: PuyoConnection,
+  connections: PuyoConnection | null,
   x: number,
   y: number,
   a: number,

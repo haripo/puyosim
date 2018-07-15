@@ -9,6 +9,7 @@ import SimulatorControls from '../../shared/components/SimulatorControls';
 import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
 import WebToolbar from './WebToolbar';
+import SlimHistoryTree from '../../shared/components/HistoryTree/SlimHistoryTree';
 
 export default class Simulator extends Component {
   constructor(props) {
@@ -99,7 +100,7 @@ export default class Simulator extends Component {
               </View>
             </View>
             <View style={ styles.historyTree }>
-              <HistoryTree
+              <SlimHistoryTree
                 history={ this.props.history }
                 historyTreeLayout={ this.props.historyTreeLayout }
                 currentIndex={ this.props.historyIndex }
