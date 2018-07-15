@@ -195,20 +195,10 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   component: {
     flex: 1,
+    elevation: 2,
     backgroundColor: cardBackgroundColor,
-    marginTop: contentsPadding,
-    marginRight: contentsPadding,
-    marginBottom: contentsPadding,
     overflow: 'scroll',
     height: screenHeight - contentsPadding * 4,
     width: screenWidth - contentsPadding * 2
   },
-  treeView: {
-    position: 'absolute'
-  },
-  handView: {
-    position: 'absolute',
-    borderColor: '#D1CDCB',
-    borderRightWidth: 2
-  }
 });
