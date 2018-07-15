@@ -13,8 +13,18 @@ import { HistoryRecord } from "../../shared/models/history";
 export interface Props {
   navigator: any,
 
+  stack: any,
+  ghosts: any,
+  droppingPuyos: any,
+  vanishingPuyos: any,
+  isActive: boolean,
+  puyoSkin: string,
+  pendingPair: any,
+  onDroppingAnimationFinished: Function,
+  onVanishingAnimationFinished: Function,
+
   history: HistoryRecord[],
-  currentIndex: number,
+  historyIndex: number,
   onNodePressed: Function,
 }
 
@@ -52,8 +62,7 @@ export default class Simulator extends Component<Props, State> {
               puyoSkin={ this.props.puyoSkin }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-              onSwiping={ this.props.onSwiping }
-              onSwipeEnd={ this.props.onSwipeEnd }>
+            >
             </Field>
           </View>
           <View style={ styles.side }>

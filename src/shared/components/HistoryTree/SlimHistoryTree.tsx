@@ -25,6 +25,8 @@ export interface Props {
 interface State {
 }
 
+type RecordIndexPair = { record: HistoryRecord, historyIndex: number };
+
 export default class SlimHistoryTree extends React.Component<Props, State> {
 
   // layout constants
@@ -36,7 +38,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   puyoMarginY = 0;
   pathRound = 30;
 
-  nodeMarginTop = 1;
+  nodeMarginTop = 2;
   nodeMarginLeft = (sideWidth - this.handsX) / 3 + this.handsX;
   nodeMarginBottom = 20;
 
@@ -77,7 +79,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
-  renderMainNode(node: HistoryRecord) {
+  renderMainNode(node: HistoryRecord, index: number, isCurrentNode: boolean) {
     const { move } = node;
 
     return (
@@ -87,13 +89,14 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         col={ move!.col }
         rotation={ move!.rotation }
         nodeWidth={ this.nodeWidth }
-        isCurrentNode={ false }
-        //       onPress={ e => this.handleNodePressed(historyIndex, e) }
+        isCurrentNode={ isCurrentNode }
+        onPress={ e => this.handleNodePressed(index, e) }
       />
     );
   }
 
-  renderSubNode(node: HistoryRecord, index: number) {
+  renderSubNode(historyIndex: number, index: number) {
+    const node = this.props.history[historyIndex];
     const { move } = node;
 
     return (
@@ -105,7 +108,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ false }
         key={ index }
-        //       onPress={ e => this.handleNodePressed(historyIndex, e) }
+        onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
   }
@@ -142,25 +145,24 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
-  renderItem({ index, item }: { index: number, item: HistoryRecord }) {
-    if (item.move === null) {
+  renderItem({ itemIndex, item }: { itemIndex: number, item: RecordIndexPair }) {
+    if (item.record.move === null) {
       return;
     }
-    const children = item.next
-      .filter(i => i !== item.defaultNext)
-      .map(i => this.props.history[i])
-      .map((record, i) =>
+    const children = item.record.next
+      .filter(i => i !== item.record.defaultNext)
+      .map((historyIndex, i) =>
         <Fragment key={ i }>
-          { this.renderSubNode(record, i) }
+          { this.renderSubNode(historyIndex, i) }
           { this.renderSubPath(i) }
         </Fragment>
       );
-    const hasNext = item.defaultNext !== null;
+    const hasNext = item.record.defaultNext !== null;
     const svgHeight = (this.nodeHeight + this.nodeMarginBottom) * (1 + children.length);
     return (
       <Svg width={ 300 } height={ svgHeight }>
-        { this.renderPair(item.pair, index) }
-        { this.renderMainNode(item) }
+        { this.renderPair(item.record.pair, itemIndex) }
+        { this.renderMainNode(item.record, item.historyIndex, item.historyIndex === this.props.currentIndex) }
         { hasNext ? this.renderMainPath(svgHeight) : null }
         { children }
       </Svg>
@@ -171,11 +173,14 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const { history } = this.props;
 
     // flatten history
-    let flatHist: HistoryRecord[] = [];
+    let flatHist: RecordIndexPair[] = [];
     let next: number | null = 0;
     while (next !== null) {
       const record = history[next];
-      flatHist.push(record);
+      flatHist.push({
+        record,
+        historyIndex: next
+      });
       next = record.defaultNext;
     }
 
@@ -186,6 +191,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         <FlatList
           data={ flatHist }
           renderItem={ this.renderItem.bind(this) }
+          keyExtractor={ (record, index) => String(index) }
         />
       </View>
     );
