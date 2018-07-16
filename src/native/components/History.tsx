@@ -25,7 +25,7 @@ export interface Props {
 
   history: HistoryRecord[],
   historyIndex: number,
-  onNodePressed: Function,
+  onHistoryNodePressed: Function,
 }
 
 interface State {
@@ -69,7 +69,7 @@ export default class Simulator extends Component<Props, State> {
             <SlimHistoryTree
               history={ this.props.history }
               currentIndex={ this.props.historyIndex }
-              onNodePressed={ this.props.onNodePressed }
+              onNodePressed={ this.props.onHistoryNodePressed }
             />
           </View>
         </View>
