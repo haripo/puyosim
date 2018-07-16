@@ -2,19 +2,19 @@
  * Small component for render history-tree
  */
 import React, { Fragment } from 'react';
-import { StyleSheet, View, ScrollView, FlatList, Text } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import {
   cardBackgroundColor,
-  contentsPadding,
+  contentsPadding, isWeb,
   screenHeight,
-  screenWidth, themeColor,
-  themeLightColor,
+  screenWidth,
+  sideWidth,
+  themeColor, themeLightColor,
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Path, Rect, } from 'react-native-svg';
 import HistoryTreeNode from './HistoryTreeNode';
 import { HistoryRecord } from "../../models/history";
-import { sideWidth } from '../../utils/constants';
 
 export interface Props {
   history: HistoryRecord[],
@@ -35,12 +35,12 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
   nodeWidth = (sideWidth - this.handsY * 2) / 3;
   nodeHeight = this.nodeWidth / 2;
-  puyoMarginY = 0;
+  puyoMarginY = 10;
   pathRound = 30;
 
-  nodeMarginTop = 2;
+  nodeMarginTop = 10;
   nodeMarginLeft = (sideWidth - this.handsX) / 3 + this.handsX;
-  nodeMarginBottom = 20;
+  nodeMarginBottom = 10;
 
   childrenLeft = this.nodeWidth;
 
@@ -95,6 +95,29 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
+  renderRootNode(isCurrentNode: boolean) {
+    const eventName = isWeb ? 'onClick' : 'onPress';
+    const events = {
+      [eventName]: e => this.handleNodePressed(0, e)
+    };
+
+    return (
+      <G { ...events } >
+        <Rect
+          { ...events }
+          x={ this.nodeMarginLeft }
+          y={ this.nodeMarginTop }
+          width={ this.nodeWidth }
+          height={ this.nodeHeight }
+          stroke={ themeColor }
+          strokeWidth={ isCurrentNode ? 4 : 2 }
+          fill={ themeLightColor }
+          rx="4"
+          ry="4"/>
+      </G>
+    );
+  }
+
   renderSubNode(historyIndex: number, index: number) {
     const node = this.props.history[historyIndex];
     const { move } = node;
@@ -102,7 +125,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     return (
       <HistoryTreeNode
         x={ this.childrenLeft + this.nodeMarginLeft }
-        y={ (index + 1) * (this.nodeHeight + this.nodeMarginBottom) }
+        y={ (index + 1) * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop}
         col={ move!.col }
         rotation={ move!.rotation }
         nodeWidth={ this.nodeWidth }
@@ -112,11 +135,11 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
       />
     );
   }
-  renderMainPath(svgHeight: number) {
+  renderMainPath(svgHeight: number, hasNext: boolean, hasPrev: boolean) {
     const startX = this.nodeWidth / 2 + this.nodeMarginLeft;
-    const startY = this.nodeHeight + this.nodeMarginTop;
+    const startY = hasPrev ? -1 : this.nodeHeight / 2;
     const endX = this.nodeWidth / 2 + this.nodeMarginLeft;
-    const endY = svgHeight + this.nodeMarginTop;
+    const endY = hasNext ? svgHeight + 1 : this.nodeHeight / 2;
     const path = `M ${startX} ${startY} C ${startX} ${startY} ${endX} ${endY} ${endX} ${endY}`;
     return (
       <Path
@@ -129,7 +152,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   }
 
   renderSubPath(index: number) {
-    const y = (index + 1) * (this.nodeHeight + this.nodeMarginBottom) +
+    const y = (index + 1) * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) +
       this.nodeHeight / 2 + this.nodeMarginTop;
     const startX = this.nodeWidth / 2 + this.nodeMarginLeft;
     const endX = this.childrenLeft + this.nodeMarginLeft;
@@ -146,24 +169,35 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   }
 
   renderItem({ itemIndex, item }: { itemIndex: number, item: RecordIndexPair }) {
+    const hasNext = item.record.defaultNext !== null;
+    const hasPrev = item.record.prev !== null;
+    const isCurrentNode = item.historyIndex === this.props.currentIndex;
+
     if (item.record.move === null) {
-      return;
+      // root node
+      const svgHeight = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
+      return (
+        <Svg width={ 300 } height={ svgHeight }>
+          { this.renderMainPath(svgHeight, true, false) }
+          { this.renderRootNode(isCurrentNode) }
+        </Svg>
+      );
     }
+
     const children = item.record.next
       .filter(i => i !== item.record.defaultNext)
       .map((historyIndex, i) =>
-        <Fragment key={ i }>
+        <Fragment key={ historyIndex }>
           { this.renderSubNode(historyIndex, i) }
           { this.renderSubPath(i) }
         </Fragment>
       );
-    const hasNext = item.record.defaultNext !== null;
-    const svgHeight = (this.nodeHeight + this.nodeMarginBottom) * (1 + children.length);
+    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * (1 + children.length);
     return (
       <Svg width={ 300 } height={ svgHeight }>
         { this.renderPair(item.record.pair, itemIndex) }
-        { this.renderMainNode(item.record, item.historyIndex, item.historyIndex === this.props.currentIndex) }
-        { hasNext ? this.renderMainPath(svgHeight) : null }
+        { this.renderMainPath(svgHeight, hasNext, hasPrev) }
+        { this.renderMainNode(item.record, item.historyIndex, isCurrentNode) }
         { children }
       </Svg>
     )
@@ -185,13 +219,11 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     }
 
     return (
-      <View
-        style={ styles.component }
-      >
+      <View style={ styles.component }>
         <FlatList
           data={ flatHist }
           renderItem={ this.renderItem.bind(this) }
-          keyExtractor={ (record, index) => String(index) }
+          keyExtractor={ (record, index) => String(record.historyIndex) }
         />
       </View>
     );
@@ -206,5 +238,5 @@ const styles = StyleSheet.create({
     overflow: 'scroll',
     height: screenHeight - contentsPadding * 4,
     width: screenWidth - contentsPadding * 2
-  },
+  }
 });
