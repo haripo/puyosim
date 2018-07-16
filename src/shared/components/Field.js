@@ -6,7 +6,15 @@ import React, { Component } from 'react';
 import { Image, PanResponder, StyleSheet, View } from 'react-native';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
-import { cardBackgroundColor, contentsPadding, fieldCols, fieldRows, puyoSize, themeColor } from '../utils/constants';
+import {
+  cardBackgroundColor,
+  contentsPadding,
+  fieldCols, fieldHeight,
+  fieldRows,
+  fieldWidth,
+  puyoSize,
+  themeColor
+} from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 
@@ -127,8 +135,8 @@ const styles = StyleSheet.create({
   field: {
     backgroundColor: cardBackgroundColor,
     elevation: 2,
-    width: puyoSize * fieldCols + contentsPadding * 2,
-    height: puyoSize * fieldRows + contentsPadding * 2
+    width: fieldWidth,
+    height: fieldHeight,
   },
   puyo: {
     width: puyoSize,
