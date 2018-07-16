@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, Linking, StyleSheet, View } from 'react-native';
 import {
   contentsMargin,
   themeColor,
@@ -9,6 +9,9 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree";
 import { HistoryRecord } from "../../shared/models/history";
+
+// @ts-ignore
+import t from '../../shared/utils/i18n';
 
 export interface Props {
   navigator: any,
@@ -38,9 +41,32 @@ export default class Simulator extends Component<Props, State> {
     navBarButtonColor: themeLightColor
   };
 
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        title: 'feedback',
+        id: 'feedback',
+        showAsAction: 'always'
+      }
+    ]
+  };
+
+  feedbackURL = 'http://puyos.im/feedback.html';
+
   constructor(props) {
     super(props);
-    this.props.navigator.setTitle({ title: "History" });
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    this.props.navigator.setTitle({ title: "History (beta)" });
+  }
+
+  onNavigatorEvent(event) {
+    if (event.type === 'NavBarButtonPress') {
+      switch (event.id) {
+        case 'feedback':
+          Linking.openURL(this.feedbackURL)
+          break;
+      }
+    }
   }
 
   render() {
