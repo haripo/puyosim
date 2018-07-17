@@ -25,54 +25,14 @@ Navigation.registerComponent('com.puyosimulator.History', () => History, store, 
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
 
-// launch first screen
-// const App = () => {
-//   return Navigation.startSingleScreenApp({
-//     screen: {
-//       screen: 'com.puyosimulator.Simulator',
-//     },
-//     appStyle: {
-//       orientation: 'portrait'
-//     },
-//     animationType: 'none',
-//     portraitOnlyMode: true,
-//   });
-// };
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'com.puyosimulator.Simulator',
+  },
+  appStyle: {
+    orientation: 'portrait'
+  },
+  animationType: 'none',
+  portraitOnlyMode: true,
+});
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'com.puyosimulator.Simulator',
-      },
-      appStyle: {
-        orientation: 'portrait'
-      },
-      animationType: 'none',
-      portraitOnlyMode: true,
-    });
-  }
-
-  render() {
-    return (
-      <Text>
-        hogehgoe
-      </Text>
-    );
-  }
-}
-const app = new App();
-// Navigation.startSingleScreenApp({
-//   screen: {
-//     screen: 'com.puyosimulator.Simulator',
-//   },
-//   appStyle: {
-//     orientation: 'portrait'
-//   },
-//   animationType: 'none',
-//   portraitOnlyMode: true,
-// });
-
-// AppRegistry.registerComponent('PuyoSimulator', () => App);
-//
