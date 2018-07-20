@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager\"",
+    "start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager --appIdSuffix debug\"",
     "build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --no-packager --variant=release",
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
@@ -69,6 +69,7 @@
     "babel-preset-react-native": "^4.0.0",
     "concurrently": "^3.6.0",
     "jest": "^23.3.0",
+    "react-native-cli": "^2.0.1",
     "react-native-typescript-transformer": "^1.2.10",
     "react-test-renderer": "^16.4.1",
     "ts-jest": "^22.4.6",
