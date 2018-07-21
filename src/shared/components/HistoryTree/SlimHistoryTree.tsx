@@ -118,23 +118,39 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
-  renderSubNode(historyIndex: number, index: number) {
+  renderSubNode(historyIndex: number, index: number, isMainPath: boolean) {
     const node = this.props.history[historyIndex];
+    const isCurrentNode = historyIndex === this.props.currentIndex;
     const { move } = node;
 
-    return (
-      <HistoryTreeNode
-        x={ this.childrenLeft + this.nodeMarginLeft }
-        y={ (index + 1) * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop}
-        col={ move!.col }
-        rotation={ move!.rotation }
-        nodeWidth={ this.nodeWidth }
-        isCurrentNode={ false }
-        key={ index }
-        onPress={ e => this.handleNodePressed(historyIndex, e) }
-      />
-    );
+    if (isMainPath) {
+      return (
+        <HistoryTreeNode
+          x={ this.nodeMarginLeft }
+          y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+          col={ move!.col }
+          rotation={ move!.rotation }
+          nodeWidth={ this.nodeWidth }
+          isCurrentNode={ isCurrentNode }
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
+        />
+      );
+    } else {
+      return (
+        <HistoryTreeNode
+          x={ this.childrenLeft + this.nodeMarginLeft }
+          y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+          col={ move!.col }
+          rotation={ move!.rotation }
+          nodeWidth={ this.nodeWidth }
+          isCurrentNode={ false }
+          key={ index }
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
+        />
+      );
+    }
   }
+
   renderMainPath(svgHeight: number, hasNext: boolean, hasPrev: boolean) {
     const startX = this.nodeWidth / 2 + this.nodeMarginLeft;
     const startY = hasPrev ? -1 : this.nodeHeight / 2;
@@ -168,7 +184,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
-  renderItem({ itemIndex, item }: { itemIndex: number, item: RecordIndexPair }) {
+  renderItem({ index, item }: { index: number, item: RecordIndexPair }) {
     const hasNext = item.record.defaultNext !== null;
     const hasPrev = item.record.prev !== null;
     const isCurrentNode = item.historyIndex === this.props.currentIndex;
@@ -184,20 +200,27 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
       );
     }
 
-    const children = item.record.next
-      .filter(i => i !== item.record.defaultNext)
+    const indices = item.record.prev ? this.props.history[item.record.prev].next : [item.historyIndex];
+    const children = indices
       .map((historyIndex, i) =>
         <Fragment key={ historyIndex }>
-          { this.renderSubNode(historyIndex, i) }
-          { this.renderSubPath(i) }
+          { this.renderSubNode(historyIndex, i, item.historyIndex === historyIndex) }
         </Fragment>
       );
-    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * (1 + children.length);
+    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * children.length;
+    const color = index % 2 === 0 ? themeLightColor : themeColor;
     return (
       <Svg width={ 300 } height={ svgHeight }>
-        { this.renderPair(item.record.pair, itemIndex) }
+        <Rect
+          x={ 0 }
+          y={ 0 }
+          width={ 300 }
+          height={ svgHeight }
+          fill={ color }
+          fillOpacity={ 0.2 }
+        />
+        { this.renderPair(item.record.pair, index) }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
-        { this.renderMainNode(item.record, item.historyIndex, isCurrentNode) }
         { children }
       </Svg>
     )
