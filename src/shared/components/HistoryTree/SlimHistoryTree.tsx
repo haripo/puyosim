@@ -2,19 +2,22 @@
  * Small component for render history-tree
  */
 import React, { Fragment } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { Animated, FlatList, StyleSheet, View } from 'react-native';
 import {
   cardBackgroundColor,
-  contentsPadding, isWeb,
+  contentsPadding,
+  isWeb,
   screenHeight,
   screenWidth,
   sideWidth,
-  themeColor, themeLightColor,
+  themeColor,
+  themeLightColor,
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Path, Rect, } from 'react-native-svg';
 import HistoryTreeNode from './HistoryTreeNode';
 import { HistoryRecord } from "../../models/history";
+import AnimatedValue = Animated.AnimatedValue;
 
 export interface Props {
   history: HistoryRecord[],
@@ -23,6 +26,7 @@ export interface Props {
 }
 
 interface State {
+  nodeAnimated: AnimatedValue[]
 }
 
 type RecordIndexPair = { record: HistoryRecord, historyIndex: number };
@@ -46,7 +50,42 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
   puyoSize = (this.nodeMarginLeft - this.handsX) / 2 - 5;
 
-  handleNodePressed(historyIndex, e) {
+  constructor(props) {
+    super(props);
+
+    const { history } = this.props;
+
+    const l = history.length;
+    let r: AnimatedValue[] = [];
+    for (let i = 0; i < l; i++) {
+      const isMainPath = history[i].prev !== null ? history[history[i].prev!].defaultNext === i : false;
+      r[i] = new Animated.Value(1);
+    }
+    this.state = { nodeAnimated: r };
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State, snapshot) {
+    const { history, currentIndex } = this.props;
+    const { history: prevHistory, currentIndex: prevCurrentIndex } = prevProps;
+    const isMainPath = (history, i) => history[history[i].prev].defaultNext === i;
+
+    for (let i = 0; i < history.length; i++) {
+      this.state.nodeAnimated[currentIndex].setValue(1);
+    }
+
+    for (let i = 1; i < history.length; i++) {
+      if (isMainPath(history, i) !== isMainPath(prevHistory, i)) {
+        this.state.nodeAnimated[i].setValue(0);
+        Animated.timing(this.state.nodeAnimated[i], {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true
+        }).start();
+      }
+    }
+  }
+
+  handleNodePressed(historyIndex: number, e) {
     e.stopPropagation();
     this.props.onNodePressed(historyIndex);
   }
@@ -126,8 +165,10 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     if (isMainPath) {
       return (
         <HistoryTreeNode
-          x={ this.nodeMarginLeft }
+          x={ this.state.nodeAnimated[historyIndex] }
           y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+          currentX={ this.nodeMarginLeft }
+          futureX={ this.nodeMarginLeft + this.childrenLeft }
           col={ move!.col }
           rotation={ move!.rotation }
           nodeWidth={ this.nodeWidth }
@@ -138,8 +179,10 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     } else {
       return (
         <HistoryTreeNode
-          x={ this.childrenLeft + this.nodeMarginLeft }
+          x={ this.state.nodeAnimated[historyIndex] }
           y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+          currentX={ this.nodeMarginLeft + this.childrenLeft }
+          futureX={ this.nodeMarginLeft }
           col={ move!.col }
           rotation={ move!.rotation }
           nodeWidth={ this.nodeWidth }
