@@ -35,6 +35,19 @@ export default class HistoryTreeNode extends React.Component {
       'isCurrentNode');
   }
 
+  constructor(props) {
+    super(props);
+    this.props.x.addListener(value => {
+      if (!this.g) return;
+      const v = (1 - value.value) * (this.props.futureX - this.props.currentX) + this.props.currentX;
+      this.g.setNativeProps({ matrix: [1, 0, 0, 1, v, 0] });
+    });
+  }
+
+  componentDidMount() {
+    this.g.setNativeProps({ matrix: [1, 0, 0, 1, this.props.currentX, 0] });
+  }
+
   render() {
     const { x, y, col, rotation, nodeWidth, isCurrentNode, onPress } = this.props;
     const iconSize = nodeWidth / 2;
@@ -48,10 +61,10 @@ export default class HistoryTreeNode extends React.Component {
     };
 
     return (
-      <G { ...events } >
+      <G { ...events } ref={ ref => this.g = ref }>
         <Rect
           { ...events }
-          x={ x }
+          x={ 0 }
           y={ y }
           width={ nodeWidth }
           height={ iconSize }
@@ -61,14 +74,14 @@ export default class HistoryTreeNode extends React.Component {
           rx="4"
           ry="4"/>
         <Image
-          x={ x + iconPadding }
+          x={ iconPadding }
           y={ y }
           width={ iconSize }
           height={ iconSize }
           href={ numberImages[col] }
         />
         <Image
-          x={ x + iconSize - iconPadding }
+          x={ iconSize - iconPadding }
           y={ y }
           width={ iconSize }
           height={ iconSize }
