@@ -58,7 +58,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const l = history.length;
     let r: AnimatedValue[] = [];
     for (let i = 0; i < l; i++) {
-      const isMainPath = history[i].prev !== null ? history[history[i].prev!].defaultNext === i : false;
       r[i] = new Animated.Value(1);
     }
     this.state = { nodeAnimated: r };
@@ -115,22 +114,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           a={ 1 }
         />
       </React.Fragment>
-    );
-  }
-
-  renderMainNode(node: HistoryRecord, index: number, isCurrentNode: boolean) {
-    const { move } = node;
-
-    return (
-      <HistoryTreeNode
-        x={ this.nodeMarginLeft }
-        y={ this.nodeMarginTop }
-        col={ move!.col }
-        rotation={ move!.rotation }
-        nodeWidth={ this.nodeWidth }
-        isCurrentNode={ isCurrentNode }
-        onPress={ e => this.handleNodePressed(index, e) }
-      />
     );
   }
 
@@ -205,23 +188,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         d={ path }
         stroke={ themeColor }
         strokeWidth={ 2 }
-        fill="none"
-      />
-    );
-  }
-
-  renderSubPath(index: number) {
-    const y = (index + 1) * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) +
-      this.nodeHeight / 2 + this.nodeMarginTop;
-    const startX = this.nodeWidth / 2 + this.nodeMarginLeft;
-    const endX = this.childrenLeft + this.nodeMarginLeft;
-    const path = `M ${startX} ${y - this.pathRound} C ${startX} ${y} ${endX} ${y} ${endX} ${y}`;
-    return (
-      <Path
-        d={ path }
-        stroke={ themeColor }
-        strokeWidth={ 2 }
-        strokeDasharray={ '4, 4' }
         fill="none"
       />
     );
