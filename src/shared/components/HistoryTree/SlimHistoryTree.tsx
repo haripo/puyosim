@@ -40,8 +40,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   nodeWidth = (sideWidth - this.handsY * 2) / 3;
   nodeHeight = this.nodeWidth / 2;
   puyoMarginY = 10;
-  pathRound = 30;
-
   nodeMarginTop = 10;
   nodeMarginLeft = (sideWidth - this.handsX) / 3 + this.handsX;
   nodeMarginBottom = 10;
@@ -77,7 +75,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         this.state.nodeAnimated[i].setValue(0);
         Animated.timing(this.state.nodeAnimated[i], {
           toValue: 1,
-          duration: 200,
+          duration: 100,
           useNativeDriver: true
         }).start();
       }
