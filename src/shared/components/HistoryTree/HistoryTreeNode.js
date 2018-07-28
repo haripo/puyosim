@@ -37,15 +37,19 @@ export default class HistoryTreeNode extends React.Component {
 
   constructor(props) {
     super(props);
-    this.props.x.addListener(value => {
-      if (!this.g) return;
-      const v = (1 - value.value) * (this.props.futureX - this.props.currentX) + this.props.currentX;
-      this.g.setNativeProps({ matrix: [1, 0, 0, 1, v, 0] });
-    });
+    if (this.props.x.addListener) {
+      this.props.x.addListener(value => {
+        if (!this.g) return;
+        const v = (1 - value.value) * (this.props.futureX - this.props.currentX) + this.props.currentX;
+        this.g.setNativeProps({ matrix: [1, 0, 0, 1, v, 0] });
+      });
+    }
   }
 
   componentDidMount() {
-    this.g.setNativeProps({ matrix: [1, 0, 0, 1, this.props.currentX, 0] });
+    if (this.g && this.g.setNativeProps) {
+      this.g.setNativeProps({ matrix: [1, 0, 0, 1, this.props.currentX, 0] });
+    }
   }
 
   render() {
@@ -61,7 +65,7 @@ export default class HistoryTreeNode extends React.Component {
     };
 
     return (
-      <G { ...events } ref={ ref => this.g = ref }>
+      <G { ...events } x={ x } ref={ ref => this.g = ref }>
         <Rect
           { ...events }
           x={ 0 }

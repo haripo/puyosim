@@ -100,7 +100,7 @@ export default class Simulator extends Component {
               </View>
             </View>
             <View style={ styles.historyTree }>
-              <SlimHistoryTree
+              <HistoryTree
                 history={ this.props.history }
                 historyTreeLayout={ this.props.historyTreeLayout }
                 currentIndex={ this.props.historyIndex }
