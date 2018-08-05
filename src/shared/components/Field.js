@@ -29,17 +29,6 @@ export default class Field extends Component {
     };
   }
 
-  componentWillMount() {
-    this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (() => true),
-      onMoveShouldSetPanResponder: (() => true),
-      onPanResponderGrant: ::this.handlePanResponderGrant,
-      onPanResponderMove: ::this.handlePanResponderMove,
-      onPanResponderRelease: ::this.handlePanResponderEnd,
-      onPanResponderTerminate: ::this.handlePanResponderEnd
-    });
-  }
-
   eventToPosition(event: Object) {
     return {
       row: Math.floor(event.nativeEvent.locationY / puyoSize),
@@ -53,25 +42,6 @@ export default class Field extends Component {
       return dx > 0 ? 'right' : 'left';
     } else {
       return dy > 0 ? 'bottom' : 'top';
-    }
-  }
-
-  handlePanResponderGrant() {
-  }
-
-  handlePanResponderMove(e: Object, gestureState: Object) {
-    if (this.props.isActive) {
-      // this.props.onSwiping(
-      //   this.eventToPosition(e),
-      //   this.gestureStateToDirection(gestureState));
-    }
-  }
-
-  handlePanResponderEnd(e: Object, gestureState: Object) {
-    if (this.props.isActive) {
-      // this.props.onSwipeEnd(
-      //   this.eventToPosition(e),
-      //   this.gestureStateToDirection(gestureState));
     }
   }
 
@@ -118,9 +88,7 @@ export default class Field extends Component {
 
   render() {
     return (
-      <View
-        style={ [this.props.style, styles.field] }
-        { ...this.panResponder.panHandlers }>
+      <View style={ [this.props.style, styles.field] } >
         { this.renderStack(this.props.stack) }
         <Image source={ require('../../../assets/cross.png') } style={ styles.cross }/>
         <DroppingPuyosContainer />
