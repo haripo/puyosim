@@ -67,6 +67,6 @@ export default class DroppingPuyos extends Component {
   }
 
   render() {
-    return <View>{ ::this.renderPuyos() }</View>;
+    return <View>{ this.renderPuyos.bind(this) }</View>;
   }
 }

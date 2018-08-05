@@ -48,9 +48,9 @@ export default class SettingsPage extends Component {
       <Modal
         transparent={ true }
         visible={ visible }
-        onRequestClose={ ::this.close }
+        onRequestClose={ this.close.bind(this) }
         animationType="fade">
-        <TouchableWithoutFeedback onPress={ ::this.close }>
+        <TouchableWithoutFeedback onPress={ this.close.bind(this) }>
           <View style={{
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
                   flex: 1,

@@ -1,15 +1,7 @@
 {
   "presets": [
-    "react-native",
-    "react-native-stage-0",
-    "react-native-stage-0/decorator-support"
-  ],
-  "plugins": [
-    [
-      "module-alias",
-      [
-        { "src": "./src/native", "expose": "specific" }
-      ]
-    ]
+      "react-native",
+      "react-native-stage-0",
+      "react-native-stage-0/decorator-support"
   ]
 }
