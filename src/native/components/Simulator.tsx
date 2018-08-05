@@ -1,7 +1,3 @@
-/**
- * Base component
- */
-
 import * as _ from 'lodash';
 import React, { Component } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
@@ -14,8 +10,10 @@ import {
 } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
-import t from '../../shared/utils/i18n';
 import SimulatorControls from '../../shared/components/SimulatorControls';
+
+// @ts-ignore
+import t from '../../shared/utils/i18n';
 
 export default class Simulator extends Component {
   static navigatorButtons = {
@@ -110,10 +108,14 @@ export default class Simulator extends Component {
     }
   }
 
+  aaa(e: { nativeEvent: { layout: { width: number, height: number } } }) {
+    console.log(e);
+  }
+
   render() {
     return (
       <View style={ styles.container }>
-        <View style={ styles.contents }>
+        <View style={ styles.contents } onLayout={ e => { console.log(e) } }>
           <View>
             <HandlingPuyos
               pair={ this.props.pendingPair }
