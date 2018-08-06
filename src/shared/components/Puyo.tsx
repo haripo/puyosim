@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { Animated, Image } from 'react-native';
 import _ from 'lodash';
+import { PuyoConnection } from "../selectors/simulatorSelectors";
 
 declare function require(x: string): any;
 
@@ -71,19 +72,12 @@ const connectionImages = {
   ]
 };
 
-interface PuyoConnection {
-  top: boolean,
-  left: boolean,
-  bottom: boolean,
-  right: boolean
-}
-
 export interface Props {
   puyo: number,
-  connections: PuyoConnection | null,
+  connections?: PuyoConnection,
   x: number,
   y: number,
-  a: number,
+  a?: number,
   size: number,
   skin: string
 }

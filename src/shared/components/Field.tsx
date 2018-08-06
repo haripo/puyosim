@@ -1,98 +1,104 @@
-/**
- * Base component
- */
-
 import React, { Component } from 'react';
-import { Image, PanResponder, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
-import {
-  cardBackgroundColor,
-  contentsPadding,
-  fieldCols,
-  fieldRows,
-  themeColor
-} from '../utils/constants';
+import { cardBackgroundColor, contentsPadding, fieldCols, themeColor } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
+import { PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
+
+export interface Props {
+  layout: Layout,
+  puyoSkin: string,
+  isActive: boolean,
+  stack: StackForRendering,
+  ghosts: PuyoForRendering[],
+  style: any
+}
+
+interface State {
+}
 
 /**
- * Component for render puyo fields
+ * Component for render field
  */
-export default class Field extends Component {
-  constructor() {
-    super();
-    this.state = {
-      vanishings: []
-    };
+export default class Field extends Component<Props, State> {
+  constructor(props, context) {
+    super(props, context);
   }
 
-  eventToPosition(event) {
-    const { layout } = this.props;
-    return {
-      row: Math.floor(event.nativeEvent.locationY / layout.puyoSize),
-      col: Math.floor(event.nativeEvent.locationX / layout.puyoSize)
-    };
-  }
+  renderPuyos(stack: StackForRendering) {
+    const {
+      layout: { puyoSize },
+      puyoSkin
+    } = this.props;
 
-  gestureStateToDirection(gestureState) {
-    const { dx, dy } = gestureState;
-    if (Math.abs(dx) > Math.abs(dy)) {
-      return dx > 0 ? 'right' : 'left';
-    } else {
-      return dy > 0 ? 'bottom' : 'top';
-    }
-  }
-
-  renderStack(stack) {
-    const { ghosts, layout } = this.props;
-    const renderPuyos = (stack) => {
-      const puyoDoms = stack
-        .map((puyos, row) => {
-          return puyos.map((puyo, col) => {
-            if (puyo.color === 0 || puyo.isDropping) return null;
-            return (
-              <Puyo
-                size={ layout.puyoSize }
-                puyo={ puyo.color }
-                x={ col * layout.puyoSize + contentsPadding }
-                y={ row * layout.puyoSize + contentsPadding }
-                connections={ puyo.connections }
-                skin={ this.props.puyoSkin }
-                key={ `puyo-${row}-${col}` }/>
-            );
-          });
-        });
-
-      const ghostDoms = ghosts.map((ghost, i) => {
+    return stack.map((puyos, row) => {
+      return puyos.map((puyo: PuyoForRendering, col) => {
+        if (puyo.color === 0 || puyo.isDropping) return null;
         return (
-          <GhostPuyo
-            size={ layout.puyoSize }
-            puyo={ ghost.color }
-            skin={ this.props.puyoSkin }
-            key={ i }
-            x={ ghost.col * layout.puyoSize + contentsPadding }
-            y={ ghost.row * layout.puyoSize + contentsPadding }/>
+          <Puyo
+            size={ puyoSize }
+            puyo={ puyo.color }
+            x={ col * puyoSize + contentsPadding }
+            y={ row * puyoSize + contentsPadding }
+            connections={ puyo.connections }
+            skin={ puyoSkin }
+            key={ `puyo-${row}-${col}` }/>
         );
-      });
+      })
+    });
+  }
 
-      return [
-        this.props.isActive ? ghostDoms : null,
-        puyoDoms
-      ];
-    };
+  renderGhostPuyos() {
+    const {
+      layout: { puyoSize },
+      puyoSkin,
+      ghosts
+    } = this.props;
 
-    return renderPuyos(stack);
+    return ghosts.map(ghost => (
+      <GhostPuyo
+        size={ puyoSize }
+        puyo={ ghost.color }
+        skin={ puyoSkin }
+        key={ `puyo-${ghost.row}-${ghost.col}` }
+        x={ ghost.col * puyoSize + contentsPadding }
+        y={ ghost.row * puyoSize + contentsPadding }
+      />
+    ));
+  }
+
+  renderStack() {
+    const { stack, isActive } = this.props;
+    return [
+      isActive ? this.renderGhostPuyos() : null,
+      this.renderPuyos(stack)
+    ];
+  }
+
+  /**
+   * Renders X mark
+   * @return {JSX.Element} element
+   */
+  renderCross(style: any): JSX.Element {
+    return (
+      <Image
+        source={ require('../../../assets/cross.png') }
+        style={ style }
+      />
+    )
   }
 
   render() {
-    const styles = createStyles(this.props.layout);
+    const { layout, style } = this.props;
+    const styles = createStyles(layout);
 
     return (
-      <View style={ [this.props.style, styles.field] } >
-        { this.renderStack(this.props.stack) }
-        <Image source={ require('../../../assets/cross.png') } style={ styles.cross }/>
+      <View style={ [style, styles.field] } >
+        { this.renderStack() }
+        { this.renderCross(styles.cross) }
         <DroppingPuyosContainer />
         <VanishingPuyosContainer />
         <View style={ styles.topShadow } />
