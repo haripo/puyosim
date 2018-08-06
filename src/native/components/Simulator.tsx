@@ -16,6 +16,8 @@ import SimulatorControls from '../../shared/components/SimulatorControls';
 import t from '../../shared/utils/i18n';
 
 export default class Simulator extends Component {
+  rootView: View | null = null;
+
   static navigatorButtons = {
     rightButtons: [
       {
@@ -108,14 +110,20 @@ export default class Simulator extends Component {
     }
   }
 
-  aaa(e: { nativeEvent: { layout: { width: number, height: number } } }) {
-    console.log(e);
+  handleLayout(e: { nativeEvent: { layout: { width: number, height: number } } }) {
+    // e.nativeEvent にアクセスするとなぜかフリーズするので ref.measure を使う
+    this.rootView!.measure((ox, oy, width, height) => {
+      this.props.onLayout({ width, height });
+    });
   }
 
   render() {
     return (
-      <View style={ styles.container }>
-        <View style={ styles.contents } onLayout={ e => { console.log(e) } }>
+      <View
+        style={ styles.container }
+        onLayout={ this.handleLayout.bind(this) }
+        ref={ r => this.rootView = r }>
+        <View style={ styles.contents }>
           <View>
             <HandlingPuyos
               pair={ this.props.pendingPair }
@@ -128,6 +136,7 @@ export default class Simulator extends Component {
               vanishingPuyos={ this.props.vanishingPuyos }
               isActive={ this.props.isActive }
               style={ styles.field }
+              layout={ this.props.layout }
               puyoSkin={ this.props.puyoSkin }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
@@ -137,8 +146,8 @@ export default class Simulator extends Component {
           </View>
           <View style={ styles.side }>
             <View style={ styles.sideHead }>
-              <NextWindowContainer />
-              <ChainResultContainer />
+              <NextWindowContainer/>
+              <ChainResultContainer/>
             </View>
             <SimulatorControls
               onUndoSelected={ this.props.onUndoSelected }
