@@ -1,7 +1,7 @@
 import { fieldCols, fieldRows } from '../utils/constants';
 import _ from 'lodash';
 import { getFirstCol, getSecondCol } from '../models/move';
-import { createField, isValidPosition } from '../models/stack';
+import { Color, createField, isValidPosition } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 
 export function wrapCache(f, ...args): any {
@@ -100,10 +100,27 @@ function _getVanishingPuyos(vanishings) {
   return result;
 }
 
+export type PuyoConnection = {
+  top: boolean,
+  left: boolean,
+  bottom: boolean,
+  right: boolean
+}
+
+export type PuyoForRendering = {
+  row: number,
+  col: number,
+  color: Color,
+  connections: PuyoConnection
+  isDropping: boolean
+}
+
+export type StackForRendering = PuyoForRendering[][];
+
 
 export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
 
-function _getStack(stack, droppings) {
+function _getStack(stack, droppings): StackForRendering {
   const isDropping = (row, col) => {
     return !!droppings.find(p => p.row === row && p.col === col);
   };
