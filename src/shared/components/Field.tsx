@@ -9,14 +9,13 @@ import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
 import {
   cardBackgroundColor,
   contentsPadding,
-  fieldCols, fieldHeight,
+  fieldCols,
   fieldRows,
-  fieldWidth,
-  puyoSize,
   themeColor
 } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
+import { Layout } from '../selectors/layoutSelectors';
 
 /**
  * Component for render puyo fields
@@ -29,14 +28,15 @@ export default class Field extends Component {
     };
   }
 
-  eventToPosition(event: Object) {
+  eventToPosition(event) {
+    const { layout } = this.props;
     return {
-      row: Math.floor(event.nativeEvent.locationY / puyoSize),
-      col: Math.floor(event.nativeEvent.locationX / puyoSize)
+      row: Math.floor(event.nativeEvent.locationY / layout.puyoSize),
+      col: Math.floor(event.nativeEvent.locationX / layout.puyoSize)
     };
   }
 
-  gestureStateToDirection(gestureState: Object) {
+  gestureStateToDirection(gestureState) {
     const { dx, dy } = gestureState;
     if (Math.abs(dx) > Math.abs(dy)) {
       return dx > 0 ? 'right' : 'left';
@@ -46,7 +46,7 @@ export default class Field extends Component {
   }
 
   renderStack(stack) {
-    const { ghosts } = this.props;
+    const { ghosts, layout } = this.props;
     const renderPuyos = (stack) => {
       const puyoDoms = stack
         .map((puyos, row) => {
@@ -54,10 +54,10 @@ export default class Field extends Component {
             if (puyo.color === 0 || puyo.isDropping) return null;
             return (
               <Puyo
-                size={ puyoSize }
+                size={ layout.puyoSize }
                 puyo={ puyo.color }
-                x={ col * puyoSize + contentsPadding }
-                y={ row * puyoSize + contentsPadding }
+                x={ col * layout.puyoSize + contentsPadding }
+                y={ row * layout.puyoSize + contentsPadding }
                 connections={ puyo.connections }
                 skin={ this.props.puyoSkin }
                 key={ `puyo-${row}-${col}` }/>
@@ -68,12 +68,12 @@ export default class Field extends Component {
       const ghostDoms = ghosts.map((ghost, i) => {
         return (
           <GhostPuyo
-            size={ puyoSize }
+            size={ layout.puyoSize }
             puyo={ ghost.color }
             skin={ this.props.puyoSkin }
             key={ i }
-            x={ ghost.col * puyoSize + contentsPadding }
-            y={ ghost.row * puyoSize + contentsPadding }/>
+            x={ ghost.col * layout.puyoSize + contentsPadding }
+            y={ ghost.row * layout.puyoSize + contentsPadding }/>
         );
       });
 
@@ -87,54 +87,43 @@ export default class Field extends Component {
   }
 
   render() {
+    const styles = createStyles(this.props.layout);
+
     return (
       <View style={ [this.props.style, styles.field] } >
         { this.renderStack(this.props.stack) }
         <Image source={ require('../../../assets/cross.png') } style={ styles.cross }/>
         <DroppingPuyosContainer />
         <VanishingPuyosContainer />
-        <View style={ styles.topShadow }></View>
+        <View style={ styles.topShadow } />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  field: {
-    backgroundColor: cardBackgroundColor,
-    elevation: 2,
-    width: fieldWidth,
-    height: fieldHeight,
-  },
-  puyo: {
-    width: puyoSize,
-    height: puyoSize
-  },
-  puyoContainer: {
-    width: puyoSize,
-    height: puyoSize
-  },
-  highlight: {
-    position: 'absolute',
-    borderColor: 'yellow',
-    borderWidth: 1,
-    width: puyoSize,
-    height: puyoSize
-  },
-  cross: {
-    position: 'absolute',
-    width: puyoSize,
-    height: puyoSize,
-    top: puyoSize + contentsPadding,
-    left: puyoSize * 2 + contentsPadding
-  },
-  topShadow: {
-    width: puyoSize * fieldCols + contentsPadding * 2,
-    height: puyoSize + contentsPadding,
-    backgroundColor: themeColor,
-    opacity: 0.2,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  }
-});
+function createStyles(layout: Layout) {
+  return StyleSheet.create({
+    field: {
+      backgroundColor: cardBackgroundColor,
+      elevation: 2,
+      width: layout.field.width,
+      height: layout.field.height
+    },
+    cross: {
+      position: 'absolute',
+      width: layout.puyoSize,
+      height: layout.puyoSize,
+      top: layout.puyoSize + contentsPadding,
+      left: layout.puyoSize * 2 + contentsPadding
+    },
+    topShadow: {
+      width: layout.puyoSize * fieldCols + contentsPadding * 2,
+      height: layout.puyoSize + contentsPadding,
+      backgroundColor: themeColor,
+      opacity: 0.2,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    }
+  });
+}

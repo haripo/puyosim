@@ -4,7 +4,7 @@ import {
   moveHighlightsLeft,
   moveHighlightsRight, openTwitterShare,
   putNextPair, redoField,
-  resetField,
+  resetField, resetLayout,
   restart,
   rotateHighlightsLeft,
   rotateHighlightsRight,
@@ -16,6 +16,7 @@ import {
   canRedo, canUndo, getGhost, getPendingPair, getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
+import { getLayout } from '../../shared/selectors/layoutSelectors';
 
 const mapStateToProps = (state) => {
   return {
@@ -26,7 +27,8 @@ const mapStateToProps = (state) => {
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin,
     canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator)
+    canRedo: canRedo(state.simulator),
+    layout: getLayout(state.layout)
   };
 };
 
@@ -66,6 +68,9 @@ const mapDispatchToProps = (dispatch) => {
     onShareSelected: () => {
       dispatch(openTwitterShare());
     },
+    onLayout: layout => {
+      dispatch(resetLayout(layout));
+    }
   };
 };
 
