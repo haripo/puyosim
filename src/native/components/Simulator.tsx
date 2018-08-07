@@ -137,6 +137,7 @@ export default class Simulator extends Component {
               isActive={ this.props.isActive }
               style={ styles.field }
               layout={ this.props.layout }
+              theme={ this.props.theme }
               puyoSkin={ this.props.puyoSkin }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }

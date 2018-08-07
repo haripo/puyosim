@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
 import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
-import { cardBackgroundColor, contentsPadding, fieldCols, themeColor } from '../utils/constants';
+import { contentsPadding, fieldCols } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
 import { PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
+import { Theme } from "../selectors/themeSelectors";
 
 export interface Props {
   layout: Layout,
+  theme: Theme,
   puyoSkin: string,
   isActive: boolean,
   stack: StackForRendering,
@@ -45,7 +47,8 @@ export default class Field extends Component<Props, State> {
             y={ row * puyoSize + contentsPadding }
             connections={ puyo.connections }
             skin={ puyoSkin }
-            key={ `puyo-${row}-${col}` }/>
+            key={ `puyo-${row}-${col}` }
+          />
         );
       })
     });
@@ -92,8 +95,8 @@ export default class Field extends Component<Props, State> {
   }
 
   render() {
-    const { layout, style } = this.props;
-    const styles = createStyles(layout);
+    const { layout, theme, style } = this.props;
+    const styles = createStyles(layout, theme);
 
     return (
       <View style={ [style, styles.field] } >
@@ -107,10 +110,10 @@ export default class Field extends Component<Props, State> {
   }
 }
 
-function createStyles(layout: Layout) {
+function createStyles(layout: Layout, theme: Theme) {
   return StyleSheet.create({
     field: {
-      backgroundColor: cardBackgroundColor,
+      backgroundColor: theme.cardBackgroundColor,
       elevation: 2,
       width: layout.field.width,
       height: layout.field.height
@@ -125,7 +128,7 @@ function createStyles(layout: Layout) {
     topShadow: {
       width: layout.puyoSize * fieldCols + contentsPadding * 2,
       height: layout.puyoSize + contentsPadding,
-      backgroundColor: themeColor,
+      backgroundColor: theme.themeColor,
       opacity: 0.2,
       position: 'absolute',
       top: 0,
