@@ -69,9 +69,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShareSelected: () => {
       dispatch(openTwitterShare());
-    },
-    onLayout: layout => {
-      dispatch(resetLayout(layout));
     }
   };
 };

@@ -12,6 +12,7 @@ import {
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
+import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
@@ -34,7 +35,6 @@ export type Props = {
   canUndo: boolean,
   canRedo: boolean,
 
-  onLayout: (layout: { width: number, height: number }) => void,
   onUndoSelected: () => void,
   onRedoSelected: () => void,
   onResetSelected: () => void,
@@ -142,55 +142,48 @@ export default class Simulator extends Component<Props, {}> {
     }
   }
 
-  handleLayout(e: { nativeEvent: { layout: { width: number, height: number } } }) {
-    // e.nativeEvent にアクセスするとなぜかフリーズするので ref.measure を使う
-    this.rootView!.measure((ox, oy, width, height) => {
-      this.props.onLayout({ width, height });
-    });
-  }
-
   render() {
     return (
-      <View
-        style={ styles.container }
-        onLayout={ this.handleLayout.bind(this) }
-        ref={ r => this.rootView = r }>
-        <View style={ styles.contents }>
-          <View>
-            <HandlingPuyos
-              pair={ this.props.pendingPair }
-              puyoSkin={ this.props.puyoSkin }>
-            </HandlingPuyos>
-            <Field
-              stack={ this.props.stack }
-              ghosts={ this.props.ghosts }
-              isActive={ this.props.isActive }
-              style={ styles.field }
-              layout={ this.props.layout }
-              theme={ this.props.theme }
-              puyoSkin={ this.props.puyoSkin }>
-            </Field>
-          </View>
-          <View style={ styles.side }>
-            <View style={ styles.sideHead }>
-              <NextWindowContainer/>
-              <ChainResultContainer/>
+      <LayoutBaseContainer>
+        <View
+          style={ styles.container }>
+          <View style={ styles.contents }>
+            <View>
+              <HandlingPuyos
+                pair={ this.props.pendingPair }
+                puyoSkin={ this.props.puyoSkin }>
+              </HandlingPuyos>
+              <Field
+                stack={ this.props.stack }
+                ghosts={ this.props.ghosts }
+                isActive={ this.props.isActive }
+                style={ styles.field }
+                layout={ this.props.layout }
+                theme={ this.props.theme }
+                puyoSkin={ this.props.puyoSkin }>
+              </Field>
             </View>
-            <SimulatorControls
-              onUndoSelected={ this.props.onUndoSelected }
-              onRedoSelected={ this.props.onRedoSelected }
-              onRotateLeftPressed={ this.props.onRotateLeftPressed }
-              onRotateRightPressed={ this.props.onRotateRightPressed }
-              onMoveLeftPressed={ this.props.onMoveLeftPressed }
-              onMoveRightPressed={ this.props.onMoveRightPressed }
-              onDropPressed={ this.props.onDropPressed }
-              isActive={ this.props.isActive }
-              canUndo={ this.props.canUndo }
-              canRedo={ this.props.canRedo }
-            />
+            <View style={ styles.side }>
+              <View style={ styles.sideHead }>
+                <NextWindowContainer/>
+                <ChainResultContainer/>
+              </View>
+              <SimulatorControls
+                onUndoSelected={ this.props.onUndoSelected }
+                onRedoSelected={ this.props.onRedoSelected }
+                onRotateLeftPressed={ this.props.onRotateLeftPressed }
+                onRotateRightPressed={ this.props.onRotateRightPressed }
+                onMoveLeftPressed={ this.props.onMoveLeftPressed }
+                onMoveRightPressed={ this.props.onMoveRightPressed }
+                onDropPressed={ this.props.onDropPressed }
+                isActive={ this.props.isActive }
+                canUndo={ this.props.canUndo }
+                canRedo={ this.props.canRedo }
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </LayoutBaseContainer>
     );
   }
 }
