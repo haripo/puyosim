@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import React, { Component } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { Navigator } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import {
@@ -14,8 +15,39 @@ import SimulatorControls from '../../shared/components/SimulatorControls';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
+import { PuyoForRendering, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { Layout } from "../../shared/selectors/layoutSelectors";
+import { Theme } from "../../shared/selectors/themeSelectors";
+import { Pair } from "../../shared/models/stack";
 
-export default class Simulator extends Component {
+export type Props = {
+  navigator: Navigator,
+
+  stack: StackForRendering,
+  ghosts: PuyoForRendering[],
+  pendingPair: Pair
+  puyoSkin: string,
+  layout: Layout,
+  theme: Theme,
+
+  isActive: boolean,
+  canUndo: boolean,
+  canRedo: boolean,
+
+  onLayout: (layout: { width: number, height: number }) => void,
+  onUndoSelected: () => void,
+  onRedoSelected: () => void,
+  onResetSelected: () => void,
+  onRestartSelected: () => void,
+  onShareSelected: () => void,
+  onRotateLeftPressed: () => void,
+  onRotateRightPressed: () => void,
+  onMoveLeftPressed: () => void,
+  onMoveRightPressed: () => void,
+  onDropPressed: () => void
+}
+
+export default class Simulator extends Component<Props, {}> {
   rootView: View | null = null;
 
   static navigatorButtons = {
@@ -71,7 +103,7 @@ export default class Simulator extends Component {
   }
 
   componentDidMount() {
-    this.props.onSimulatorLaunched();
+    //this.props.onSimulatorLaunched();
   }
 
   onNavigatorEvent(event) {
@@ -132,17 +164,11 @@ export default class Simulator extends Component {
             <Field
               stack={ this.props.stack }
               ghosts={ this.props.ghosts }
-              droppingPuyos={ this.props.droppingPuyos }
-              vanishingPuyos={ this.props.vanishingPuyos }
               isActive={ this.props.isActive }
               style={ styles.field }
               layout={ this.props.layout }
               theme={ this.props.theme }
-              puyoSkin={ this.props.puyoSkin }
-              onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-              onSwiping={ this.props.onSwiping }
-              onSwipeEnd={ this.props.onSwipeEnd }>
+              puyoSkin={ this.props.puyoSkin }>
             </Field>
           </View>
           <View style={ styles.side }>
