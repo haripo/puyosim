@@ -9,7 +9,6 @@ import {
   isWeb,
   screenHeight,
   screenWidth,
-  sideWidth,
   themeColor,
   themeLightColor,
 } from '../../utils/constants';
@@ -26,7 +25,9 @@ export interface Props {
 }
 
 interface State {
-  nodeAnimated: AnimatedValue[]
+  nodeAnimated: AnimatedValue[],
+  width: number,
+  height: number
 }
 
 type RecordIndexPair = { record: HistoryRecord, historyIndex: number };
@@ -37,16 +38,17 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   handsX = 8;
   handsY = 14;
 
-  nodeWidth = (sideWidth - this.handsY * 2) / 3;
-  nodeHeight = this.nodeWidth / 2;
+  view: View | null = null;
+
+  get nodeWidth() { return (this.state.width - this.handsY * 2) / 3 }
+  get nodeHeight() { return this.nodeWidth / 2 }
   puyoMarginY = 10;
   nodeMarginTop = 10;
-  nodeMarginLeft = (sideWidth - this.handsX) / 3 + this.handsX;
+  get nodeMarginLeft() { return (this.state.width - this.handsX) / 3 + this.handsX }
   nodeMarginBottom = 10;
 
-  childrenLeft = this.nodeWidth;
-
-  puyoSize = (this.nodeMarginLeft - this.handsX) / 2 - 5;
+  get childrenLeft() { return this.nodeWidth }
+  get puyoSize() { return (this.nodeMarginLeft - this.handsX) / 2 - 5 }
 
   constructor(props) {
     super(props);
@@ -58,7 +60,11 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     for (let i = 0; i < l; i++) {
       r[i] = new Animated.Value(1);
     }
-    this.state = { nodeAnimated: r };
+    this.state = {
+      nodeAnimated: r,
+      width: 0,
+      height: 0
+    };
   }
 
   componentDidUpdate(prevProps: Props, prevState: State, snapshot) {
@@ -85,6 +91,14 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   handleNodePressed(historyIndex: number, e) {
     e.stopPropagation();
     this.props.onNodePressed(historyIndex);
+  }
+
+  handleLayout(e) {
+    const w = e.nativeEvent.layout.width;
+    this.view!.measure((ox, oy, width, height) => {
+      console.log(width, w);
+      this.setState({ width, height });
+    });
   }
 
   renderPair(hand, index) {
@@ -247,7 +261,9 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     }
 
     return (
-      <View style={ styles.component }>
+      <View style={ styles.component }
+            onLayout={ this.handleLayout.bind(this) }
+            ref={ ref => this.view = ref }>
         <FlatList
           data={ flatHist }
           renderItem={ this.renderItem.bind(this) }
@@ -264,7 +280,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: cardBackgroundColor,
     overflow: 'scroll',
-    height: screenHeight - contentsPadding * 4,
-    width: screenWidth - contentsPadding * 2
+    // height: screenHeight - contentsPadding * 4,
+    // width: screenWidth - contentsPadding * 2
   }
 });
