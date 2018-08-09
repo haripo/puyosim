@@ -23,6 +23,17 @@ const numberImages = [
 ];
 
 export default class HistoryTreeNode extends React.Component {
+  constructor(props) {
+    super(props);
+    if (this.props.x.addListener) {
+      this.props.x.addListener(value => {
+        if (!this.g) return;
+        const v = (1 - value.value) * (this.props.futureX - this.props.currentX) + this.props.currentX;
+        this.g.setNativeProps({ matrix: [1, 0, 0, 1, v, 0] });
+      });
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     return !compareWith(
       this.props,
@@ -33,17 +44,6 @@ export default class HistoryTreeNode extends React.Component {
       'rotation',
       'nodeWidth',
       'isCurrentNode');
-  }
-
-  constructor(props) {
-    super(props);
-    if (this.props.x.addListener) {
-      this.props.x.addListener(value => {
-        if (!this.g) return;
-        const v = (1 - value.value) * (this.props.futureX - this.props.currentX) + this.props.currentX;
-        this.g.setNativeProps({ matrix: [1, 0, 0, 1, v, 0] });
-      });
-    }
   }
 
   componentDidMount() {
