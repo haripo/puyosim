@@ -14,7 +14,11 @@ import reducers from './src/shared/reducers'
 
 import { Sentry } from 'react-native-sentry';
 
-Sentry.config('https://***REMOVED***').install();
+if (!__DEV__) {
+  Sentry
+    .config('https://***REMOVED***')
+    .install();
+}
 
 const store = getStore(reducers, sagas);
 
