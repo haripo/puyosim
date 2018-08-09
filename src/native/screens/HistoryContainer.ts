@@ -16,6 +16,8 @@ import {
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import History from '../components/History';
+import { getLayout } from "../../shared/selectors/layoutSelectors";
+import { getTheme } from "../../shared/selectors/themeSelectors";
 
 const mapStateToProps = (state) => {
   return {
@@ -30,6 +32,8 @@ const mapStateToProps = (state) => {
     history: state.simulator.history,
     historyTreeLayout: getHistoryTreeLayout(state.simulator),
     historyIndex: state.simulator.historyIndex,
+    layout: getLayout(state.layout),
+    theme: getTheme(state.theme)
   };
 };
 
