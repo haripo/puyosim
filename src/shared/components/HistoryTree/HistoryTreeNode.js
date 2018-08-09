@@ -53,7 +53,7 @@ export default class HistoryTreeNode extends React.Component {
   }
 
   render() {
-    const { x, y, col, rotation, nodeWidth, isCurrentNode, onPress } = this.props;
+    const { y, col, rotation, nodeWidth, isCurrentNode, onPress } = this.props;
     const iconSize = nodeWidth / 2;
     const iconPadding = nodeWidth / 16;
 
@@ -65,7 +65,7 @@ export default class HistoryTreeNode extends React.Component {
     };
 
     return (
-      <G { ...events } x={ x } ref={ ref => this.g = ref }>
+      <G { ...events } ref={ ref => this.g = ref }>
         <Rect
           { ...events }
           x={ 0 }

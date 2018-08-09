@@ -99,7 +99,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           x={ x }
           y={ this.puyoMarginY }
           skin={ puyoSkin }
-          connections={ null }
           a={ 1 }
         />
         <SvgPuyo
@@ -108,7 +107,6 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           x={ x + this.puyoSize }
           y={ this.puyoMarginY }
           skin={ puyoSkin }
-          connections={ null }
           a={ 1 }
         />
       </React.Fragment>

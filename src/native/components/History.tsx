@@ -9,12 +9,17 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree";
 import { HistoryRecord } from "../../shared/models/history";
+import { Theme } from "../../shared/selectors/themeSelectors";
+import { Layout } from "../../shared/selectors/layoutSelectors";
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
 
 export interface Props {
   navigator: any,
+
+  theme: Theme,
+  layout: Layout,
 
   stack: any,
   ghosts: any,
@@ -81,14 +86,11 @@ export default class Simulator extends Component<Props, State> {
             <Field
               stack={ this.props.stack }
               ghosts={ this.props.ghosts }
-              droppingPuyos={ this.props.droppingPuyos }
-              vanishingPuyos={ this.props.vanishingPuyos }
               isActive={ this.props.isActive }
               style={ styles.field }
               puyoSkin={ this.props.puyoSkin }
-              onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-            >
+              theme={ this.props.theme }
+              layout={ this.props.layout }>
             </Field>
           </View>
           <View style={ styles.side }>
