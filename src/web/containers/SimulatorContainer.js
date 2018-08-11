@@ -22,6 +22,8 @@ import {
   getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
+import { getLayout } from '../../shared/selectors/layoutSelectors';
+import { getTheme } from '../../shared/selectors/themeSelectors';
 
 const mapStateToProps = (state) => {
   return {
@@ -34,7 +36,9 @@ const mapStateToProps = (state) => {
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin,
     canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator)
+    canRedo: canRedo(state.simulator),
+    layout: getLayout(state.layout),
+    theme: getTheme(state.theme)
   };
 };
 

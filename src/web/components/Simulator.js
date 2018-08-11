@@ -9,7 +9,7 @@ import SimulatorControls from '../../shared/components/SimulatorControls';
 import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
 import WebToolbar from './WebToolbar';
-import SlimHistoryTree from '../../shared/components/HistoryTree/SlimHistoryTree';
+import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 
 export default class Simulator extends Component {
   constructor(props) {
@@ -51,65 +51,63 @@ export default class Simulator extends Component {
         style={ { outline: '0' } }
         focused>
         { /* Focused on mounted to enable hotkeys */ }
-        <div
+        <View
           ref={ c => this.hotkeyElementRef = c }
           tabIndex={ -1 }
           style={ { outline: '0' } }>
           <View>
             <WebToolbar/>
           </View>
-          <View style={ styles.container }>
-            <View style={ styles.contents }>
-              <View>
-                <HandlingPuyos
-                  pair={ this.props.pendingPair }
-                  puyoSkin={ this.props.puyoSkin }
-                  layout={ this.props.layout }>
-                </HandlingPuyos>
-                <Field
-                  stack={ this.props.stack }
-                  ghosts={ this.props.ghosts }
-                  droppingPuyos={ this.props.droppingPuyos }
-                  vanishingPuyos={ this.props.vanishingPuyos }
-                  isActive={ this.props.isActive }
-                  style={ styles.field }
-                  puyoSkin={ this.props.puyoSkin }
-                  onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-                  onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-                  onSwiping={ this.props.onSwiping }
-                  onSwipeEnd={ this.props.onSwipeEnd }>
-                </Field>
-              </View>
-              <View style={ styles.side }>
-                <View style={ styles.sideHead }>
-                  <NextWindowContainer/>
-                  <ChainResultContainer/>
+          <LayoutBaseContainer>
+            <View style={ styles.container }>
+              <View style={ styles.contents }>
+                <View>
+                  <HandlingPuyos
+                    pair={ this.props.pendingPair }
+                    puyoSkin={ this.props.puyoSkin }
+                    layout={ this.props.layout }>
+                  </HandlingPuyos>
+                  <Field
+                    stack={ this.props.stack }
+                    ghosts={ this.props.ghosts }
+                    isActive={ this.props.isActive }
+                    style={ styles.field }
+                    theme={ this.props.theme }
+                    layout={ this.props.layout }
+                    puyoSkin={ this.props.puyoSkin }>
+                  </Field>
                 </View>
-                <SimulatorControls
-                  onUndoSelected={ this.props.onUndoSelected }
-                  onRedoSelected={ this.props.onRedoSelected }
-                  onRotateLeftPressed={ this.props.onRotateLeftPressed }
-                  onRotateRightPressed={ this.props.onRotateRightPressed }
-                  onMoveLeftPressed={ this.props.onMoveLeftPressed }
-                  onMoveRightPressed={ this.props.onMoveRightPressed }
-                  onDropPressed={ this.props.onDropPressed }
-                  isActive={ this.props.isActive }
-                  canUndo={ this.props.canUndo }
-                  canRedo={ this.props.canRedo }
-                  shortcuts={ keyMap }
+                <View style={ styles.side }>
+                  <View style={ styles.sideHead }>
+                    <NextWindowContainer/>
+                    <ChainResultContainer/>
+                  </View>
+                  <SimulatorControls
+                    onUndoSelected={ this.props.onUndoSelected }
+                    onRedoSelected={ this.props.onRedoSelected }
+                    onRotateLeftPressed={ this.props.onRotateLeftPressed }
+                    onRotateRightPressed={ this.props.onRotateRightPressed }
+                    onMoveLeftPressed={ this.props.onMoveLeftPressed }
+                    onMoveRightPressed={ this.props.onMoveRightPressed }
+                    onDropPressed={ this.props.onDropPressed }
+                    isActive={ this.props.isActive }
+                    canUndo={ this.props.canUndo }
+                    canRedo={ this.props.canRedo }
+                    shortcuts={ keyMap }
+                  />
+                </View>
+              </View>
+              <View style={ styles.historyTree }>
+                <HistoryTree
+                  history={ this.props.history }
+                  historyTreeLayout={ this.props.historyTreeLayout }
+                  currentIndex={ this.props.historyIndex }
+                  onNodePressed={ this.props.onHistoryNodePressed }
                 />
               </View>
             </View>
-            <View style={ styles.historyTree }>
-              <HistoryTree
-                history={ this.props.history }
-                historyTreeLayout={ this.props.historyTreeLayout }
-                currentIndex={ this.props.historyIndex }
-                onNodePressed={ this.props.onHistoryNodePressed }
-              />
-            </View>
-          </View>
-        </div>
+          </LayoutBaseContainer>
+        </View>
       </HotKeys>
     );
   }
@@ -140,8 +138,7 @@ const styles = StyleSheet.create({
   sideHead: {
     flex: 1
   },
-  historyTree: {
-  },
+  historyTree: {},
   hotkeyElement: {
     borderWidth: 0
   }
