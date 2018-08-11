@@ -44,7 +44,14 @@ export function getGhost(state: SimulatorState) {
   return getDropPositions(state);
 }
 
-export function getPendingPair(state: SimulatorState) {
+type PendingPairPuyo = {
+  row: number,
+  col: number,
+  color: Color
+}
+export type PendingPair = PendingPairPuyo[];
+
+export function getPendingPair(state: SimulatorState): PendingPair {
   const pair = state.pendingPair; // as Move
   const hand = getCurrentHand(state);
 

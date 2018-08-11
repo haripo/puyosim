@@ -16,17 +16,16 @@ import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { PuyoForRendering, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { PendingPair, PuyoForRendering, StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
-import { Pair } from "../../shared/models/stack";
 
 export type Props = {
   navigator: Navigator,
 
   stack: StackForRendering,
   ghosts: PuyoForRendering[],
-  pendingPair: Pair
+  pendingPair: PendingPair
   puyoSkin: string,
   layout: Layout,
   theme: Theme,
@@ -151,7 +150,8 @@ export default class Simulator extends Component<Props, {}> {
             <View>
               <HandlingPuyos
                 pair={ this.props.pendingPair }
-                puyoSkin={ this.props.puyoSkin }>
+                puyoSkin={ this.props.puyoSkin }
+                layout={ this.props.layout }>
               </HandlingPuyos>
               <Field
                 stack={ this.props.stack }
