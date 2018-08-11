@@ -34,7 +34,6 @@ export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 
 export const fieldWidth = puyoSize * fieldCols + contentsPadding * 2;
 export const fieldHeight = puyoSize * fieldRows + contentsPadding * 2;
 export const sideWidth = screen.width - fieldWidth - contentsMargin * 3;
-console.log(sideWidth, screen.width, "AAAAAAAAAAA")
 
 export const controllerButtonWidth = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
 export const controllerButtonHeight = (screen.height / 2) / 4;

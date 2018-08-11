@@ -94,9 +94,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   }
 
   handleLayout(e) {
-    const w = e.nativeEvent.layout.width;
     this.view!.measure((ox, oy, width, height) => {
-      console.log(width, w);
       this.setState({ width, height });
     });
   }
