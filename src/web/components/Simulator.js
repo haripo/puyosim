@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
   side: {
     flex: 1,
     justifyContent: 'space-between',
-    marginTop: contentsMargin,
     marginRight: contentsMargin,
+    marginLeft: contentsMargin,
     marginBottom: contentsMargin
   },
   sideHead: {

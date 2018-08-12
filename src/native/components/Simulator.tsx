@@ -151,6 +151,7 @@ export default class Simulator extends Component<Props, {}> {
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }
+                style={ styles.handlingPuyos }
                 layout={ this.props.layout }>
               </HandlingPuyos>
               <Field
@@ -201,10 +202,14 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'row'
   },
+  handlingPuyos: {
+    marginTop: 3,
+    marginLeft: 3,
+  },
   side: {
     flex: 1,
-    justifyContent: 'space-between',
-    marginTop: contentsMargin,
+//    justifyContent: 'space-between',
+    // marginTop: contentsMargin,
     marginRight: contentsMargin,
     marginBottom: contentsMargin
   },

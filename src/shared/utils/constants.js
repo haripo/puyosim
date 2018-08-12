@@ -35,8 +35,8 @@ export const fieldWidth = puyoSize * fieldCols + contentsPadding * 2;
 export const fieldHeight = puyoSize * fieldRows + contentsPadding * 2;
 export const sideWidth = screen.width - fieldWidth - contentsMargin * 3;
 
-export const controllerButtonWidth = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
-export const controllerButtonHeight = (screen.height / 2) / 4;
+// export const controllerButtonWidth = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
+// export const controllerButtonHeight = (screen.height / 2) / 4;
 
 export const cardBackgroundColor = '#EFEBE9';
 export const buttonColor = '#8D6E63';
