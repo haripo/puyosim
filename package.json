@@ -32,7 +32,7 @@
     "react-dom": "^16.4.1",
     "react-hotkeys": "^1.1.4",
     "react-mixin": "^4.0.0",
-    "react-native": "0.56.0",
+    "react-native": "0.55.0",
     "react-native-i18n": "^2.0.12",
     "react-native-modal-selector": "0.0.27",
     "react-native-navigation": "^1.1.479",
