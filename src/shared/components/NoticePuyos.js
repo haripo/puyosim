@@ -6,8 +6,9 @@ import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/c
  * Component for render notice puyos
  */
 export default class NoticePuyos extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.rate = 70;
     this.noticeVolumes = [
       1,

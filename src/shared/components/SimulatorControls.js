@@ -20,10 +20,10 @@ export default class SimulatorControls extends PureComponent {
   }
 
   render() {
-    const shortcuts = _.mapValues(this.props.shortcuts || {},(shortcut) => `(${shortcut})`);
+    const shortcuts = _.mapValues(this.props.shortcuts || {}, (shortcut) => `(${shortcut})`);
 
     return (
-      <View style={ { flexDirection: 'column' } }>
+      <View style={ styles.component }>
         <View style={ styles.buttonGroup }>
           <TouchableOpacity
             disabled={ !this.props.canUndo }
@@ -37,7 +37,7 @@ export default class SimulatorControls extends PureComponent {
           </TouchableOpacity>
           <TouchableOpacity
             disabled={ !this.props.canRedo }
-            style={ styles.controllerButton }
+            style={ [styles.controllerButton, styles.controllerRightButton] }
             activeOpacity={ this.props.canRedo ? 0.7 : 1 }
             // onClick={ this.props.onRedoSelected }
             onPress={ this.props.onRedoSelected }>
@@ -56,7 +56,7 @@ export default class SimulatorControls extends PureComponent {
             { this.renderShortcut(shortcuts.rotateLeft) }
           </TouchableOpacity>
           <TouchableOpacity
-            style={ styles.controllerButton }
+            style={ [styles.controllerButton, styles.controllerRightButton] }
             // onClick={ this.props.onRotateRightPressed }
             onPress={ this.props.onRotateRightPressed }
             disabled={ !this.props.isActive }>
@@ -64,23 +64,23 @@ export default class SimulatorControls extends PureComponent {
             { this.renderShortcut(shortcuts.rotateRight) }
           </TouchableOpacity>
         </View>
-        <View style={ styles.buttons }>
-          <View style={ styles.buttonGroup }>
-            <TouchableOpacity
-              style={ styles.controllerButton }
-              // onClick={ this.props.onMoveLeftPressed }
-              onPress={ this.props.onMoveLeftPressed }
-              disabled={ !this.props.isActive }>
-              <Icon name="arrow-back" size={ 30 } color="#FFF"/>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={ styles.controllerButton }
-              // onClick={ this.props.onMoveRightPressed }
-              onPress={ this.props.onMoveRightPressed }
-              disabled={ !this.props.isActive }>
-              <Icon name="arrow-forward" size={ 30 } color="#FFF"/>
-            </TouchableOpacity>
-          </View>
+        <View style={ styles.buttonGroup }>
+          <TouchableOpacity
+            style={ styles.controllerButton }
+            // onClick={ this.props.onMoveLeftPressed }
+            onPress={ this.props.onMoveLeftPressed }
+            disabled={ !this.props.isActive }>
+            <Icon name="arrow-back" size={ 30 } color="#FFF"/>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={ [styles.controllerButton, styles.controllerRightButton] }
+            // onClick={ this.props.onMoveRightPressed }
+            onPress={ this.props.onMoveRightPressed }
+            disabled={ !this.props.isActive }>
+            <Icon name="arrow-forward" size={ 30 } color="#FFF"/>
+          </TouchableOpacity>
+        </View>
+        <View style={ styles.buttonGroup }>
           <TouchableOpacity
             style={ styles.controllerFullWidthButton }
             // onClick={ this.props.onDropPressed }
@@ -95,13 +95,17 @@ export default class SimulatorControls extends PureComponent {
 }
 
 const styles = StyleSheet.create({
+  component: {
+    flexDirection: 'column',
+    height: 300
+  },
   buttonGroup: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   controllerButton: {
-    width: controllerButtonWidth,
-    height: controllerButtonHeight,
+    flex: 1,
     marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center',
@@ -109,10 +113,12 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     elevation: 3,
   },
+  controllerRightButton: {
+    marginLeft: contentsMargin
+  },
   controllerFullWidthButton: {
+    flex: 1,
     backgroundColor: buttonColor,
-    width: controllerButtonWidth * 2 + contentsMargin,
-    height: controllerButtonHeight,
     marginTop: contentsMargin,
     justifyContent: 'center',
     alignItems: 'center',
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   shortcut: {
-    color : 'white',
+    color: 'white',
     fontSize: 12
   }
 });
