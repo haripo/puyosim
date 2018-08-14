@@ -20,6 +20,13 @@ if (!__DEV__) {
     .install();
 }
 
+// https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings([
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+]);
+
 const store = getStore(reducers, sagas);
 
 // Register screen components
