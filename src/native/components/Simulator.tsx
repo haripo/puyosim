@@ -47,8 +47,6 @@ export type Props = {
 }
 
 export default class Simulator extends Component<Props, {}> {
-  rootView: View | null = null;
-
   static navigatorButtons = {
     rightButtons: [
       {
@@ -76,11 +74,11 @@ export default class Simulator extends Component<Props, {}> {
         id: 'reset',
         showAsAction: 'never'
       },
-      {
-        title: t('history'),
-        id: 'history',
-        showAsAction: 'never'
-      },
+      // {
+      //   title: t('history'),
+      //   id: 'history',
+      //   showAsAction: 'never'
+      // },
       {
         title: t('undo'),
         id: 'undo',
