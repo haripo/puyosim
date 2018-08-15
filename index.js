@@ -1,5 +1,14 @@
-import React, { Component } from 'react';
-import { AppRegistry, Text } from 'react-native';
+// https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings([
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+  'Warning: componentWillUpdate is deprecated',
+  'Warning: isMounted(...) is deprecated'
+]);
+
+
+import React from 'react';
 import { Provider } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
@@ -19,13 +28,6 @@ if (!__DEV__) {
     .config('https://d03216589dad4ea9ac7a2431b901ff11:772e66c1594b42969f68d524e683a3b1@sentry.io/1222354')
     .install();
 }
-
-// https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
-import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings([
-  'Warning: componentWillMount is deprecated',
-  'Warning: componentWillReceiveProps is deprecated',
-]);
 
 const store = getStore(reducers, sagas);
 
