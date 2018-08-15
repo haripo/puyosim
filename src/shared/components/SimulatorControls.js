@@ -3,8 +3,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   buttonColor,
   contentsMargin,
-  controllerButtonHeight,
-  controllerButtonWidth
 } from '../../shared/utils/constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
