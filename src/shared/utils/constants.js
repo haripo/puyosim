@@ -29,12 +29,6 @@ export const fieldCols = 6;
 export const contentsMargin = 3;
 export const contentsPadding = 3;
 
-export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 4) / (fieldRows + 3);
-
-export const fieldWidth = puyoSize * fieldCols + contentsPadding * 2;
-export const fieldHeight = puyoSize * fieldRows + contentsPadding * 2;
-export const sideWidth = screen.width - fieldWidth - contentsMargin * 3;
-
 export const cardBackgroundColor = '#EFEBE9';
 export const buttonColor = '#8D6E63';
 export const themeColor = '#6D4C41';
