@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import { Animated, Image } from 'react-native';
+import { Animated, Image, ViewStyle } from 'react-native';
 import _ from 'lodash';
 import { PuyoConnection } from "../selectors/simulatorSelectors";
 
@@ -89,7 +89,7 @@ interface State {
  * Component for render single puyo
  */
 export default class Puyo extends Component<Props, State> {
-  style() {
+  style(): ViewStyle {
     return {
       position: 'absolute',
       top: 0,

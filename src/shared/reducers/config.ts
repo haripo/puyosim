@@ -1,6 +1,8 @@
 import { SAVE_CONFIG } from '../actions/actions';
-import { saveConfig, loadConfig } from '../utils/StorageService';
 import getInitialState from '../models/config';
+
+// @ts-ignore
+import { saveConfig, loadConfig } from '../utils/StorageService';
 
 function save(state, { key, value }) {
   if (key === 'numColors') {

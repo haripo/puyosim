@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
+
+// @ts-ignore
 import t from '../utils/i18n';
 
-export default class ChainResult extends Component {
-  constructor() {
-    super();
-  }
+type Props = {
+  chain: number,
+  score: number,
+  chainScore: number
+}
 
+export default class ChainResult extends Component<Props, {}> {
   render() {
     const { chain, score, chainScore } = this.props;
     return (
