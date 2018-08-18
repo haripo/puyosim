@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Animated, View } from 'react-native';
-import { contentsPadding, puyoSize } from '../utils/constants';
+import { contentsPadding } from '../utils/constants';
 import Puyo from './Puyo';
 
 export default class DroppingPuyos extends Component {
@@ -12,7 +12,7 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.state.isAnimating && nextProps.vanishings.length > 0) {
       this.launchVanishingAnimation();
     }
@@ -49,6 +49,8 @@ export default class DroppingPuyos extends Component {
   }
 
   renderPuyos() {
+    const { puyoSize } = this.props.layout;
+
     return this.props.vanishings.map(v => {
       const a = this.state.progress.interpolate(this.getInterpolateOption());
 
@@ -67,6 +69,6 @@ export default class DroppingPuyos extends Component {
   }
 
   render() {
-    return <View>{ ::this.renderPuyos() }</View>;
+    return <View>{ this.renderPuyos() }</View>;
   }
 }

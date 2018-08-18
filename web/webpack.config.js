@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const appDirectory = path.resolve(__dirname, '../');
 
 const babelLoaderConfiguration = {
-  test: /\.js$/,
+  test: /\.[jt]sx?$/,
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
     path.resolve(appDirectory, 'index.web.js'),
@@ -48,6 +48,27 @@ const fontLoaderConfiguration = {
   }
 };
 
+
+const tsLoaderConfiguration = {
+  test: /\.tsx?$/,
+  exclude: [
+    "/node_modules/"
+  ],
+  use: {
+    loader: 'ts-loader',
+    options: {
+      compilerOptions: {
+        allowJs: true,
+        target: "ES5",
+        module: "es2015",
+        jsx: "react",
+        outDir: "web/build",
+        lib: ["dom", "ES2017"],
+      }
+    }
+  }
+};
+
 module.exports = {
   entry: [path.resolve(appDirectory, 'index.web.js'), 'babel-polyfill'],
   output: {
@@ -57,6 +78,7 @@ module.exports = {
   module: {
     rules: [
       babelLoaderConfiguration,
+      tsLoaderConfiguration,
       imageLoaderConfiguration,
       fontLoaderConfiguration
     ]
@@ -68,7 +90,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.web.js', '.js'],
+    extensions: ['.web.js', '.js', '.ts', '.tsx', '.web.ts', '.web.tsx'],
     alias: {
       'react-native-svg': 'react-native-svg-web'
     }
@@ -77,5 +99,5 @@ module.exports = {
     contentBase: path.resolve(appDirectory, 'web/'),
     publicPath: '/build/'
   },
-  devtool: 'inline-source-map'
+  devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map'
 };

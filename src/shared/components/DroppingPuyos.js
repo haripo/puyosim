@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Component } from 'react';
 import { Animated, View } from 'react-native';
-import { contentsPadding, puyoSize } from '../utils/constants';
+import { contentsPadding } from '../utils/constants';
 import Puyo from './Puyo';
 import _ from 'lodash';
 
@@ -13,7 +14,7 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.state.isAnimating && nextProps.droppings.length > 0) {
       this.launchDroppingAnimation(nextProps.droppings);
     }
@@ -39,6 +40,7 @@ export default class DroppingPuyos extends Component {
 
   renderPuyos() {
     const { droppings, puyoSkin } = this.props;
+    const { puyoSize } = this.props.layout;
 
     const maxDistance = _.max(this.props.droppings.map(d => d.distance));
     return droppings.map(d => {
@@ -54,17 +56,17 @@ export default class DroppingPuyos extends Component {
 
       return (
         <Puyo
-          size={puyoSize}
-          puyo={d.color}
-          skin={puyoSkin}
-          x={d.col * puyoSize + contentsPadding}
-          y={y}
-          key={`dropping-${d.row}-${d.col}`}/>
+          size={ puyoSize }
+          puyo={ d.color }
+          skin={ puyoSkin }
+          x={ d.col * puyoSize + contentsPadding }
+          y={ y }
+          key={ `dropping-${d.row}-${d.col}` }/>
       );
     });
   }
 
   render() {
-    return <View>{::this.renderPuyos()}</View>;
+    return <View>{ this.renderPuyos() }</View>;
   }
 }

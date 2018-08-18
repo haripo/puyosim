@@ -7,6 +7,7 @@ const windowSize = Dimensions.get('window');
 
 const androidStatusBar = 24;
 const androidToolBar = 56;
+export const webToolbarSize = 64;
 
 let screen = {
   width: windowSize.width,
@@ -14,7 +15,7 @@ let screen = {
 };
 
 if (isWeb) {
-  screen.height = Math.max(600, windowSize.height);
+  screen.height = Math.max(600, windowSize.height) - webToolbarSize;
   screen.width = screen.height * 0.65;
 }
 
@@ -27,12 +28,6 @@ export const fieldCols = 6;
 
 export const contentsMargin = 3;
 export const contentsPadding = 3;
-
-export const puyoSize = (screen.height - contentsMargin * 3 - contentsPadding * 4) / (fieldRows + 3);
-
-export const controllerButtonWidth = (screen.width - puyoSize * 6 - contentsMargin * 4 - contentsPadding * 2) / 2;
-export const controllerButtonHeight = (screen.height / 2) / 4;
-
 
 export const cardBackgroundColor = '#EFEBE9';
 export const buttonColor = '#8D6E63';

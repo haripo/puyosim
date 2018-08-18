@@ -1,60 +1,43 @@
-/**
- * Puyo simulator app
- * @flow
- */
+// https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings([
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+  'Warning: componentWillUpdate is deprecated',
+  'Warning: isMounted(...) is deprecated'
+]);
 
-import { mapValues } from 'lodash';
-import React, { Component } from 'react';
+
+import React from 'react';
 import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
-import { createLogger } from 'redux-logger';
-import createSagaMiddleware from 'redux-saga';
 import { Navigation } from 'react-native-navigation';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 import Simulator from './src/native/screens/SimulatorContainer';
 import History from './src/native/screens/HistoryContainer';
 import About from './src/native/screens/AboutContainer';
 import Settings from './src/native/screens/SettingsContainer';
-import reducer from './src/shared/reducers';
-import sagas from './src/shared/sagas';
+import { getStore } from './src/shared/store/store';
 
-import { Client } from 'bugsnag-react-native';
-Client.releaseStage = 'development';
-Client.notifyReleaseStages = ['production'];
+import sagas from './src/shared/sagas';
+import reducers from './src/shared/reducers'
 
 import { Sentry } from 'react-native-sentry';
-import Raven from "raven-js";
-import createRavenMiddleware from "raven-for-redux";
 
-Sentry.config('https://***REMOVED***').install();
+if (!__DEV__) {
+  Sentry
+    .config('https://***REMOVED***')
+    .install();
+}
 
-ravenMiddleware = createRavenMiddleware(Raven, {
-  // stateTransformer: state => {
-  //   return JSON.stringify(state, null, 2)
-  // }
-});
-
-const stateTransformer = state => state.toJS();
-
-const logger = createLogger({
-  stateTransformer
-});
-
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-  reducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware, ravenMiddleware/*, logger*/)));
-
-sagaMiddleware.run(sagas);
+const store = getStore(reducers, sagas);
 
 // Register screen components
+//Navigation.registerComponent('PuyoSimulator', () => Simulator, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
 Navigation.registerComponent('com.puyosimulator.History', () => History, store, Provider);
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
 
-// launch first screen
 Navigation.startSingleScreenApp({
   screen: {
     screen: 'com.puyosimulator.Simulator',
@@ -65,3 +48,4 @@ Navigation.startSingleScreenApp({
   animationType: 'none',
   portraitOnlyMode: true,
 });
+
