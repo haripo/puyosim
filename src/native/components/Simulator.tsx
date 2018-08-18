@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from 'react-native';
 import { Navigator } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
@@ -47,45 +47,8 @@ export type Props = {
 }
 
 export default class Simulator extends Component<Props, {}> {
-  static navigatorButtons = {
-    rightButtons: [
-      {
-        title: t('about'),
-        id: 'about',
-        showAsAction: 'never'
-      },
-      {
-        title: t('settings'),
-        id: 'settings',
-        showAsAction: 'never'
-      },
-      {
-        title: t('shareViaTwitter'),
-        id: 'share-via-ips',
-        showAsAction: 'never'
-      },
-      {
-        title: t('restart'),
-        id: 'restart',
-        showAsAction: 'never'
-      },
-      {
-        title: t('reset'),
-        id: 'reset',
-        showAsAction: 'never'
-      },
-      // {
-      //   title: t('history'),
-      //   id: 'history',
-      //   showAsAction: 'never'
-      // },
-      {
-        title: t('undo'),
-        id: 'undo',
-        showAsAction: 'never'
-      }
-    ]
-  };
+
+  static navigatorButtons = {}
 
   static navigatorStyle = {
     navBarBackgroundColor: themeColor,
@@ -134,6 +97,38 @@ export default class Simulator extends Component<Props, {}> {
           break;
         case 'about':
           this.props.navigator.push({ screen: 'com.puyosimulator.About' });
+          break;
+        case 'menu':
+          ActionSheetIOS.showActionSheetWithOptions({
+            options: [
+              'Cancel',
+              'Undo',
+              'Reset',
+              'Restart',
+              'Share',
+              'Settings',
+              'About'
+            ],
+            destructiveButtonIndex: 0
+          }, selected => {
+            [
+              () => {},
+              this.props.onUndoSelected,
+              this.props.onResetSelected,
+              () => Alert.alert(
+                t('restart'),
+                t('confirmRestart'),
+                [
+                  { text: 'Cancel', onPress: _.noop, style: 'cancel' },
+                  { text: 'OK', onPress: this.props.onRestartSelected }
+                ],
+                { cancelable: false }
+              ),
+              this.props.onShareSelected,
+              () => this.props.navigator.push({ screen: 'com.puyosimulator.Settings' }),
+              () => this.props.navigator.push({ screen: 'com.puyosimulator.About' })
+            ][selected]()
+          });
           break;
       }
     }
@@ -185,6 +180,57 @@ export default class Simulator extends Component<Props, {}> {
       </LayoutBaseContainer>
     );
   }
+}
+
+if (Platform.OS === 'android') {
+  Simulator.navigatorButtons = {
+    rightButtons: [
+      {
+        title: t('about'),
+        id: 'about',
+        showAsAction: 'never'
+      },
+      {
+        title: t('settings'),
+        id: 'settings',
+        showAsAction: 'never'
+      },
+      {
+        title: t('shareViaTwitter'),
+        id: 'share-via-ips',
+        showAsAction: 'never'
+      },
+      {
+        title: t('restart'),
+        id: 'restart',
+        showAsAction: 'never'
+      },
+      {
+        title: t('reset'),
+        id: 'reset',
+        showAsAction: 'never'
+      },
+      // {
+      //   title: t('history'),
+      //   id: 'history',
+      //   showAsAction: 'never'
+      // },
+      {
+        title: t('undo'),
+        id: 'undo',
+        showAsAction: 'never'
+      }
+    ]
+  };
+} else if (Platform.OS === 'ios') {
+  Simulator.navigatorButtons = {
+    rightButtons: [
+      {
+        title: 'menu',
+        id: 'menu'
+      }
+    ]
+  };
 }
 
 const styles = StyleSheet.create({
