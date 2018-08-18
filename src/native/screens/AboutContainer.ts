@@ -3,8 +3,7 @@ import AboutContent from '../components/AboutContents';
 import { debugSetPattern, debugSetHistory } from '../../shared/actions/actions';
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
