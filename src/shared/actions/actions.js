@@ -25,7 +25,9 @@ export const RESET_FIELD = 'RESET_FIELD';
 export const RESTART = 'RESTART';
 export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const OPEN_TWITTER_SHARE = 'OPEN_TWITTER_SHARE';
+export const RESET_LAYOUT = 'RESET_LAYOUT';
 export const DEBUG_SET_PATTERN = 'DEBUG_SET_PATTERN';
+export const DEBUG_SET_HISTORY = 'DEBUG_SET_HISTORY';
 
 export const putNextPair = (position, rotation) => {
   return {
@@ -53,4 +55,6 @@ export const resetField = makeActionCreator(RESET_FIELD);
 export const restart = makeActionCreator(RESTART);
 export const saveConfig = makeActionCreator(SAVE_CONFIG, 'key', 'value');
 export const openTwitterShare = makeActionCreator(OPEN_TWITTER_SHARE);
+export const resetLayout = makeActionCreator(RESET_LAYOUT, 'layout');
 export const debugSetPattern = makeActionCreator(DEBUG_SET_PATTERN, 'name');
+export const debugSetHistory = makeActionCreator(DEBUG_SET_HISTORY, 'name');

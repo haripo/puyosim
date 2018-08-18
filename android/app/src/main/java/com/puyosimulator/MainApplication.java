@@ -3,16 +3,12 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import io.sentry.RNSentryPackage;
-import com.horcrux.svg.SvgPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.horcrux.svg.SvgPackage;
-import com.horcrux.svg.SvgPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.bugsnag.BugsnagReactNative;
+import com.horcrux.svg.SvgPackage;
+import io.sentry.RNSentryPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,9 +18,11 @@ import com.reactnativenavigation.NavigationApplication;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends NavigationApplication {
+
+public class MainApplication extends NavigationApplication/* implements ReactApplication */{
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -34,13 +32,13 @@ public class MainApplication extends NavigationApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new RNSentryPackage(MainApplication.this),
-          new SvgPackage(),
-          new RNI18nPackage(),
-          new RealmReactPackage(),
-          new RNVersionNumberPackage(),
-          new VectorIconsPackage(),
-          BugsnagReactNative.getPackage()
+            new RealmReactPackage(),
+            new RNVersionNumberPackage(),
+            new VectorIconsPackage(),
+            new SvgPackage(),
+            new RNSentryPackage(),
+            //new NavigationReactPackage(),
+            new RNI18nPackage()
       );
     }
 
@@ -50,36 +48,44 @@ public class MainApplication extends NavigationApplication {
     }
   };
 
-  @Override
+  //@Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
 
-  @Override
+  //@Override
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
   }
 
-  // react-native-navigation methods
-
-  @Override
+//  @Override
   public boolean isDebug() {
-      // Make sure you are using BuildConfig from your own application
-      return BuildConfig.DEBUG;
+    // Make sure you are using BuildConfig from your own application
+    return BuildConfig.DEBUG;
+  }
+
+  protected List<ReactPackage> getPackages() {
+    // Add additional packages you require here
+    // No need to add RnnPackage and MainReactPackage
+    return Arrays.<ReactPackage>asList(
+      new MainReactPackage(),
+      new RealmReactPackage(),
+      new RNVersionNumberPackage(),
+      new VectorIconsPackage(),
+      new SvgPackage(),
+      new RNSentryPackage(),
+      new RNI18nPackage()
+    );
   }
 
   @Override
   public List<ReactPackage> createAdditionalReactPackages() {
-    return Arrays.<ReactPackage>asList(
-        new MainReactPackage(),
-        new RNSentryPackage(MainApplication.this),
-        new SvgPackage(),
-        new RNI18nPackage(),
-        new RealmReactPackage(),
-        new RNVersionNumberPackage(),
-        new VectorIconsPackage(),
-        BugsnagReactNative.getPackage()
-    );
+    return getPackages();
+  }
+
+//  @Override
+  public String getJSMainModuleName() {
+    return "index";
   }
 }

@@ -1,0 +1,24 @@
+.hero {
+    text-align: center;
+}
+
+section {
+    margin: 30px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+}
+
+li {
+    list-style: none;
+}
+
+li i {
+    margin-right: 10px;
+}
+
+footer a {
+    color: #795548;
+}

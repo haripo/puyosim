@@ -1,14 +1,5 @@
 {
   "presets": [
-    "react-native",
-    "react-native-stage-0"
-  ],
-  "plugins": [
-    [
-      "module-alias",
-      [
-        { "src": "./src/native", "expose": "specific" }
-      ]
-    ]
+      "react-native"
   ]
 }

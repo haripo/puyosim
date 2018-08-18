@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import { applyGravity, finishVanishingAnimations } from '../actions/actions';
 import VanishingPuyos from '../components/VanishingPuyos';
-import toJS from '../utils/toJS';
 import { getVanishingPuyos } from '../selectors/simulatorSelectors';
+import { getLayout } from '../selectors/layoutSelectors';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
   return {
-    vanishings: getVanishingPuyos(simulator),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    vanishings: getVanishingPuyos(state.simulator),
+    puyoSkin: state.config.puyoSkin,
+    layout: getLayout(state.layout)
   };
 };
 
@@ -24,4 +24,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(VanishingPuyos));
+)(VanishingPuyos);

@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { finishDroppingAnimations, vanishPuyos } from '../actions/actions';
 import DroppingPuyos from '../components/DroppingPuyos';
-import toJS from '../utils/toJS';
+import { getLayout } from '../selectors/layoutSelectors';
 
 const mapStateToProps = (state) => {
-  const simulator = state.get('simulator');
   return {
-    droppings: simulator.get('droppingPuyos'),
-    puyoSkin: state.getIn(['config', 'puyoSkin'])
+    droppings: state.simulator.droppingPuyos,
+    puyoSkin: state.config.puyoSkin,
+    layout: getLayout(state.layout)
   };
 };
 
@@ -23,4 +23,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(DroppingPuyos));
+)(DroppingPuyos);
