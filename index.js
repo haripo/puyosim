@@ -32,7 +32,6 @@ if (!__DEV__) {
 const store = getStore(reducers, sagas);
 
 // Register screen components
-//Navigation.registerComponent('PuyoSimulator', () => Simulator, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
 Navigation.registerComponent('com.puyosimulator.History', () => History, store, Provider);
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
@@ -48,4 +47,3 @@ Navigation.startSingleScreenApp({
   animationType: 'none',
   portraitOnlyMode: true,
 });
-
