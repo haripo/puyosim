@@ -1,3 +1,4 @@
+// @ts-ignore
 import t from '../utils/i18n';
 import { handsetPatterns } from '../utils/handsetPattern';
 

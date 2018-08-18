@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
-import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, TouchableWithoutFeedback, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SettingsList from 'react-native-settings-list';
 
-export default class SettingsPage extends Component {
-  constructor() {
-    super();
-  }
+export type Props = {
+  onClose: (value) => void,
+  onChanged: (value: string) => void,
+  selected: string,
+  visible: any,
+  items: any
+}
 
+export default class SettingsPage extends Component<Props, {}> {
   close() {
     this.props.onClose(null);
   }
 
   renderItem(itemOption) {
-    let icon = null;
+    let icon: JSX.Element | null = null;
     if (itemOption.value == this.props.selected) {
       icon = (
-        <Icon name="check" size={30} color="green" style={ { top: 20 , left: 20, width: 50 } }/>
+        <Icon name="check" size={ 30 } color="green" style={ { top: 20, left: 20, width: 50 } }/>
       )
     } else {
       icon = (
-        <View style={ { top: 20 , left: 20, width: 50 } }/>
+        <View style={ { top: 20, left: 20, width: 50 } }/>
       )
     }
 
@@ -29,7 +33,7 @@ export default class SettingsPage extends Component {
         title={ itemOption.title }
         itemWidth={ 70 }
         icon={ icon }
-        titleStyle={ { color:'black', fontSize: 16 } }
+        titleStyle={ { color: 'black', fontSize: 16 } }
         onPress={ () => this.handleChange(itemOption) }
         hasNavArrow={ false }
         borderHide={ 'Both' }
@@ -51,13 +55,14 @@ export default class SettingsPage extends Component {
         onRequestClose={ this.close.bind(this) }
         animationType="fade">
         <TouchableWithoutFeedback onPress={ this.close.bind(this) }>
-          <View style={{
+          <View style={ {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'}}>
-            <View style={{　backgroundColor: 'white', width: 300 }}>
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+          } }>
+            <View style={ { backgroundColor: 'white', width: 300 } }>
               <SettingsList borderColor='#d6d5d9' defaultItemSize={ 50 }>
                 { items.map(item => this.renderItem(item)) }
               </SettingsList>
@@ -68,9 +73,3 @@ export default class SettingsPage extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  component: {
-    alignItems: 'stretch'
-  }
-});

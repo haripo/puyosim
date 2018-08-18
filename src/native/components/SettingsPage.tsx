@@ -3,9 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import SettingsList from 'react-native-settings-list';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import t from '../../shared/utils/i18n';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { defaultValues } from '../../shared/models/config';
+
+// @ts-ignore
+import t from '../../shared/utils/i18n';
+import { Navigator } from "react-native-navigation";
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {
@@ -14,7 +17,16 @@ function evalItem(configItem, config) {
   return configItem;
 }
 
-export default class SettingsPage extends Component {
+export type Props = {
+  navigator: Navigator,
+  configKey: string,
+  configItems: any,
+  targetItems: any,
+  config: any,
+  onChanged: (key: string, value: string) => void
+}
+
+export default class SettingsPage extends Component<Props, {}> {
   static navigatorStyle = {
     navBarBackgroundColor: themeColor,
     navBarTextColor: themeLightColor,

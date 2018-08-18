@@ -2,20 +2,28 @@ import React, { Component } from 'react';
 import { Button, Linking, StyleSheet, Text, View } from 'react-native';
 import VersionNumber from 'react-native-version-number';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
+import { Navigator } from "react-native-navigation";
 
-export default class AboutContents extends Component {
+type Props = {
+  navigator: Navigator,
+  onSetKennySelected: () => void,
+  onSetSnakeSelected: () => void,
+  onSetComplexHistorySelected: () => void,
+}
+
+export default class AboutContents extends Component<Props, {}> {
   static navigatorStyle = {
     navBarBackgroundColor: themeColor,
     navBarTextColor: themeLightColor,
     navBarButtonColor: themeLightColor
   };
 
+  static websiteURL = 'http://puyos.im';
+  static feedbackURL = 'http://puyos.im/feedback.html';
+  static licensesURL = 'http://puyos.im/license.txt';
+
   componentDidMount() {
     this.props.navigator.setTitle({ title: 'About' });
-
-    this.websiteURL = 'http://puyos.im';
-    this.feedbackURL = 'http://puyos.im/feedback.html';
-    this.licensesURL = 'http://puyos.im/license.txt';
   }
 
   handleKennyPressed() {
@@ -37,30 +45,24 @@ export default class AboutContents extends Component {
           <Text style={ styles.title }>puyosim { VersionNumber.appVersion }</Text>
         </View>
         <View style={ styles.row }>
-          <Button style={ styles.button }
-                  onPress={ () => Linking.openURL(this.websiteURL) }
+          <Button onPress={ () => Linking.openURL(AboutContents.websiteURL) }
                   title="view website"/>
         </View>
         <View style={ styles.row }>
-          <Button style={ styles.button }
-                  onPress={ () => Linking.openURL(this.feedbackURL) }
+          <Button onPress={ () => Linking.openURL(AboutContents.feedbackURL) }
                   title="send feedback"/>
         </View>
         <View style={ styles.row }>
-          <Button style={ styles.button }
-                  onPress={ () => Linking.openURL(this.licensesURL) }
+          <Button onPress={ () => Linking.openURL(AboutContents.licensesURL) }
                   title="open source licenses"/>
         </View>
         { __DEV__ &&
           <View style={ styles.row }>
-            <Button style={ styles.button }
-                    onPress={ () => this.handleKennyPressed() }
+            <Button onPress={ () => this.handleKennyPressed() }
                     title="DEBUG: kenny19"/>
-            <Button style={ styles.button }
-                    onPress={ () => this.handleSnakePressed() }
+            <Button onPress={ () => this.handleSnakePressed() }
                     title="DEBUG: snake"/>
-            <Button style={ styles.button }
-                    onPress={ () => this.handleComplexHistoryPressed() }
+            <Button onPress={ () => this.handleComplexHistoryPressed() }
                     title="DEBUG: complex history"/>
           </View>
         }
