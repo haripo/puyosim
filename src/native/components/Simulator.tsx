@@ -48,7 +48,7 @@ export type Props = {
 
 export default class Simulator extends Component<Props, {}> {
 
-  static navigatorButtons = {}
+  static navigatorButtons = {};
 
   static navigatorStyle = {
     navBarBackgroundColor: themeColor,

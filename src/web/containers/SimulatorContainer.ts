@@ -65,9 +65,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     onUndoSelected: () => {
       dispatch(undoField());
+      dispatch(vanishPuyos());
     },
     onRedoSelected: () => {
       dispatch(redoField());
+      dispatch(vanishPuyos());
     },
     onResetSelected: () => {
       dispatch(resetField());

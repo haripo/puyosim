@@ -29,16 +29,7 @@ export const RESET_LAYOUT = 'RESET_LAYOUT';
 export const DEBUG_SET_PATTERN = 'DEBUG_SET_PATTERN';
 export const DEBUG_SET_HISTORY = 'DEBUG_SET_HISTORY';
 
-export const putNextPair = (position, rotation) => {
-  return {
-    type: 'PUT_NEXT_PAIR',
-    payload: {
-      position,
-      rotation
-    }
-  };
-};
-
+export const putNextPair = makeActionCreator(PUT_NEXT_PAIR);
 export const initializeSimulator = makeActionCreator(INITIALIZE_SIMULATOR);
 export const rotateHighlightsLeft = makeActionCreator(ROTATE_HIGHLIGHTS_LEFT);
 export const rotateHighlightsRight = makeActionCreator(ROTATE_HIGHLIGHTS_RIGHT);

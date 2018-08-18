@@ -2,9 +2,11 @@ import { connect } from 'react-redux';
 import {
   initializeSimulator,
   moveHighlightsLeft,
-  moveHighlightsRight, openTwitterShare,
-  putNextPair, redoField,
-  resetField, resetLayout,
+  moveHighlightsRight,
+  openTwitterShare,
+  putNextPair,
+  redoField,
+  resetField,
   restart,
   rotateHighlightsLeft,
   rotateHighlightsRight,
@@ -13,7 +15,11 @@ import {
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
 import {
-  canRedo, canUndo, getGhost, getPendingPair, getStack,
+  canRedo,
+  canUndo,
+  getGhost,
+  getPendingPair,
+  getStack,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
@@ -57,9 +63,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     onUndoSelected: () => {
       dispatch(undoField());
+      dispatch(vanishPuyos());
     },
     onRedoSelected: () => {
       dispatch(redoField());
+      dispatch(vanishPuyos());
     },
     onResetSelected: () => {
       dispatch(resetField());
