@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight,
   openTwitterShare,
@@ -28,11 +27,10 @@ import { getTheme } from '../../shared/selectors/themeSelectors';
 const mapStateToProps = (state) => {
   return {
     stack: getStack(state.simulator),
-    current: state.simulator.queue[0],
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
     isActive: isActive(state),
-    puyoSkin: state.config.puyoSkin,
+    puyoSkin: state.config.puyoSkin as string,
     canUndo: canUndo(state.simulator),
     canRedo: canRedo(state.simulator),
     layout: getLayout(state.layout),
@@ -42,9 +40,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSimulatorLaunched: () => {
-      dispatch(initializeSimulator());
-    },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
     },

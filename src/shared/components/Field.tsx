@@ -6,7 +6,7 @@ import { contentsPadding, fieldCols } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
-import { PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
+import { PendingPairPuyo, PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
 import { Theme } from "../selectors/themeSelectors";
 
 export interface Props {
@@ -15,7 +15,7 @@ export interface Props {
   puyoSkin: string,
   isActive: boolean,
   stack: StackForRendering,
-  ghosts: PuyoForRendering[],
+  ghosts: PendingPairPuyo[],
   style: any
 }
 

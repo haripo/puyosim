@@ -16,7 +16,11 @@ import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { PendingPair, PuyoForRendering, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import {
+  PendingPairPuyo,
+  PendingPair,
+  StackForRendering
+} from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 
@@ -24,7 +28,7 @@ export type Props = {
   navigator: Navigator,
 
   stack: StackForRendering,
-  ghosts: PuyoForRendering[],
+  ghosts: PendingPairPuyo[],
   pendingPair: PendingPair
   puyoSkin: string,
   layout: Layout,

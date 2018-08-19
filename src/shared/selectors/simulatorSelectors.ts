@@ -1,29 +1,8 @@
 import { fieldCols, fieldRows } from '../utils/constants';
-import _ from 'lodash';
 import { getFirstCol, getSecondCol } from '../models/move';
 import { Color, createField, isValidPosition } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
-
-export function wrapCache(f, ...args): any {
-  let argsCache = {};
-  let resultCache = null;
-
-  return state => {
-    const isNotUpdated = _.every(args, arg => state[arg] === argsCache[arg]);
-
-    if (isNotUpdated && resultCache !== null) {
-      // use cache
-      return resultCache;
-    }
-
-    for (let arg of args) {
-      argsCache[arg] = state[arg];
-    }
-
-    resultCache = f(..._.values(_.pick(argsCache, args)), state);
-    return resultCache;
-  }
-}
+import { createSelector } from 'reselect';
 
 export function isActive(state): boolean {
   return !(
@@ -40,35 +19,64 @@ export function canRedo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].next.length > 0;
 }
 
-export function getGhost(state: SimulatorState) {
+export function getGhost(state: SimulatorState): PendingPairPuyo[] {
   return getDropPositions(state);
 }
 
-type PendingPairPuyo = {
+export const getCurrentHand = createSelector(
+  [
+    (state: SimulatorState) => state.queue,
+    (state: SimulatorState) => state.numHands
+  ],
+  (queue, numHands) => queue[numHands % queue.length]
+);
+
+export const getNextHand = createSelector(
+  [
+    (state: SimulatorState) => state.queue,
+    (state: SimulatorState) => state.numHands
+  ],
+  (queue, numHands) => queue[(numHands + 1) % queue.length]
+);
+
+export const getDoubleNextHand = createSelector(
+  [
+    (state: SimulatorState) => state.queue,
+    (state: SimulatorState) => state.numHands
+  ],
+  (queue, numHands) => queue[(numHands + 2) % queue.length]
+);
+
+export type PendingPairPuyo = {
   row: number,
   col: number,
   color: Color
 }
 export type PendingPair = PendingPairPuyo[];
 
-export function getPendingPair(state: SimulatorState): PendingPair {
-  const pair = state.pendingPair; // as Move
-  const hand = getCurrentHand(state);
+const _getPendingPair = state => state.pendingPair;
 
-  let secondRow = 1;
-  if (pair.rotation === 'bottom') {
-    secondRow = 2;
-  } else if (pair.rotation === 'top') {
-    secondRow = 0;
+export const getPendingPair = createSelector(
+  [_getPendingPair, getCurrentHand],
+  (pair, hand): PendingPair => {
+    let secondRow = 1;
+    if (pair.rotation === 'bottom') {
+      secondRow = 2;
+    } else if (pair.rotation === 'top') {
+      secondRow = 0;
+    }
+
+    return [
+      { row: 1, col: getFirstCol(pair), color: hand[0] as Color },
+      { row: secondRow, col: getSecondCol(pair), color: hand[1] as Color }
+    ];
   }
+);
 
-  return [
-    { row: 1, col: getFirstCol(pair), color: hand[0] },
-    { row: secondRow, col: getSecondCol(pair), color: hand[1] }
-  ];
-}
-
-export const getVanishingPuyos = wrapCache(_getVanishingPuyos, 'vanishingPuyos');
+export const getVanishingPuyos = createSelector(
+  [(state: SimulatorState) => state.vanishingPuyos],
+  _getVanishingPuyos
+);
 
 function _getVanishingPuyos(vanishings) {
   let field = createField(fieldRows, fieldCols);
@@ -125,7 +133,13 @@ export type PuyoForRendering = {
 export type StackForRendering = PuyoForRendering[][];
 
 
-export const getStack = wrapCache(_getStack, 'stack', 'droppingPuyos');
+export const getStack = createSelector(
+  [
+    (state: SimulatorState) => state.stack,
+    (state: SimulatorState) => state.droppingPuyos
+  ],
+  _getStack
+);
 
 function _getStack(stack, droppings): StackForRendering {
   const isDropping = (row, col) => {
@@ -160,23 +174,19 @@ function _getStack(stack, droppings): StackForRendering {
   });
 }
 
-export const getCurrentHand = wrapCache(
-  (queue, numHands) => queue[numHands % queue.length],
-  'queue', 'numHands');
+export const getDropPositions = createSelector(
+  [
+    (state: SimulatorState) => state.pendingPair,
+    (state: SimulatorState) => state.stack,
+    (state: SimulatorState) => state.queue,
+    (state: SimulatorState) => state.numHands,
+    (state: SimulatorState) => getCurrentHand(state)
+  ],
+  _getDropPositions
+);
 
-export const getNextHand = wrapCache(
-  (queue, numHands) => queue[(numHands + 1) % queue.length],
-  'queue', 'numHands');
-
-export const getDoubleNextHand = wrapCache(
-  (queue, numHands) => queue[(numHands + 2) % queue.length],
-  'queue', 'numHands');
-
-export const getDropPositions = wrapCache(_getDropPositions, 'pendingPair', 'stack', 'queue', 'numHands');
-
-function _getDropPositions(pair, stack, queue, numHands, state): any[] {
+function _getDropPositions(pair, stack, queue, numHands, hand): PendingPairPuyo[] {
   // TODO: use model/stack.ts 's getDropPositions
-  const hand: any = getCurrentHand(state);
   const firstCol = getFirstCol(pair);
   const secondCol = getSecondCol(pair);
 
@@ -201,7 +211,13 @@ function _getDropPositions(pair, stack, queue, numHands, state): any[] {
   return [drop1, drop2].filter(d => isValidPosition(d));
 }
 
-export const getHistoryTreeLayout = wrapCache(_getHistoryTreeLayout, 'history', 'historyIndex');
+export const getHistoryTreeLayout = createSelector(
+  [
+    (state: SimulatorState) => state.history,
+    (state: SimulatorState) => state.historyIndex
+  ],
+  _getHistoryTreeLayout
+);
 
 function _getHistoryTreeLayout(history, historyIndexBase) {
   let nodes: any[] = [];
