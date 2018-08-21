@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
 
+type Props = {
+  score: number
+};
+
 /**
  * Component for render notice puyos
  */
-export default class NoticePuyos extends Component {
+export default class NoticePuyos extends Component<Props, {}> {
+  rate: number;
+  noticeVolumes: number[];
+  images: any[];
+
   constructor(props) {
     super(props);
 
@@ -30,7 +38,7 @@ export default class NoticePuyos extends Component {
   }
 
   getRenderNoticePuyos(counts) {
-    let result = [];
+    let result: number[] = [];
     for (let i = 0; i < this.noticeVolumes.length; i++) {
       const r = this.noticeVolumes.length - i - 1;
       const volume = this.noticeVolumes[r];

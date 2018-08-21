@@ -3,11 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   buttonColor,
   contentsMargin,
-} from '../../shared/utils/constants';
+} from '../utils/constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 
-export default class SimulatorControls extends PureComponent {
+export type Props = {
+  shortcuts?: string[],
+  canUndo: boolean,
+  canRedo: boolean,
+  isActive: boolean,
+  onUndoSelected: () => void,
+  onRedoSelected: () => void,
+  onRotateLeftPressed: () => void,
+  onRotateRightPressed: () => void,
+  onMoveLeftPressed: () => void,
+  onMoveRightPressed: () => void,
+  onDropPressed: () => void
+};
+
+export default class SimulatorControls extends PureComponent<Props> {
   renderShortcut(key) {
     if (key) {
       return (
