@@ -6,36 +6,29 @@ import Puyo from './Puyo';
 import _ from 'lodash';
 
 export default class DroppingPuyos extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      progress: new Animated.Value(0),
-      isAnimating: false
+      progress: new Animated.Value(0)
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (!this.state.isAnimating && nextProps.droppings.length > 0) {
-      this.launchDroppingAnimation(nextProps.droppings);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.droppings.length > 0) {
+      prevState.progress.setValue(0);
+      const maxDistance = _.max(nextProps.droppings.map(d => d.distance));
+      Animated.timing(
+        prevState.progress,
+        {
+          toValue: maxDistance,
+          duration: 70 * maxDistance,
+          useNativeDriver: true
+        }
+      ).start(() => {
+        nextProps.onDroppingAnimationFinished();
+      });
     }
-  }
-
-  launchDroppingAnimation(droppings) {
-    this.state.progress.setValue(0);
-    const maxDistance = _.max(droppings.map(d => d.distance));
-    Animated.timing(
-      this.state.progress,
-      {
-        toValue: maxDistance,
-        duration: 70 * maxDistance,
-        useNativeDriver: true
-      }
-    ).start(() => {
-      // animation is finished
-      this.setState({ isAnimating: false });
-      this.props.onDroppingAnimationFinished();
-    });
-    this.setState({ isAnimating: true });
+    return null;
   }
 
   renderPuyos() {
