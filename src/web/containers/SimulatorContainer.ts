@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 import {
+  applyGravity,
+  finishDroppingAnimations, finishVanishingAnimations,
   initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight,
@@ -19,7 +21,7 @@ import {
   getGhost,
   getHistoryTreeLayout,
   getPendingPair,
-  getStack,
+  getStack, getVanishingPuyos,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
@@ -33,6 +35,8 @@ const mapStateToProps = (state) => {
     historyTreeLayout: getHistoryTreeLayout(state.simulator),
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
+    droppings: state.simulator.droppingPuyos,
+    vanishings: getVanishingPuyos(state.simulator),
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin,
     canUndo: canUndo(state.simulator),
@@ -81,6 +85,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(moveHistory(index));
       dispatch(vanishPuyos());
     },
+    onVanishingAnimationFinished: () => {
+      dispatch(finishVanishingAnimations());
+      dispatch(applyGravity());
+    },
+    onDroppingAnimationFinished: () => {
+      dispatch(finishDroppingAnimations());
+      dispatch(vanishPuyos());
+    }
   };
 };
 

@@ -70,12 +70,16 @@ export default class Simulator extends Component {
                   <Field
                     stack={ this.props.stack }
                     ghosts={ this.props.ghosts }
+                    droppings={ this.props.droppings }
+                    vanishings={ this.props.vanishings }
                     isActive={ this.props.isActive }
                     style={ styles.field }
                     theme={ this.props.theme }
                     layout={ this.props.layout }
-                    puyoSkin={ this.props.puyoSkin }>
-                  </Field>
+                    puyoSkin={ this.props.puyoSkin }
+                    onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+                    onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+                  />
                 </View>
                 <View style={ styles.side }>
                   <View style={ styles.sideHead }>

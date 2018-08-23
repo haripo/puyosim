@@ -28,8 +28,8 @@ export interface Props {
   isActive: boolean,
   puyoSkin: string,
   pendingPair: any,
-  onDroppingAnimationFinished: Function,
-  onVanishingAnimationFinished: Function,
+  onDroppingAnimationFinished: () => void,
+  onVanishingAnimationFinished: () => void,
 
   history: HistoryRecord[],
   historyIndex: number,
@@ -91,7 +91,9 @@ export default class Simulator extends Component<Props, State> {
               style={ styles.field }
               puyoSkin={ this.props.puyoSkin }
               theme={ this.props.theme }
-              layout={ this.props.layout }>
+              layout={ this.props.layout }
+              onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }>
             </Field>
           </View>
           <View style={ styles.side }>

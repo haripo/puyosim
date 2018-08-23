@@ -18,7 +18,7 @@ function getInterpolateOption() {
 }
 const interpolation = getInterpolateOption();
 
-export default class DroppingPuyos extends Component {
+export default class VanishingPuyos extends Component {
   constructor(props) {
     super(props);
     this.state = {

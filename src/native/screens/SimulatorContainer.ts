@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 import {
+  applyGravity, finishDroppingAnimations,
+  finishVanishingAnimations,
   moveHighlightsLeft,
   moveHighlightsRight,
   openTwitterShare,
@@ -18,7 +20,7 @@ import {
   canUndo,
   getGhost,
   getPendingPair,
-  getStack,
+  getStack, getVanishingPuyos,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
@@ -29,6 +31,8 @@ const mapStateToProps = (state) => {
     stack: getStack(state.simulator),
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
+    droppings: state.simulator.droppingPuyos,
+    vanishings: getVanishingPuyos(state.simulator),
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin as string,
     canUndo: canUndo(state.simulator),
@@ -72,6 +76,14 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShareSelected: () => {
       dispatch(openTwitterShare());
+    },
+    onVanishingAnimationFinished: () => {
+      dispatch(finishVanishingAnimations());
+      dispatch(applyGravity());
+    },
+    onDroppingAnimationFinished: () => {
+      dispatch(finishDroppingAnimations());
+      dispatch(vanishPuyos());
     }
   };
 };

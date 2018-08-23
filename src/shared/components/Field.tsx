@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import DroppingPuyosContainer from '../containers/DroppingPuyosContainer';
-import VanishingPuyosContainer from '../containers/VanishingPuyosContainer';
+import DroppingPuyos from './DroppingPuyos';
+import VanishingPuyos from './VanishingPuyos';
 import { contentsPadding, fieldCols } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
 import { PendingPairPuyo, PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
 import { Theme } from "../selectors/themeSelectors";
+import { DroppingPlan, VanishingPlan } from "../models/chainPlanner";
 
 export interface Props {
   layout: Layout,
@@ -16,7 +17,12 @@ export interface Props {
   isActive: boolean,
   stack: StackForRendering,
   ghosts: PendingPairPuyo[],
-  style: any
+  droppings?: DroppingPlan[],
+  vanishings?: VanishingPlan[],
+  style: any,
+
+  onVanishingAnimationFinished: () => void,
+  onDroppingAnimationFinished: () => void
 }
 
 interface State {
@@ -99,12 +105,22 @@ export default class Field extends Component<Props, State> {
     const styles = createStyles(layout, theme);
 
     return (
-      <View style={ [style, styles.field] } >
+      <View style={ [style, styles.field] }>
         { this.renderStack() }
         { this.renderCross(styles.cross) }
-        <DroppingPuyosContainer />
-        <VanishingPuyosContainer />
-        <View style={ styles.topShadow } />
+        <DroppingPuyos
+          layout={ layout }
+          puyoSkin={ this.props.puyoSkin }
+          droppings={ this.props.droppings }
+          onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+        />
+        <VanishingPuyos
+          layout={ layout }
+          puyoSkin={ this.props.puyoSkin }
+          vanishings={ this.props.vanishings }
+          onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+        />
+        <View style={ styles.topShadow }/>
       </View>
     );
   }

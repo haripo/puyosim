@@ -23,13 +23,17 @@ import {
 } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
+import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 
 export type Props = {
   navigator: Navigator,
 
   stack: StackForRendering,
   ghosts: PendingPairPuyo[],
-  pendingPair: PendingPair
+  pendingPair: PendingPair,
+  droppings: DroppingPlan[],
+  vanishings: VanishingPlan[],
+
   puyoSkin: string,
   layout: Layout,
   theme: Theme,
@@ -47,7 +51,9 @@ export type Props = {
   onRotateRightPressed: () => void,
   onMoveLeftPressed: () => void,
   onMoveRightPressed: () => void,
-  onDropPressed: () => void
+  onDropPressed: () => void,
+  onDroppingAnimationFinished: () => void,
+  onVanishingAnimationFinished: () => void
 }
 
 export default class Simulator extends Component<Props, {}> {
@@ -155,10 +161,15 @@ export default class Simulator extends Component<Props, {}> {
                 stack={ this.props.stack }
                 ghosts={ this.props.ghosts }
                 isActive={ this.props.isActive }
+                droppings={ this.props.droppings }
+                vanishings={ this.props.vanishings }
                 style={ styles.field }
                 layout={ this.props.layout }
                 theme={ this.props.theme }
-                puyoSkin={ this.props.puyoSkin }>
+                puyoSkin={ this.props.puyoSkin }
+                onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+                onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+              >
               </Field>
             </View>
             <View style={ styles.side }>
