@@ -56,7 +56,7 @@ export default class AboutContents extends Component<Props, {}> {
           <Button onPress={ () => Linking.openURL(AboutContents.licensesURL) }
                   title="open source licenses"/>
         </View>
-        { !__DEV__ &&
+        { __DEV__ &&
           <View style={ styles.row }>
             <Button onPress={ () => this.handleKennyPressed() }
                     title="DEBUG: kenny19"/>
