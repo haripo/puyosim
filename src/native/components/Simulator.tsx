@@ -115,6 +115,7 @@ export default class Simulator extends Component<Props, {}> {
               'Undo',
               'Reset',
               'Restart',
+              'History',
               'Share',
               'Settings',
               'About'
@@ -134,6 +135,7 @@ export default class Simulator extends Component<Props, {}> {
                 ],
                 { cancelable: false }
               ),
+              () => this.props.navigator.push({ screen: 'com.puyosimulator.History' }),
               this.props.onShareSelected,
               () => this.props.navigator.push({ screen: 'com.puyosimulator.Settings' }),
               () => this.props.navigator.push({ screen: 'com.puyosimulator.About' })
@@ -225,11 +227,11 @@ if (Platform.OS === 'android') {
         id: 'reset',
         showAsAction: 'never'
       },
-      // {
-      //   title: t('history'),
-      //   id: 'history',
-      //   showAsAction: 'never'
-      // },
+      {
+        title: t('history'),
+        id: 'history',
+        showAsAction: 'never'
+      },
       {
         title: t('undo'),
         id: 'undo',

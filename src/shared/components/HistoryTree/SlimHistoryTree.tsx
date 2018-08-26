@@ -2,13 +2,10 @@
  * Small component for render history-tree
  */
 import React, { Fragment } from 'react';
-import { Animated, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, StyleSheet, View } from 'react-native';
 import {
   cardBackgroundColor,
-  contentsPadding,
   isWeb,
-  screenHeight,
-  screenWidth,
   themeColor,
   themeLightColor,
 } from '../../utils/constants';
@@ -246,6 +243,16 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   render() {
     const { history } = this.props;
 
+    if (this.state.width === 0) {
+      return (
+        <View
+          onLayout={ this.handleLayout.bind(this) }
+          ref={ ref => this.view = ref }>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
     // flatten history
     let flatHist: RecordIndexPair[] = [];
     let next: number | null = 0;
@@ -259,9 +266,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     }
 
     return (
-      <View style={ styles.component }
-            onLayout={ this.handleLayout.bind(this) }
-            ref={ ref => this.view = ref }>
+      <View style={ styles.component }>
         <FlatList
           data={ flatHist }
           renderItem={ this.renderItem.bind(this) }
@@ -277,8 +282,6 @@ const styles = StyleSheet.create({
     flex: 1,
     elevation: 2,
     backgroundColor: cardBackgroundColor,
-    overflow: 'scroll',
-    // height: screenHeight - contentsPadding * 4,
-    // width: screenWidth - contentsPadding * 2
+    overflow: 'scroll'
   }
 });

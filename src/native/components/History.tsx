@@ -82,6 +82,7 @@ export default class Simulator extends Component<Props, State> {
             <HandlingPuyos
               pair={ this.props.pendingPair }
               puyoSkin={ this.props.puyoSkin }
+              style={ styles.handlingPuyos }
               layout={ this.props.layout }>
             </HandlingPuyos>
             <Field
@@ -92,6 +93,8 @@ export default class Simulator extends Component<Props, State> {
               puyoSkin={ this.props.puyoSkin }
               theme={ this.props.theme }
               layout={ this.props.layout }
+              droppings={ this.props.droppingPuyos }
+              vanishings={ this.props.vanishingPuyos }
               onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
               onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }>
             </Field>
@@ -121,6 +124,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     flexDirection: 'row'
+  },
+  handlingPuyos: {
+    marginTop: 3,
+    marginLeft: 3,
   },
   side: {
     flex: 1,

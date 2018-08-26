@@ -12,7 +12,7 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import {
-  canRedo, canUndo, getGhost, getHistoryTreeLayout, getPendingPair, getStack,
+  canRedo, canUndo, getGhost, getHistoryTreeLayout, getPendingPair, getStack, getVanishingPuyos,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import History from '../components/History';
@@ -25,6 +25,8 @@ const mapStateToProps = (state) => {
     current: state.simulator.queue[0],
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
+    droppingPuyos: state.simulator.droppingPuyos,
+    vanishingPuyos: getVanishingPuyos(state.simulator),
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin,
     canUndo: canUndo(state.simulator),
