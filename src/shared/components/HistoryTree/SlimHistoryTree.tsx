@@ -37,15 +37,30 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
   view: View | null = null;
 
-  get nodeWidth() { return (this.state.width - this.handsY * 2) / 3 }
-  get nodeHeight() { return this.nodeWidth / 2 }
+  get nodeWidth() {
+    return (this.state.width - this.handsY * 2) / 3
+  }
+
+  get nodeHeight() {
+    return this.nodeWidth / 2
+  }
+
   puyoMarginY = 10;
   nodeMarginTop = 10;
-  get nodeMarginLeft() { return (this.state.width - this.handsX) / 3 + this.handsX }
+
+  get nodeMarginLeft() {
+    return (this.state.width - this.handsX) / 3 + this.handsX
+  }
+
   nodeMarginBottom = 10;
 
-  get childrenLeft() { return this.nodeWidth }
-  get puyoSize() { return (this.nodeMarginLeft - this.handsX) / 2 - 5 }
+  get childrenLeft() {
+    return this.nodeWidth
+  }
+
+  get puyoSize() {
+    return (this.nodeMarginLeft - this.handsX) / 2 - 5
+  }
 
   constructor(props) {
     super(props);
@@ -214,6 +229,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
       );
     }
 
+    const touchableAreaHeight = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
     const indices = item.record.prev ? this.props.history[item.record.prev].next : [item.historyIndex];
     const children = indices
       .map((historyIndex, i) =>
@@ -221,8 +237,20 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           { this.renderSubNode(historyIndex, i, item.historyIndex === historyIndex) }
         </Fragment>
       );
-    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * children.length;
+    const touchableArea = indices
+      .map((historyIndex, i) =>
+        <Rect
+          x={ 0 }
+          y={ touchableAreaHeight * i }
+          width={ 300 }
+          height={ touchableAreaHeight }
+          fill={ 'transparent' }
+          key={ i }
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
+        />
+      );
     const color = index % 2 === 0 ? themeLightColor : themeColor;
+    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * children.length;
     return (
       <Svg width={ 300 } height={ svgHeight }>
         <Rect
@@ -233,6 +261,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           fill={ color }
           fillOpacity={ 0.2 }
         />
+        { touchableArea }
         { this.renderPair(item.record.pair, index) }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
         { children }
@@ -248,7 +277,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         <View
           onLayout={ this.handleLayout.bind(this) }
           ref={ ref => this.view = ref }>
-          <ActivityIndicator />
+          <ActivityIndicator/>
         </View>
       );
     }
