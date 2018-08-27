@@ -10,8 +10,49 @@ import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
 import WebToolbar from './WebToolbar';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
+import { PendingPair, PendingPairPuyo, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
+import { Layout } from "../../shared/selectors/layoutSelectors";
+import { Theme } from "../../shared/selectors/themeSelectors";
+import { HistoryRecord } from "../../shared/models/history";
 
-export default class Simulator extends Component {
+export type Props = {
+  stack: StackForRendering,
+  ghosts: PendingPairPuyo[],
+  pendingPair: PendingPair,
+  droppings: DroppingPlan[],
+  vanishings: VanishingPlan[],
+
+  puyoSkin: string,
+  layout: Layout,
+  theme: Theme,
+
+  isActive: boolean,
+  canUndo: boolean,
+  canRedo: boolean,
+
+  onUndoSelected: () => void,
+  onRedoSelected: () => void,
+  onResetSelected: () => void,
+  onRestartSelected: () => void,
+  onShareSelected: () => void,
+  onRotateLeftPressed: () => void,
+  onRotateRightPressed: () => void,
+  onMoveLeftPressed: () => void,
+  onMoveRightPressed: () => void,
+  onDropPressed: () => void,
+  onDroppingAnimationFinished: () => void,
+  onVanishingAnimationFinished: () => void,
+
+  history: HistoryRecord[],
+  historyIndex: number,
+  historyTreeLayout: any,
+  onHistoryNodePressed: (index: number) => void
+}
+
+export default class Simulator extends Component<Props, {}> {
+  hotkeyElementRef: any;
+
   constructor(props) {
     super(props);
   }
@@ -54,6 +95,7 @@ export default class Simulator extends Component {
         <View
           ref={ c => this.hotkeyElementRef = c }
           tabIndex={ -1 }
+          // @ts-ignore
           style={ { outline: '0' } }>
           <View>
             <WebToolbar/>
@@ -103,9 +145,7 @@ export default class Simulator extends Component {
               </View>
               <View style={ styles.historyTree }>
                 <HistoryTree
-                  history={ this.props.history }
                   historyTreeLayout={ this.props.historyTreeLayout }
-                  currentIndex={ this.props.historyIndex }
                   onNodePressed={ this.props.onHistoryNodePressed }
                 />
               </View>
@@ -123,13 +163,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    outline: '0'
+    alignItems: 'center'
   },
   contents: {
     display: 'flex',
     flexDirection: 'row',
     width: simulatorWidth - contentsMargin,
+    // @ts-ignore
     outline: '0'
   },
   side: {

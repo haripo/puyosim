@@ -108,18 +108,25 @@ export default class Field extends Component<Props, State> {
       <View style={ [style, styles.field] }>
         { this.renderStack() }
         { this.renderCross(styles.cross) }
-        <DroppingPuyos
-          layout={ layout }
-          puyoSkin={ this.props.puyoSkin }
-          droppings={ this.props.droppings }
-          onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-        />
-        <VanishingPuyos
-          layout={ layout }
-          puyoSkin={ this.props.puyoSkin }
-          vanishings={ this.props.vanishings }
-          onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-        />
+        { this.props.droppings ? (
+          <DroppingPuyos
+            layout={ layout }
+            puyoSkin={ this.props.puyoSkin }
+            droppings={ this.props.droppings }
+            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+          />
+        ) : null
+        }
+        {
+          this.props.vanishings ? (
+            <VanishingPuyos
+              layout={ layout }
+              puyoSkin={ this.props.puyoSkin }
+              vanishings={ this.props.vanishings }
+              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+            />
+          ) : null
+        }
         <View style={ styles.topShadow }/>
       </View>
     );

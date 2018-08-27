@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 
 export type Props = {
-  shortcuts?: string[],
+  shortcuts?: { [key: string]: string },
   canUndo: boolean,
   canRedo: boolean,
   isActive: boolean,

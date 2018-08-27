@@ -4,8 +4,21 @@ import { Animated, View } from 'react-native';
 import { contentsPadding } from '../utils/constants';
 import Puyo from './Puyo';
 import _ from 'lodash';
+import { Layout } from "../selectors/layoutSelectors";
+import { DroppingPlan } from "../models/chainPlanner";
 
-export default class DroppingPuyos extends Component {
+type Props = {
+  layout: Layout,
+  droppings: DroppingPlan[],
+  puyoSkin: string,
+  onDroppingAnimationFinished: () => void
+};
+
+type State = {
+  progress: Animated.Value
+};
+
+export default class DroppingPuyos extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,10 +26,10 @@ export default class DroppingPuyos extends Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.droppings.length > 0) {
       prevState.progress.setValue(0);
-      const maxDistance = _.max(nextProps.droppings.map(d => d.distance));
+      const maxDistance = _.max(nextProps.droppings.map(d => d.distance))!;
       Animated.timing(
         prevState.progress,
         {
@@ -35,7 +48,7 @@ export default class DroppingPuyos extends Component {
     const { droppings, puyoSkin } = this.props;
     const { puyoSize } = this.props.layout;
 
-    const maxDistance = _.max(this.props.droppings.map(d => d.distance));
+    const maxDistance = _.max(this.props.droppings.map(d => d.distance))!;
     return droppings.map(d => {
       const y = this.state.progress
         .interpolate({

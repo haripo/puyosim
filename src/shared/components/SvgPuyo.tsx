@@ -11,7 +11,7 @@ export default class SvgPuyo extends Puyo {
       <Image
         href={ image }
         x={ this.props.x }
-        y={ this.props.y }
+        y={ this.props.y as number }
         width={ this.props.size }
         height={ this.props.size }
       />

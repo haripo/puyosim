@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Animated, View } from 'react-native';
 import { contentsPadding } from '../utils/constants';
 import Puyo from './Puyo';
+import { Layout } from "../selectors/layoutSelectors";
+import { VanishingPlan } from "../models/chainPlanner";
 
 function getInterpolateOption() {
-  let inputRange = [];
-  let outputRange = [];
+  let inputRange: number[] = [];
+  let outputRange: number[] = [];
   for (let i = 0; i < 10; i++) {
     inputRange.push(i / 10);
     inputRange.push((i + 1) / 10);
@@ -16,9 +18,21 @@ function getInterpolateOption() {
   outputRange.push(0);
   return { inputRange, outputRange };
 }
+
 const interpolation = getInterpolateOption();
 
-export default class VanishingPuyos extends Component {
+type Props = {
+  layout: Layout,
+  vanishings: any[],
+  puyoSkin: string,
+  onVanishingAnimationFinished: () => void
+};
+
+type State = {
+  progress: Animated.Value
+};
+
+export default class VanishingPuyos extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +40,7 @@ export default class VanishingPuyos extends Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.vanishings.length > 0) {
       prevState.progress.setValue(0);
       Animated.timing(

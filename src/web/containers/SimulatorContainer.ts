@@ -81,7 +81,7 @@ const mapDispatchToProps = (dispatch) => {
     onRestartSelected: () => {
       dispatch(restart());
     },
-    onHistoryNodePressed: (index) => {
+    onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));
       dispatch(vanishPuyos());
     },

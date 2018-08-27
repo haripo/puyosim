@@ -6,7 +6,15 @@ import { themeColor } from '../../utils/constants';
 import { Path } from 'react-native-svg';
 import _ from 'lodash';
 
-export default class HistoryTreePath extends React.Component {
+type Props = {
+  startX: number,
+  startY: number,
+  endX: number,
+  endY: number,
+  isCurrentPath: boolean
+};
+
+export default class HistoryTreePath extends React.Component<Props, {}> {
   pathRound = 20;
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {

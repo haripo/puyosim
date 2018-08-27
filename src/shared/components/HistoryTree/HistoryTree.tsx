@@ -14,7 +14,17 @@ import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
 
-export default class HistoryTree extends React.Component {
+export type Props = {
+  onNodePressed: (historyIndex: number) => void,
+  historyTreeLayout: any
+};
+
+type State = {
+  top: number,
+  left: number
+};
+
+export default class HistoryTree extends React.Component<Props, State> {
 
   // layout constants
   graphX = 95;
@@ -28,8 +38,8 @@ export default class HistoryTree extends React.Component {
   handsY = 16;
   puyoSize = 24;
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       top: 0,
       left: 0
