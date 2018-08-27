@@ -4,16 +4,6 @@ import { connect } from "react-redux";
 import {
   resetLayout
 } from "../../shared/actions/actions";
-import { webToolbarSize } from "../../shared/utils/constants";
-
-type LayoutEvent = {
-  nativeEvent: {
-    layout: {
-      width: number,
-      height: number
-    }
-  }
-}
 
 type Props = {
   onLayout: (_: { width: number, height: number }) => void
@@ -37,6 +27,7 @@ class LayoutBaseContainer extends Component<Props, {}> {
 
   handleLayout() {
     // e.nativeEvent にアクセスするとなぜかフリーズするので ref.measure を使う
+    // FIXME: 原因究明 （onLayout が再帰的に呼ばれている？）
     this.view!.measure((ox, oy, width, height) => {
       this.props.onLayout({ width, height });
     });

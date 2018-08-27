@@ -3,7 +3,6 @@ import { Component } from 'react';
 import { Animated, Image, ViewStyle } from 'react-native';
 import _ from 'lodash';
 import { PuyoConnection } from "../selectors/simulatorSelectors";
-import AnimatedInterpolation = Animated.AnimatedInterpolation;
 
 declare function require(x: string): any;
 
@@ -77,8 +76,8 @@ export interface Props {
   puyo: number,
   connections?: PuyoConnection,
   x: number,
-  y: number | AnimatedInterpolation,
-  a?: number | AnimatedInterpolation,
+  y: number | Animated.Animated,
+  a?: number | Animated.Animated,
   size: number,
   skin: string
 }
@@ -100,12 +99,12 @@ export default class Puyo extends Component<Props, State> {
           translateX: this.props.x,
         },
         {
-          translateY: this.props.y as number, // TODO: キャスト外せる？
+          translateY: this.props.y as number, // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
         }
       ],
       width: this.props.size + 1,
       height: this.props.size + 1,
-      opacity: this.props.a === undefined ? 1 : this.props.a as number
+      opacity: this.props.a === undefined ? 1 : this.props.a as number  // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
     };
   }
 

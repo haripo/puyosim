@@ -3,7 +3,6 @@ import { Animated, View } from 'react-native';
 import { contentsPadding } from '../utils/constants';
 import Puyo from './Puyo';
 import { Layout } from "../selectors/layoutSelectors";
-import { VanishingPlan } from "../models/chainPlanner";
 
 function getInterpolateOption() {
   let inputRange: number[] = [];
