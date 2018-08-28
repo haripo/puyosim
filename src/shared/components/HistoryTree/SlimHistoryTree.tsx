@@ -2,7 +2,7 @@
  * Small component for render history-tree
  */
 import React, { Fragment } from 'react';
-import { ActivityIndicator, Animated, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
 import {
   cardBackgroundColor,
   isWeb,
@@ -121,7 +121,8 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           size={ this.puyoSize }
           puyo={ hand[0] }
           x={ x }
-          y={ this.puyoMarginY }
+          // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
+          y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
           skin={ puyoSkin }
           a={ 1 }
         />
@@ -129,7 +130,8 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           size={ this.puyoSize }
           puyo={ hand[1] }
           x={ x + this.puyoSize }
-          y={ this.puyoMarginY }
+          // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
+          y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
           skin={ puyoSkin }
           a={ 1 }
         />
@@ -275,6 +277,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     if (this.state.width === 0) {
       return (
         <View
+          style={ styles.component }
           onLayout={ this.handleLayout.bind(this) }
           ref={ ref => this.view = ref }>
           <ActivityIndicator/>

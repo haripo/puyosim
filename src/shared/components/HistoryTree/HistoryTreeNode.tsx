@@ -5,7 +5,7 @@ import React from 'react';
 import { isWeb, themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
 import compareWith from '../../utils/compareWith';
-import { Animated } from "react-native";
+import { Animated, Platform } from "react-native";
 import AnimatedValue = Animated.AnimatedValue;
 import { Rotation } from "../../models/move";
 
@@ -98,14 +98,14 @@ export default class HistoryTreeNode extends React.Component<Props, {}> {
           ry="4"/>
         <Image
           x={ iconPadding }
-          y={ y }
+          y={ Platform.OS === 'ios' ? -y : y }
           width={ iconSize }
           height={ iconSize }
           href={ numberImages[col] }
         />
         <Image
           x={ iconSize - iconPadding }
-          y={ y }
+          y={ Platform.OS === 'ios' ? -y : y } // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
           width={ iconSize }
           height={ iconSize }
           href={ arrowImages[rotation] }
