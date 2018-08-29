@@ -240,17 +240,22 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         </Fragment>
       );
     const touchableArea = indices
-      .map((historyIndex, i) =>
-        <Rect
-          x={ 0 }
-          y={ touchableAreaHeight * i }
-          width={ 300 }
-          height={ touchableAreaHeight }
-          fill={ 'transparent' }
-          key={ i }
-          onPress={ e => this.handleNodePressed(historyIndex, e) }
-        />
-      );
+      .map((historyIndex, i) => {
+        const events = {
+          [isWeb ? 'onClick' : 'onPressOut']: e => this.handleNodePressed(historyIndex, e)
+        };
+        return (
+          <Rect
+            x={ 0 }
+            y={ touchableAreaHeight * i }
+            width={ 300 }
+            height={ touchableAreaHeight }
+            fill={ 'transparent' }
+            key={ i }
+            { ...events }
+          />
+        );
+      });
     const color = index % 2 === 0 ? themeLightColor : themeColor;
     const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * children.length;
     return (
@@ -263,10 +268,10 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           fill={ color }
           fillOpacity={ 0.2 }
         />
-        { touchableArea }
         { this.renderPair(item.record.pair, index) }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
         { children }
+        { touchableArea }
       </Svg>
     )
   }
