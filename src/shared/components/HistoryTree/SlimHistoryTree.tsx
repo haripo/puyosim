@@ -14,6 +14,7 @@ import Svg, { G, Path, Rect, } from 'react-native-svg';
 import HistoryTreeNode from './HistoryTreeNode';
 import { HistoryRecord } from "../../models/history";
 import AnimatedValue = Animated.AnimatedValue;
+import HistoryHand from "./HistoryHand";
 
 export interface Props {
   history: HistoryRecord[],
@@ -67,16 +68,29 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
     const { history } = this.props;
 
-    const l = history.length;
-    let r: AnimatedValue[] = [];
-    for (let i = 0; i < l; i++) {
-      r[i] = new Animated.Value(1);
-    }
     this.state = {
-      nodeAnimated: r,
+      nodeAnimated: history.map(() => new Animated.Value(1)),
       width: 0,
       height: 0
     };
+  }
+
+  /**
+   * History の現在のパスのみを取得します
+   */
+  get flattenedHistory(): RecordIndexPair[] {
+    const { history } = this.props;
+    let flatHist: RecordIndexPair[] = [];
+    let next: number | null = 0;
+    while (next !== null) {
+      const record = history[next];
+      flatHist.push({
+        record,
+        historyIndex: next
+      });
+      next = record.defaultNext;
+    }
+    return flatHist;
   }
 
   componentDidUpdate(prevProps: Props, prevState: State, snapshot) {
@@ -115,88 +129,47 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const x = this.handsX;
     const puyoSkin = 'puyoSkinDefault';
 
+    // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
     return (
-      <React.Fragment key={ index }>
-        <SvgPuyo
-          size={ this.puyoSize }
-          puyo={ hand[0] }
-          x={ x }
-          // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
-          y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
-          skin={ puyoSkin }
-          a={ 1 }
-        />
-        <SvgPuyo
-          size={ this.puyoSize }
-          puyo={ hand[1] }
-          x={ x + this.puyoSize }
-          // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
-          y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
-          skin={ puyoSkin }
-          a={ 1 }
-        />
-      </React.Fragment>
+      <HistoryHand
+        key={ index }
+        hand={ hand }
+        x={ x }
+        y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
+        puyoSkin={ puyoSkin }
+        puyoSize={ this.puyoSize }
+      />
     );
   }
 
-  renderRootNode(isCurrentNode: boolean) {
-    const eventName = isWeb ? 'onClick' : 'onPress';
-    const events = {
-      [eventName]: e => this.handleNodePressed(0, e)
-    };
-
-    return (
-      <G { ...events } >
-        <Rect
-          { ...events }
-          x={ this.nodeMarginLeft }
-          y={ this.nodeMarginTop }
-          width={ this.nodeWidth }
-          height={ this.nodeHeight }
-          stroke={ themeColor }
-          strokeWidth={ isCurrentNode ? 4 : 2 }
-          fill={ themeLightColor }
-          rx="4"
-          ry="4"/>
-      </G>
-    );
-  }
-
-  renderSubNode(historyIndex: number, index: number, isMainPath: boolean) {
+  renderNode(historyIndex: number, index: number, isMainPath: boolean) {
     const node = this.props.history[historyIndex];
     const isCurrentNode = historyIndex === this.props.currentIndex;
     const { move } = node;
 
-    if (isMainPath) {
+    if (move === null) {
       return (
         <HistoryTreeNode
-          x={ this.state.nodeAnimated[historyIndex] }
-          y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
-          currentX={ this.nodeMarginLeft }
-          futureX={ this.nodeMarginLeft + this.childrenLeft }
-          col={ move!.col }
-          rotation={ move!.rotation }
+          x={ this.nodeMarginLeft }
+          y={ this.nodeMarginTop }
           nodeWidth={ this.nodeWidth }
           isCurrentNode={ isCurrentNode }
-          onPress={ e => this.handleNodePressed(historyIndex, e) }
-        />
-      );
-    } else {
-      return (
-        <HistoryTreeNode
-          x={ this.state.nodeAnimated[historyIndex] }
-          y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
-          currentX={ this.nodeMarginLeft + this.childrenLeft }
-          futureX={ this.nodeMarginLeft }
-          col={ move!.col }
-          rotation={ move!.rotation }
-          nodeWidth={ this.nodeWidth }
-          isCurrentNode={ false }
-          key={ index }
-          onPress={ e => this.handleNodePressed(historyIndex, e) }
         />
       );
     }
+
+    return (
+      <HistoryTreeNode
+        x={ this.state.nodeAnimated[historyIndex] }
+        y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+        currentX={ this.nodeMarginLeft + (isMainPath ? 0 : this.childrenLeft) }
+        futureX={ this.nodeMarginLeft + (isMainPath ? this.childrenLeft : 0) }
+        col={ move.col }
+        rotation={ move.rotation }
+        nodeWidth={ this.nodeWidth }
+        isCurrentNode={ isCurrentNode }
+      />
+    );
   }
 
   renderMainPath(svgHeight: number, hasNext: boolean, hasPrev: boolean) {
@@ -215,49 +188,35 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     );
   }
 
+  renderRow(item, historyIndex, i) {
+    const height = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
+    const events = {
+      [isWeb ? 'onClick' : 'onPressOut']: e => this.handleNodePressed(historyIndex, e)
+    };
+    return (
+      <Fragment key={ historyIndex }>
+        { this.renderNode(historyIndex, i, item.historyIndex === historyIndex) }
+        {/* touchable area */}
+        <Rect
+          x={ 0 }
+          y={ height * i }
+          width={ 300 }
+          height={ height }
+          fill={ 'transparent' }
+          key={ i }
+          { ...events }
+        />
+      </Fragment>
+    );
+  }
+
   renderItem({ index, item }: { index: number, item: RecordIndexPair }) {
     const hasNext = item.record.defaultNext !== null;
     const hasPrev = item.record.prev !== null;
-    const isCurrentNode = item.historyIndex === this.props.currentIndex;
-
-    if (item.record.move === null) {
-      // root node
-      const svgHeight = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
-      return (
-        <Svg width={ 300 } height={ svgHeight }>
-          { this.renderMainPath(svgHeight, true, false) }
-          { this.renderRootNode(isCurrentNode) }
-        </Svg>
-      );
-    }
-
-    const touchableAreaHeight = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
-    const indices = item.record.prev ? this.props.history[item.record.prev].next : [item.historyIndex];
-    const children = indices
-      .map((historyIndex, i) =>
-        <Fragment key={ historyIndex }>
-          { this.renderSubNode(historyIndex, i, item.historyIndex === historyIndex) }
-        </Fragment>
-      );
-    const touchableArea = indices
-      .map((historyIndex, i) => {
-        const events = {
-          [isWeb ? 'onClick' : 'onPressOut']: e => this.handleNodePressed(historyIndex, e)
-        };
-        return (
-          <Rect
-            x={ 0 }
-            y={ touchableAreaHeight * i }
-            width={ 300 }
-            height={ touchableAreaHeight }
-            fill={ 'transparent' }
-            key={ i }
-            { ...events }
-          />
-        );
-      });
+    const indices = item.record.prev !== null ? this.props.history[item.record.prev].next : [item.historyIndex];
     const color = index % 2 === 0 ? themeLightColor : themeColor;
-    const svgHeight = (this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom) * children.length;
+    const height = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
+    const svgHeight = height * indices.length;
     return (
       <Svg width={ 300 } height={ svgHeight }>
         <Rect
@@ -268,46 +227,35 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           fill={ color }
           fillOpacity={ 0.2 }
         />
-        { this.renderPair(item.record.pair, index) }
+        { index > 0 ? this.renderPair(item.record.pair, index) : null }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
-        { children }
-        { touchableArea }
+        { indices.map((historyIndex, i) => this.renderRow(item, historyIndex, i)) }
       </Svg>
     )
   }
 
+  renderActivityIndicator() {
+    return (
+      <View
+        style={ styles.component }
+        onLayout={ this.handleLayout.bind(this) }
+        ref={ ref => this.view = ref }>
+        <ActivityIndicator/>
+      </View>
+    );
+  }
+
   render() {
-    const { history } = this.props;
-
     if (this.state.width === 0) {
-      return (
-        <View
-          style={ styles.component }
-          onLayout={ this.handleLayout.bind(this) }
-          ref={ ref => this.view = ref }>
-          <ActivityIndicator/>
-        </View>
-      );
-    }
-
-    // flatten history
-    let flatHist: RecordIndexPair[] = [];
-    let next: number | null = 0;
-    while (next !== null) {
-      const record = history[next];
-      flatHist.push({
-        record,
-        historyIndex: next
-      });
-      next = record.defaultNext;
+      return this.renderActivityIndicator();
     }
 
     return (
       <View style={ styles.component }>
         <FlatList
-          data={ flatHist }
+          data={ this.flattenedHistory }
           renderItem={ this.renderItem.bind(this) }
-          keyExtractor={ (record, index) => String(record.historyIndex) }
+          keyExtractor={ record => String(record.historyIndex) }
         />
       </View>
     );

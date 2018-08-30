@@ -30,11 +30,11 @@ export type Props = {
   y: number,
   futureX?: number,
   currentX?: number,
-  col: number,
-  rotation: Rotation,
+  col?: number,
+  rotation?: Rotation,
   nodeWidth: number,
   isCurrentNode: boolean,
-  onPress: (e: any) => void
+  onPress?: (e: any) => void
 }
 
 const isAnimatedValue = (value: any): value is AnimatedValue => !!value.addListener;
@@ -67,49 +67,71 @@ export default class HistoryTreeNode extends React.Component<Props, {}> {
 
   componentDidMount() {
     if (this.g && this.g.setNativeProps) {
-      this.g.setNativeProps({ matrix: [1, 0, 0, 1, this.props.currentX, 0] });
+      this.g.setNativeProps({ matrix: [1, 0, 0, 1, this.props.currentX || 0, 0] });
     }
   }
 
-  render() {
-    const { y, col, rotation, nodeWidth, isCurrentNode, onPress } = this.props;
-    const iconSize = nodeWidth / 2;
+  renderFrame(x, y, nodeWidth, isCurrentNode, iconSize, events) {
+    return (
+      <Rect
+        { ...events }
+        x={ x }
+        y={ y }
+        width={ nodeWidth }
+        height={ iconSize }
+        stroke={ themeColor }
+        strokeWidth={ isCurrentNode ? 4 : 2 }
+        fill={ themeLightColor }
+        rx="4"
+        ry="4"/>
+    );
+  }
+
+  renderText(col, rotation, x, y, nodeWidth, iconSize) {
     const iconPadding = nodeWidth / 16;
 
-    // Android では G 要素の onPress がとれなかったので、
-    // onClick のみでよさそう
-    const eventName = isWeb ? 'onClick' : 'onPress';
-    const events = {
-      [eventName]: e => onPress(e)
-    };
+    if (!col && !rotation) {
+      // root node 用に col, rotation を表示しないパターンが必要
+      return null;
+    }
 
     return (
-      <G { ...events } ref={ ref => this.g = ref }>
-        <Rect
-          { ...events }
-          x={ 0 }
-          y={ y }
-          width={ nodeWidth }
-          height={ iconSize }
-          stroke={ themeColor }
-          strokeWidth={ isCurrentNode ? 4 : 2 }
-          fill={ themeLightColor }
-          rx="4"
-          ry="4"/>
+      <React.Fragment>
         <Image
-          x={ iconPadding }
+          x={ iconPadding + x }
           y={ Platform.OS === 'ios' ? -y : y }
           width={ iconSize }
           height={ iconSize }
           href={ numberImages[col] }
         />
         <Image
-          x={ iconSize - iconPadding }
+          x={ iconSize - iconPadding + x }
           y={ Platform.OS === 'ios' ? -y : y } // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
           width={ iconSize }
           height={ iconSize }
           href={ arrowImages[rotation] }
         />
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    const { y, col, rotation, nodeWidth, isCurrentNode, onPress } = this.props;
+    const iconSize = nodeWidth / 2;
+
+    // Android では G 要素の onPress がとれなかったので、
+    // onClick のみでよさそう
+    const eventName = isWeb ? 'onClick' : 'onPress';
+    const events = {
+      [eventName]: e => (onPress ? onPress(e) : null)
+    };
+
+    let x = isAnimatedValue(this.props.x) ? 0 : this.props.x;
+
+    return (
+      <G { ...events } ref={ ref => this.g = ref }>
+        { this.renderFrame(x, y, nodeWidth, isCurrentNode, iconSize, events) }
+        { this.renderText(col, rotation, x, y, nodeWidth, iconSize) }
       </G>
     );
   }
