@@ -8,7 +8,9 @@
     "android:emulator": "cd $ANDROID_HOME/tools && ./emulator -avd \"Nexus_5X_API_27_x86\"",
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "babel": "^6.23.0",
@@ -50,6 +52,10 @@
     "webpack": "^4.14.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^4.0.0-alpha.20",
+    "@storybook/addon-links": "^4.0.0-alpha.16",
+    "@storybook/addons": "^3.4.10",
+    "@storybook/react": "^4.0.0-alpha.16",
     "@types/jest": "^23.1.4",
     "@types/lodash": "^4.14.110",
     "@types/react": "^16.4.6",
@@ -60,8 +66,12 @@
     "@types/redux": "^3.6.0",
     "@types/redux-logger": "^3.0.6",
     "@types/redux-saga": "^0.10.5",
+    "@types/storybook__addon-actions": "^3.4.1",
+    "@types/storybook__react": "^3.0.9",
+    "babel-core": "^6.26.3",
     "babel-jest": "23.4.2",
     "babel-preset-react-native": "^4",
+    "babel-runtime": "^6.26.0",
     "concurrently": "^3.6.0",
     "jest": "23.4.2",
     "react-native-cli": "^2.0.1",
