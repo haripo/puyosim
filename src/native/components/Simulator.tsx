@@ -243,7 +243,7 @@ if (Platform.OS === 'android') {
   Simulator.navigatorButtons = {
     rightButtons: [
       {
-        title: 'menu',
+        title: '...',
         id: 'menu'
       }
     ]
