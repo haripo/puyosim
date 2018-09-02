@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 import {
+  applyGravity, finishDroppingAnimations,
+  finishVanishingAnimations,
   initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight, moveHistory, openTwitterShare,
@@ -77,6 +79,14 @@ const mapDispatchToProps = (dispatch) => {
     },
     onHistoryNodePressed: (index) => {
       dispatch(moveHistory(index));
+      dispatch(vanishPuyos());
+    },
+    onVanishingAnimationFinished: () => {
+      dispatch(finishVanishingAnimations());
+      dispatch(applyGravity());
+    },
+    onDroppingAnimationFinished: () => {
+      dispatch(finishDroppingAnimations());
       dispatch(vanishPuyos());
     }
   };
