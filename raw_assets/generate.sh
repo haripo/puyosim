@@ -64,6 +64,18 @@ convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipm
 convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
 convert cropped_icon_000.png -sample 1200% png32:../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 convert cropped_icon_000.png -sample 1200% png32:../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+
+IOS_BASE_DIR=../ios/PuyoSimulator/Images.xcassets/AppIcon.appiconset
+convert cropped_icon_000.png -sample 40x40 -alpha remove png32:${IOS_BASE_DIR}/iPhone-20@2x.png
+convert cropped_icon_000.png -sample 60x60 -alpha remove png32:${IOS_BASE_DIR}/iPhone-20@3x.png
+convert cropped_icon_000.png -sample 58x58 -alpha remove png32:${IOS_BASE_DIR}/Icon-Small@2x.png
+convert cropped_icon_000.png -sample 87x87 -alpha remove png32:${IOS_BASE_DIR}/Icon-Small@3x.png
+convert cropped_icon_000.png -sample 80x80 -alpha remove png32:${IOS_BASE_DIR}/Icon-Small-40@2x.png
+convert cropped_icon_000.png -sample 120x120 -alpha remove png32:${IOS_BASE_DIR}/Icon-Small-40@3x.png
+convert cropped_icon_000.png -sample 120x120 -alpha remove png32:${IOS_BASE_DIR}/Icon-60@2x.png
+convert cropped_icon_000.png -sample 180x180 -alpha remove png32:${IOS_BASE_DIR}/Icon-60@3x.png
+convert cropped_icon_000.png -sample 1024x1024 -alpha remove png32:${IOS_BASE_DIR}/Icon-1024.png
+
 cp cropped_icon_000.png icon.png
 
 rm -f cropped_*
