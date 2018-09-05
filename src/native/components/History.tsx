@@ -61,7 +61,7 @@ export default class Simulator extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-    this.props.navigator.setTitle({ title: "History (beta)" });
+    this.props.navigator.setTitle({ title: "History" });
   }
 
   onNavigatorEvent(event) {
