@@ -96,8 +96,13 @@ module.exports = {
     }
   },
   devServer: {
-    contentBase: path.resolve(appDirectory, 'web/'),
-    publicPath: '/build/'
+    contentBase: path.resolve(appDirectory, 'web/public'),
+    publicPath: '/build/',
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/s\/.*$/, to: '/s/index.html' }
+      ]
+    }
   },
   devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map'
 };

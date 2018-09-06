@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { AppRegistry } from 'react-native';
+import { BrowserRouter, Route } from 'react-router-dom'
 
 import Simulator from './src/web/containers/SimulatorContainer';
 import { getStore } from './src/shared/store/store';
@@ -12,8 +13,10 @@ import './src/web/misc/icon';
 class App extends Component {
   render() {
     return (
-      <Provider store={this.props.store}>
-        <Simulator/>
+      <Provider store={ this.props.store }>
+        <BrowserRouter>
+          <Route exact path='/s' component={ Simulator }/>
+        </BrowserRouter>
       </Provider>
     )
   }
