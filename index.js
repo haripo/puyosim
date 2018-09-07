@@ -25,8 +25,7 @@ import { SENTRY_URL } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 
-console.warn(SENTRY_URL);
-if (!__DEV__) {
+if (!__DEV__ && SENTRY_URL) {
   Sentry
     .config(SENTRY_URL)
     .install();
