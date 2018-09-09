@@ -1,4 +1,5 @@
 .env
+sentry.properties
 
 # OSX
 #
