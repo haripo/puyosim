@@ -21,13 +21,13 @@ import { getStore } from './src/shared/store/store';
 import sagas from './src/shared/sagas';
 import reducers from './src/shared/reducers'
 
-import { SENTRY_URL } from 'react-native-dotenv'
+import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 
-if (!__DEV__ && SENTRY_URL) {
+if (!__DEV__ && SENTRY_DSN) {
   Sentry
-    .config(SENTRY_URL)
+    .config(SENTRY_DSN)
     .install();
 }
 
