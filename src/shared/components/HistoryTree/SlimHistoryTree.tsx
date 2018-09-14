@@ -200,7 +200,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         <Rect
           x={ 0 }
           y={ height * i }
-          width={ 300 }
+          width={ this.state.width }
           height={ height }
           fill={ 'transparent' }
           key={ i }
@@ -218,11 +218,11 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const height = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
     const svgHeight = height * indices.length;
     return (
-      <Svg width={ 300 } height={ svgHeight }>
+      <Svg width={ this.state.width } height={ svgHeight }>
         <Rect
           x={ 0 }
           y={ 0 }
-          width={ 300 }
+          width={ this.state.width }
           height={ svgHeight }
           fill={ color }
           fillOpacity={ 0.2 }
