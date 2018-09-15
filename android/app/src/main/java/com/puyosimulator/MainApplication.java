@@ -3,6 +3,8 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -32,6 +34,8 @@ public class MainApplication extends NavigationApplication/* implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseFirestorePackage(),
             new RealmReactPackage(),
             new RNVersionNumberPackage(),
             new VectorIconsPackage(),
@@ -70,6 +74,8 @@ public class MainApplication extends NavigationApplication/* implements ReactApp
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
       new MainReactPackage(),
+      new RNFirebasePackage(),
+      new RNFirebaseFirestorePackage(),
       new RealmReactPackage(),
       new RNVersionNumberPackage(),
       new VectorIconsPackage(),
