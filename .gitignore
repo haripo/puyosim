@@ -1,5 +1,6 @@
 .env
 sentry.properties
+android/app/src/*/google-services.json
 
 # OSX
 #
