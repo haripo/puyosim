@@ -97,7 +97,10 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
   return history;
 }
 
-export function createHistoryFromMinimumHistory(minimumHistory: MinimumHistory, queue: number[]): History {
+export function createHistoryFromMinimumHistory(
+  minimumHistoryRecords: MinimumHistoryRecord[],
+  queue: number[][]): HistoryRecord[] {
+
   let stack = createField(fieldRows, fieldCols);
   let resultRecords: HistoryRecord[] = [
     createInitialHistoryRecord(stack)
@@ -105,11 +108,10 @@ export function createHistoryFromMinimumHistory(minimumHistory: MinimumHistory, 
   let backtrack: { [_: number]: number } = {};
   let index = 1;
 
-  for (const record of minimumHistory.records) {
+  for (const record of minimumHistoryRecords) {
     const prev = index in backtrack ? backtrack[index] : 0;
     const numHands = resultRecords[prev].numHands + 1;
-    const queuePosition = ((numHands - 1) * 2) % queue.length;
-    const pair = queue.slice(queuePosition, queuePosition + 2);
+    const pair = queue[(numHands - 1) % queue.length];
     const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
     const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
 
@@ -140,11 +142,7 @@ export function createHistoryFromMinimumHistory(minimumHistory: MinimumHistory, 
     index += 1;
   }
 
-  return {
-    version: 1,
-    records: resultRecords,
-    currentIndex: minimumHistory.currentIndex
-  }
+  return resultRecords;
 }
 
 export function serialize(history: History): string {

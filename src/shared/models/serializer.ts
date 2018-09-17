@@ -13,16 +13,12 @@ const maxColor = 7;
  * Serialize queue into string
  * @param queue color array
  */
-export function serializeQueue(queue: number[]): string {
-  if (queue.length % 2 !== 0) {
-    throw new Error('The length of queue must be even');
-  }
-
-  if (queue.find(c => (c < 0 || maxColor <= c)) !== undefined) {
+export function serializeQueue(queue: number[][]): string {
+  if (_.flatten(queue).find(c => (c < 0 || maxColor <= c)) !== undefined) {
     throw new Error('Invalid color in queue: [' + queue.join(',') + ']');
   }
 
-  return _.chunk(queue, 2)
+  return queue
     .map(pair => chars[pair[0] * maxColor + pair[1]])
     .join('');
 }
@@ -31,7 +27,7 @@ export function serializeQueue(queue: number[]): string {
  * Deserialize queue from string
  * @param serializedQueue string queue
  */
-export function deserializeQueue(serializedQueue: string): number[] {
+export function deserializeQueue(serializedQueue: string): number[][] {
   const pairNumbers = serializedQueue
     .split('')
     .map(char => chars.indexOf(char));
@@ -40,7 +36,7 @@ export function deserializeQueue(serializedQueue: string): number[] {
     throw new Error('Invalid char in serialized queue: [' + serializedQueue + ']')
   }
 
-  return _.flatMap(pairNumbers, n => [Math.floor(n / maxColor), n % maxColor]);
+  return pairNumbers.map(n => [Math.floor(n / maxColor), n % maxColor]);
 }
 
 const moveList: Move[] = [
