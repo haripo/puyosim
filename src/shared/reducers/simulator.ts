@@ -10,6 +10,7 @@ import {
   MOVE_HISTORY,
   OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR,
+  RECONSTRUCT_HISTORY,
   REDO_FIELD,
   RESET_FIELD,
   RESTART,
@@ -40,13 +41,14 @@ import {
   appendHistoryRecord,
   createInitialHistoryRecord,
   History,
-  HistoryRecord
+  HistoryRecord, createHistoryFromMinimumHistory
 } from '../models/history';
 
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 import { applyDropPlans, applyVanishPlans, createField, setPair, Stack } from '../models/stack';
+import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 
 export type SimulatorState = {
   queue: number[][],
@@ -274,6 +276,14 @@ function setHistory(state: SimulatorState, action) {
   return state;
 }
 
+function reconstructHistory(state: SimulatorState, action): SimulatorState {
+  const { history, queue, index } = action;
+  state.queue = deserializeQueue(queue);
+  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(history), state.queue);
+  state.historyIndex = index;
+  return state;
+}
+
 function createInitialState(config): SimulatorState {
   const queue = generateQueue(config);
   const stack = createField(fieldRows, fieldCols);
@@ -335,6 +345,8 @@ export const reducer = (state, action, config) => {
       return resetField(state, action);
     case RESTART:
       return restart(state, action, config);
+    case RECONSTRUCT_HISTORY:
+      return reconstructHistory(state, action);
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:

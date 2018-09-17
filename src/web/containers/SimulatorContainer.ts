@@ -6,7 +6,7 @@ import {
   moveHighlightsLeft,
   moveHighlightsRight,
   moveHistory,
-  putNextPair, redoField,
+  putNextPair, reconstructHistory, redoField,
   resetField,
   restart,
   rotateHighlightsLeft,
@@ -84,6 +84,9 @@ const mapDispatchToProps = (dispatch) => {
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));
       dispatch(vanishPuyos());
+    },
+    onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
+      dispatch(reconstructHistory(history, queue, index))
     },
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations());

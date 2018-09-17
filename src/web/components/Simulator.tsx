@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { parse } from 'query-string';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
@@ -17,6 +18,9 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { HistoryRecord } from "../../shared/models/history";
 
 export type Props = {
+  match: any,
+  location: any,
+
   stack: StackForRendering,
   ghosts: PendingPairPuyo[],
   pendingPair: PendingPair,
@@ -47,7 +51,8 @@ export type Props = {
   history: HistoryRecord[],
   historyIndex: number,
   historyTreeLayout: any,
-  onHistoryNodePressed: (index: number) => void
+  onHistoryNodePressed: (index: number) => void,
+  onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
 }
 
 export default class Simulator extends Component<Props, {}> {
@@ -61,6 +66,15 @@ export default class Simulator extends Component<Props, {}> {
     // enable hotkeys
     if (this.hotkeyElementRef) {
       this.hotkeyElementRef.focus();
+    }
+
+    const query = parse(this.props.location.search);
+    if ('q' in query && 'h' in query) {
+      this.props.onReconstructHistoryRequested(
+        query['h'],
+        query['q'],
+        'i' in query ? parseInt(query['i']) : 0,
+      )
     }
   }
 
