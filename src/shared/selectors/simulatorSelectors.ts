@@ -1,6 +1,9 @@
 import { fieldCols, fieldRows } from '../utils/constants';
 import { getFirstCol, getSecondCol } from '../models/move';
-import { Color, createField, isValidPosition } from '../models/stack';
+import {
+  Color, createField, isValidPosition,
+  getDropPositions as getDropPositionsStack
+} from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
 
@@ -176,40 +179,12 @@ function _getStack(stack, droppings): StackForRendering {
 
 export const getDropPositions = createSelector(
   [
-    (state: SimulatorState) => state.pendingPair,
     (state: SimulatorState) => state.stack,
-    (state: SimulatorState) => state.queue,
-    (state: SimulatorState) => state.numHands,
+    (state: SimulatorState) => state.pendingPair,
     (state: SimulatorState) => getCurrentHand(state)
   ],
-  _getDropPositions
+  getDropPositionsStack
 );
-
-function _getDropPositions(pair, stack, queue, numHands, hand): PendingPairPuyo[] {
-  // TODO: use model/stack.ts 's getDropPositions
-  const firstCol = getFirstCol(pair);
-  const secondCol = getSecondCol(pair);
-
-  const getDropRow = (col) => {
-    let i = fieldRows - 1;
-    while (stack[i] && stack[i][col] !== 0) {
-      i--;
-    }
-    return i;
-  };
-
-  const drop1 = { row: getDropRow(firstCol), col: firstCol, color: hand[0] };
-  const drop2 = { row: getDropRow(secondCol), col: secondCol, color: hand[1] };
-  if (drop1.col === drop2.col && drop1.row === drop2.row) {
-    if (pair.rotation === 'bottom') {
-      drop1.row -= 1;
-    } else {
-      drop2.row -= 1;
-    }
-  }
-
-  return [drop1, drop2].filter(d => isValidPosition(d));
-}
 
 export const getHistoryTreeLayout = createSelector(
   [

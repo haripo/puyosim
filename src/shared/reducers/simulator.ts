@@ -46,7 +46,7 @@ import {
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
-import { applyDropPlans, applyVanishPlans, createField, Stack } from '../models/stack';
+import { applyDropPlans, applyVanishPlans, createField, setPair, Stack } from '../models/stack';
 
 export type SimulatorState = {
   queue: number[][],
@@ -87,6 +87,10 @@ function putNextPair(state: SimulatorState, action) {
   const numHands = state.numHands;
   const hand = state.queue[numHands];
   const move = state.pendingPair;
+
+  // state.stack = setPair(state.stack, move, hand);
+  // TODO: 下の処理を setPair に変更する。
+  // position.length === 0 の処理（置けない場所においたときの処理）を書き換える必要がある
 
   const positions: any[] = getDropPositions(state);
 

@@ -1,5 +1,8 @@
-import { Pair, Stack } from './stack';
+import { cloneStack, createField, Pair, setPair, Stack } from './stack';
 import { Move } from "./move";
+import { fieldCols, fieldRows } from "../utils/constants";
+import { createChainPlan } from "./chainPlanner";
+import index from "../reducers";
 
 export type HistoryRecord = {
   move: Move | null,
@@ -17,6 +20,20 @@ export type HistoryRecord = {
 export type History = {
   version: number;
   records: Array<HistoryRecord>;
+  currentIndex: number;
+}
+
+/**
+ * 最小限のデータだけ保存する形式の履歴レコード。
+ * URL にシリアライズする際に利用する。
+ */
+export type MinimumHistoryRecord = {
+  move: Move,
+  next: number[]
+}
+
+export type MinimumHistory = {
+  records: MinimumHistoryRecord[];
   currentIndex: number;
 }
 
@@ -59,8 +76,7 @@ export function createHistoryRecord(
   };
 }
 
-export function appendHistoryRecord(
-  history: History, record: HistoryRecord): History {
+export function appendHistoryRecord(history: History, record: HistoryRecord): History {
 
   const nextIndex = history.records.length;
   const lastState = history.records[history.currentIndex];
@@ -89,6 +105,56 @@ export function appendHistoryRecord(
   return history;
 }
 
+export function createHistoryFromMinimumHistory(minimumHistory: MinimumHistory, queue: number[]): History {
+  let stack = createField(fieldRows, fieldCols);
+  let resultRecords: HistoryRecord[] = [
+    createInitialHistoryRecord(stack)
+  ];
+  let backtrack: { [_: number]: number } = {};
+  let index = 1;
+
+  for (const record of minimumHistory.records) {
+    const prev = index in backtrack ? backtrack[index] : 0;
+    const numHands = resultRecords[prev].numHands + 1;
+    const queuePosition = ((numHands - 1) * 2) % queue.length;
+    const pair = queue.slice(queuePosition, queuePosition + 2);
+    const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
+    const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
+
+    for (const nextPosition of record.next) {
+      backtrack[nextPosition + 1] = index;
+    }
+
+    if (!(index in backtrack)) {
+      resultRecords[0].next.push(index);
+      if (resultRecords[0].next.length === 1) {
+        resultRecords[0].defaultNext = index;
+      }
+    }
+
+    resultRecords.push({
+      move: record.move,
+      pair: pair,
+      numHands: numHands,
+      stack: currentStack,
+      score: chainResult.score + resultRecords[prev].score,
+      chain: chainResult.chain,
+      chainScore: chainResult.score,
+      next: record.next.map(n => n + 1),
+      defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
+      prev: prev
+    });
+
+    index += 1;
+  }
+
+  return {
+    version: 1,
+    records: resultRecords,
+    currentIndex: minimumHistory.currentIndex
+  }
+}
+
 export function serialize(history: History): string {
   return JSON.stringify(history);
 }
@@ -96,3 +162,4 @@ export function serialize(history: History): string {
 export function deserialize(serialized: string): History {
   return JSON.parse(serialized);
 }
+
