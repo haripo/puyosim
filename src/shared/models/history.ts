@@ -1,8 +1,7 @@
-import { cloneStack, createField, Pair, setPair, Stack } from './stack';
-import { Move } from "./move";
+import { createField, Pair, setPair, Stack } from './stack';
+import { isEqualMove, Move } from "./move";
 import { fieldCols, fieldRows } from "../utils/constants";
 import { createChainPlan } from "./chainPlanner";
-import index from "../reducers";
 
 export type HistoryRecord = {
   move: Move | null,
@@ -35,13 +34,6 @@ export type MinimumHistoryRecord = {
 export type MinimumHistory = {
   records: MinimumHistoryRecord[];
   currentIndex: number;
-}
-
-function isEqualMove(a: Move | null, b: Move | null) {
-  if (a === null || b === null) {
-    return false;
-  }
-  return a.col === b.col && a.rotation === b.rotation;
 }
 
 export function createInitialHistoryRecord(stack: Stack): HistoryRecord {

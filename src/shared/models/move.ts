@@ -72,3 +72,10 @@ export function moveRight(move: Move): Move {
   move.col += 1;
   return move;
 }
+
+export function isEqualMove(a: Move | null, b: Move | null) {
+  if (a === null || b === null) {
+    return false;
+  }
+  return a.col === b.col && a.rotation === b.rotation;
+}
