@@ -1,24 +1,6 @@
-import {
-  createHistoryFromMinimumHistory,
-  deserialize, MinimumHistory,
-  serialize
-} from '../src/shared/models/history';
-import { createInitialHistoryRecord } from '../src/shared/models/history';
-import { fieldCols, fieldRows } from '../src/shared/utils/constants';
-import { createField } from '../src/shared/models/stack';
+import { createHistoryFromMinimumHistory, MinimumHistory } from '../src/shared/models/history';
 
 describe('history', () => {
-  test('serialize', () => {
-    const stack = createField(fieldRows, fieldCols);
-    const history = {
-      version: 1,
-      records: [createInitialHistoryRecord(stack)],
-      currentIndex: 0
-    };
-    const result = deserialize(serialize(history));
-    expect(result).toEqual(history);
-  });
-
   describe('create history from minimum history', () => {
     test('with simple history', () => {
       const queue = [1, 2, 3, 4, 1, 2, 3, 4];
