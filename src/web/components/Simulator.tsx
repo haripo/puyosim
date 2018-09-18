@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { parse } from 'query-string';
+import Modal from 'react-modal';
+
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
@@ -16,6 +18,8 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { HistoryRecord } from "../../shared/models/history";
+import ShareModal from "./ShareModal";
+import ShareModalContainer from "../containers/ShareModalContainer";
 
 export type Props = {
   match: any,
@@ -55,11 +59,18 @@ export type Props = {
   onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
 }
 
-export default class Simulator extends Component<Props, {}> {
+type State = {
+  shareModalIsOpen: boolean
+}
+
+export default class Simulator extends Component<Props, State> {
   hotkeyElementRef: any;
 
   constructor(props) {
     super(props);
+    this.state = {
+      shareModalIsOpen: false
+    }
   }
 
   componentDidMount() {
@@ -76,6 +87,18 @@ export default class Simulator extends Component<Props, {}> {
         'i' in query ? parseInt(query['i']) : 0,
       )
     }
+  }
+
+  handleSharePressed() {
+    this.setState({
+      shareModalIsOpen: true
+    });
+  }
+
+  handleRequestShareModalClose() {
+    this.setState({
+      shareModalIsOpen: false
+    })
   }
 
   render() {
@@ -112,7 +135,9 @@ export default class Simulator extends Component<Props, {}> {
           // @ts-ignore
           style={ { outline: '0' } }>
           <View>
-            <WebToolbar/>
+            <WebToolbar
+              onSharePressed={ this.handleSharePressed.bind(this) }
+            />
           </View>
           <LayoutBaseContainer>
             <View style={ styles.container }>
@@ -166,6 +191,14 @@ export default class Simulator extends Component<Props, {}> {
             </View>
           </LayoutBaseContainer>
         </View>
+        <Modal
+          isOpen={ this.state.shareModalIsOpen }
+          shouldCloseOnEsc={ true }
+          shouldReturnFocusAfterClose={ true }
+          onRequestClose={ this.handleRequestShareModalClose.bind(this) }
+        >
+          <ShareModalContainer />
+        </Modal>
       </HotKeys>
     );
   }

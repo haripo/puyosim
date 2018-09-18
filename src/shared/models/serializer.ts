@@ -57,11 +57,11 @@ const moveList: Move[] = [
   { rotation: 'right', col: 2 },
   { rotation: 'right', col: 3 },
   { rotation: 'right', col: 4 },
-  { rotation: 'left', col: 0 },
   { rotation: 'left', col: 1 },
   { rotation: 'left', col: 2 },
   { rotation: 'left', col: 3 },
-  { rotation: 'left', col: 4 }
+  { rotation: 'left', col: 4 },
+  { rotation: 'left', col: 5 },
 ];
 
 const specialChars = [

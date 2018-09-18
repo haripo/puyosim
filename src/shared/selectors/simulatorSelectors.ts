@@ -6,6 +6,7 @@ import {
 } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
+import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 
 export function isActive(state): boolean {
   return !(
@@ -267,4 +268,12 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     width: rightmostRow,
     height: deepestColumn
   };
+}
+
+export function getShareURL(state: SimulatorState): string {
+  const q = serializeQueue(state.queue);
+  const h = serializeHistoryRecords(state.history);
+  const i = state.historyIndex.toString();
+
+  return `http://puyos.im/s?q=${q}&h=${h}&i=${i}`
 }

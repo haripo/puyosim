@@ -4,7 +4,7 @@ import {
   serializeHistoryRecords,
   serializeQueue
 } from "../src/shared/models/serializer";
-import { createHistoryFromMinimumHistory } from "../src/shared/models/history";
+import { createHistoryFromMinimumHistory, HistoryRecord, MinimumHistoryRecord } from "../src/shared/models/history";
 
 describe('serializer', () => {
   describe('queue', () => {
@@ -64,6 +64,16 @@ describe('serializer', () => {
 
       const result = deserializeHistoryRecords('bh8fup9d9ef9');
       expect(result).toEqual(history);
+    });
+
+    test('serialize history with long jump', () => {
+      const history = createHistoryFromMinimumHistory([
+        { move: { rotation: 'top', col: 1 }, next: [5] },
+        { move: { rotation: 'bottom', col: 1 }, next: [] },
+      ], [[1, 1]]);
+
+      const result = serializeHistoryRecords(history);
+      expect(result).toEqual("b8eu9");
     });
 
     test('serialize queue', () => {

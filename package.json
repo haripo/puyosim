@@ -24,6 +24,7 @@
     "react-dom": "^16.4.1",
     "react-hotkeys": "^1.1.4",
     "react-mixin": "^4.0.0",
+    "react-modal": "^3.5.1",
     "react-native": "0.55.4",
     "react-native-i18n": "^2.0.12",
     "react-native-modal-selector": "0.0.27",

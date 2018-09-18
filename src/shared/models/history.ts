@@ -101,6 +101,8 @@ export function createHistoryFromMinimumHistory(
   minimumHistoryRecords: MinimumHistoryRecord[],
   queue: number[][]): HistoryRecord[] {
 
+  console.log(minimumHistoryRecords)
+
   let stack = createField(fieldRows, fieldCols);
   let resultRecords: HistoryRecord[] = [
     createInitialHistoryRecord(stack)
@@ -118,6 +120,7 @@ export function createHistoryFromMinimumHistory(
     for (const nextPosition of record.next) {
       backtrack[nextPosition + 1] = index;
     }
+    console.log(backtrack);
 
     if (!(index in backtrack)) {
       resultRecords[0].next.push(index);
