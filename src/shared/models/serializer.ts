@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { createInitialHistoryRecord, History, HistoryRecord, MinimumHistoryRecord } from "./history";
+import { HistoryRecord, MinimumHistoryRecord } from "./history";
 import { isEqualMove, Move } from "./move";
 
-const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const chars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 /**
  * The maximum of color number that serializer can handle
@@ -100,18 +100,19 @@ export function serializeHistoryRecords(records: HistoryRecord[]): string {
     // append jump mark
     const jumps = record.next.filter(next => next !== i + 1);
     for (let jump of jumps) {
-      const numRequiredChars = Math.ceil(baseLog(jump, chars.length));
+      const numRequiredChars = Math.ceil(baseLog(jump + 1, chars.length));
       const specialIndex = specialChars
         .findIndex(c => c.type === 'jump' && c.numNextChars === numRequiredChars);
       result += chars[chars.length - (specialIndex + 1)];
 
       // encode jump destination index
-      let encodedJump = '';
+      let encodedJump: string[] = [];
       for (let j = 0; j < numRequiredChars; j++) {
-        encodedJump += chars[Math.floor(jump % chars.length)];
+        const char = chars[Math.floor(jump % chars.length)];
+        encodedJump.push(char);
         jump = Math.floor(jump / chars.length);
       }
-      result += _.reverse(encodedJump);
+      result += _.reverse(encodedJump).join('');
     }
 
     i++;

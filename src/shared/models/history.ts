@@ -144,12 +144,3 @@ export function createHistoryFromMinimumHistory(
 
   return resultRecords;
 }
-
-export function serialize(history: History): string {
-  return JSON.stringify(history);
-}
-
-export function deserialize(serialized: string): History {
-  return JSON.parse(serialized);
-}
-
