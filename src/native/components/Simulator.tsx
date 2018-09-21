@@ -100,7 +100,8 @@ export default class Simulator extends Component<Props, {}> {
           this.props.navigator.push({ screen: 'com.puyosimulator.History' });
           break;
         case 'share-via-ips':
-          this.props.onShareSelected();
+          //this.props.onShareSelected();
+          this.props.navigator.push({ screen: 'com.puyosimulator.Share' });
           break;
         case 'settings':
           this.props.navigator.push({ screen: 'com.puyosimulator.Settings' });
@@ -136,7 +137,8 @@ export default class Simulator extends Component<Props, {}> {
                 { cancelable: false }
               ),
               () => this.props.navigator.push({ screen: 'com.puyosimulator.History' }),
-              this.props.onShareSelected,
+              () => this.props.navigator.push({ screen: 'com.puyosimulator.Share' }),
+//              this.props.onShareSelected,
               () => this.props.navigator.push({ screen: 'com.puyosimulator.Settings' }),
               () => this.props.navigator.push({ screen: 'com.puyosimulator.About' })
             ][selected]()
