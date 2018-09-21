@@ -3,6 +3,7 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -14,12 +15,13 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.reactnativenavigation.NavigationApplication;
+import cl.json.ShareApplication;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public class MainApplication extends NavigationApplication/* implements ReactApplication */{
+public class MainApplication extends NavigationApplication implements ShareApplication /*, ReactApplication */{
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
@@ -32,6 +34,7 @@ public class MainApplication extends NavigationApplication/* implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSharePackage(),
             new RealmReactPackage(),
             new RNVersionNumberPackage(),
             new VectorIconsPackage(),
@@ -71,6 +74,7 @@ public class MainApplication extends NavigationApplication/* implements ReactApp
     return Arrays.<ReactPackage>asList(
       new MainReactPackage(),
       new RealmReactPackage(),
+      new RNSharePackage(),
       new RNVersionNumberPackage(),
       new VectorIconsPackage(),
       new SvgPackage(),
@@ -88,4 +92,9 @@ public class MainApplication extends NavigationApplication/* implements ReactApp
   public String getJSMainModuleName() {
     return "index";
   }
+
+   @Override
+   public String getFileProviderAuthority() {
+          return "com.puyosimulator.provider";
+   }
 }
