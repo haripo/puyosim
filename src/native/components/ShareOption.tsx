@@ -6,7 +6,7 @@ import { CaptureOptions, captureRef } from "react-native-view-shot";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { contentsMargin, contentsPadding, themeColor, themeLightColor } from '../../shared/utils/constants';
-import { PendingPair, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { PendingPair, ShareUrls, StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import Field from "../../shared/components/Field";
@@ -16,7 +16,7 @@ export type Props = {
 
   stack: StackForRendering,
   ghosts: PendingPair
-  shareURL: string,
+  shareURLs: ShareUrls,
 
   puyoSkin: string,
   layout: Layout,
@@ -55,7 +55,7 @@ export default class ShareOption extends Component<Props, State> {
       // share
       const shareOptions = {
         url: imageUri,
-        message: shareUrl
+        message: shareUrl || undefined
       };
       const response = await Share.open(shareOptions);
 
@@ -70,7 +70,11 @@ export default class ShareOption extends Component<Props, State> {
   }
 
   async handleWholeSharePressed() {
-    return await this.share(this.props.shareURL);
+    return await this.share(this.props.shareURLs.whole);
+  }
+
+  async handleCurrentSharePressed() {
+    return await this.share(this.props.shareURLs.current);
   }
 
   async handleSnapshotSharePressed() {
@@ -125,14 +129,14 @@ export default class ShareOption extends Component<Props, State> {
                 "現在手までの操作履歴をシェア",
                 "分岐を含まない現在手までの履歴とスナップショットを共有します。",
                 require('../../../assets/share-single-history.png'),
-                this.handleWholeSharePressed.bind(this))
+                this.handleCurrentSharePressed.bind(this))
             }
             {
               this.renderItem(
                 "現在のスナップショットをシェア",
                 "現在のスナップショット画像のみ共有します。",
                 require('../../../assets/share-snapshot.png'),
-                this.handleWholeSharePressed.bind(this))
+                this.handleSnapshotSharePressed.bind(this))
             }
           </ScrollView>
         </View>

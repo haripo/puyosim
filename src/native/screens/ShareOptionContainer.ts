@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
     stack: getStack(state.simulator),
     ghosts: getGhost(state.simulator),
 
-    shareURL: getShareURL(state.simulator),
+    shareURLs: getShareURL(state.simulator),
 
     puyoSkin: state.config.puyoSkin as string,
     layout: getLayout(state.layout),

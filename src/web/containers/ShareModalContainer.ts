@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
   return {
     layout: getLayout(state.layout),
     theme: getTheme(state.theme),
-    shareURL: getShareURL(state.simulator)
+    shareURLs: getShareURL(state.simulator)
   };
 };
 

@@ -2,6 +2,7 @@ import { createField, Pair, setPair, Stack } from './stack';
 import { isEqualMove, Move } from "./move";
 import { fieldCols, fieldRows } from "../utils/constants";
 import { createChainPlan } from "./chainPlanner";
+import _ from 'lodash';
 
 export type HistoryRecord = {
   move: Move | null,
@@ -95,6 +96,41 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
   history.records.push(record);
   history.currentIndex = nextIndex;
   return history;
+}
+
+/**
+ * Extract records which are on the path to current index
+ * @param history list of records
+ * @param currentIndex current index
+ */
+export function getCurrentPathRecords(
+    history: HistoryRecord[],
+    currentIndex: number): HistoryRecord[] {
+  let result: HistoryRecord[] = [];
+
+  // extract records
+  let index: number | null = currentIndex;
+  while (index) {
+    const p = history[index];
+    result.unshift(_.cloneDeep(p));
+    index = p.prev;
+  }
+
+  result.unshift(createInitialHistoryRecord(createField(fieldRows, fieldCols)));
+
+  // reindex next and prev
+  for (let i = 0; i < result.length; i++) {
+    result[i].prev = i > 0 ? i - 1 : null;
+    result[i].next = [i + 1];
+    result[i].defaultNext = i + 1;
+  }
+
+  result[result.length - 1].next = [];
+  result[result.length - 1].defaultNext = null;
+
+  console.log("RRR", result);
+
+  return result;
 }
 
 export function createHistoryFromMinimumHistory(

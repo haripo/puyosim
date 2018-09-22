@@ -7,6 +7,7 @@ import {
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
+import { getCurrentPathRecords } from "../models/history";
 
 export function isActive(state): boolean {
   return !(
@@ -200,6 +201,7 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   let paths: any[] = [];
   let rightmostRow = 0;
   let deepestColumn = 0;
+  console.log(history);
 
   // calc indexMap
   let indexMap = {};
@@ -270,10 +272,20 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   };
 }
 
-export function getShareURL(state: SimulatorState): string {
-  const q = serializeQueue(state.queue);
-  const h = serializeHistoryRecords(state.history);
-  const i = state.historyIndex.toString();
+export type ShareUrls = {
+  whole: string,
+  current: string
+}
 
-  return `http://puyos.im/s?q=${q}&h=${h}&i=${i}`
+export function getShareURL(state: SimulatorState): ShareUrls {
+  const q = serializeQueue(state.queue);
+  const i = state.historyIndex.toString();
+  const whole = serializeHistoryRecords(state.history);
+  const current = serializeHistoryRecords(
+    getCurrentPathRecords(state.history, state.historyIndex));
+
+  return {
+    whole: `http://puyos.im/s?q=${q}&h=${whole}&i=${i}`,
+    current: `http://puyos.im/s?q=${q}&h=${current}&i=${current.length - 1}`,
+  }
 }

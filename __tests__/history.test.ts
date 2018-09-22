@@ -1,4 +1,9 @@
-import { createHistoryFromMinimumHistory, MinimumHistory, MinimumHistoryRecord } from '../src/shared/models/history';
+import {
+  createHistoryFromMinimumHistory,
+  getCurrentPathRecords,
+  MinimumHistory,
+  MinimumHistoryRecord
+} from '../src/shared/models/history';
 
 describe('history', () => {
   describe('create history from minimum history', () => {
@@ -129,6 +134,59 @@ describe('history', () => {
       expect(result[4].prev).toEqual(3);
       expect(result[4].next).toEqual([]);
       expect(result[4].defaultNext).toEqual(null);
+    });
+  });
+
+  describe('getCurrentPath', () => {
+    test('' , () => {
+      const queue = [[1, 1]];
+      const history: MinimumHistoryRecord[] = [
+        { move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
+        { move: { rotation: 'top', col: 1 }, next: [] },
+        { move: { rotation: 'top', col: 2 }, next: [3] },
+        { move: { rotation: 'top', col: 3 }, next: [] },
+        { move: { rotation: 'top', col: 4 }, next: [5] },
+        { move: { rotation: 'top', col: 5 }, next: [] }
+      ];
+      const target = createHistoryFromMinimumHistory(history, queue);
+
+      {
+        const actual = getCurrentPathRecords(target, 3);
+        expect(actual[0].move).toBeNull();
+        expect(actual[1].move!.col).toEqual(0);
+        expect(actual[1].next).toEqual([2]);
+        expect(actual[1].defaultNext).toEqual(2);
+        expect(actual[2].move!.col).toEqual(2);
+        expect(actual[2].next).toEqual([]);
+        expect(actual[2].defaultNext).toBeNull();
+      }
+    });
+
+    test('' , () => {
+      const queue = [[1, 1]];
+      const history: MinimumHistoryRecord[] = [
+        { move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
+        { move: { rotation: 'top', col: 1 }, next: [] },
+        { move: { rotation: 'top', col: 2 }, next: [3] },
+        { move: { rotation: 'top', col: 3 }, next: [] },
+        { move: { rotation: 'top', col: 4 }, next: [5] },
+        { move: { rotation: 'top', col: 5 }, next: [] }
+      ];
+      const target = createHistoryFromMinimumHistory(history, queue);
+
+      {
+        const actual = getCurrentPathRecords(target, 4);
+        expect(actual[0].move).toBeNull();
+        expect(actual[1].move!.col).toEqual(0);
+        expect(actual[1].next).toEqual([2]);
+        expect(actual[1].defaultNext).toEqual(2);
+        expect(actual[2].move!.col).toEqual(2);
+        expect(actual[2].next).toEqual([3]);
+        expect(actual[2].defaultNext).toEqual(3);
+        expect(actual[3].move!.col).toEqual(3);
+        expect(actual[3].next).toEqual([]);
+        expect(actual[3].defaultNext).toBeNull();
+      }
     });
   });
 });
