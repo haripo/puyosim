@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Navigator } from "react-native-navigation";
 import Share from 'react-native-share';
 import { CaptureOptions, captureRef } from "react-native-view-shot";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin, contentsPadding, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { PendingPair, StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
@@ -23,8 +24,7 @@ export type Props = {
   theme: Theme,
 }
 
-type State = {
-}
+type State = {}
 
 export default class ShareOption extends Component<Props, State> {
 
@@ -43,34 +43,63 @@ export default class ShareOption extends Component<Props, State> {
     this.props.navigator.setTitle({ title: "Share" });
   }
 
-  async onWholeSharePressed() {
+  async share(shareUrl: string | null) {
     try {
       // capture
       const captureOptions: CaptureOptions = {
         format: 'png',
         result: 'data-uri'
       };
-      const uri = await captureRef(this.viewShotRef, captureOptions);
+      const imageUri = await captureRef(this.viewShotRef, captureOptions);
 
       // share
       const shareOptions = {
-        url: uri,
-        message: 'テスト'
+        url: imageUri,
+        message: shareUrl
       };
       const response = await Share.open(shareOptions);
 
       if (response['message'] !== 'OK') {
         // error
+        console.warn(response);
       }
     } catch (e) {
       // handle error
+      console.warn(e)
     }
   }
 
-  handleCaptured(uri) {
-    this.setState({
-      imageUri: uri
-    })
+  async handleWholeSharePressed() {
+    return await this.share(this.props.shareURL);
+  }
+
+  async handleSnapshotSharePressed() {
+    return await this.share(null);
+  }
+
+  renderItem(title: string, description: string, image: any, handler: () => void) {
+    return (
+      <View style={ styles.shareCard }>
+        <TouchableOpacity onPress={ handler }>
+          <View style={ styles.description }>
+            <View style={ { flex: 1 } }>
+              <Text style={ styles.title }>
+                { title }
+              </Text>
+              <Text>
+                { description }
+              </Text>
+            </View>
+            <View style={ { flex: 0 } }>
+              <Image
+                source={ image }
+                style={ styles.image }
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   render() {
@@ -81,18 +110,38 @@ export default class ShareOption extends Component<Props, State> {
     };
 
     return (
-      <View
-        style={ styles.container }>
+      <View style={ styles.container }>
         <View style={ styles.contents }>
-          <Button
-            onPress={ this.onWholeSharePressed.bind(this) }
-            title={ 'Share whole history' }
-          />
+          <ScrollView>
+            {
+              this.renderItem(
+                "すべての操作履歴をシェア",
+                "分岐を含む全ての履歴と現在手のスナップショットを共有します。",
+                require('../../../assets/share-whole-history.png'),
+                this.handleWholeSharePressed.bind(this))
+            }
+            {
+              this.renderItem(
+                "現在手までの操作履歴をシェア",
+                "分岐を含まない現在手までの履歴とスナップショットを共有します。",
+                require('../../../assets/share-single-history.png'),
+                this.handleWholeSharePressed.bind(this))
+            }
+            {
+              this.renderItem(
+                "現在のスナップショットをシェア",
+                "現在のスナップショット画像のみ共有します。",
+                require('../../../assets/share-snapshot.png'),
+                this.handleWholeSharePressed.bind(this))
+            }
+          </ScrollView>
         </View>
 
-        {/* off-screen field for generating image */}
-        <View style={{ position: 'absolute', width: 0, height: 0 }}>
-          <View ref={ r => this.viewShotRef = r } collapsable={ false } style={ captureViewStyle }>
+        { /* off-screen field for generating image */ }
+        <View style={ { position: 'absolute', width: 0, height: 0 } }>
+          <View ref={ r => this.viewShotRef = r }
+                collapsable={ false }
+                style={ captureViewStyle }>
             <Field
               layout={ this.props.layoutForCapturingField }
               theme={ this.props.theme }
@@ -118,8 +167,27 @@ const styles = StyleSheet.create({
   },
   contents: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+    flexDirection: 'column',
+  },
+  shareCard: {
+    margin: contentsMargin,
+    paddingLeft: 18,
+    paddingRight: 18,
+    paddingTop: 18,
+    paddingBottom: 8,
+    backgroundColor: themeLightColor
+  },
+  title: {
+    marginBottom: 6,
+    fontSize: 14,
+    fontWeight: "bold"
+  },
+  image: {
+    width: 80,
+    height: 80,
+    marginLeft: 20
+  },
+  description: {
     flexDirection: 'row'
   }
 });
