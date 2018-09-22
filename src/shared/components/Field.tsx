@@ -9,6 +9,7 @@ import { Layout } from '../selectors/layoutSelectors';
 import { PendingPairPuyo, PuyoForRendering, StackForRendering } from "../selectors/simulatorSelectors";
 import { Theme } from "../selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../models/chainPlanner";
+import _ from 'lodash';
 
 export interface Props {
   layout: Layout,
@@ -21,8 +22,8 @@ export interface Props {
   vanishings?: VanishingPlan[],
   style: any,
 
-  onVanishingAnimationFinished: () => void,
-  onDroppingAnimationFinished: () => void
+  onVanishingAnimationFinished?: () => void,
+  onDroppingAnimationFinished?: () => void
 }
 
 interface State {
@@ -113,7 +114,7 @@ export default class Field extends Component<Props, State> {
             layout={ layout }
             puyoSkin={ this.props.puyoSkin }
             droppings={ this.props.droppings }
-            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished || _.noop }
           />
         ) : null
         }
@@ -123,7 +124,7 @@ export default class Field extends Component<Props, State> {
               layout={ layout }
               puyoSkin={ this.props.puyoSkin }
               vanishings={ this.props.vanishings }
-              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
+              onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished || _.noop }
             />
           ) : null
         }

@@ -1,5 +1,6 @@
 import { fieldCols, fieldRows } from '../utils/constants';
 import { LayoutState } from '../reducers/layout';
+import _ from 'lodash';
 
 export type Layout = {
   screen: {
@@ -33,4 +34,17 @@ export function getLayout(state: LayoutState): Layout {
       height: puyoSize * fieldRows + padding * 2
     }
   }
+}
+
+/**
+ * Create layout for capturing field
+ *
+ * 共有用 Field 画像のサイズが端末サイズに依存しないように、
+ * 固定サイズの Layout を作成する。
+ */
+export function getLayoutForCapturingField(): Layout {
+  return getLayout({
+    width: 400,
+    height: 800
+  });
 }

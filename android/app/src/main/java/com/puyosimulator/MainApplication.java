@@ -3,6 +3,7 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNViewShotPackage(),
             new RNSharePackage(),
             new RealmReactPackage(),
             new RNVersionNumberPackage(),
@@ -76,6 +78,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
       new RealmReactPackage(),
       new RNSharePackage(),
       new RNVersionNumberPackage(),
+      new RNViewShotPackage(),
       new VectorIconsPackage(),
       new SvgPackage(),
       new RNSentryPackage(),
