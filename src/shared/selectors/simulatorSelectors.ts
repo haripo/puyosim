@@ -201,7 +201,6 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   let paths: any[] = [];
   let rightmostRow = 0;
   let deepestColumn = 0;
-  console.log(history);
 
   // calc indexMap
   let indexMap = {};

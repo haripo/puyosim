@@ -128,8 +128,6 @@ export function getCurrentPathRecords(
   result[result.length - 1].next = [];
   result[result.length - 1].defaultNext = null;
 
-  console.log("RRR", result);
-
   return result;
 }
 
