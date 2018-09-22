@@ -283,6 +283,13 @@ export function getShareURL(state: SimulatorState): ShareUrls {
   const current = serializeHistoryRecords(
     getCurrentPathRecords(state.history, state.historyIndex));
 
+  if (state.history.length <= 1) {
+    return {
+      whole: 'http://puyos.im/s',
+      current: 'http://puyos.im/s',
+    }
+  }
+
   return {
     whole: `http://puyos.im/s?q=${q}&h=${whole}&i=${i}`,
     current: `http://puyos.im/s?q=${q}&h=${current}&i=${current.length - 1}`,
