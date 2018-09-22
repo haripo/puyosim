@@ -91,7 +91,7 @@ export default class ShareOption extends Component<Props, State> {
         </View>
 
         {/* off-screen field for generating image */}
-        <View style={{ position: 'absolute' }}>
+        <View style={{ position: 'absolute', width: 0, height: 0 }}>
           <View ref={ r => this.viewShotRef = r } collapsable={ false } style={ captureViewStyle }>
             <Field
               layout={ this.props.layoutForCapturingField }
