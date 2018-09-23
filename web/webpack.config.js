@@ -100,7 +100,7 @@ module.exports = {
     publicPath: '/build/',
     historyApiFallback: {
       rewrites: [
-        { from: /^\/s\/.*$/, to: '/s/index.html' }
+        { from: /^\/[sv]\/.*$/, to: '/s/index.html' }
       ]
     }
   },

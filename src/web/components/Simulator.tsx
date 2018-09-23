@@ -18,8 +18,8 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { HistoryRecord } from "../../shared/models/history";
-import ShareModal from "./ShareModal";
 import ShareModalContainer from "../containers/ShareModalContainer";
+import ViewerControls from "../../shared/components/ViewerControls";
 
 export type Props = {
   match: any,
@@ -35,6 +35,7 @@ export type Props = {
   layout: Layout,
   theme: Theme,
 
+  mode: string | undefined,
   isActive: boolean,
   canUndo: boolean,
   canRedo: boolean,
@@ -99,6 +100,37 @@ export default class Simulator extends Component<Props, State> {
     this.setState({
       shareModalIsOpen: false
     })
+  }
+
+  renderControls(keyMap: any) {
+    if (this.props.mode !== 'view') {
+      return (
+        <SimulatorControls
+          onUndoSelected={ this.props.onUndoSelected }
+          onRedoSelected={ this.props.onRedoSelected }
+          onRotateLeftPressed={ this.props.onRotateLeftPressed }
+          onRotateRightPressed={ this.props.onRotateRightPressed }
+          onMoveLeftPressed={ this.props.onMoveLeftPressed }
+          onMoveRightPressed={ this.props.onMoveRightPressed }
+          onDropPressed={ this.props.onDropPressed }
+          isActive={ this.props.isActive }
+          canUndo={ this.props.canUndo }
+          canRedo={ this.props.canRedo }
+          shortcuts={ keyMap }
+        />
+      );
+    } else {
+      return (
+        <ViewerControls
+          onUndoSelected={ this.props.onUndoSelected }
+          onRedoSelected={ this.props.onRedoSelected }
+          isActive={ this.props.isActive }
+          canUndo={ this.props.canUndo }
+          canRedo={ this.props.canRedo }
+          shortcuts={ keyMap }
+        />
+      );
+    }
   }
 
   render() {
@@ -167,19 +199,7 @@ export default class Simulator extends Component<Props, State> {
                     <NextWindowContainer/>
                     <ChainResultContainer/>
                   </View>
-                  <SimulatorControls
-                    onUndoSelected={ this.props.onUndoSelected }
-                    onRedoSelected={ this.props.onRedoSelected }
-                    onRotateLeftPressed={ this.props.onRotateLeftPressed }
-                    onRotateRightPressed={ this.props.onRotateRightPressed }
-                    onMoveLeftPressed={ this.props.onMoveLeftPressed }
-                    onMoveRightPressed={ this.props.onMoveRightPressed }
-                    onDropPressed={ this.props.onDropPressed }
-                    isActive={ this.props.isActive }
-                    canUndo={ this.props.canUndo }
-                    canRedo={ this.props.canRedo }
-                    shortcuts={ keyMap }
-                  />
+                  { this.renderControls(keyMap) }
                 </View>
               </View>
               <View style={ styles.historyTree }>

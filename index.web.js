@@ -2,9 +2,10 @@ import 'babel-polyfill';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { AppRegistry } from 'react-native';
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Simulator from './src/web/containers/SimulatorContainer';
+import SimulatorContainer from './src/web/containers/SimulatorContainer';
+import ViewerContainer from './src/web/containers/ViewerContainer';
 import { getStore } from './src/shared/store/store';
 import sagas from './src/shared/sagas';
 import reducers from './src/shared/reducers'
@@ -15,7 +16,10 @@ class App extends Component {
     return (
       <Provider store={ this.props.store }>
         <BrowserRouter>
-          <Route exact path='/s' component={ Simulator }/>
+          <Switch>
+            <Route path='/s' component={ SimulatorContainer }/>
+            <Route path='/v' component={ ViewerContainer }/>
+          </Switch>
         </BrowserRouter>
       </Provider>
     )
