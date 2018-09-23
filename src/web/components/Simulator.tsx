@@ -216,13 +216,26 @@ export default class Simulator extends Component<Props, State> {
           shouldCloseOnEsc={ true }
           shouldReturnFocusAfterClose={ true }
           onRequestClose={ this.handleRequestShareModalClose.bind(this) }
+          style={ modalStyles }
+          appElement={ document.getElementById('root') }
         >
-          <ShareModalContainer />
+          <ShareModalContainer/>
         </Modal>
       </HotKeys>
     );
   }
 }
+
+const modalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -252,5 +265,5 @@ const styles = StyleSheet.create({
   historyTree: {},
   hotkeyElement: {
     borderWidth: 0
-  }
+  },
 });
