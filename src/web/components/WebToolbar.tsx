@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { webToolbarSize, themeColor, themeLightColor } from '../../shared/utils/constants';
 
+// @ts-ignore
+import t from '../../shared/utils/i18n';
+
 type Props = {
   onSharePressed: () => void
 }
@@ -23,7 +26,7 @@ export default class WebToolbar extends React.Component<Props, {}> {
               onPress={ this.handleSharePressed.bind(this) }
               style={ styles.navigationItem }
             >
-              シェア
+              { t('share') }
             </Text>
           </View>
         </View>
@@ -57,6 +60,6 @@ const styles = StyleSheet.create({
     lineHeight: webToolbarSize - 3,
     color: 'white',
     // @ts-ignore
-    outline: 0
+    outline: '0'
   }
 });

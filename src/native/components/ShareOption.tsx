@@ -11,6 +11,9 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import Field from "../../shared/components/Field";
 
+// @ts-ignore
+import t from '../../shared/utils/i18n';
+
 export type Props = {
   navigator: Navigator,
 
@@ -119,22 +122,22 @@ export default class ShareOption extends Component<Props, State> {
           <ScrollView>
             {
               this.renderItem(
-                "すべての操作履歴をシェア",
-                "分岐を含む全ての履歴と現在手のスナップショットを共有します。",
+                t('shareWholeHistory'),
+                t('shareWholeHistoryDescription'),
                 require('../../../assets/share-whole-history.png'),
                 this.handleWholeSharePressed.bind(this))
             }
             {
               this.renderItem(
-                "現在手までの操作履歴をシェア",
-                "分岐を含まない現在手までの履歴とスナップショットを共有します。",
+                t('shareCurrentHistory'),
+                t('shareCurrentHistoryDescription'),
                 require('../../../assets/share-single-history.png'),
                 this.handleCurrentSharePressed.bind(this))
             }
             {
               this.renderItem(
-                "現在のスナップショットをシェア",
-                "現在のスナップショット画像のみ共有します。",
+                t('shareSnapshot'),
+                t('shareSnapshotDescription'),
                 require('../../../assets/share-snapshot.png'),
                 this.handleSnapshotSharePressed.bind(this))
             }

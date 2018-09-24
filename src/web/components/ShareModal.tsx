@@ -5,6 +5,9 @@ import Modal from 'react-modal';
 import { ShareUrls } from "../../shared/selectors/simulatorSelectors";
 import { themeColor, themeLightColor } from "../../shared/utils/constants";
 
+// @ts-ignore
+import t from '../../shared/utils/i18n';
+
 export type Props = {
   shareURLs: ShareUrls
 }
@@ -19,13 +22,13 @@ export default class ShareModal extends Component<Props, State> {
   render() {
     return (
       <View>
-        <Text style={ styles.title }>Share</Text>
+        <Text style={ styles.title }>{ t('share') }</Text>
         <View>
-          <Text>全ての履歴を共有</Text>
+          <Text>{ t('shareWholeHistory') }</Text>
           <TextInput style={ styles.urlInput } value={ this.props.shareURLs.whole } />
         </View>
         <View>
-          <Text>現在手までの履歴を共有</Text>
+          <Text>{ t('shareCurrentHistory') }</Text>
           <TextInput style={ styles.urlInput } value={ this.props.shareURLs.current } />
         </View>
       </View>
