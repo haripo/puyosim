@@ -128,6 +128,14 @@ export default class HistoryTreeNode extends React.Component<Props, {}> {
 
     let x = isAnimatedValue(this.props.x) ? 0 : this.props.x;
 
+    if (isWeb) {
+      return (
+        <G { ...events }>
+          { this.renderFrame(x, y, nodeWidth, isCurrentNode, iconSize, events) }
+          { this.renderText(col, rotation, x, y, nodeWidth, iconSize) }
+        </G>
+      );
+    }
     return (
       <G { ...events } ref={ ref => this.g = ref }>
         { this.renderFrame(x, y, nodeWidth, isCurrentNode, iconSize, events) }
