@@ -53,20 +53,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(initializeSimulator());
     },
     onRotateRightPressed: () => {
-      dispatch(rotateHighlightsRight());
+      // dispatch(rotateHighlightsRight());
     },
     onRotateLeftPressed: () => {
-      dispatch(rotateHighlightsLeft());
+      // dispatch(rotateHighlightsLeft());
     },
     onMoveRightPressed: () => {
-      dispatch(moveHighlightsRight());
+      // dispatch(moveHighlightsRight());
     },
     onMoveLeftPressed: () => {
-      dispatch(moveHighlightsLeft());
+      // dispatch(moveHighlightsLeft());
     },
     onDropPressed: () => {
-      dispatch(putNextPair());
-      dispatch(vanishPuyos());
+      // dispatch(putNextPair());
+      // dispatch(vanishPuyos());
     },
     onUndoSelected: () => {
       dispatch(undoField());
@@ -77,10 +77,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(vanishPuyos());
     },
     onResetSelected: () => {
-      dispatch(resetField());
+      // dispatch(resetField());
     },
     onRestartSelected: () => {
-      dispatch(restart());
+      // dispatch(restart());
     },
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));
