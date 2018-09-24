@@ -73,7 +73,7 @@ module.exports = {
   entry: [path.resolve(appDirectory, 'index.web.js'), 'babel-polyfill'],
   output: {
     filename: 'bundle.web.js',
-    path: path.resolve(appDirectory, 'web/build')
+    path: path.resolve(appDirectory, 'web/public')
   },
   module: {
     rules: [
