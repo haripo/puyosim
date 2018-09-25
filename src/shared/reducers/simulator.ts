@@ -57,7 +57,7 @@ export type SimulatorState = {
   chain: number,
   chainScore: number,
   score: number,
-  isDropOperated: boolean,
+  isResetChainRequired: boolean,
   pendingPair: Move,
   droppingPuyos: DroppingPlan[],
   vanishingPuyos: VanishingPlan[],
@@ -99,7 +99,7 @@ function putNextPair(state: SimulatorState, action) {
 
   state.numHands += 1;
   state.pendingPair = getDefaultMove();
-  state.isDropOperated = true;
+  state.isResetChainRequired = true;
 
   const record = createHistoryRecord(
     move,
@@ -129,8 +129,8 @@ function vanishPuyos(state: SimulatorState, action) {
     return state;
   }
 
-  if (state.isDropOperated) { // TODO: わかりにくいのでなおす
-    state.isDropOperated = false;
+  if (state.isResetChainRequired) { // TODO: わかりにくいのでなおす
+    state.isResetChainRequired = false;
     state.chain = 0;
     state.chainScore = 0;
   }
@@ -287,7 +287,7 @@ function createInitialState(config): SimulatorState {
     chain: 0,
     chainScore: 0,
     score: 0,
-    isDropOperated: false,
+    isResetChainRequired: false,
     pendingPair: getDefaultMove(),
     droppingPuyos: [],
     vanishingPuyos: [],
