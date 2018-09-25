@@ -1,7 +1,6 @@
 import {
   createHistoryFromMinimumHistory,
   getCurrentPathRecords,
-  MinimumHistory,
   MinimumHistoryRecord
 } from '../src/shared/models/history';
 

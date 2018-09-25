@@ -29,7 +29,7 @@ import {
 } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { calcChainStepScore } from '../models/score';
-import { getDropPositions } from '../selectors/simulatorSelectors';
+import { getCurrentHand, getDropPositions } from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
 import {
@@ -86,22 +86,15 @@ function moveHighlightsRight(state: SimulatorState, action) {
 }
 
 function putNextPair(state: SimulatorState, action) {
-  const numHands = state.numHands;
-  const hand = state.queue[numHands];
+  const hand = getCurrentHand(state);
   const move = state.pendingPair;
+  const prevStack = state.stack;
 
-  // state.stack = setPair(state.stack, move, hand);
-  // TODO: 下の処理を setPair に変更する。
-  // position.length === 0 の処理（置けない場所においたときの処理）を書き換える必要がある
+  state.stack = setPair(prevStack, move, hand);
 
-  const positions: any[] = getDropPositions(state);
-
-  if (positions.length === 0) {
+  if (state.stack === prevStack) {
+    // 設置不可だった場合（= Stack が変化しなかった場合）、設置処理を行わない
     return state;
-  }
-
-  for (let i = 0; i < positions.length; i++) {
-    state.stack[positions[i].row][positions[i].col] = positions[i].color;
   }
 
   state.numHands += 1;

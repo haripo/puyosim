@@ -72,15 +72,18 @@ export function getDropPositions(stack: Stack, move: Move, pair: Pair): PendingP
  * @param stack original stack
  * @param move move
  * @param pair pair
- * @return {Stack} modified stack (copied)
+ * @return {Stack} modified stack
  */
 export function setPair(stack: Stack, move: Move, pair: Pair): Stack {
   const positions: PendingPairPuyo[] = getDropPositions(stack, move, pair);
-  let newStack = cloneStack(stack);
 
   if (positions.length === 0) {
-    return newStack;
+    // 呼び出し側で stack が変更されたかが簡単にわかるようにするため、
+    // 変更がない場合は (newStack ではなく) もとの参照を返す。
+    return stack;
   }
+
+  let newStack = cloneStack(stack);
 
   for (let i = 0; i < positions.length; i++) {
     newStack[positions[i].row][positions[i].col] = positions[i].color;
