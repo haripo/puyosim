@@ -163,7 +163,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-firebase')
     implementation project(':react-native-view-shot')
     implementation project(':react-native-share')
     implementation project(':react-native-firebase')
