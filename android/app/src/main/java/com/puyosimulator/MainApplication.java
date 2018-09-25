@@ -5,6 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import cl.json.RNSharePackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -37,6 +39,8 @@ public class MainApplication extends NavigationApplication implements ShareAppli
           new MainReactPackage(),
             new RNViewShotPackage(),
             new RNSharePackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseFirestorePackage(),
             new RealmReactPackage(),
             new RNVersionNumberPackage(),
             new VectorIconsPackage(),
@@ -75,6 +79,8 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
       new MainReactPackage(),
+      new RNFirebasePackage(),
+      new RNFirebaseFirestorePackage(),
       new RealmReactPackage(),
       new RNSharePackage(),
       new RNVersionNumberPackage(),

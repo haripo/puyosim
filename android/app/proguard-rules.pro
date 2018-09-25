@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# react-native-firebase
+-keep class io.invertase.firebase.** { *; }
+-dontwarn io.invertase.firebase.**

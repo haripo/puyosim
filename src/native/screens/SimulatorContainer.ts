@@ -25,6 +25,7 @@ import {
 } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
+import firebase from 'react-native-firebase';
 
 const mapStateToProps = (state) => {
   return {
@@ -63,6 +64,13 @@ const mapDispatchToProps = (dispatch) => {
     onUndoSelected: () => {
       dispatch(undoField());
       dispatch(vanishPuyos());
+
+      const ref = firebase.firestore().collection("test-history");
+      ref.add({
+        records2: [
+          { move: 'move1', pair: 'pair1' }
+        ]
+      })
     },
     onRedoSelected: () => {
       dispatch(redoField());
