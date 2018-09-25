@@ -62,7 +62,7 @@ const tsLoaderConfiguration = {
         target: "ES5",
         module: "es2015",
         jsx: "react",
-        outDir: "web/build",
+        outDir: "web/public",
         lib: ["dom", "ES2017"],
       }
     }
@@ -97,10 +97,10 @@ module.exports = {
   },
   devServer: {
     contentBase: path.resolve(appDirectory, 'web/public'),
-    publicPath: '/build/',
+    publicPath: '/',
     historyApiFallback: {
       rewrites: [
-        { from: /^\/[sv]\/.*$/, to: '/s/index.html' }
+        { from: /^\/[sv].*$/, to: '/simulator.html' }
       ]
     }
   },
