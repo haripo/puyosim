@@ -56,7 +56,11 @@ export type Props = {
   onVanishingAnimationFinished: () => void
 }
 
-export default class Simulator extends Component<Props, {}> {
+type State = {
+  isVisible: boolean
+}
+
+export default class Simulator extends Component<Props, State> {
 
   static navigatorButtons = {};
 
@@ -70,6 +74,10 @@ export default class Simulator extends Component<Props, {}> {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     this.props.navigator.setTitle({ title: "puyosim" });
+
+    this.state = {
+      isVisible: true
+    }
   }
 
   componentDidMount() {
@@ -77,6 +85,15 @@ export default class Simulator extends Component<Props, {}> {
   }
 
   onNavigatorEvent(event) {
+    switch(event.id) {
+      case 'willAppear':
+        this.setState({ isVisible: true });
+        break;
+      case 'didDisappear':
+        this.setState({ isVisible: false });
+        break;
+    }
+
     if (event.type === 'NavBarButtonPress') {
       switch (event.id) {
         case 'undo':
@@ -171,10 +188,15 @@ export default class Simulator extends Component<Props, {}> {
                 layout={ this.props.layout }
                 theme={ this.props.theme }
                 puyoSkin={ this.props.puyoSkin }
-                onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-                onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-              >
-              </Field>
+                onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
+                onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
+              />
+              {/*
+                this.state.isiVisible == false のとき、
+                このコンポーネントは history 画面などの screen によって隠されている。
+                その場合、アニメーション完了時のコールバックが history 画面のものとあわせて
+                2 回発行されてしまうため、それを防ぐ。
+               */}
             </View>
             <View style={ styles.side }>
               <View style={ styles.sideHead }>
