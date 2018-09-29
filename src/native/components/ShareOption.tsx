@@ -13,6 +13,7 @@ import Field from "../../shared/components/Field";
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
+import FieldCapturer from "./FieldCapturer";
 
 export type Props = {
   navigator: Navigator,
@@ -40,6 +41,7 @@ export default class ShareOption extends Component<Props, State> {
   };
 
   viewShotRef: any = null;
+  capturer: FieldCapturer | null = null;
 
   constructor(props) {
     super(props);
@@ -49,11 +51,15 @@ export default class ShareOption extends Component<Props, State> {
   async share(shareUrl: string | null) {
     try {
       // capture
-      const captureOptions: CaptureOptions = {
-        format: 'png',
-        result: 'data-uri'
-      };
-      const imageUri = await captureRef(this.viewShotRef, captureOptions);
+      // const captureOptions: CaptureOptions = {
+      //   format: 'png',
+      //   result: 'data-uri'
+      // };
+      // const imageUri = await captureRef(this.viewShotRef, captureOptions);
+      if (this.capturer === null) {
+        return;
+      }
+      const imageUri = await this.capturer.capture();
 
       // share
       const shareOptions = {
@@ -145,21 +151,25 @@ export default class ShareOption extends Component<Props, State> {
         </View>
 
         { /* off-screen field for generating image */ }
-        <View style={ { position: 'absolute', width: 0, height: 0 } }>
-          <View ref={ r => this.viewShotRef = r }
-                collapsable={ false }
-                style={ captureViewStyle }>
-            <Field
-              layout={ this.props.layoutForCapturingField }
-              theme={ this.props.theme }
-              puyoSkin={ this.props.puyoSkin }
-              stack={ this.props.stack }
-              ghosts={ this.props.ghosts }
-              style={ null }
-              isActive={ true } // must be true to render ghost puyos
-            />
-          </View>
-        </View>
+        {/*<View style={ { position: 'absolute', width: 0, height: 0 } }>*/}
+          {/*<View ref={ r => this.viewShotRef = r }*/}
+                {/*collapsable={ false }*/}
+                {/*style={ captureViewStyle }>*/}
+            {/*<Field*/}
+              {/*layout={ this.props.layoutForCapturingField }*/}
+              {/*theme={ this.props.theme }*/}
+              {/*puyoSkin={ this.props.puyoSkin }*/}
+              {/*stack={ this.props.stack }*/}
+              {/*ghosts={ this.props.ghosts }*/}
+              {/*style={ null }*/}
+              {/*isActive={ true } // must be true to render ghost puyos*/}
+            {/*/>*/}
+          {/*</View>*/}
+        {/*</View>*/}
+        <FieldCapturer
+          ref={ ref => this.capturer = ref }
+          { ...this.props }
+        />
       </View>
     );
   }
