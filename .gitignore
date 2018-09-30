@@ -1,7 +1,9 @@
 .env
 sentry.properties
 android/app/src/*/google-services.json
+ios/GoogleService-Info.plist
 /.firebase
+ios/Pods/
 
 # OSX
 #

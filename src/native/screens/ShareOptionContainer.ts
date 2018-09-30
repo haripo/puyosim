@@ -20,9 +20,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // onSetComplexHistorySelected: () => {
-    //   dispatch(debugSetHistory('complex'));
-    // }
   };
 };
 
