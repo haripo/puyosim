@@ -23,24 +23,6 @@ export default class FieldCapturer extends Component<Props, State> {
 
   viewShotRef: any = null;
 
-  waitForImagesLoaded(imageURLs, callback){
-    var imageElements = [];
-    var remaining = imageURLs.length;
-    var onEachImageLoad = function(){
-      if (--remaining === 0 && callback) {
-        callback(imageElements);
-      }
-    };
-
-    // first create the images and apply the onload method
-    for (var i = 0, len = imageURLs.length; i < len; i++){
-      var img = new Image();
-      imageElements.push(img);
-      img.onload = onEachImageLoad;
-      img.src = imageURLs[i];
-    }
-  }
-
   async capture() {
     const captureOptions: CaptureOptions = {
       format: 'png',
