@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import ShareOption from "../components/ShareOption";
-import { getGhost, getPendingPair, getShareURL, getStack } from "../../shared/selectors/simulatorSelectors";
-import { getLayout, getLayoutForCapturingField, Layout } from "../../shared/selectors/layoutSelectors";
-import { getTheme, Theme } from "../../shared/selectors/themeSelectors";
+import { getGhostForSnapshot, getShareURL, getStackForSnapshot } from "../../shared/selectors/simulatorSelectors";
+import { getLayout, getLayoutForCapturingField } from "../../shared/selectors/layoutSelectors";
+import { getTheme } from "../../shared/selectors/themeSelectors";
 
 const mapStateToProps = (state) => {
   return {
-    stack: getStack(state.simulator),
-    ghosts: getGhost(state.simulator),
+    stack: getStackForSnapshot(state.simulator),
+    ghosts: getGhostForSnapshot(state.simulator),
 
     shareURLs: getShareURL(state.simulator),
 

@@ -40,7 +40,6 @@ export default class ShareOption extends Component<Props, State> {
     navBarButtonColor: themeLightColor
   };
 
-  viewShotRef: any = null;
   capturer: FieldCapturer | null = null;
 
   constructor(props) {
@@ -50,12 +49,6 @@ export default class ShareOption extends Component<Props, State> {
 
   async share(shareUrl: string | null) {
     try {
-      // capture
-      // const captureOptions: CaptureOptions = {
-      //   format: 'png',
-      //   result: 'data-uri'
-      // };
-      // const imageUri = await captureRef(this.viewShotRef, captureOptions);
       if (this.capturer === null) {
         return;
       }
@@ -150,22 +143,6 @@ export default class ShareOption extends Component<Props, State> {
           </ScrollView>
         </View>
 
-        { /* off-screen field for generating image */ }
-        {/*<View style={ { position: 'absolute', width: 0, height: 0 } }>*/}
-          {/*<View ref={ r => this.viewShotRef = r }*/}
-                {/*collapsable={ false }*/}
-                {/*style={ captureViewStyle }>*/}
-            {/*<Field*/}
-              {/*layout={ this.props.layoutForCapturingField }*/}
-              {/*theme={ this.props.theme }*/}
-              {/*puyoSkin={ this.props.puyoSkin }*/}
-              {/*stack={ this.props.stack }*/}
-              {/*ghosts={ this.props.ghosts }*/}
-              {/*style={ null }*/}
-              {/*isActive={ true } // must be true to render ghost puyos*/}
-            {/*/>*/}
-          {/*</View>*/}
-        {/*</View>*/}
         <FieldCapturer
           ref={ ref => this.capturer = ref }
           { ...this.props }

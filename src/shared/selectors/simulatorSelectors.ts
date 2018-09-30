@@ -7,7 +7,8 @@ import {
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
-import { getCurrentPathRecords } from "../models/history";
+import { getCurrentPathRecords, HistoryRecord } from "../models/history";
+import { DroppingPlan } from "../models/chainPlanner";
 
 export function isActive(state): boolean {
   return !(
@@ -27,6 +28,26 @@ export function canRedo(state: SimulatorState): boolean {
 export function getGhost(state: SimulatorState): PendingPairPuyo[] {
   return getDropPositions(state);
 }
+
+export function getGhostForSnapshot(state: SimulatorState): PendingPairPuyo[] {
+  if (state.historyIndex === 0) {
+    return [];
+  }
+
+  return getDropPositionsStack(
+    state.history[state.historyIndex - 1].stack,
+    state.history[state.historyIndex].move!,
+    getPreviousHand(state)
+  )
+}
+
+export const getPreviousHand = createSelector(
+  [
+    (state: SimulatorState) => state.queue,
+    (state: SimulatorState) => state.numHands
+  ],
+  (queue, numHands) => queue[(numHands - 1) % queue.length]
+);
 
 export const getCurrentHand = createSelector(
   [
@@ -178,6 +199,21 @@ function _getStack(stack, droppings): StackForRendering {
     });
   });
 }
+
+export const getStackForSnapshot = createSelector(
+  [
+    (state: SimulatorState) => state.history,
+    (state: SimulatorState) => state.historyIndex,
+    (state: SimulatorState) => state.droppingPuyos
+  ],
+  (history: HistoryRecord[], historyIndex: number, droppings: DroppingPlan[]): StackForRendering => {
+    if (historyIndex === 0) {
+      return _getStack(history[0].stack, droppings);
+    } else {
+      return _getStack(history[historyIndex - 1].stack, droppings);
+    }
+  }
+);
 
 export const getDropPositions = createSelector(
   [
