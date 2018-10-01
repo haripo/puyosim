@@ -36,20 +36,18 @@ export default class ViewerControls extends PureComponent<Props> {
             disabled={ !this.props.canUndo }
             style={ styles.controllerButton }
             activeOpacity={ this.props.canUndo ? 0.7 : 1 }
-            // onClick={ this.props.onUndoSelected }
             onPress={ this.props.onUndoSelected }>
             <Icon name="undo" size={ 30 } color="#FFF"/>
-            <Text style={ { color: '#FFF' } }>Undo</Text>
+            <Text style={ { color: '#FFF' } }>Prev</Text>
             { this.renderShortcut(shortcuts.undo) }
           </TouchableOpacity>
           <TouchableOpacity
             disabled={ !this.props.canRedo }
             style={ [styles.controllerButton, styles.controllerRightButton] }
             activeOpacity={ this.props.canRedo ? 0.7 : 1 }
-            // onClick={ this.props.onRedoSelected }
             onPress={ this.props.onRedoSelected }>
             <Icon name="redo" size={ 30 } color="#FFF"/>
-            <Text style={ { color: '#FFF' } }>Redo</Text>
+            <Text style={ { color: '#FFF' } }>Next</Text>
             { this.renderShortcut(shortcuts.redo) }
           </TouchableOpacity>
         </View>
