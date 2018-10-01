@@ -331,7 +331,7 @@ export type ShareUrls = {
 
 export function getShareURL(state: SimulatorState): ShareUrls {
   const q = serializeQueue(state.queue);
-  const i = state.historyIndex.toString();
+  // const i = state.historyIndex.toString();
   const whole = serializeHistoryRecords(state.history);
   const current = serializeHistoryRecords(
     getCurrentPathRecords(state.history, state.historyIndex));
@@ -344,7 +344,7 @@ export function getShareURL(state: SimulatorState): ShareUrls {
   }
 
   return {
-    whole: `http://puyos.im/v?q=${q}&h=${whole}&i=${i}`,
-    current: `http://puyos.im/v?q=${q}&h=${current}&i=${current.length - 1}`,
+    whole: `http://puyos.im/v?q=${q}&h=${whole}&i=${0}`,
+    current: `http://puyos.im/v?q=${q}&h=${current}&i=${0}`,
   }
 }
