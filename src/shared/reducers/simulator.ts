@@ -29,7 +29,13 @@ import {
 } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { calcChainStepScore } from '../models/score';
-import { getCurrentHand, getDropPositions } from '../selectors/simulatorSelectors';
+import {
+  canRedo,
+  getCurrentHand,
+  getDefaultNextMove,
+  getDefaultNextRecord,
+  getDropPositions
+} from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
 import {
@@ -98,8 +104,8 @@ function putNextPair(state: SimulatorState, action) {
   }
 
   state.numHands += 1;
-  state.pendingPair = getDefaultMove();
   state.isResetChainRequired = true;
+  state.pendingPair = getDefaultNextMove(state);
 
   const record = createHistoryRecord(
     move,
@@ -186,6 +192,8 @@ function revert(state: SimulatorState, historyIndex: number) {
   state.vanishingPuyos = [];
   state.droppingPuyos = [];
   state.historyIndex = historyIndex;
+  state.pendingPair = getDefaultNextMove(state);
+
   return state;
 }
 

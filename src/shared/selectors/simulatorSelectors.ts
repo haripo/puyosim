@@ -1,5 +1,5 @@
 import { fieldCols, fieldRows } from '../utils/constants';
-import { getFirstCol, getSecondCol } from '../models/move';
+import { getDefaultMove, getFirstCol, getSecondCol, Move } from '../models/move';
 import {
   Color, createField, isValidPosition,
   getDropPositions as getDropPositionsStack
@@ -23,6 +23,23 @@ export function canUndo(state: SimulatorState): boolean {
 
 export function canRedo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].next.length > 0;
+}
+
+export function getDefaultNextRecord(state: SimulatorState): HistoryRecord | null {
+  const next = state.history[state.historyIndex].defaultNext;
+  if (!next) {
+    return null;
+  }
+  return state.history[next];
+}
+
+export function getDefaultNextMove(state: SimulatorState): Move {
+  const nextRecord = getDefaultNextRecord(state);
+  if (nextRecord && nextRecord.move) {
+    return nextRecord.move;
+  } else {
+    return getDefaultMove();
+  }
 }
 
 export function getGhost(state: SimulatorState): PendingPairPuyo[] {
