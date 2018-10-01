@@ -17,6 +17,7 @@ import History from './src/native/screens/HistoryContainer';
 import About from './src/native/screens/AboutContainer';
 import Settings from './src/native/screens/SettingsContainer';
 import Share from './src/native/screens/ShareOptionContainer';
+import Viewer from './src/native/screens/ViewerContainer';
 import { getStore } from './src/shared/store/store';
 
 import sagas from './src/shared/sagas';
@@ -40,6 +41,7 @@ Navigation.registerComponent('com.puyosimulator.History', () => History, store, 
 Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Share', () => Share, store, Provider);
+Navigation.registerComponent('com.puyosimulator.Viewer', () => Viewer, store, Provider);
 
 Navigation.startSingleScreenApp({
   screen: {

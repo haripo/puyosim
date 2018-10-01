@@ -24,6 +24,7 @@ import {
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
+import firebase from 'react-native-firebase';
 
 export type Props = {
   navigator: Navigator,
@@ -82,6 +83,18 @@ export default class Simulator extends Component<Props, State> {
 
   componentDidMount() {
     //this.props.onSimulatorLaunched();
+    firebase.links()
+      .getInitialLink()
+      .then((url) => {
+        if (url) {
+          console.log('URL', url);
+          // app opened from a url
+          this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
+        } else {
+          // app NOT opened from a url
+          console.log('NOT URL')
+        }
+      });
   }
 
   onNavigatorEvent(event) {
