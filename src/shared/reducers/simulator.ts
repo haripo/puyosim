@@ -282,6 +282,7 @@ function reconstructHistory(state: SimulatorState, action): SimulatorState {
   state.queue = deserializeQueue(queue);
   state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(history), state.queue);
   state.historyIndex = index;
+  state = revert(state, index);
   return state;
 }
 
