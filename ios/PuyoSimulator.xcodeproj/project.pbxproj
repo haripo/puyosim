@@ -475,6 +475,7 @@
 		33D44BFF9B39EC4B49AC3D61 /* Pods-PuyoSimulatorTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PuyoSimulatorTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PuyoSimulatorTests/Pods-PuyoSimulatorTests.release.xcconfig"; sourceTree = "<group>"; };
 		41793CB6183C0E46056F2261 /* Pods-PuyoSimulatorTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PuyoSimulatorTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PuyoSimulatorTests/Pods-PuyoSimulatorTests.debug.xcconfig"; sourceTree = "<group>"; };
 		43EB803F42E14B1BBD5255CC /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
+		460DFEE22161E88D00D36AB3 /* PuyoSimulator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = PuyoSimulator.entitlements; path = PuyoSimulator/PuyoSimulator.entitlements; sourceTree = "<group>"; };
 		46B856A02160EFE3001F15DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46CAFFB72155619F00F71DB1 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		46CAFFB9215561A600F71DB1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -678,6 +679,7 @@
 		13B07FAE1A68108700A75B9A /* PuyoSimulator */ = {
 			isa = PBXGroup;
 			children = (
+				460DFEE22161E88D00D36AB3 /* PuyoSimulator.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1054,6 +1056,11 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = N28G8DP368;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1624,15 +1631,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-PuyoSimulator-tvOS-checkManifestLockResult.txt",
 			);
@@ -1646,15 +1649,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-PuyoSimulatorTests-checkManifestLockResult.txt",
 			);
@@ -1668,15 +1667,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-PuyoSimulator-checkManifestLockResult.txt",
 			);
@@ -1690,15 +1685,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-PuyoSimulator-tvOSTests-checkManifestLockResult.txt",
 			);
@@ -1872,6 +1863,7 @@
 			baseConfigurationReference = 32355359F25B3334E4484BBF /* Pods-PuyoSimulator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PuyoSimulator/PuyoSimulator.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1910,6 +1902,7 @@
 			baseConfigurationReference = EACD18DC1F83A5C14E400015 /* Pods-PuyoSimulator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PuyoSimulator/PuyoSimulator.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

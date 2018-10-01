@@ -12,6 +12,7 @@
 #import "RCCManager.h"
 
 #import <Firebase.h>
+#import "RNFirebaseLinks.h"
 
 #import <React/RCTRootView.h>
 #if __has_include(<React/RNSentry.h>)
@@ -24,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIROptions defaultOptions].deepLinkURLScheme = @"com.haripo.puyosim";
   [FIRApp configure];
   NSURL *jsCodeLocation;
 #ifdef DEBUG
@@ -36,6 +38,20 @@
   self.window.backgroundColor = [UIColor whiteColor];
   [[RCCManager sharedInstance] initBridgeWithBundleURL:jsCodeLocation launchOptions:launchOptions];
   return YES;
+}
+  
+// react-native-firebase dynamic links
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<NSString *, id> *)options {
+  return [[RNFirebaseLinks instance] application:application openURL:url options:options];
+}
+  
+// react-native-firebase dynamic links
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *))restorationHandler {
+  return [[RNFirebaseLinks instance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end

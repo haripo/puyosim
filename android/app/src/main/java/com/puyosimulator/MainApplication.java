@@ -7,6 +7,7 @@ import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import cl.json.RNSharePackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.links.RNFirebaseLinksPackage;
 import io.realm.react.RealmReactPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -81,6 +82,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
       new MainReactPackage(),
       new RNFirebasePackage(),
       new RNFirebaseFirestorePackage(),
+      new RNFirebaseLinksPackage(),
       new RealmReactPackage(),
       new RNSharePackage(),
       new RNVersionNumberPackage(),

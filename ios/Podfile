@@ -7,6 +7,7 @@ target 'PuyoSimulator' do
 
   # Pods for PuyoSimulator
   pod 'Firebase/Core', '~> 5.9.0'
+  pod 'Firebase/DynamicLinks'
 
   target 'PuyoSimulatorTests' do
     inherit! :search_paths
