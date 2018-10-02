@@ -5,7 +5,7 @@ import {
   moveHighlightsLeft,
   moveHighlightsRight,
   openTwitterShare,
-  putNextPair,
+  putNextPair, reconstructHistory,
   redoField,
   resetField,
   restart,
@@ -77,6 +77,9 @@ const mapDispatchToProps = (dispatch) => {
     onShareSelected: () => {
       dispatch(openTwitterShare());
     },
+    onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
+      dispatch(reconstructHistory(history, queue, index))
+    },
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations());
       dispatch(applyGravity());
@@ -84,7 +87,7 @@ const mapDispatchToProps = (dispatch) => {
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());
       dispatch(vanishPuyos());
-    }
+    },
   };
 };
 

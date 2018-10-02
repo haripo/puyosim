@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import React, { Component } from 'react';
 import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from 'react-native';
+import { parse } from 'query-string';
 import { Navigator } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
@@ -54,7 +55,8 @@ export type Props = {
   onMoveRightPressed: () => void,
   onDropPressed: () => void,
   onDroppingAnimationFinished: () => void,
-  onVanishingAnimationFinished: () => void
+  onVanishingAnimationFinished: () => void,
+  onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
 }
 
 type State = {
@@ -82,18 +84,21 @@ export default class Simulator extends Component<Props, State> {
   }
 
   componentDidMount() {
-    //this.props.onSimulatorLaunched();
     firebase.links()
       .getInitialLink()
       .then((url) => {
-        if (url) {
-          console.log('URL', url);
-          // app opened from a url
-          this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
-        } else {
-          // app NOT opened from a url
-          console.log('NOT URL')
+        if (!url) { return }
+
+        const query = parse(url.split('?')[1]);
+        if ('q' in query && 'h' in query) {
+          this.props.onReconstructHistoryRequested(
+            query['h'],
+            query['q'],
+            'i' in query ? parseInt(query['i']) : 0,
+          )
         }
+
+        this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
       });
   }
 
