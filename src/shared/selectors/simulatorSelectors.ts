@@ -329,6 +329,13 @@ export type ShareUrls = {
   current: string
 }
 
+function createShareURL(q: string, h: string | null): string {
+  const head = 'https://puyosim.page.link/';
+  const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
+  const link = encodeURIComponent('https://puyos.im/v?' + query);
+  return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim`;
+}
+
 export function getShareURL(state: SimulatorState): ShareUrls {
   const q = serializeQueue(state.queue);
   // const i = state.historyIndex.toString();
@@ -338,13 +345,13 @@ export function getShareURL(state: SimulatorState): ShareUrls {
 
   if (state.history.length <= 1) {
     return {
-      whole: 'http://puyos.im/v?q=${q}',
-      current: 'http://puyos.im/v?q=${q}',
+      whole: createShareURL(q, null),
+      current: createShareURL(q, null),
     }
   }
 
   return {
-    whole: `http://puyos.im/v?q=${q}&h=${whole}&i=${0}`,
-    current: `http://puyos.im/v?q=${q}&h=${current}&i=${0}`,
+    whole: createShareURL(q, whole),
+    current: createShareURL(q, current),
   }
 }
