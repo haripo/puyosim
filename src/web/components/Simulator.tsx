@@ -144,14 +144,22 @@ export default class Simulator extends Component<Props, State> {
       'redo': 's'
     };
 
+    const handleKey = handler => {
+      return () => {
+        if (this.props.isActive) {
+          handler()
+        }
+      }
+    };
+
     const keyHandlers = {
-      'moveLeft': this.props.onMoveLeftPressed,
-      'moveRight': this.props.onMoveRightPressed,
-      'putHand': this.props.onDropPressed,
-      'rotateRight': this.props.onRotateRightPressed,
-      'rotateLeft': this.props.onRotateLeftPressed,
-      'undo': this.props.onUndoSelected,
-      'redo': this.props.onRedoSelected
+      'moveLeft': handleKey(this.props.onMoveLeftPressed),
+      'moveRight': handleKey(this.props.onMoveRightPressed),
+      'putHand': handleKey(this.props.onDropPressed),
+      'rotateRight': handleKey(this.props.onRotateRightPressed),
+      'rotateLeft': handleKey(this.props.onRotateLeftPressed),
+      'undo': handleKey(this.props.onUndoSelected),
+      'redo': handleKey(this.props.onRedoSelected)
     };
 
     return (
