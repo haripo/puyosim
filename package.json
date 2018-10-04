@@ -1,7 +1,6 @@
 {
-  "name": "PuyoSimulator",
+  "name": "puyosim",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "android:start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager --appIdSuffix debug\"",
     "android:build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --no-packager --variant=release",
