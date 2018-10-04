@@ -135,7 +135,7 @@ function vanishPuyos(state: SimulatorState, action) {
     return state;
   }
 
-  if (state.isResetChainRequired) { // TODO: わかりにくいのでなおす
+  if (state.isResetChainRequired) {
     state.isResetChainRequired = false;
     state.chain = 0;
     state.chainScore = 0;
@@ -193,6 +193,7 @@ function revert(state: SimulatorState, historyIndex: number) {
   state.droppingPuyos = [];
   state.historyIndex = historyIndex;
   state.pendingPair = getDefaultNextMove(state);
+  state.isResetChainRequired = true;
 
   return state;
 }
