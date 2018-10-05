@@ -2,4 +2,17 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.puyosimulator">
   <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+  <application>
+    <provider
+      android:name="android.support.v4.content.FileProvider"
+      android:authorities="com.puyosimulator.provider.debug"
+      android:grantUriPermissions="true"
+      android:exported="false">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/filepaths"/>
+    </provider>
+  </application>
 </manifest>
+
