@@ -119,13 +119,13 @@ export default class ShareOption extends Component<Props, State> {
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <ScrollView>
-            {
-              this.renderItem(
-                t('shareWholeHistory'),
-                t('shareWholeHistoryDescription'),
-                require('../../../assets/share-whole-history.png'),
-                this.handleWholeSharePressed.bind(this))
-            }
+            {/*{*/}
+              {/*this.renderItem(*/}
+                {/*t('shareWholeHistory'),*/}
+                {/*t('shareWholeHistoryDescription'),*/}
+                {/*require('../../../assets/share-whole-history.png'),*/}
+                {/*this.handleWholeSharePressed.bind(this))*/}
+            {/*}*/}
             {
               this.renderItem(
                 t('shareCurrentHistory'),
