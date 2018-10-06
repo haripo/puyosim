@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
+import { contentsMargin, contentsPadding, screenHeight, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
@@ -20,6 +20,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { HistoryRecord } from "../../shared/models/history";
 import ShareModalContainer from "../containers/ShareModalContainer";
 import ViewerControls from "../../shared/components/ViewerControls";
+import MediaQuery from "react-native-web-responsive";
 
 export type Props = {
   match: any,
@@ -166,19 +167,17 @@ export default class Simulator extends Component<Props, State> {
       <HotKeys
         keyMap={ keyMap }
         handlers={ keyHandlers }
-        style={ { outline: '0' } }
+        style={ { outline: '0', display: 'flex', alignItems: 'stretch', flexGrow: 1 } }
         focused>
         { /* Focused on mounted to enable hotkeys */ }
         <View
           ref={ c => this.hotkeyElementRef = c }
           tabIndex={ -1 }
           // @ts-ignore
-          style={ { outline: '0' } }>
-          <View>
-            <WebToolbar
-              onSharePressed={ this.handleSharePressed.bind(this) }
-            />
-          </View>
+          style={ { outline: '0', display: 'flex', alignItems: 'stretch', flexGrow: 1, flexDirection: 'column' } }>
+          <WebToolbar
+            onSharePressed={ this.handleSharePressed.bind(this) }
+          />
           <LayoutBaseContainer>
             <View style={ styles.container }>
               <View style={ styles.contents }>
@@ -210,12 +209,14 @@ export default class Simulator extends Component<Props, State> {
                   { this.renderControls(keyMap) }
                 </View>
               </View>
-              <View style={ styles.historyTree }>
-                <HistoryTree
-                  historyTreeLayout={ this.props.historyTreeLayout }
-                  onNodePressed={ this.props.onHistoryNodePressed }
-                />
-              </View>
+              <MediaQuery minWidth={ 1224 }>
+                <View style={ styles.historyTree }>
+                  <HistoryTree
+                    historyTreeLayout={ this.props.historyTreeLayout }
+                    onNodePressed={ this.props.onHistoryNodePressed }
+                  />
+                </View>
+              </MediaQuery>
             </View>
           </LayoutBaseContainer>
         </View>
@@ -251,12 +252,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   contents: {
     display: 'flex',
     flexDirection: 'row',
     width: simulatorWidth - contentsMargin,
+    // height: screenHeight - contentsPadding * 2,
     // @ts-ignore
     outline: '0'
   },
