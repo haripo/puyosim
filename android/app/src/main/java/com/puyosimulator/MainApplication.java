@@ -3,6 +3,7 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import cl.json.RNSharePackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -38,6 +39,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RNViewShotPackage(),
             new RNSharePackage(),
             new RNFirebasePackage(),
@@ -63,7 +65,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     return mReactNativeHost;
   }
 
-  //@Override
+  @Override
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
@@ -79,6 +81,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
+      new SplashScreenReactPackage(),
       new MainReactPackage(),
       new RNFirebasePackage(),
       new RNFirebaseFirestorePackage(),
