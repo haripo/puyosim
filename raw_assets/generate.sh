@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 convert puyos.xcf -crop 16x16 -sample 400% cropped_puyo_%03d.png
 mv cropped_puyo_000.png ../assets/puyo_red.png
 mv cropped_puyo_001.png ../assets/puyo_green.png
@@ -64,6 +66,17 @@ convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipm
 convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
 convert cropped_icon_000.png -sample 1200% png32:../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 convert cropped_icon_000.png -sample 1200% png32:../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+
+mkdir ../android/app/src/main/res/drawable-mdpi
+mkdir ../android/app/src/main/res/drawable-hdpi
+mkdir ../android/app/src/main/res/drawable-xhdpi
+mkdir ../android/app/src/main/res/drawable-xxhdpi
+mkdir ../android/app/src/main/res/drawable-xxxhdpi
+convert cropped_icon_000.png -sample 300% png32:../android/app/src/main/res/drawable-mdpi/launch_screen.png
+convert cropped_icon_000.png -sample 450% png32:../android/app/src/main/res/drawable-hdpi/launch_screen.png
+convert cropped_icon_000.png -sample 600% png32:../android/app/src/main/res/drawable-xhdpi/launch_screen.png
+convert cropped_icon_000.png -sample 900% png32:../android/app/src/main/res/drawable-xxhdpi/launch_screen.png
+convert cropped_icon_000.png -sample 1200% png32:../android/app/src/main/res/drawable-xxxhdpi/launch_screen.png
 
 IOS_BASE_DIR=../ios/PuyoSimulator/Images.xcassets/AppIcon.appiconset
 convert cropped_icon_000.png -sample 40x40 -alpha remove png32:${IOS_BASE_DIR}/iPhone-20@2x.png
