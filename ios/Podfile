@@ -9,6 +9,8 @@ target 'PuyoSimulator' do
   pod 'Firebase/Core', '~> 5.9.0'
   pod 'Firebase/DynamicLinks'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'PuyoSimulatorTests' do
     inherit! :search_paths
     # Pods for testing

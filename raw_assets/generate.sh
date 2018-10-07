@@ -89,6 +89,11 @@ convert cropped_icon_000.png -sample 120x120 -alpha remove png32:${IOS_BASE_DIR}
 convert cropped_icon_000.png -sample 180x180 -alpha remove png32:${IOS_BASE_DIR}/Icon-60@3x.png
 convert cropped_icon_000.png -sample 1024x1024 -alpha remove png32:${IOS_BASE_DIR}/Icon-1024.png
 
+IOS_BASE_DIR=../ios/PuyoSimulator/Images.xcassets/Logo.imageset
+convert cropped_icon_000.png -sample 60x60 png32:${IOS_BASE_DIR}/Logo@1x.png
+convert cropped_icon_000.png -sample 120x120 png32:${IOS_BASE_DIR}/Logo@2x.png
+convert cropped_icon_000.png -sample 240x240 png32:${IOS_BASE_DIR}/Logo@3x.png
+
 cp cropped_icon_000.png icon.png
 
 rm -f cropped_*
