@@ -26,7 +26,7 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 
 export type Props = {
   navigator: Navigator,
@@ -284,14 +284,7 @@ if (Platform.OS === 'android') {
     ]
   };
 } else if (Platform.OS === 'ios') {
-  Simulator.navigatorButtons = {
-    rightButtons: [
-      {
-        title: '...',
-        id: 'menu'
-      }
-    ]
-  };
+  Simulator.navigatorButtons = {};
 }
 
 const styles = StyleSheet.create({

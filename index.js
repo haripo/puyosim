@@ -1,5 +1,6 @@
 // https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
-import { YellowBox } from 'react-native';
+import { YellowBox, Platform } from 'react-native';
+
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillReceiveProps is deprecated',
@@ -26,6 +27,7 @@ import reducers from './src/shared/reducers'
 import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 if (!__DEV__ && SENTRY_DSN) {
   Sentry
@@ -43,13 +45,38 @@ Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store
 Navigation.registerComponent('com.puyosimulator.Share', () => Share, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Viewer', () => Viewer, store, Provider);
 
-Navigation.startSingleScreenApp({
-  screen: {
-    screen: 'com.puyosimulator.Simulator',
-  },
-  appStyle: {
-    orientation: 'portrait'
-  },
-  animationType: 'none',
-  portraitOnlyMode: true,
-});
+
+
+if (Platform.OS === 'ios') {
+  Icon.getImageSource('menu', 24).then((icon) => {
+    Navigation.startSingleScreenApp({
+      screen: {
+        screen: 'com.puyosimulator.Simulator',
+        navigatorButtons: {
+          rightButtons: [
+            {
+              icon: icon,
+              id: 'menu'
+            }
+          ]
+        }
+      },
+      appStyle: {
+        orientation: 'portrait'
+      },
+      animationType: 'none',
+      portraitOnlyMode: true,
+    });
+  });
+} else {
+  Navigation.startSingleScreenApp({
+    screen: {
+      screen: 'com.puyosimulator.Simulator',
+    },
+    appStyle: {
+      orientation: 'portrait'
+    },
+    animationType: 'none',
+    portraitOnlyMode: true,
+  });
+}
