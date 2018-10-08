@@ -56,16 +56,10 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - React (0.11.0):
-    - React/Core (= 0.11.0)
-  - react-native-splash-screen (3.1.1):
-    - React
-  - React/Core (0.11.0)
 
 DEPENDENCIES:
   - Firebase/Core (~> 5.9.0)
   - Firebase/DynamicLinks
-  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -78,11 +72,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
-    - React
-
-EXTERNAL SOURCES:
-  react-native-splash-screen:
-    :path: "../node_modules/react-native-splash-screen"
 
 SPEC CHECKSUMS:
   Firebase: 383fa29aca93e371cab776b48a5c66544d3c2003
@@ -94,9 +83,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 2b3a023a61239c8d002e6e4fcf4abce8eddce0e0
   GoogleUtilities: 760ccb53b7c7f40f9c02d8c241f76f841a7a6162
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  React: ab1a2e21deb34965c38328d5ec40cc7d12c6050a
-  react-native-splash-screen: 8e3f866dc79bfe533baeffd0a38c33f7a7eae7f8
 
-PODFILE CHECKSUM: 0dc5fc3e7832b8c59f7f6854b8082ba397296446
+PODFILE CHECKSUM: 8e5fbc2a1c5ed3b72a3363731826921f9b53ab0b
 
 COCOAPODS: 1.5.3

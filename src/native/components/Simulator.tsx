@@ -26,6 +26,7 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
+import SplashScreen from 'react-native-splash-screen'
 
 export type Props = {
   navigator: Navigator,
@@ -100,6 +101,7 @@ export default class Simulator extends Component<Props, State> {
 
         this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
       });
+    SplashScreen.hide();
   }
 
   onNavigatorEvent(event) {

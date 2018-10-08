@@ -27,8 +27,6 @@ import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 
-import SplashScreen from 'react-native-splash-screen'
-
 if (!__DEV__ && SENTRY_DSN) {
   Sentry
     .config(SENTRY_DSN)
