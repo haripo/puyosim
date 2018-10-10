@@ -85,6 +85,8 @@ export default class Simulator extends Component<Props, State> {
   }
 
   componentDidMount() {
+    SplashScreen.hide();
+
     firebase.links()
       .getInitialLink()
       .then((url) => {
@@ -101,7 +103,10 @@ export default class Simulator extends Component<Props, State> {
 
         this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
       });
-    SplashScreen.hide();
+
+    firebase.links()
+      .onLink(url => {
+      });
   }
 
   onNavigatorEvent(event) {

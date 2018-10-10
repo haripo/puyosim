@@ -28,6 +28,7 @@ import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import firebase from "react-native-firebase";
 
 if (!__DEV__ && SENTRY_DSN) {
   Sentry
@@ -45,10 +46,36 @@ Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store
 Navigation.registerComponent('com.puyosimulator.Share', () => Share, store, Provider);
 Navigation.registerComponent('com.puyosimulator.Viewer', () => Viewer, store, Provider);
 
+async function launch() {
+  // const url = await firebase.links().getInitialLink();
+  // if (url) {
+  //   const query = parse(url.split('?')[1]);
+  //   if ('q' in query && 'h' in query) {
+  //     this.props.onReconstructHistoryRequested(
+  //       query['h'],
+  //       query['q'],
+  //       'i' in query ? parseInt(query['i']) : 0,
+  //     )
+  //   }
+  //
+  //   Navigation.startSingleScreenApp({
+  //     screen: {
+  //       screen: 'com.puyosimulator.Viewer',
+  //     },
+  //     appStyle: {
+  //       orientation: 'portrait'
+  //     },
+  //     animationType: 'none',
+  //     portraitOnlyMode: true,
+  //   });
+  //
+  //   // this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
+  //   return;
+  // }
 
 
-if (Platform.OS === 'ios') {
-  Icon.getImageSource('menu', 24).then((icon) => {
+  if (Platform.OS === 'ios') {
+    const icon = await Icon.getImageSource('menu', 24);
     Navigation.startSingleScreenApp({
       screen: {
         screen: 'com.puyosimulator.Simulator',
@@ -67,16 +94,18 @@ if (Platform.OS === 'ios') {
       animationType: 'none',
       portraitOnlyMode: true,
     });
-  });
-} else {
-  Navigation.startSingleScreenApp({
-    screen: {
-      screen: 'com.puyosimulator.Simulator',
-    },
-    appStyle: {
-      orientation: 'portrait'
-    },
-    animationType: 'none',
-    portraitOnlyMode: true,
-  });
+  } else {
+    Navigation.startSingleScreenApp({
+      screen: {
+        screen: 'com.puyosimulator.Simulator',
+      },
+      appStyle: {
+        orientation: 'portrait'
+      },
+      animationType: 'none',
+      portraitOnlyMode: true,
+    });
+  }
 }
+
+launch();
