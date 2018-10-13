@@ -128,7 +128,10 @@ async function launch() {
         color: themeColor
       },
       animate: true,
-      buttonColor: themeLightColor
+      buttonColor: themeLightColor,
+      backButton: {
+        color: 'white'
+      },
     },
     layout: {
       orientation: ['portrait']

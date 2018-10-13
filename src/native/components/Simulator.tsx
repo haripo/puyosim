@@ -96,11 +96,14 @@ export default class Simulator extends Component<Props, State> {
             background: {
               color: themeColor
             },
+            backButton: {
+              color: 'white'
+            },
             rightButtons: [
               {
                 text: t('about'),
                 id: 'about',
-                showAsAction: 'never'
+                showAsAction: 'never',
               },
               {
                 text: t('settings'),

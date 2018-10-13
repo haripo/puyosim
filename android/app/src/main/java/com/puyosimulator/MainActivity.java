@@ -6,6 +6,10 @@ import org.devio.rn.splashscreen.SplashScreen;
 import android.widget.LinearLayout;
 
 public class MainActivity extends NavigationActivity {
+    @Override
+    protected void addDefaultSplashLayout() {
+        setContentView(R.layout.launch_screen);
+    }
 }
 
 // public class MainActivity extends ReactActivity {
