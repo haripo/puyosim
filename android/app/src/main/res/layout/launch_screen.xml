@@ -7,8 +7,8 @@
               android:gravity="center"
               android:id="@+id/launch_screen">
   <ImageView
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
     android:layout_marginTop="24dp"
     android:src="@drawable/launch_screen"
   />

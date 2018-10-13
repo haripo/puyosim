@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "android:start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager --appIdSuffix debug\"",
-    "android:build": "cd android && ./gradlew assembleRelease && cd .. && react-native run-android --no-packager --variant=release",
+    "android:build": "cd android && ./gradlew app:assembleRelease && ./gradlew installRelease",
     "android:emulator": "cd $ANDROID_HOME/tools && ./emulator -avd \"Nexus_5X_API_27_x86\"",
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
@@ -29,7 +29,7 @@
     "react-native-firebase": "^4.3.8",
     "react-native-i18n": "^2.0.12",
     "react-native-modal-selector": "0.0.27",
-    "react-native-navigation": "^1.1.479",
+    "react-native-navigation": "^2.0.2580",
     "react-native-sentry": "^0.38.3",
     "react-native-settings-list": "^1.8.0",
     "react-native-share": "^1.1.2",

@@ -8,7 +8,7 @@ import { defaultValues } from '../../shared/models/config';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { Navigator } from "react-native-navigation";
+import { Navigation } from "react-native-navigation";
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {
@@ -18,7 +18,7 @@ function evalItem(configItem, config) {
 }
 
 export type Props = {
-  navigator: Navigator,
+  componentId: string,
   configKey: string,
   configItems: any,
   targetItems: any,
@@ -27,23 +27,31 @@ export type Props = {
 }
 
 export default class SettingsPage extends Component<Props, {}> {
-  static navigatorStyle = {
-    navBarBackgroundColor: themeColor,
-    navBarTextColor: themeLightColor,
-    navBarButtonColor: themeLightColor
-  };
-
-  componentDidMount() {
-    const { configKey } = this.props;
-    const title = configKey ? t(configKey) : 'Settings';
-    this.props.navigator.setTitle({ title });
+  static options(passProps: Props) {
+    const { configKey } = passProps;
+    return {
+      topBar: {
+        title: {
+          text: configKey ? t(configKey) : 'Settings',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        }
+      },
+      layout: {
+        orientation: 'portrait'
+      }
+    }
   }
 
   openDescendantScreen(descendantItems) {
-    this.props.navigator.push({
-      screen: 'com.puyosimulator.Settings',
-      passProps: {
-        targetItems: descendantItems,
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: 'com.puyosimulator.Settings',
+        passProps: {
+          targetItems: descendantItems,
+        }
       }
     });
   }
@@ -58,7 +66,7 @@ export default class SettingsPage extends Component<Props, {}> {
       this.updateConfigValue(parent.key, configItem.value);
     }
     if (!configItem.children) {
-      this.props.navigator.pop();
+      Navigation.pop(this.props.componentId);
     } else {
       this.openDescendantScreen(configItem);
     }

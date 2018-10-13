@@ -3,7 +3,6 @@ package com.puyosimulator;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import cl.json.RNSharePackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -19,11 +18,14 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.reactnativenavigation.NavigationApplication;
 import cl.json.ShareApplication;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.reactnativenavigation.NavigationApplication;
+import com.reactnativenavigation.react.NavigationReactNativeHost;
+import com.reactnativenavigation.react.ReactGateway;
 
 
 public class MainApplication extends NavigationApplication implements ShareApplication /*, ReactApplication */{
@@ -39,7 +41,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SplashScreenReactPackage(),
+            //new SplashScreenReactPackage(),
             new RNViewShotPackage(),
             new RNSharePackage(),
             new RNFirebasePackage(),
@@ -77,13 +79,23 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     return BuildConfig.DEBUG;
   }
 
+  @Override
+  protected ReactGateway createReactGateway() {
+      ReactNativeHost host = new NavigationReactNativeHost(this, isDebug(), createAdditionalReactPackages()) {
+          @Override
+          protected String getJSMainModuleName() {
+              return "index";
+          }
+      };
+      return new ReactGateway(this, isDebug(), host);
+  }
+
   protected List<ReactPackage> getPackages() {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
-      new SplashScreenReactPackage(),
-      new MainReactPackage(),
-      new RNFirebasePackage(),
+      //new SplashScreenReactPackage(),
+        new RNFirebasePackage(),
       new RNFirebaseFirestorePackage(),
       new RNFirebaseLinksPackage(),
       new RealmReactPackage(),
