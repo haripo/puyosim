@@ -112,8 +112,8 @@ android {
         applicationId "com.puyosimulator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "2.0"
+        versionCode 18
+        versionName "2.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
