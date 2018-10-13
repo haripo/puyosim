@@ -1,21 +1,11 @@
 package com.puyosimulator;
 
 //import com.facebook.react.ReactActivity;
-import com.reactnativenavigation.controllers.SplashActivity;
+import com.reactnativenavigation.NavigationActivity;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.widget.LinearLayout;
 
-public class MainActivity extends SplashActivity {
-
-  @Override
-  public int getSplashLayout() {
-    return R.layout.launch_screen;
-  }
-
-//  @Override
-//  public LinearLayout createSplashLayout() {
-//    return findViewById(R.id.launch_screen);
-//  }
+public class MainActivity extends NavigationActivity {
 }
 
 // public class MainActivity extends ReactActivity {

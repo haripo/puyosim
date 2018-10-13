@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
  *
@@ -8,14 +9,13 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
-
-#import "RCCManager.h"
+#import <React/RCTRootView.h>
+#import <ReactNativeNavigation/ReactNativeNavigation.h>
 
 #import <Firebase.h>
 #import "RNFirebaseLinks.h"
 #import "RNSplashScreen.h"
 
-#import <React/RCTRootView.h>
 #if __has_include(<React/RNSentry.h>)
 #import <React/RNSentry.h> // This is used for versions of react >= 0.40
 #else
@@ -29,27 +29,21 @@
   [FIROptions defaultOptions].deepLinkURLScheme = @"com.haripo.puyosim";
   [FIRApp configure];
   NSURL *jsCodeLocation;
-#ifdef DEBUG
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-#else
-  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
+  
+  [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
 
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  self.window.backgroundColor = [UIColor whiteColor];
-  [[RCCManager sharedInstance] initBridgeWithBundleURL:jsCodeLocation launchOptions:launchOptions];
-
-  [RNSplashScreen show];
+  // [RNSplashScreen show];
   return YES;
 }
-  
+
 // react-native-firebase dynamic links
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(NSDictionary<NSString *, id> *)options {
   return [[RNFirebaseLinks instance] application:application openURL:url options:options];
 }
-  
+
 // react-native-firebase dynamic links
 - (BOOL)application:(UIApplication *)application
 continueUserActivity:(NSUserActivity *)userActivity

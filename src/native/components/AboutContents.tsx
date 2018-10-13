@@ -2,28 +2,37 @@ import React, { Component } from 'react';
 import { Button, Linking, StyleSheet, Text, View } from 'react-native';
 import VersionNumber from 'react-native-version-number';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
-import { Navigator } from "react-native-navigation";
 
 type Props = {
-  navigator: Navigator,
   onSetKennySelected: () => void,
   onSetSnakeSelected: () => void,
   onSetComplexHistorySelected: () => void,
 }
 
 export default class AboutContents extends Component<Props, {}> {
-  static navigatorStyle = {
-    navBarBackgroundColor: themeColor,
-    navBarTextColor: themeLightColor,
-    navBarButtonColor: themeLightColor
-  };
 
   static websiteURL = 'http://puyos.im';
   static feedbackURL = 'http://puyos.im/feedback.html';
   static licensesURL = 'http://puyos.im/license.txt';
 
+  static options(passProps) {
+    return {
+      topBar: {
+        title: {
+          text: 'About',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        },
+      },
+      layout: {
+        orientation: 'portrait'
+      }
+    }
+  }
+
   componentDidMount() {
-    this.props.navigator.setTitle({ title: 'About' });
   }
 
   handleKennyPressed() {

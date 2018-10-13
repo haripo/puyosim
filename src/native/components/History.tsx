@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Linking, StyleSheet, View } from 'react-native';
-import {
-  contentsMargin,
-  themeColor,
-  themeLightColor
-} from '../../shared/utils/constants';
+import { StyleSheet, View } from 'react-native';
+import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree";
@@ -12,12 +8,7 @@ import { HistoryRecord } from "../../shared/models/history";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 
-// @ts-ignore
-import t from '../../shared/utils/i18n';
-
 export interface Props {
-  navigator: any,
-
   theme: Theme,
   layout: Layout,
 
@@ -39,38 +30,14 @@ export interface Props {
 interface State {
 }
 
-export default class Simulator extends Component<Props, State> {
-  static navigatorStyle = {
-    navBarBackgroundColor: themeColor,
-    navBarTextColor: themeLightColor,
-    navBarButtonColor: themeLightColor
-  };
-
-  static navigatorButtons = {
-    rightButtons: [
-      {
-        title: 'feedback',
-        id: 'feedback',
-        showAsAction: 'always'
-      }
-    ]
-  };
-
-  feedbackURL = 'http://puyos.im/feedback.html';
-
-  constructor(props) {
-    super(props);
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-    this.props.navigator.setTitle({ title: "History" });
-  }
-
-  onNavigatorEvent(event) {
-    if (event.type === 'NavBarButtonPress') {
-      switch (event.id) {
-        case 'feedback':
-          Linking.openURL(this.feedbackURL)
-          break;
-      }
+export default class History extends Component<Props, State> {
+  static options() {
+    return {
+      topBar: {
+        title: {
+          text: 'History',
+        },
+      },
     }
   }
 

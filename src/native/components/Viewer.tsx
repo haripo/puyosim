@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Navigator } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
@@ -12,10 +11,9 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
+import { Navigation } from "react-native-navigation";
 
 export type Props = {
-  navigator: Navigator,
-
   stack: StackForRendering,
   ghosts: PendingPairPuyo[],
   pendingPair: PendingPair,
@@ -42,33 +40,38 @@ type State = {
 
 export default class Viewer extends Component<Props, State> {
 
-  static navigatorButtons = {};
-
-  static navigatorStyle = {
-    navBarBackgroundColor: themeColor,
-    navBarTextColor: themeLightColor,
-    navBarButtonColor: themeLightColor
-  };
+  static options(passProps) {
+    return {
+      topBar: {
+        title: {
+          text: 'puyosim',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        },
+      },
+      layout: {
+        orientation: 'portrait'
+      }
+    }
+  }
 
   constructor(props) {
     super(props);
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-    this.props.navigator.setTitle({ title: "puyosim" });
+    Navigation.events().bindComponent(this);
 
     this.state = {
       isVisible: true
     }
   }
 
-  onNavigatorEvent(event) {
-    switch(event.id) {
-      case 'willAppear':
-        this.setState({ isVisible: true });
-        break;
-      case 'didDisappear':
-        this.setState({ isVisible: false });
-        break;
-    }
+  componentDidAppear() {
+    this.setState({ isVisible: true });
+  }
+
+  componentDidDisappear() {
+    this.setState({ isVisible: false });
   }
 
   render() {

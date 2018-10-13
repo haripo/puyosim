@@ -28,7 +28,8 @@ import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import firebase from "react-native-firebase";
+import firebase from 'react-native-firebase';
+import { themeColor, themeLightColor } from './src/shared/utils/constants';
 
 if (!__DEV__ && SENTRY_DSN) {
   Sentry
@@ -39,12 +40,12 @@ if (!__DEV__ && SENTRY_DSN) {
 const store = getStore(reducers, sagas);
 
 // Register screen components
-Navigation.registerComponent('com.puyosimulator.Simulator', () => Simulator, store, Provider);
-Navigation.registerComponent('com.puyosimulator.History', () => History, store, Provider);
-Navigation.registerComponent('com.puyosimulator.About', () => About, store, Provider);
-Navigation.registerComponent('com.puyosimulator.Settings', () => Settings, store, Provider);
-Navigation.registerComponent('com.puyosimulator.Share', () => Share, store, Provider);
-Navigation.registerComponent('com.puyosimulator.Viewer', () => Viewer, store, Provider);
+Navigation.registerComponentWithRedux('com.puyosimulator.Simulator', () => Simulator, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.History', () => History, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.About', () => About, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.Settings', () => Settings, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.Share', () => Share, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.Viewer', () => Viewer, Provider, store);
 
 async function launch() {
   // const url = await firebase.links().getInitialLink();
@@ -73,39 +74,66 @@ async function launch() {
   //   return;
   // }
 
-
   if (Platform.OS === 'ios') {
     const icon = await Icon.getImageSource('menu', 24);
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'com.puyosimulator.Simulator',
-        navigatorButtons: {
-          rightButtons: [
+    Navigation.setRoot({
+      root: {
+        stack: {
+          children: [
             {
-              icon: icon,
-              id: 'menu'
+              component: {
+                name: 'com.puyosimulator.Simulator',
+                passProps: {},
+                options: {
+                  topBar: {
+                    rightButtons: [
+                      {
+                        icon: icon,
+                        id: 'menu',
+                        color: 'white'
+                      }
+                    ],
+                  }
+                }
+              }
             }
           ]
         }
-      },
-      appStyle: {
-        orientation: 'portrait'
-      },
-      animationType: 'none',
-      portraitOnlyMode: true,
+      }
     });
   } else {
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'com.puyosimulator.Simulator',
-      },
-      appStyle: {
-        orientation: 'portrait'
-      },
-      animationType: 'none',
-      portraitOnlyMode: true,
+    Navigation.setRoot({
+      root: {
+        stack: {
+          children: [
+            {
+              component: {
+                name: 'com.puyosimulator.Simulator',
+                passProps: {}
+              }
+            }
+          ]
+        }
+      }
     });
   }
+
+  // FIXME: これを setRoot の前に持っていくと動かなくなる
+  Navigation.setDefaultOptions({
+    topBar: {
+      title: {
+        color: themeLightColor
+      },
+      background: {
+        color: themeColor
+      },
+      animate: true,
+      buttonColor: themeLightColor
+    },
+    layout: {
+      orientation: ['portrait']
+    }
+  });
 }
 
 launch();

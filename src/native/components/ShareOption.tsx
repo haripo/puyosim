@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Navigator } from "react-native-navigation";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Share from 'react-native-share';
-import { CaptureOptions, captureRef } from "react-native-view-shot";
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { contentsMargin, contentsPadding, themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { PendingPair, ShareUrls, StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
-import Field from "../../shared/components/Field";
-
 // @ts-ignore
 import t from '../../shared/utils/i18n';
 import FieldCapturer from "./FieldCapturer";
 
 export type Props = {
-  navigator: Navigator,
-
   stack: StackForRendering,
   ghosts: PendingPair
   shareURLs: ShareUrls,
@@ -32,19 +25,27 @@ type State = {}
 
 export default class ShareOption extends Component<Props, State> {
 
-  static navigatorButtons = {};
-
-  static navigatorStyle = {
-    navBarBackgroundColor: themeColor,
-    navBarTextColor: themeLightColor,
-    navBarButtonColor: themeLightColor
-  };
+  static options(passProps) {
+    return {
+      topBar: {
+        title: {
+          text: 'Share',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        },
+      },
+      layout: {
+        orientation: 'portrait'
+      }
+    }
+  }
 
   capturer: FieldCapturer | null = null;
 
   constructor(props) {
     super(props);
-    this.props.navigator.setTitle({ title: "Share" });
   }
 
   async share(shareUrl: string | null) {
