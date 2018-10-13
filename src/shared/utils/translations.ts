@@ -48,6 +48,7 @@ const translations = {
     shareWholeHistoryDescription: '分岐を含む全ての履歴と現在手のスナップショットを共有します。',
     shareCurrentHistoryDescription: '分岐を含まない現在手までの履歴とスナップショットを共有します。',
     shareSnapshotDescription: '現在のスナップショット画像のみ共有します。',
+    openInExistingAppAlert: 'URL を開きますか？既存の状態は破棄されます。',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
@@ -97,6 +98,7 @@ const translations = {
     shareWholeHistoryDescription: 'Share a snapshot and whole moves including undo/redo branches.',
     shareCurrentHistoryDescription: 'Share a snapshot and current moves.',
     shareSnapshotDescription: 'Share a snapshot of the current field',
+    openInExistingAppAlert: 'Are you sure to open URL? Existing chain will overwritten.',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))

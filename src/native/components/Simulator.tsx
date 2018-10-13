@@ -28,6 +28,7 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import SplashScreen from 'react-native-splash-screen';
 
+
 export type Props = {
   componentId: string,
 
@@ -67,7 +68,7 @@ type State = {
 export default class Simulator extends Component<Props, State> {
 
   static options(passProps) {
-    switch(Platform.OS) {
+    switch (Platform.OS) {
       case 'ios':
         return {
           topBar: {
@@ -153,32 +154,51 @@ export default class Simulator extends Component<Props, State> {
     }
   }
 
+  private launchViewer(url) {
+    if (!url) {
+      return
+    }
+
+    const query = parse(url.split('?')[1]);
+    if ('q' in query && 'h' in query) {
+      this.props.onReconstructHistoryRequested(
+        query['h'],
+        query['q'],
+        'i' in query ? parseInt(query['i']) : 0,
+      )
+    }
+
+    Navigation.push(this.props.componentId, {
+      component: { name: 'com.puyosimulator.Viewer' }
+    });
+  }
+
   componentDidMount() {
     // SplashScreen.hide();
 
     firebase.links()
       .getInitialLink()
       .then((url) => {
-        if (!url) {
-          return
-        }
-
-        const query = parse(url.split('?')[1]);
-        if ('q' in query && 'h' in query) {
-          this.props.onReconstructHistoryRequested(
-            query['h'],
-            query['q'],
-            'i' in query ? parseInt(query['i']) : 0,
-          )
-        }
-
-        Navigation.push(this.props.componentId, {
-          component: { name: 'com.puyosimulator.Viewer' }
-        });
+        this.launchViewer(url);
       });
 
     firebase.links()
       .onLink(url => {
+        Alert.alert(
+          'Open URL',
+          t('openInExistingAppAlert'),
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel'
+            },
+            {
+              text: 'OK',
+              onPress: () => this.launchViewer(url)
+            },
+          ],
+          { cancelable: false }
+        );
       });
   }
 

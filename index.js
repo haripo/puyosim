@@ -28,7 +28,6 @@ import { SENTRY_DSN } from 'react-native-dotenv'
 
 import { Sentry } from 'react-native-sentry';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import firebase from 'react-native-firebase';
 import { themeColor, themeLightColor } from './src/shared/utils/constants';
 
 if (!__DEV__ && SENTRY_DSN) {
@@ -48,32 +47,6 @@ Navigation.registerComponentWithRedux('com.puyosimulator.Share', () => Share, Pr
 Navigation.registerComponentWithRedux('com.puyosimulator.Viewer', () => Viewer, Provider, store);
 
 async function launch() {
-  // const url = await firebase.links().getInitialLink();
-  // if (url) {
-  //   const query = parse(url.split('?')[1]);
-  //   if ('q' in query && 'h' in query) {
-  //     this.props.onReconstructHistoryRequested(
-  //       query['h'],
-  //       query['q'],
-  //       'i' in query ? parseInt(query['i']) : 0,
-  //     )
-  //   }
-  //
-  //   Navigation.startSingleScreenApp({
-  //     screen: {
-  //       screen: 'com.puyosimulator.Viewer',
-  //     },
-  //     appStyle: {
-  //       orientation: 'portrait'
-  //     },
-  //     animationType: 'none',
-  //     portraitOnlyMode: true,
-  //   });
-  //
-  //   // this.props.navigator.push({ screen: 'com.puyosimulator.Viewer' });
-  //   return;
-  // }
-
   if (Platform.OS === 'ios') {
     const icon = await Icon.getImageSource('menu', 24);
     Navigation.setRoot({
