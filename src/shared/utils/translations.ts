@@ -98,7 +98,7 @@ const translations = {
     shareWholeHistoryDescription: 'Share a snapshot and whole moves including undo/redo branches.',
     shareCurrentHistoryDescription: 'Share a snapshot and current moves.',
     shareSnapshotDescription: 'Share a snapshot of the current field',
-    openInExistingAppAlert: 'Are you sure to open URL? Existing chain will overwritten.',
+    openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
