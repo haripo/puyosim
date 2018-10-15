@@ -333,7 +333,7 @@ function createShareURL(q: string, h: string | null): string {
   const head = 'https://puyosim.page.link/';
   const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
   const link = encodeURIComponent('https://puyos.im/v?' + query);
-  return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim`;
+  return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
 }
 
 export function getShareURL(state: SimulatorState): ShareUrls {
