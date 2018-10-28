@@ -20,7 +20,13 @@ export function getLayout(state: LayoutState): Layout {
   const { width, height } = state;
   const margin = 3;
   const padding = 3;
-  const puyoSize = (height - margin * 3 - padding * 4) / (fieldRows + 3);
+  let puyoSize = (height - margin * 3 - padding * 4) / (fieldRows + 3);
+
+  if (width - puyoSize * 6 < 150) {
+    // sidenav 側の幅が狭くなりすぎないようにする
+    puyoSize = ((height - 120) - margin * 3 - padding * 4) / (fieldRows + 3);
+  }
+
   return {
     screen: {
       width: width,
