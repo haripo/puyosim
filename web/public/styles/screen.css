@@ -22,3 +22,14 @@ li i {
 footer a {
     color: #795548;
 }
+
+.store-badges {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  line-height: 0;
+}
+
+.ios-badge {
+  padding-top: 6px;
+}
