@@ -188,6 +188,10 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
+    // https://developer.android.com/studio/build/multidex
+    // > minSdkVersion を 20 以下に設定している場合は、次のように Multidex サポート ライブラリを使用する必要があります。
+    implementation 'com.android.support:multidex:1.0.3'
+
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:15.0.1"
     implementation "com.google.firebase:firebase-core:16.0.1"
