@@ -244,6 +244,7 @@ export default class Simulator extends Component<Props, State> {
             'History',
             'Share',
             'Settings',
+            'Archive',
             'About'
           ],
           destructiveButtonIndex: 0
@@ -266,6 +267,7 @@ export default class Simulator extends Component<Props, State> {
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } }),
 //              this.props.onShareSelected,
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } }),
+            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } }),
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } }),
           ][selected]()
         });

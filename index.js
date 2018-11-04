@@ -19,6 +19,7 @@ import About from './src/native/screens/AboutContainer';
 import Settings from './src/native/screens/SettingsContainer';
 import Share from './src/native/screens/ShareOptionContainer';
 import Viewer from './src/native/screens/ViewerContainer';
+import Archive from './src/native/screens/ArchiveContainer';
 import { getStore } from './src/shared/store/store';
 
 import sagas from './src/shared/sagas';
@@ -45,6 +46,7 @@ Navigation.registerComponentWithRedux('com.puyosimulator.About', () => About, Pr
 Navigation.registerComponentWithRedux('com.puyosimulator.Settings', () => Settings, Provider, store);
 Navigation.registerComponentWithRedux('com.puyosimulator.Share', () => Share, Provider, store);
 Navigation.registerComponentWithRedux('com.puyosimulator.Viewer', () => Viewer, Provider, store);
+Navigation.registerComponentWithRedux('com.puyosimulator.Archive', () => Archive, Provider, store);
 
 async function launch() {
   if (Platform.OS === 'ios') {
