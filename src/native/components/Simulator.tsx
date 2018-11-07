@@ -112,6 +112,11 @@ export default class Simulator extends Component<Props, State> {
                 showAsAction: 'never'
               },
               {
+                text: t('archive'),
+                id: 'archive',
+                showAsAction: 'never'
+              },
+              {
                 text: t('shareViaTwitter'),
                 id: 'share-via-ips',
                 showAsAction: 'never'
@@ -233,6 +238,9 @@ export default class Simulator extends Component<Props, State> {
         break;
       case 'about':
         Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } });
+        break;
+      case 'archive':
+        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } });
         break;
       case 'menu':
         ActionSheetIOS.showActionSheetWithOptions({
