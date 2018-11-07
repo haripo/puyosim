@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity, finishDroppingAnimations,
+  applyGravity, archiveCurrentField, finishDroppingAnimations,
   finishVanishingAnimations,
   moveHighlightsLeft,
   moveHighlightsRight,
@@ -59,6 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     onDropPressed: () => {
       dispatch(putNextPair());
       dispatch(vanishPuyos());
+      dispatch(archiveCurrentField());
     },
     onUndoSelected: () => {
       dispatch(undoField());

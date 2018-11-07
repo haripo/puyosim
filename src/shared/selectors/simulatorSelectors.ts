@@ -9,6 +9,8 @@ import { createSelector } from 'reselect';
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
+import { ArchivedPlay } from "../utils/StorageService.native";
+import _ from 'lodash';
 
 export function isActive(state): boolean {
   return !(
@@ -353,5 +355,20 @@ export function getShareURL(state: SimulatorState): ShareUrls {
   return {
     whole: createShareURL(q, whole),
     current: createShareURL(q, current),
+  }
+}
+
+export function getArchivedPlay(state: SimulatorState): ArchivedPlay {
+  return {
+    id: state.playId,
+    history: serializeHistoryRecords(state.history),
+    historyIndex: state.historyIndex,
+    maxChain: _.max(state.history.map(h => h.chain)) || 0,
+    queue: _.flatten(state.queue),
+    title: 'autosave',
+    stack: _.flatten(state.stack),
+    score: state.score,
+    updatedAt: new Date(),
+    createdAt: state.startDateTime
   }
 }
