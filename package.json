@@ -4,7 +4,7 @@
   "scripts": {
     "android:start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-android --no-packager --appIdSuffix debug\"",
     "android:build": "cd android && ./gradlew app:assembleRelease && ./gradlew installRelease",
-    "android:emulator": "cd $ANDROID_HOME/tools && ./emulator -avd \"Nexus_5X_API_27_x86\"",
+    "android:emulator": "cd $ANDROID_HOME/emulator && ./emulator -avd \"Nexus_5X_API_27_x86\"",
     "ios:start": "concurrently \"node node_modules/react-native/local-cli/cli.js start --reset-cache\" \"react-native run-ios --no-packager\"",
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
