@@ -61,11 +61,21 @@ export function archiveCurrentPlay(item: ArchivedPlay): void {
   });
 }
 
-export function loadArchiveItem(): ArchivedPlay[] {
+export function loadArchivedPlays(start, count): ArchivedPlay[] {
   const result = realm
     .objects<ArchivedPlay>('ArchivedPlay')
-    .slice(0, 100);
+    .slice(start, start + count);
   return [...result];
+}
+
+export function loadArchivedPlay(id: string): ArchivedPlay {
+  const result = realm
+    .objects<ArchivedPlay>('ArchivedPlay')
+    .find(play => play.id === id);
+  if (!result) {
+    throw new Error('Failed to load archived play')
+  }
+  return result;
 }
 
 export function loadConfig() {

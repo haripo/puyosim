@@ -7,15 +7,18 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import Field from "../../shared/components/Field";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 
 export interface Props {
   theme: Theme,
   puyoSkin: string,
   layout: Layout,
-
   stack: StackForRendering,
-  history: HistoryRecord[],
-  historyIndex: number,
+
+  archivedPlays: ArchivedPlay[],
+
+  onArchiveOpened: () => void,
+  onItemPressed: (id: string) => void
 }
 
 interface State {
@@ -32,9 +35,19 @@ export default class Archive extends Component<Props, State> {
     }
   }
 
-  renderItem({ item, index, separators }) {
+  componentDidMount() {
+    this.props.onArchiveOpened();
+  }
+
+  handleItemClicked(id: string) {
+    this.props.onItemPressed(id);
+  }
+
+  renderItem({ item, index, separators }: { item: ArchivedPlay, index: number, separators: any }) {
     return (
-      <View style={ styles.itemWrapper }>
+      <TouchableOpacity
+        onPress={ this.handleItemClicked.bind(this, item.id) }
+        style={ styles.itemWrapper }>
         <View style={ styles.fieldWrapper }>
           <Field
             layout={ this.props.layout }
@@ -52,10 +65,10 @@ export default class Archive extends Component<Props, State> {
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              last modified: 2018-10-10 12:23:34
+              last modified: { item.updatedAt.toString() }
             </Text>
             <Text style={ styles.stats }>
-              120 hands, 8 chain, total 120000 pts.
+              { item.maxChain } chain, { item.score } pts.
             </Text>
           </View>
           <View style={ styles.controls }>
@@ -65,21 +78,18 @@ export default class Archive extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
   render() {
-    const items = [
-      { title: 'hogehoge' },
-      { title: 'fugafuga' }
-    ];
     return (
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <FlatList
-            data={ items }
+            data={ this.props.archivedPlays }
             renderItem={ this.renderItem.bind(this) }
+            keyExtractor={ item => item.id }
           />
         </View>
       </View>

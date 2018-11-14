@@ -12,8 +12,11 @@ import {
 } from "../../shared/selectors/simulatorSelectors";
 import { getLayoutForArchivedListField } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
+import { State } from "../../shared/reducers";
+import { loadArchivesList, loadArchive } from "../../shared/actions/actions";
+import { getArchivedPlays } from "../../shared/selectors/archiveSelectors";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     stack: getStack(state.simulator),
     current: state.simulator.queue[0],
@@ -29,12 +32,20 @@ const mapStateToProps = (state) => {
     historyTreeLayout: getHistoryTreeLayout(state.simulator),
     historyIndex: state.simulator.historyIndex,
     layout: getLayoutForArchivedListField(),
-    theme: getTheme(state.theme)
+    theme: getTheme(state.theme),
+
+    archivedPlays: getArchivedPlays(state.archive),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onArchiveOpened() {
+      dispatch(loadArchivesList(0, 100));
+    },
+    onItemPressed(id: string) {
+      dispatch(loadArchive(id));
+    }
   };
 };
 
