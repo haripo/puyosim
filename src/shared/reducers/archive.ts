@@ -2,11 +2,13 @@ import { ArchivedPlay, loadArchivedPlays } from "../utils/StorageService.native"
 import { LOAD_ARCHIVES_LIST } from "../actions/actions";
 
 export type ArchiveState = {
-  plays: { [id: number]: ArchivedPlay }
+  plays: { [id: string]: ArchivedPlay },
+  sortedIds: string[];
 }
 
 export const initialState: ArchiveState = {
-  plays: {}
+  plays: {},
+  sortedIds: []
 };
 
 function loadArchivesList(state: ArchiveState, { start, count }): ArchiveState {
@@ -14,6 +16,7 @@ function loadArchivesList(state: ArchiveState, { start, count }): ArchiveState {
   for (let item of items) {
     state.plays[item.id] = item;
   }
+  state.sortedIds = items.map(item => item.id);
   return state;
 }
 

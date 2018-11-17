@@ -14,7 +14,8 @@ const translations = {
     about: 'puyosim について',
     confirmRestart: 'ツモが再生成されます。よろしいですか？',
     shareViaTwitter: 'Twitter で手順をシェア',
-    archive: 'アーカイブ',
+    loadArchive: '読み込み',
+    archive: '保存',
 
     // settings
     noLimit: '制限なし',
@@ -66,7 +67,8 @@ const translations = {
     history: 'History mode',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?',
     shareViaTwitter: 'Share',
-    archive: 'Archive',
+    loadArchive: 'Load',
+    archive: 'Save',
 
     noLimit: 'No limit',
     numColors: 'The number of colors',

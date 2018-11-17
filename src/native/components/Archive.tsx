@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
-import { HistoryRecord } from "../../shared/models/history";
+import { contentsMargin, fieldCols, fieldRows, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
-import { StackForRendering } from "../../shared/selectors/simulatorSelectors";
 import Field from "../../shared/components/Field";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ArchivedPlay } from "../../shared/utils/StorageService.native";
+import _ from 'lodash';
+import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
 
 export interface Props {
   theme: Theme,
@@ -54,7 +54,7 @@ export default class Archive extends Component<Props, State> {
             theme={ this.props.theme }
             puyoSkin={ this.props.puyoSkin }
             isActive={ false }
-            stack={ this.props.stack }
+            stack={ getStackForRendering(_.chunk(item.stack, fieldCols), []) }
             ghosts={ [] }
             style={ { width: 10 } }
           />

@@ -64,6 +64,7 @@ export function archiveCurrentPlay(item: ArchivedPlay): void {
 export function loadArchivedPlays(start, count): ArchivedPlay[] {
   const result = realm
     .objects<ArchivedPlay>('ArchivedPlay')
+    .sorted('updatedAt', true)
     .slice(start, start + count);
   return [...result];
 }

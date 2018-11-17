@@ -59,7 +59,6 @@ const mapDispatchToProps = (dispatch) => {
     onDropPressed: () => {
       dispatch(putNextPair());
       dispatch(vanishPuyos());
-      dispatch(archiveCurrentField());
     },
     onUndoSelected: () => {
       dispatch(undoField());
@@ -77,6 +76,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShareSelected: () => {
       dispatch(openTwitterShare());
+    },
+    onSavePressed: () => {
+      dispatch(archiveCurrentField());
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))

@@ -4,7 +4,6 @@ import { archiveCurrentPlay, loadArchivedPlay } from "../utils/StorageService.na
 import { getArchivedPlay } from "../selectors/simulatorSelectors";
 
 function* handleArchiveField() {
-  yield take(ARCHIVE_CURRENT_FIELD);
   const play = yield select<any>(state => getArchivedPlay(state.simulator));
   archiveCurrentPlay(play);
 }
