@@ -8,8 +8,11 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 import _ from 'lodash';
 import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
+import { Navigation } from "react-native-navigation";
 
 export interface Props {
+  componentId: string,
+
   theme: Theme,
   puyoSkin: string,
   layout: Layout,
@@ -41,6 +44,7 @@ export default class Archive extends Component<Props, State> {
 
   handleItemClicked(id: string) {
     this.props.onItemPressed(id);
+    Navigation.pop(this.props.componentId);
   }
 
   renderItem({ item, index, separators }: { item: ArchivedPlay, index: number, separators: any }) {
