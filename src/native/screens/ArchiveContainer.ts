@@ -13,7 +13,11 @@ import {
 import { getLayoutForArchivedListField } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import { State } from "../../shared/reducers";
-import { loadArchivesList, loadArchive } from "../../shared/actions/actions";
+import {
+  loadArchive,
+  loadArchivesListFirstPage,
+  loadArchivesListNextPage
+} from "../../shared/actions/actions";
 import { getArchivedPlays } from "../../shared/selectors/archiveSelectors";
 
 const mapStateToProps = (state: State) => {
@@ -41,10 +45,13 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onArchiveOpened() {
-      dispatch(loadArchivesList(0, 100));
+      dispatch(loadArchivesListFirstPage());
     },
     onItemPressed(id: string) {
       dispatch(loadArchive(id));
+    },
+    onEndReached() {
+      dispatch(loadArchivesListNextPage());
     }
   };
 };

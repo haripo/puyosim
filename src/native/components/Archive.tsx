@@ -10,6 +10,9 @@ import _ from 'lodash';
 import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
 import { Navigation } from "react-native-navigation";
 
+// @ts-ignore
+import t from '../../shared/utils/i18n';
+
 export interface Props {
   componentId: string,
 
@@ -21,7 +24,8 @@ export interface Props {
   archivedPlays: ArchivedPlay[],
 
   onArchiveOpened: () => void,
-  onItemPressed: (id: string) => void
+  onItemPressed: (id: string) => void,
+  onEndReached: () => void
 }
 
 interface State {
@@ -47,6 +51,10 @@ export default class Archive extends Component<Props, State> {
     Navigation.pop(this.props.componentId);
   }
 
+  handleEndReached() {
+    this.props.onEndReached();
+  }
+
   renderItem({ item, index, separators }: { item: ArchivedPlay, index: number, separators: any }) {
     return (
       <TouchableOpacity
@@ -69,7 +77,7 @@ export default class Archive extends Component<Props, State> {
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              last modified: { item.updatedAt.toString() }
+              { t('lastModified') }: { item.updatedAt.toString() }
             </Text>
             <Text style={ styles.stats }>
               { item.maxChain } chain, { item.score } pts.
@@ -94,6 +102,7 @@ export default class Archive extends Component<Props, State> {
             data={ this.props.archivedPlays }
             renderItem={ this.renderItem.bind(this) }
             keyExtractor={ item => item.id }
+            onEndReached={ this.handleEndReached.bind(this) }
           />
         </View>
       </View>

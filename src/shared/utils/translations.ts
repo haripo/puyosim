@@ -43,6 +43,7 @@ const translations = {
     puyoSkinDefault: 'デフォルト',
     puyoSkinCharacter: '文字',
 
+    // share
     share: '共有',
     shareWholeHistory: 'すべての操作履歴をシェア',
     shareCurrentHistory: '現在手までの操作履歴をシェア',
@@ -51,6 +52,9 @@ const translations = {
     shareCurrentHistoryDescription: '分岐を含まない現在手までの履歴とスナップショットを共有します。',
     shareSnapshotDescription: '現在のスナップショット画像のみ共有します。',
     openInExistingAppAlert: 'URL を開きますか？既存の状態は破棄されます。',
+
+    // archive
+    lastModified: '更新日',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
@@ -95,6 +99,7 @@ const translations = {
     puyoSkinDefault: 'Default',
     puyoSkinCharacter: 'Character',
 
+    // share
     share: 'Share',
     shareWholeHistory: 'Share whole moves',
     shareCurrentHistory: 'Share current moves',
@@ -103,6 +108,9 @@ const translations = {
     shareCurrentHistoryDescription: 'Share a snapshot and current moves.',
     shareSnapshotDescription: 'Share a snapshot of the current field',
     openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
+
+    // archive
+    lastModified: 'Last modified',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
