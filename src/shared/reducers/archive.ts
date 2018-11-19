@@ -1,5 +1,5 @@
 import { ArchivedPlay, loadArchivedPlays } from "../utils/StorageService.native";
-import { LOAD_ARCHIVES_LIST, LOAD_ARCHIVES_LIST_FIRST_PAGE, LOAD_ARCHIVES_LIST_NEXT_PAGE } from "../actions/actions";
+import { LOAD_ARCHIVES_LIST_FIRST_PAGE, LOAD_ARCHIVES_LIST_NEXT_PAGE } from "../actions/actions";
 
 export type ArchiveState = {
   plays: { [id: string]: ArchivedPlay },
