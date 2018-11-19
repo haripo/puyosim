@@ -1,7 +1,12 @@
-import I18n from 'react-native-i18n';
+import RNLanguages from 'react-native-languages';
+import i18n from 'i18n-js';
 import translations from './translations';
 
-I18n.fallbacks = true;
-I18n.translations = translations;
+i18n.locale = RNLanguages.language;
 
-export default (key: string): string => I18n.t(key);
+export const getLanguages = () => RNLanguages.languages;
+
+i18n.fallbacks = true;
+i18n.translations = translations;
+
+export default (key: string): string => i18n.t(key);
