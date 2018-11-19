@@ -31,5 +31,7 @@ footer a {
 }
 
 .ios-badge {
-  padding-top: 6px;
+  width: 160px;
+  height: 77px;
+  padding: 12px 0;
 }
