@@ -3,7 +3,6 @@ package com.puyosimulator;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -26,6 +25,7 @@ import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.links.RNFirebaseLinksPackage;
 import io.realm.react.RealmReactPackage;
 import io.sentry.RNSentryPackage;
+import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 
 
 public class MainApplication extends NavigationApplication implements ShareApplication /*, ReactApplication */ {
@@ -41,6 +41,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new RNLanguagesPackage(),
                     //new SplashScreenReactPackage(),
                     new RNViewShotPackage(),
                     new RNSharePackage(),
@@ -50,9 +51,8 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                     new RNVersionNumberPackage(),
                     new VectorIconsPackage(),
                     new SvgPackage(),
-                    new RNSentryPackage(),
-                    //new NavigationReactPackage(),
-                    new RNI18nPackage()
+                    new RNSentryPackage()
+                    //new NavigationReactPackage()
             );
         }
 
@@ -95,6 +95,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
                 // new SplashScreenReactPackage(),
+                new RNLanguagesPackage(),
                 new RNFirebasePackage(),
                 new RNFirebaseFirestorePackage(),
                 new RNFirebaseLinksPackage(),
@@ -104,8 +105,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                 new RNViewShotPackage(),
                 new VectorIconsPackage(),
                 new SvgPackage(),
-                new RNSentryPackage(),
-                new RNI18nPackage()
+                new RNSentryPackage()
         );
     }
 

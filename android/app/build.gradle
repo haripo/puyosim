@@ -173,6 +173,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-languages')
     compile project(':react-native-splash-screen')
     implementation project(':react-native-view-shot')
     implementation project(':react-native-share')

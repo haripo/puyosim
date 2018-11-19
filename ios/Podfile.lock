@@ -56,10 +56,16 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - React (0.11.0):
+    - React/Core (= 0.11.0)
+  - React/Core (0.11.0)
+  - RNLanguages (3.0.1):
+    - React
 
 DEPENDENCIES:
   - Firebase/Core (~> 5.9.0)
   - Firebase/DynamicLinks
+  - RNLanguages (from `../node_modules/react-native-languages`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -72,6 +78,11 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
+    - React
+
+EXTERNAL SOURCES:
+  RNLanguages:
+    :path: "../node_modules/react-native-languages"
 
 SPEC CHECKSUMS:
   Firebase: 383fa29aca93e371cab776b48a5c66544d3c2003
@@ -83,7 +94,9 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 2b3a023a61239c8d002e6e4fcf4abce8eddce0e0
   GoogleUtilities: 760ccb53b7c7f40f9c02d8c241f76f841a7a6162
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  React: ab1a2e21deb34965c38328d5ec40cc7d12c6050a
+  RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
 
-PODFILE CHECKSUM: 8e5fbc2a1c5ed3b72a3363731826921f9b53ab0b
+PODFILE CHECKSUM: 4abd6656d10ad0053551706cc6e2b2343ac19fc8
 
 COCOAPODS: 1.5.3
