@@ -21,4 +21,8 @@ if (style.styleSheet) {
   style.appendChild(document.createTextNode(iconFontStyles));
 }
 
-document.head.appendChild(style);
+if (document.head) {
+  document.head.appendChild(style);
+} else {
+  console.error('Failed to load vector icons')
+}
