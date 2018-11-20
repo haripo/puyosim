@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -49,7 +49,7 @@ export default class History extends Component<Props, State> {
             <HandlingPuyos
               pair={ this.props.pendingPair }
               puyoSkin={ this.props.puyoSkin }
-              style={ styles.handlingPuyos }
+              style={ styles.handlingPuyos as ViewStyle }
               layout={ this.props.layout }>
             </HandlingPuyos>
             <Field

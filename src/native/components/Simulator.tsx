@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from 'react-native';
+import { ActionSheetIOS, Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
@@ -291,7 +291,7 @@ export default class Simulator extends Component<Props, State> {
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }
-                style={ styles.handlingPuyos }
+                style={ styles.handlingPuyos as ViewStyle }
                 layout={ this.props.layout }>
               </HandlingPuyos>
               <Field

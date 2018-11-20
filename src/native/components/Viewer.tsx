@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
@@ -84,7 +84,7 @@ export default class Viewer extends Component<Props, State> {
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }
-                style={ styles.handlingPuyos }
+                style={ styles.handlingPuyos as ViewStyle }
                 layout={ this.props.layout }>
               </HandlingPuyos>
               <Field

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageStyle, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Share from 'react-native-share';
 
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
@@ -100,7 +100,7 @@ export default class ShareOption extends Component<Props, State> {
             <View style={ { flex: 0 } }>
               <Image
                 source={ image }
-                style={ styles.image }
+                style={ styles.image as ImageStyle }
               />
             </View>
           </View>

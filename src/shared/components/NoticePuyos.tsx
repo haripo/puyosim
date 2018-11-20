@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, ImageStyle, StyleSheet, View } from 'react-native';
 import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
 
 type Props = {
@@ -56,7 +56,7 @@ export default class NoticePuyos extends Component<Props, {}> {
     return puyos.map((type, index) => {
       const style = [styles.puyo, { left: index * 16 + contentsPadding }];
       return (
-        <Image source={ this.images[type] } style={ style } key={ index }/>
+        <Image source={ this.images[type] } style={ style as ImageStyle } key={ index }/>
       );
     });
   }
