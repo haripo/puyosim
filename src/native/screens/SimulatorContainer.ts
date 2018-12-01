@@ -77,9 +77,6 @@ const mapDispatchToProps = (dispatch) => {
     onShareSelected: () => {
       dispatch(openTwitterShare());
     },
-    onSavePressed: () => {
-      dispatch(archiveCurrentField());
-    },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))
     },

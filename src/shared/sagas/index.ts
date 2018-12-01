@@ -3,7 +3,7 @@ import { ARCHIVE_CURRENT_FIELD, LOAD_ARCHIVE, LOAD_ARCHIVE_FINISHED } from "../a
 import { archiveCurrentPlay, loadArchivedPlay } from "../utils/StorageService.native";
 import { getArchivedPlay } from "../selectors/simulatorSelectors";
 
-function* handleArchiveField() {
+function* handleArchiveField(action) {
   const play = yield select<any>(state => getArchivedPlay(state.simulator));
   archiveCurrentPlay(play);
 }

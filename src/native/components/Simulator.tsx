@@ -19,7 +19,6 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
 
-
 export type Props = {
   componentId: string,
 
@@ -50,7 +49,6 @@ export type Props = {
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void,
   onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
-  onSavePressed: () => void,
 }
 
 type State = {
@@ -152,7 +150,7 @@ export default class Simulator extends Component<Props, State> {
     Navigation.events().bindComponent(this);
 
     this.state = {
-      isVisible: true
+      isVisible: true,
     }
   }
 
@@ -240,7 +238,7 @@ export default class Simulator extends Component<Props, State> {
         Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } });
         break;
       case 'save':
-        this.props.onSavePressed();
+        this.handleSavePressed()
         break;
       case 'menu':
         ActionSheetIOS.showActionSheetWithOptions({
@@ -277,7 +275,7 @@ export default class Simulator extends Component<Props, State> {
 //              this.props.onShareSelected,
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } }),
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } }),
-            this.props.onSavePressed,
+            () => this.handleSavePressed(),
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } }),
           ][selected]()
         });
@@ -291,6 +289,16 @@ export default class Simulator extends Component<Props, State> {
 
   componentDidDisappear() {
     this.setState({ isVisible: false });
+  }
+
+  handleSavePressed() {
+    Navigation.push(
+      this.props.componentId,
+      {
+        component: {
+          name: 'com.puyosimulator.SaveModal',
+        }
+      });
   }
 
   render() {
