@@ -318,14 +318,14 @@ export function getShareURL(state: SimulatorState): ShareUrls {
   }
 }
 
-export function getArchivedPlay(state: SimulatorState): ArchivedPlay {
+export function getArchivedPlay(state: SimulatorState, title: string): ArchivedPlay {
   return {
     id: state.playId,
     history: serializeHistoryRecords(state.history),
     historyIndex: state.historyIndex,
     maxChain: _.max(state.history.map(h => h.chain)) || 0,
     queue: _.flatten(state.queue),
-    title: 'autosave',
+    title: title,
     stack: _.flatten(state.stack),
     score: state.score,
     updatedAt: new Date(),
