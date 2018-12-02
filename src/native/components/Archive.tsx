@@ -11,7 +11,7 @@ import { getStackForRendering, StackForRendering } from "../../shared/models/sta
 import { Navigation } from "react-native-navigation";
 
 // @ts-ignore
-import t from '../../shared/utils/i18n';
+import t, { formatDateTime } from '../../shared/utils/i18n';
 
 export interface Props {
   componentId: string,
@@ -77,17 +77,11 @@ export default class Archive extends Component<Props, State> {
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              { t('lastModified') }: { item.updatedAt.toString() }
+              { t('lastModified') }: { formatDateTime(item.updatedAt) }
             </Text>
             <Text style={ styles.stats }>
               { item.maxChain } chain, { item.score } pts.
             </Text>
-          </View>
-          <View style={ styles.controls }>
-            <TouchableOpacity>
-              <Icon name="star" size={ 25 } color={ themeColor }/>
-              { /* star_border */ }
-            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>

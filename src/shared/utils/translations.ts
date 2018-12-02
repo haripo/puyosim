@@ -57,7 +57,15 @@ const translations = {
     lastModified: '更新日',
 
     // handset patterns
-    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
+
+
+    // datetime
+    datetime: {
+      formats: {
+        short: '%Y/%m/%d'
+      }
+    }
   },
   'en': {
     chain: 'chain',
@@ -113,7 +121,14 @@ const translations = {
     lastModified: 'Last modified',
 
     // handset patterns
-    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
+
+    // datetime
+    datetime: {
+      formats: {
+        short: '%-d %b %Y'
+      }
+    }
   }
 };
 
