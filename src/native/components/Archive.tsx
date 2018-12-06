@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ReactNative, { Alert, FlatList, StyleSheet, Text, TouchableOpacity, UIManager, View } from 'react-native';
 import { contentsMargin, fieldCols, fieldRows, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
@@ -25,13 +25,16 @@ export interface Props {
 
   onArchiveOpened: () => void,
   onItemPressed: (id: string) => void,
-  onEndReached: () => void
+  onEndReached: () => void,
+  onDeleteSelected: (id: string) => void
 }
 
 interface State {
 }
 
 export default class Archive extends Component<Props, State> {
+  itemRefs: any = [];
+
   static options() {
     return {
       topBar: {
@@ -51,6 +54,60 @@ export default class Archive extends Component<Props, State> {
     Navigation.pop(this.props.componentId);
   }
 
+  handleDeleteConfirmed(item: ArchivedPlay) {
+    // TODO: delete item
+    this.props.onDeleteSelected(item.id);
+  }
+
+  handlePopupMenuItemSelected(event: string, index: number, item: ArchivedPlay): void {
+    if (event === 'itemSelected') {
+      switch (index) {
+        case 0: // edit
+          Navigation.push(
+            this.props.componentId,
+            {
+              component: {
+                name: 'com.puyosimulator.SaveModal',
+                passProps: {
+                  editItem: item
+                }
+              }
+            });
+          break;
+        case 1: // delete
+          Alert.alert(
+            'delete',
+            'delete?',
+            [
+              {
+                text: 'Cancel', // TODO: i18n
+                style: 'cancel'
+              },
+              {
+                text: 'OK',
+                onPress: () => this.handleDeleteConfirmed(item)
+              },
+            ],
+            { cancelable: false }
+          );
+          break;
+      }
+    }
+  }
+
+  handleItemLongPressed(item: ArchivedPlay, itemIndex: number) {
+    // @ts-ignore
+    UIManager.showPopupMenu(
+      ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
+      [
+        'edit',// TODO: i18n
+        'delete'
+      ],
+      () => console.warn('something went wrong with the popup menu'),
+      (event, index) => this.handlePopupMenuItemSelected(event, index, item)
+    );
+  }
+
   handleEndReached() {
     this.props.onEndReached();
   }
@@ -58,7 +115,9 @@ export default class Archive extends Component<Props, State> {
   renderItem({ item, index, separators }: { item: ArchivedPlay, index: number, separators: any }) {
     return (
       <TouchableOpacity
+        ref={ e => { this.itemRefs[index] = e } }
         onPress={ this.handleItemClicked.bind(this, item.id) }
+        onLongPress={ () => this.handleItemLongPressed(item, index) }
         style={ styles.itemWrapper }>
         <View style={ styles.fieldWrapper }>
           <Field

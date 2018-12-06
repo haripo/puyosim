@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { themeColor, themeLightColor } from "../../shared/utils/constants";
 import { Navigation } from "react-native-navigation";
+import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 
 export type Props = {
   componentId: string,
-  onSavePressed: (title: string) => void,
+  onSavePressed: (id: string | null, title: string) => void,
+
+  editItem: ArchivedPlay | undefined,
 }
 
 type State = {
@@ -14,7 +17,7 @@ type State = {
 
 export default class SaveModal extends Component<Props, State> {
 
-  static options(passProps) {
+  static options(passProps: Props) {
     return {
       topBar: {
         title: {
@@ -33,7 +36,7 @@ export default class SaveModal extends Component<Props, State> {
             color: 'white',
             text: 'DONE'
           }
-        ],
+        ]
       },
       layout: {
         orientation: 'portrait'
@@ -45,13 +48,23 @@ export default class SaveModal extends Component<Props, State> {
     super(props);
     Navigation.events().bindComponent(this);
 
-    this.state = {
-      title: ''
+    if (props.editItem) {
+      this.state = {
+        title: props.editItem.title.toString() // realm オブジェクトを文字列に直す
+      }
+    } else {
+      this.state = {
+        title: ''
+      }
     }
   }
 
   handleDonePressed() {
-    this.props.onSavePressed(this.state.title || 'No title');
+    this.props.onSavePressed(
+      this.props.editItem ? this.props.editItem.id : null,
+      this.state.title || 'No title'
+    );
+
     // TODO: show loading indicator
     Navigation.pop(this.props.componentId);
   }

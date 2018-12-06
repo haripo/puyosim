@@ -14,6 +14,7 @@ import { getLayoutForArchivedListField } from "../../shared/selectors/layoutSele
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import { State } from "../../shared/reducers";
 import {
+  deleteArchive,
   loadArchive,
   loadArchivesListFirstPage,
   loadArchivesListNextPage
@@ -52,6 +53,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onEndReached() {
       dispatch(loadArchivesListNextPage());
+    },
+    onDeleteSelected(id: string) {
+      dispatch(deleteArchive(id))
     }
   };
 };

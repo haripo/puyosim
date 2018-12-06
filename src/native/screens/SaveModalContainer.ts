@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { archiveCurrentField } from '../../shared/actions/actions';
+import { archiveCurrentField, editArchive } from '../../shared/actions/actions';
 import SaveModal from "../components/SaveModal";
 import { getStack } from "../../shared/selectors/simulatorSelectors";
 import { getLayout } from "../../shared/selectors/layoutSelectors";
@@ -16,8 +16,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSavePressed: (title: string) => {
-      dispatch(archiveCurrentField(title));
+    onSavePressed: (id: string | null, title: string) => {
+      if (id) {
+        dispatch(editArchive(id, title));
+      } else {
+        dispatch(archiveCurrentField(title));
+      }
     },
   };
 };

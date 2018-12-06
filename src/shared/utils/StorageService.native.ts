@@ -1,6 +1,5 @@
 import Realm from 'realm';
 import _ from 'lodash';
-import { Stack } from "../models/stack";
 
 const archivedPlaySchema = {
   name: 'ArchivedPlay',
@@ -55,6 +54,7 @@ let realm = new Realm({
 
 console.info("Realm path: " + realm.path);
 
+// TODO: rename to saveArchivedPlay
 export function archiveCurrentPlay(item: ArchivedPlay): void {
   realm.write(() => {
     realm.create('ArchivedPlay', item, true);
@@ -77,6 +77,30 @@ export function loadArchivedPlay(id: string): ArchivedPlay {
     throw new Error('Failed to load archived play')
   }
   return result;
+}
+
+export function editArchivedPlay(id: string, title: string): ArchivedPlay {
+  realm.write(() => {
+    const play = realm
+      .objects<ArchivedPlay>('ArchivedPlay')
+      .find(play => play.id === id);
+    if (play) {
+      play.title = title;
+    } else {
+      console.error(`Failed to find play (id: ${id})`);
+      throw new Error(`Failed to find play (id: ${id})`);
+    }
+  });
+  return loadArchivedPlay(id);
+}
+
+export function deleteArchivedPlay(id: string): void {
+  realm.write(() => {
+    const play = realm
+      .objects<ArchivedPlay>('ArchivedPlay')
+      .find(play => play.id === id);
+    realm.delete(play);
+  });
 }
 
 export function loadConfig() {
