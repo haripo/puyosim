@@ -4,7 +4,7 @@ import {
   DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
-  INITIALIZE_SIMULATOR,
+  INITIALIZE_SIMULATOR, LOAD_ARCHIVE, LOAD_ARCHIVE_FINISHED,
   MOVE_HIGHLIGHTS_LEFT,
   MOVE_HIGHLIGHTS_RIGHT,
   MOVE_HISTORY,
@@ -19,42 +19,29 @@ import {
   UNDO_FIELD,
   VANISH_PUYOS
 } from '../actions/actions';
-import {
-  rotateLeft,
-  rotateRight,
-  moveLeft,
-  moveRight,
-  getDefaultMove,
-  Move
-} from '../models/move';
+import { getDefaultMove, Move, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { calcChainStepScore } from '../models/score';
-import {
-  canRedo,
-  getCurrentHand,
-  getDefaultNextMove,
-  getDefaultNextRecord,
-  getDropPositions
-} from '../selectors/simulatorSelectors';
+import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
 import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
+import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
-  setPatternByName,
-  setRandomHistory
-} from '../models/debug';
-import {
-  createHistoryRecord,
   appendHistoryRecord,
+  createHistoryFromMinimumHistory,
+  createHistoryRecord,
   createInitialHistoryRecord,
   History,
-  HistoryRecord, createHistoryFromMinimumHistory
+  HistoryRecord
 } from '../models/history';
-
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 import { applyDropPlans, applyVanishPlans, createField, setPair, Stack } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
+import uuid from 'uuid/v4';
+import { ArchivedPlay } from "../utils/StorageService.native";
+import _ from 'lodash';
 
 export type SimulatorState = {
   queue: number[][],
@@ -68,7 +55,10 @@ export type SimulatorState = {
   droppingPuyos: DroppingPlan[],
   vanishingPuyos: VanishingPlan[],
   history: HistoryRecord[],
-  historyIndex: number
+  historyIndex: number,
+
+  playId: string,
+  startDateTime: Date // Date を直接編集すると immer が immutability を保証しないので注意
 };
 
 function rotateHighlightsLeft(state: SimulatorState, action) {
@@ -283,7 +273,23 @@ function reconstructHistory(state: SimulatorState, action): SimulatorState {
   state.queue = deserializeQueue(queue);
   state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(history), state.queue);
   state.historyIndex = index;
+
+  state.startDateTime = new Date();
+  state.playId = uuid();
+
   state = revert(state, index);
+  return state;
+}
+
+function loadArchiveFinished(state: SimulatorState, action) {
+  const play: ArchivedPlay = action.play;
+  state.playId = play.id;
+  state.queue = _.chunk(play.queue, 2);
+  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(play.history), state.queue);
+  state.historyIndex = play.historyIndex;
+  state.startDateTime = play.createdAt;
+
+  state = revert(state, state.historyIndex);
   return state;
 }
 
@@ -302,7 +308,9 @@ function createInitialState(config): SimulatorState {
     droppingPuyos: [],
     vanishingPuyos: [],
     history: [createInitialHistoryRecord(stack)],
-    historyIndex: 0
+    historyIndex: 0,
+    startDateTime: new Date(),
+    playId: uuid()
   };
 }
 
@@ -350,6 +358,8 @@ export const reducer = (state, action, config) => {
       return restart(state, action, config);
     case RECONSTRUCT_HISTORY:
       return reconstructHistory(state, action);
+    case LOAD_ARCHIVE_FINISHED:
+      return loadArchiveFinished(state, action);
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:

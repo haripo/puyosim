@@ -5,29 +5,19 @@ import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import {
-  contentsMargin,
-  themeColor,
-  themeLightColor
-} from '../../shared/utils/constants';
+import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import {
-  PendingPairPuyo,
-  PendingPair,
-  StackForRendering
-} from "../../shared/selectors/simulatorSelectors";
+import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
-import SplashScreen from 'react-native-splash-screen';
-
+import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
   componentId: string,
@@ -112,6 +102,16 @@ export default class Simulator extends Component<Props, State> {
                 showAsAction: 'never'
               },
               {
+                text: t('archive'),
+                id: 'save',
+                showAsAction: 'never'
+              },
+              {
+                text: t('loadArchive'),
+                id: 'load',
+                showAsAction: 'never'
+              },
+              {
                 text: t('shareViaTwitter'),
                 id: 'share-via-ips',
                 showAsAction: 'never'
@@ -150,7 +150,7 @@ export default class Simulator extends Component<Props, State> {
     Navigation.events().bindComponent(this);
 
     this.state = {
-      isVisible: true
+      isVisible: true,
     }
   }
 
@@ -234,6 +234,12 @@ export default class Simulator extends Component<Props, State> {
       case 'about':
         Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } });
         break;
+      case 'load':
+        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } });
+        break;
+      case 'save':
+        this.handleSavePressed()
+        break;
       case 'menu':
         ActionSheetIOS.showActionSheetWithOptions({
           options: [
@@ -244,6 +250,8 @@ export default class Simulator extends Component<Props, State> {
             'History',
             'Share',
             'Settings',
+            'Load',
+            'Save',
             'About'
           ],
           destructiveButtonIndex: 0
@@ -266,6 +274,8 @@ export default class Simulator extends Component<Props, State> {
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } }),
 //              this.props.onShareSelected,
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } }),
+            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } }),
+            () => this.handleSavePressed(),
             () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } }),
           ][selected]()
         });
@@ -279,6 +289,16 @@ export default class Simulator extends Component<Props, State> {
 
   componentDidDisappear() {
     this.setState({ isVisible: false });
+  }
+
+  handleSavePressed() {
+    Navigation.push(
+      this.props.componentId,
+      {
+        component: {
+          name: 'com.puyosimulator.SaveModal',
+        }
+      });
   }
 
   render() {

@@ -1,15 +1,34 @@
 import Realm from 'realm';
 import _ from 'lodash';
 
-const StackStateSchema = {
-  name: 'LastState',
+const archivedPlaySchema = {
+  name: 'ArchivedPlay',
+  primaryKey: 'id',
   properties: {
-    history: { type: 'string' }
+    id: { type: 'string' },
+    queue: { type: 'list', objectType: 'int' },
+    stack: { type: 'list', objectType: 'int' },
+    maxChain: { type: 'int' },
+    score: { type: 'int' },
+    history: { type: 'string' },
+    historyIndex: { type: 'int' },
+    createdAt: { type: 'date' },
+    updatedAt: { type: 'date' },
+    title: { type: 'string' },
   }
 };
 
-interface StackState {
-  history: string;
+export interface ArchivedPlay {
+  id: string,
+  queue: number[],
+  stack: number[],
+  maxChain: number,
+  score: number,
+  history: string,
+  historyIndex: number,
+  createdAt: Date,
+  updatedAt: Date,
+  title: string,
 }
 
 const configSchema = {
@@ -28,30 +47,60 @@ interface Config {
 
 let realm = new Realm({
   schema: [
-    StackStateSchema,
+    archivedPlaySchema,
     configSchema
   ]
 });
 
 console.info("Realm path: " + realm.path);
 
-export function saveLastState(history) {
-  const body = JSON.stringify(history);
+// TODO: rename to saveArchivedPlay
+export function archiveCurrentPlay(item: ArchivedPlay): void {
   realm.write(() => {
-    realm.delete(realm.objects('LastState'));
-    realm.create('LastState', {
-      history: body
-    });
+    realm.create('ArchivedPlay', item, true);
   });
 }
 
-export function loadLastState() {
-  const json = realm.objects<StackState>('LastState');
-  if (json[0]) {
-    return JSON.parse(json[0].history);
-  } else {
-    return null;
+export function loadArchivedPlays(start, count): ArchivedPlay[] {
+  const result = realm
+    .objects<ArchivedPlay>('ArchivedPlay')
+    .sorted('updatedAt', true)
+    .slice(start, start + count);
+  return [...result];
+}
+
+export function loadArchivedPlay(id: string): ArchivedPlay {
+  const result = realm
+    .objects<ArchivedPlay>('ArchivedPlay')
+    .find(play => play.id === id);
+  if (!result) {
+    throw new Error('Failed to load archived play')
   }
+  return result;
+}
+
+export function editArchivedPlay(id: string, title: string): ArchivedPlay {
+  realm.write(() => {
+    const play = realm
+      .objects<ArchivedPlay>('ArchivedPlay')
+      .find(play => play.id === id);
+    if (play) {
+      play.title = title;
+    } else {
+      console.error(`Failed to find play (id: ${id})`);
+      throw new Error(`Failed to find play (id: ${id})`);
+    }
+  });
+  return loadArchivedPlay(id);
+}
+
+export function deleteArchivedPlay(id: string): void {
+  realm.write(() => {
+    const play = realm
+      .objects<ArchivedPlay>('ArchivedPlay')
+      .find(play => play.id === id);
+    realm.delete(play);
+  });
 }
 
 export function loadConfig() {

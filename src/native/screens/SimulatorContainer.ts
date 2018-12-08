@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity, finishDroppingAnimations,
+  applyGravity, archiveCurrentField, finishDroppingAnimations,
   finishVanishingAnimations,
   moveHighlightsLeft,
   moveHighlightsRight,

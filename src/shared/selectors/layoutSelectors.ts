@@ -54,3 +54,14 @@ export function getLayoutForCapturingField(): Layout {
     height: 800
   });
 }
+
+/**
+ * Create layout for archived list
+ */
+export function getLayoutForArchivedListField(): Layout {
+  // TODO: 将来的には Field の style を指定する形でサイズを固定したい
+  return getLayout({
+    width: 150,
+    height: 300
+  });
+}

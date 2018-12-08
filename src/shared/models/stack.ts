@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { fieldCols, fieldRows } from "../utils/constants";
 import { DroppingPlan, VanishingPlan } from "./ChainPlanner";
 import { getFirstCol, getSecondCol, Move } from "./move";
-import { PendingPairPuyo } from "../selectors/simulatorSelectors";
+import { PendingPairPuyo, PuyoConnection } from "../selectors/simulatorSelectors";
 
 export type Stack = number[][];
 export type Color = 0 | 1 | 2 | 3 | 4 | 5;
@@ -109,3 +109,46 @@ export function applyVanishPlans(stack: Stack, plans: VanishingPlan[]): Stack {
   return stack;
 }
 
+
+export type PuyoForRendering = {
+  row: number,
+  col: number,
+  color: Color,
+  connections: PuyoConnection
+  isDropping: boolean
+}
+
+export type StackForRendering = PuyoForRendering[][];
+
+export function getStackForRendering(stack: Stack, droppings): StackForRendering {
+  const isDropping = (row, col) => {
+    return !!droppings.find(p => p.row === row && p.col === col);
+  };
+
+  const hasConnection = (row, col, color) => {
+    return isValidPosition({ row, col }) &&
+      0 < row &&
+      stack[row][col] === color &&
+      color !== 0 &&
+      !isDropping(row, col);
+  };
+
+  return stack.map((cols, row) => {
+    return cols.map((color, col) => {
+      let connections: any = {
+        top: hasConnection(row - 1, col, color),
+        bottom: hasConnection(row + 1, col, color),
+        left: hasConnection(row, col - 1, color),
+        right: hasConnection(row, col + 1, color)
+      };
+      if (row === 0) connections = {}; // puyos on row = 0 have no connection
+      return {
+        row: row,
+        col: col,
+        color: color as Color,
+        connections: connections,
+        isDropping: isDropping(row, col)
+      };
+    });
+  });
+}

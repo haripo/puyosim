@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ViewStyle } from 'react-native';
+import { RegisteredStyle, View, ViewStyle } from 'react-native';
 import { cardBackgroundColor, contentsPadding, fieldCols } from '../utils/constants';
 import Puyo from './Puyo';
 import { Layout } from "../selectors/layoutSelectors";
@@ -9,7 +9,7 @@ export type Props = {
   pair: PendingPair,
   layout: Layout,
   puyoSkin: string,
-  style?: ViewStyle
+  style?: RegisteredStyle<ViewStyle>
 }
 
 const padding = 3;

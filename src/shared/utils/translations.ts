@@ -14,6 +14,8 @@ const translations = {
     about: 'puyosim について',
     confirmRestart: 'ツモが再生成されます。よろしいですか？',
     shareViaTwitter: 'Twitter で手順をシェア',
+    loadArchive: '読み込み',
+    archive: '保存',
 
     // settings
     noLimit: '制限なし',
@@ -41,6 +43,7 @@ const translations = {
     puyoSkinDefault: 'デフォルト',
     puyoSkinCharacter: '文字',
 
+    // share
     share: '共有',
     shareWholeHistory: 'すべての操作履歴をシェア',
     shareCurrentHistory: '現在手までの操作履歴をシェア',
@@ -50,8 +53,19 @@ const translations = {
     shareSnapshotDescription: '現在のスナップショット画像のみ共有します。',
     openInExistingAppAlert: 'URL を開きますか？既存の状態は破棄されます。',
 
+    // archive
+    lastModified: '更新日',
+
     // handset patterns
-    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
+
+
+    // datetime
+    datetime: {
+      formats: {
+        short: '%Y/%m/%d'
+      }
+    }
   },
   'en': {
     chain: 'chain',
@@ -65,6 +79,8 @@ const translations = {
     history: 'History mode',
     confirmRestart: 'Color pattern will be regenerated. Are you sure?',
     shareViaTwitter: 'Share',
+    loadArchive: 'Load',
+    archive: 'Save',
 
     noLimit: 'No limit',
     numColors: 'The number of colors',
@@ -91,6 +107,7 @@ const translations = {
     puyoSkinDefault: 'Default',
     puyoSkinCharacter: 'Character',
 
+    // share
     share: 'Share',
     shareWholeHistory: 'Share whole moves',
     shareCurrentHistory: 'Share current moves',
@@ -100,8 +117,18 @@ const translations = {
     shareSnapshotDescription: 'Share a snapshot of the current field',
     openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
 
+    // archive
+    lastModified: 'Last modified',
+
     // handset patterns
-    ..._.fromPairs(handsetPatterns[2].map(p => [p, p]))
+    ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
+
+    // datetime
+    datetime: {
+      formats: {
+        short: '%-d %b %Y'
+      }
+    }
   }
 };
 
