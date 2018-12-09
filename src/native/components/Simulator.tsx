@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { ActionSheetIOS, Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
+import { Layout as NavigationLayout } from "react-native-navigation/lib/dist/interfaces/Layout";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
@@ -18,6 +19,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
+import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
 
 export type Props = {
   componentId: string,
@@ -57,10 +59,16 @@ type State = {
 
 export default class Simulator extends Component<Props, State> {
 
-  static options(passProps) {
+  static options(passProps): Options | undefined {
     switch (Platform.OS) {
       case 'ios':
         return {
+          sideMenu: {
+            right: {
+              enabled: true,
+              visible: true
+            }
+          },
           topBar: {
             title: {
               text: 'puyosim',
@@ -73,12 +81,15 @@ export default class Simulator extends Component<Props, State> {
               color: 'white'
             }
           },
-          layout: {
-            orientation: 'portrait'
-          }
         };
       case 'android':
         return {
+          sideMenu: {
+            right: {
+              enabled: true,
+              visible: true
+            }
+          },
           topBar: {
             title: {
               text: 'puyosim',
@@ -94,7 +105,8 @@ export default class Simulator extends Component<Props, State> {
               {
                 text: t('about'),
                 id: 'about',
-                showAsAction: 'never',
+                // @ts-ignore
+                showAsAction: 'never'
               },
               {
                 text: t('settings'),
@@ -137,9 +149,6 @@ export default class Simulator extends Component<Props, State> {
                 showAsAction: 'never'
               }
             ]
-          },
-          layout: {
-            orientation: 'portrait'
           }
         }
     }

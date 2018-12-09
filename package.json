@@ -30,7 +30,7 @@
     "react-native-firebase": "^4.3.8",
     "react-native-languages": "^2.0.1",
     "react-native-modal-selector": "0.0.27",
-    "react-native-navigation": "^2.0.2580",
+    "react-native-navigation": "^2.1.2",
     "react-native-sentry": "^0.38.3",
     "react-native-settings-list": "^1.8.0",
     "react-native-share": "^1.1.2",
