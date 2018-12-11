@@ -65,6 +65,8 @@ export default class Simulator extends Component<Props, State> {
         return {
           sideMenu: {
             right: {
+              // @ts-ignore
+              width: 200,
               enabled: true,
               visible: true
             }
