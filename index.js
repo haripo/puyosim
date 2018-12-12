@@ -53,96 +53,50 @@ Navigation.registerComponentWithRedux('com.puyosimulator.SaveModal', () => SaveM
 Navigation.registerComponentWithRedux('com.puyosimulator.RightDrawer', () => RightDrawer, Provider, store);
 
 async function launch() {
-  if (Platform.OS === 'ios') {
-    const icon = await Icon.getImageSource('menu', 24);
-    Navigation.setRoot({
-      root: {
-        sideMenu: {
-          id: "sideMenu",
-          right: {
-            component: {
-              name: "com.puyosimulator.RightDrawer"
-            }
-          },
-          center: {
-            stack: {
-              options: {
-                sideMenu: {
-                  right: {
-                    enabled: false,
-                    visible: false
-                  },
-                  openGestureMode: "bezel"
-                }
-              },
-              children: [
-                {
-                  component: {
-                    name: 'com.puyosimulator.Simulator',
-                    passProps: {},
-                    options: {
-                      topBar: {
-                        rightButtons: [
-                          {
-                            icon: icon,
-                            id: 'menu',
-                            color: 'white'
-                          }
-                        ],
-                      }
-                    }
-                  }
-                }
-              ]
-            }
+  const icon = await Icon.getImageSource('menu', 24);
+  Navigation.setRoot({
+    root: {
+      sideMenu: {
+        id: "sideMenu",
+        right: {
+          component: {
+            name: "com.puyosimulator.RightDrawer"
           }
-        }
-      }
-    });
-  } else {
-    Navigation.setRoot({
-      root: {
-        sideMenu: {
-          id: "sideMenu",
-          right: {
-            component: {
-              name: "com.puyosimulator.RightDrawer"
-            }
-          },
-          center: {
-            stack: {
-              options: {
-                sideMenu: {
-                  right: {
-                    enabled: false,
-                    visible: false
-                  }
-                }
-              },
-              children: [
-                {
-                  component: {
-                    name: 'com.puyosimulator.Simulator',
-                    passProps: {},
-                    options: {
-                      sideMenu: {
-                        right: {
-                          component: {
-                            //name: "com.puyosimulator.RightDrawer"
-                            // enabled: true,
-                          }
+        },
+        center: {
+          stack: {
+            children: [
+              {
+                component: {
+                  name: 'com.puyosimulator.Simulator',
+                  options: {
+                    topBar: {
+                      rightButtons: [
+                        {
+                          icon: icon,
+                          id: 'menu',
+                          color: 'white'
                         }
-                      }
+                      ],
                     }
                   }
                 }
-              ]
+              }
+            ],
+            options: {
+              sideMenu: {
+                right: {
+                  enabled: false,
+                  visible: false
+                },
+                openGestureMode: "bezel"
+              }
             }
           }
         }
       }
-    });
-  }
+    }
+  });
 
   // FIXME: これを setRoot の前に持っていくと動かなくなる
   Navigation.setDefaultOptions({

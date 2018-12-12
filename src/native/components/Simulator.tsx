@@ -59,100 +59,28 @@ type State = {
 
 export default class Simulator extends Component<Props, State> {
 
-  static options(passProps): Options | undefined {
-    switch (Platform.OS) {
-      case 'ios':
-        return {
-          sideMenu: {
-            right: {
-              // @ts-ignore
-              width: 200,
-              enabled: true,
-              visible: true
-            }
-          },
-          topBar: {
-            title: {
-              text: 'puyosim',
-              color: themeLightColor
-            },
-            background: {
-              color: themeColor
-            },
-            backButton: {
-              color: 'white'
-            }
-          },
-        };
-      case 'android':
-        return {
-          sideMenu: {
-            right: {
-              enabled: true,
-              visible: true
-            }
-          },
-          topBar: {
-            title: {
-              text: 'puyosim',
-              color: themeLightColor
-            },
-            background: {
-              color: themeColor
-            },
-            backButton: {
-              color: 'white'
-            },
-            rightButtons: [
-              {
-                text: t('about'),
-                id: 'about',
-                // @ts-ignore
-                showAsAction: 'never'
-              },
-              {
-                text: t('settings'),
-                id: 'settings',
-                showAsAction: 'never'
-              },
-              {
-                text: t('archive'),
-                id: 'save',
-                showAsAction: 'never'
-              },
-              {
-                text: t('loadArchive'),
-                id: 'load',
-                showAsAction: 'never'
-              },
-              {
-                text: t('shareViaTwitter'),
-                id: 'share-via-ips',
-                showAsAction: 'never'
-              },
-              {
-                text: t('restart'),
-                id: 'restart',
-                showAsAction: 'never'
-              },
-              {
-                text: t('reset'),
-                id: 'reset',
-                showAsAction: 'never'
-              },
-              {
-                text: t('history'),
-                id: 'history',
-                showAsAction: 'never'
-              },
-              {
-                text: t('undo'),
-                id: 'undo',
-                showAsAction: 'never'
-              }
-            ]
-          }
+  static options(passProps): Options {
+    return {
+      sideMenu: {
+        right: {
+          // @ts-ignore
+          width: (Platform.OS === 'ios' ? 200 : undefined),
+          enabled: true,
+          visible: true
         }
+      },
+      topBar: {
+        title: {
+          text: 'puyosim',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        },
+        backButton: {
+          color: 'white'
+        },
+      }
     }
   }
 
@@ -161,7 +89,7 @@ export default class Simulator extends Component<Props, State> {
     Navigation.events().bindComponent(this);
 
     this.state = {
-      isVisible: true,
+      isVisible: true
     }
   }
 
@@ -211,87 +139,6 @@ export default class Simulator extends Component<Props, State> {
           { cancelable: false }
         );
       });
-  }
-
-  navigationButtonPressed({ buttonId }) {
-    switch (buttonId) {
-      case 'undo':
-        this.props.onUndoSelected();
-        break;
-      case 'reset':
-        this.props.onResetSelected();
-        break;
-      case 'restart':
-        Alert.alert(
-          t('restart'),
-          t('confirmRestart'),
-          [
-            { text: 'Cancel', onPress: _.noop, style: 'cancel' },
-            { text: 'OK', onPress: this.props.onRestartSelected }
-          ],
-          { cancelable: false }
-        );
-        break;
-      case 'history':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.History' } });
-        break;
-      case 'share-via-ips':
-        //this.props.onShareSelected();
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } });
-        break;
-      case 'settings':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } });
-        break;
-      case 'about':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } });
-        break;
-      case 'load':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } });
-        break;
-      case 'save':
-        this.handleSavePressed()
-        break;
-      case 'menu':
-        ActionSheetIOS.showActionSheetWithOptions({
-          options: [
-            'Cancel',
-            'Undo',
-            'Reset',
-            'Restart',
-            'History',
-            'Share',
-            'Settings',
-            'Load',
-            'Save',
-            'About'
-          ],
-          destructiveButtonIndex: 0
-        }, selected => {
-          [
-            () => {
-            },
-            this.props.onUndoSelected,
-            this.props.onResetSelected,
-            () => Alert.alert(
-              t('restart'),
-              t('confirmRestart'),
-              [
-                { text: 'Cancel', onPress: _.noop, style: 'cancel' },
-                { text: 'OK', onPress: this.props.onRestartSelected }
-              ],
-              { cancelable: false }
-            ),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.History' } }),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } }),
-//              this.props.onShareSelected,
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } }),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } }),
-            () => this.handleSavePressed(),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } }),
-          ][selected]()
-        });
-        break;
-    }
   }
 
   componentDidAppear() {
