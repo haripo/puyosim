@@ -68,15 +68,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(redoField());
       dispatch(vanishPuyos());
     },
-    onResetSelected: () => {
-      dispatch(resetField());
-    },
-    onRestartSelected: () => {
-      dispatch(restart());
-    },
-    onShareSelected: () => {
-      dispatch(openTwitterShare());
-    },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))
     },

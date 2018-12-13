@@ -65,6 +65,7 @@ async function launch() {
         },
         center: {
           stack: {
+            id: 'centerStack',
             children: [
               {
                 component: {

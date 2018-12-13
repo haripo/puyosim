@@ -40,9 +40,6 @@ export type Props = {
 
   onUndoSelected: () => void,
   onRedoSelected: () => void,
-  onResetSelected: () => void,
-  onRestartSelected: () => void,
-  onShareSelected: () => void,
   onRotateLeftPressed: () => void,
   onRotateRightPressed: () => void,
   onMoveLeftPressed: () => void,
@@ -141,22 +138,26 @@ export default class Simulator extends Component<Props, State> {
       });
   }
 
+  navigationButtonPressed({ buttonId }) {
+    switch (buttonId) {
+      case 'menu':
+        Navigation.mergeOptions('sideMenu', {
+          sideMenu: {
+            right: {
+              visible: true
+            }
+          }
+        });
+        break;
+    }
+  }
+
   componentDidAppear() {
     this.setState({ isVisible: true });
   }
 
   componentDidDisappear() {
     this.setState({ isVisible: false });
-  }
-
-  handleSavePressed() {
-    Navigation.push(
-      this.props.componentId,
-      {
-        component: {
-          name: 'com.puyosimulator.SaveModal',
-        }
-      });
   }
 
   render() {
