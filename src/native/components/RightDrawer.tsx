@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
-import { contentsMargin, contentsPadding } from "../../shared/utils/constants";
+import { Alert, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { contentsMargin, contentsPadding, themeLightColor } from "../../shared/utils/constants";
 import IconButton from "../../shared/components/IconButton";
 import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
@@ -90,12 +90,35 @@ export default class RightDrawer extends Component<Props, State> {
     });
   }
 
-  render() {
+  renderMetric({ name, value }) {
     return (
-      <View style={ [styles.container, Platform.OS === 'ios' ? { width: 200 } : null] }>
-        <Text>
-          hoge
-        </Text>
+      <View style={ styles.metricItem } key={ name }>
+        <View style={ styles.metricKey }>
+          <Text style={ styles.metricText }>
+            { name }
+          </Text>
+        </View>
+        <View style={ styles.metricValue }>
+          <Text style={ styles.metricText }>
+            { value }
+          </Text>
+        </View>
+      </View>
+    )
+  }
+
+  render() {
+    const metrics = [
+      { name: '連鎖数', value: 100 },
+      { name: '累計スコア', value: 10000 },
+      { name: 'ちぎり数', value: 1 }
+    ];
+
+    return (
+      <View style={ [styles.container, Platform.OS === 'ios' ? styles.iosStyle : null] }>
+        <View style={ styles.metrics }>
+          { metrics.map(m => this.renderMetric(m)) }
+        </View>
         <View style={ styles.buttons }>
           <View style={ styles.buttonGroup }>
             <IconButton
@@ -176,5 +199,30 @@ const styles = StyleSheet.create({
   },
   controllerRightButton: {
     marginLeft: contentsMargin
+  },
+  iosStyle: {
+    width: 200,
+    paddingTop: 20
+  },
+  metrics: {
+    padding: contentsPadding
+  },
+  metricItem: {
+    marginBottom: contentsPadding,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  metricKey: {
+    flex: 1,
+    padding: contentsPadding,
+    marginRight: contentsPadding
+  },
+  metricValue: {
+    flex: 1,
+    backgroundColor: themeLightColor,
+    padding: contentsPadding
+  },
+  metricText: {
+    textAlign: 'right'
   }
 });
