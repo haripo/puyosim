@@ -1,9 +1,7 @@
-import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { ActionSheetIOS, Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
+import { Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
-import { Layout as NavigationLayout } from "react-native-navigation/lib/dist/interfaces/Layout";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
