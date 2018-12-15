@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity, archiveCurrentField, finishDroppingAnimations,
+  applyGravity,
+  finishDroppingAnimations,
   finishVanishingAnimations,
   moveHighlightsLeft,
   moveHighlightsRight,
-  openTwitterShare,
-  putNextPair, reconstructHistory,
+  putNextPair,
+  reconstructHistory,
   redoField,
-  resetField,
-  restart,
   rotateHighlightsLeft,
   rotateHighlightsRight,
   undoField,
@@ -20,7 +19,8 @@ import {
   canUndo,
   getGhost,
   getPendingPair,
-  getStack, getVanishingPuyos,
+  getStack,
+  getVanishingPuyos,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
@@ -67,15 +67,6 @@ const mapDispatchToProps = (dispatch) => {
     onRedoSelected: () => {
       dispatch(redoField());
       dispatch(vanishPuyos());
-    },
-    onResetSelected: () => {
-      dispatch(resetField());
-    },
-    onRestartSelected: () => {
-      dispatch(restart());
-    },
-    onShareSelected: () => {
-      dispatch(openTwitterShare());
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))

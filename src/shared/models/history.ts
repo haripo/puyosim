@@ -1,4 +1,4 @@
-import { createField, Pair, setPair, Stack } from './stack';
+import { createField, getSplitHeight, Pair, setPair, Stack } from './stack';
 import { isEqualMove, Move } from "./move";
 import { fieldCols, fieldRows } from "../utils/constants";
 import { createChainPlan } from "./chainPlanner";
@@ -12,6 +12,7 @@ export type HistoryRecord = {
   score: number,
   chain: number,
   chainScore: number,
+  numSplit: number,
   prev: number | null,
   next: number[],
   defaultNext: number | null
@@ -46,6 +47,7 @@ export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
     score: 0,
     chain: 0,
     chainScore: 0,
+    numSplit: 0,
     prev: null,
     next: [],
     defaultNext: null
@@ -54,7 +56,7 @@ export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
 
 export function createHistoryRecord(
   move: Move, pair: Pair, numHands: number, stack: Stack,
-  chain: number, score: number, chainScore: number): HistoryRecord {
+  chain: number, score: number, chainScore: number, numSplit: number): HistoryRecord {
   return {
     move,
     pair,
@@ -63,6 +65,7 @@ export function createHistoryRecord(
     score,
     chain,
     chainScore,
+    numSplit,
     prev: null,
     next: [],
     defaultNext: null
@@ -146,6 +149,7 @@ export function createHistoryFromMinimumHistory(
     const prev = index in backtrack ? backtrack[index] : 0;
     const numHands = resultRecords[prev].numHands + 1;
     const pair = queue[(numHands - 1) % queue.length];
+    const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
     const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
     const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
 
@@ -169,6 +173,7 @@ export function createHistoryFromMinimumHistory(
       chain: chainResult.chain,
       chainScore: chainResult.score,
       next: record.next.map(n => n + 1),
+      numSplit: resultRecords[prev].numSplit + (splitHeight ? 1 : 0),
       defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
       prev: prev
     });

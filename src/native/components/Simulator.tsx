@@ -1,6 +1,5 @@
-import * as _ from 'lodash';
 import React, { Component } from 'react';
-import { ActionSheetIOS, Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
+import { Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
@@ -18,6 +17,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
+import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
 
 export type Props = {
   componentId: string,
@@ -38,9 +38,6 @@ export type Props = {
 
   onUndoSelected: () => void,
   onRedoSelected: () => void,
-  onResetSelected: () => void,
-  onRestartSelected: () => void,
-  onShareSelected: () => void,
   onRotateLeftPressed: () => void,
   onRotateRightPressed: () => void,
   onMoveLeftPressed: () => void,
@@ -57,91 +54,28 @@ type State = {
 
 export default class Simulator extends Component<Props, State> {
 
-  static options(passProps) {
-    switch (Platform.OS) {
-      case 'ios':
-        return {
-          topBar: {
-            title: {
-              text: 'puyosim',
-              color: themeLightColor
-            },
-            background: {
-              color: themeColor
-            },
-            backButton: {
-              color: 'white'
-            }
-          },
-          layout: {
-            orientation: 'portrait'
-          }
-        };
-      case 'android':
-        return {
-          topBar: {
-            title: {
-              text: 'puyosim',
-              color: themeLightColor
-            },
-            background: {
-              color: themeColor
-            },
-            backButton: {
-              color: 'white'
-            },
-            rightButtons: [
-              {
-                text: t('about'),
-                id: 'about',
-                showAsAction: 'never',
-              },
-              {
-                text: t('settings'),
-                id: 'settings',
-                showAsAction: 'never'
-              },
-              {
-                text: t('archive'),
-                id: 'save',
-                showAsAction: 'never'
-              },
-              {
-                text: t('loadArchive'),
-                id: 'load',
-                showAsAction: 'never'
-              },
-              {
-                text: t('shareViaTwitter'),
-                id: 'share-via-ips',
-                showAsAction: 'never'
-              },
-              {
-                text: t('restart'),
-                id: 'restart',
-                showAsAction: 'never'
-              },
-              {
-                text: t('reset'),
-                id: 'reset',
-                showAsAction: 'never'
-              },
-              {
-                text: t('history'),
-                id: 'history',
-                showAsAction: 'never'
-              },
-              {
-                text: t('undo'),
-                id: 'undo',
-                showAsAction: 'never'
-              }
-            ]
-          },
-          layout: {
-            orientation: 'portrait'
-          }
+  static options(passProps): Options {
+    return {
+      sideMenu: {
+        right: {
+          // @ts-ignore
+          width: (Platform.OS === 'ios' ? 200 : undefined),
+          enabled: true,
+          visible: true
         }
+      },
+      topBar: {
+        title: {
+          text: 'puyosim',
+          color: themeLightColor
+        },
+        background: {
+          color: themeColor
+        },
+        backButton: {
+          color: 'white'
+        },
+      }
     }
   }
 
@@ -150,7 +84,7 @@ export default class Simulator extends Component<Props, State> {
     Navigation.events().bindComponent(this);
 
     this.state = {
-      isVisible: true,
+      isVisible: true
     }
   }
 
@@ -204,80 +138,13 @@ export default class Simulator extends Component<Props, State> {
 
   navigationButtonPressed({ buttonId }) {
     switch (buttonId) {
-      case 'undo':
-        this.props.onUndoSelected();
-        break;
-      case 'reset':
-        this.props.onResetSelected();
-        break;
-      case 'restart':
-        Alert.alert(
-          t('restart'),
-          t('confirmRestart'),
-          [
-            { text: 'Cancel', onPress: _.noop, style: 'cancel' },
-            { text: 'OK', onPress: this.props.onRestartSelected }
-          ],
-          { cancelable: false }
-        );
-        break;
-      case 'history':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.History' } });
-        break;
-      case 'share-via-ips':
-        //this.props.onShareSelected();
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } });
-        break;
-      case 'settings':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } });
-        break;
-      case 'about':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } });
-        break;
-      case 'load':
-        Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } });
-        break;
-      case 'save':
-        this.handleSavePressed()
-        break;
       case 'menu':
-        ActionSheetIOS.showActionSheetWithOptions({
-          options: [
-            'Cancel',
-            'Undo',
-            'Reset',
-            'Restart',
-            'History',
-            'Share',
-            'Settings',
-            'Load',
-            'Save',
-            'About'
-          ],
-          destructiveButtonIndex: 0
-        }, selected => {
-          [
-            () => {
-            },
-            this.props.onUndoSelected,
-            this.props.onResetSelected,
-            () => Alert.alert(
-              t('restart'),
-              t('confirmRestart'),
-              [
-                { text: 'Cancel', onPress: _.noop, style: 'cancel' },
-                { text: 'OK', onPress: this.props.onRestartSelected }
-              ],
-              { cancelable: false }
-            ),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.History' } }),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Share' } }),
-//              this.props.onShareSelected,
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Settings' } }),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.Archive' } }),
-            () => this.handleSavePressed(),
-            () => Navigation.push(this.props.componentId, { component: { name: 'com.puyosimulator.About' } }),
-          ][selected]()
+        Navigation.mergeOptions('sideMenu', {
+          sideMenu: {
+            right: {
+              visible: true
+            }
+          }
         });
         break;
     }
@@ -289,16 +156,6 @@ export default class Simulator extends Component<Props, State> {
 
   componentDidDisappear() {
     this.setState({ isVisible: false });
-  }
-
-  handleSavePressed() {
-    Navigation.push(
-      this.props.componentId,
-      {
-        component: {
-          name: 'com.puyosimulator.SaveModal',
-        }
-      });
   }
 
   render() {
