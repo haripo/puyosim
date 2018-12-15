@@ -37,7 +37,7 @@ import {
 // TODO: ここで react-native を import しない
 import { Linking } from 'react-native';
 import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
-import { applyDropPlans, applyVanishPlans, createField, setPair, Stack } from '../models/stack';
+import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair, Stack } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import { ArchivedPlay } from "../utils/StorageService.native";
@@ -50,6 +50,7 @@ export type SimulatorState = {
   chain: number,
   chainScore: number,
   score: number,
+  numSplit: number,
   isResetChainRequired: boolean,
   pendingPair: Move,
   droppingPuyos: DroppingPlan[],
@@ -85,6 +86,7 @@ function putNextPair(state: SimulatorState, action) {
   const hand = getCurrentHand(state);
   const move = state.pendingPair;
   const prevStack = state.stack;
+  const splitHeight = getSplitHeight(prevStack, move);
 
   state.stack = setPair(prevStack, move, hand);
 
@@ -96,6 +98,7 @@ function putNextPair(state: SimulatorState, action) {
   state.numHands += 1;
   state.isResetChainRequired = true;
   state.pendingPair = getDefaultNextMove(state);
+  state.numSplit += splitHeight ? 1 : 0;
 
   const record = createHistoryRecord(
     move,
@@ -104,7 +107,8 @@ function putNextPair(state: SimulatorState, action) {
     state.stack,
     state.chain,
     state.score,
-    state.chainScore);
+    state.chainScore,
+    state.numSplit);
 
   let result = appendHistoryRecord({
     version: 0,
@@ -303,6 +307,7 @@ function createInitialState(config): SimulatorState {
     chain: 0,
     chainScore: 0,
     score: 0,
+    numSplit: 0,
     isResetChainRequired: false,
     pendingPair: getDefaultMove(),
     droppingPuyos: [],

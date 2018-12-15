@@ -40,6 +40,10 @@ function getDropRowFromCol(stack: Stack, col: number): number {
   return i;
 }
 
+export function getSplitHeight(stack: Stack, move: Move): number {
+  return getDropRowFromCol(stack, getFirstCol(move)) - getDropRowFromCol(stack, getSecondCol(move));
+}
+
 export function getDropPositions(stack: Stack, move: Move, pair: Pair): PendingPairPuyo[] {
   const firstCol = getFirstCol(move);
   const secondCol = getSecondCol(move);

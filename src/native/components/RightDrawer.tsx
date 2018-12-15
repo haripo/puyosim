@@ -11,6 +11,12 @@ import t from '../../shared/utils/i18n';
 export type Props = {
   componentId: string,
 
+  score: number,
+  chainScore: number,
+  numHands: number,
+  chain: number,
+  numSplit: number,
+
   onResetSelected: () => void,
   onRestartSelected: () => void,
   onShareSelected: () => void,
@@ -109,9 +115,11 @@ export default class RightDrawer extends Component<Props, State> {
 
   render() {
     const metrics = [
-      { name: '連鎖数', value: 100 },
-      { name: '累計スコア', value: 10000 },
-      { name: 'ちぎり数', value: 1 }
+      { name: '連鎖数', value: this.props.chain },
+      { name: '連鎖スコア', value: this.props.chainScore },
+      { name: '累計スコア', value: this.props.score },
+      { name: '手数', value: this.props.numHands },
+      { name: 'ちぎり回数', value: this.props.numSplit },
     ];
 
     return (
