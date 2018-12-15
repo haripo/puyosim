@@ -176,6 +176,7 @@ function revertFromRecord(state: SimulatorState, record: HistoryRecord) {
   state.chainScore = record.chainScore;
   state.chain = record.chain;
   state.score = record.score;
+  state.numSplit = record.numSplit;
 
   return state
 }
