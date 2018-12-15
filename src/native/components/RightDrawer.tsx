@@ -115,11 +115,11 @@ export default class RightDrawer extends Component<Props, State> {
 
   render() {
     const metrics = [
-      { name: '連鎖数', value: this.props.chain },
-      { name: '連鎖スコア', value: this.props.chainScore },
-      { name: '累計スコア', value: this.props.score },
-      { name: '手数', value: this.props.numHands },
-      { name: 'ちぎり回数', value: this.props.numSplit },
+      { name: t('numChain'), value: this.props.chain },
+      { name: t('chainScore'), value: this.props.chainScore },
+      { name: t('totalScore'), value: this.props.score },
+      { name: t('numHands'), value: this.props.numHands },
+      { name: t('numSplit'), value: this.props.numSplit },
     ];
 
     return (

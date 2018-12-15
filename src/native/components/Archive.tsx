@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import ReactNative, { Alert, FlatList, StyleSheet, Text, TouchableOpacity, UIManager, View } from 'react-native';
-import { contentsMargin, fieldCols, fieldRows, themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin, fieldCols, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 import _ from 'lodash';
 import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
 import { Navigation } from "react-native-navigation";
-
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
 
@@ -76,11 +74,11 @@ export default class Archive extends Component<Props, State> {
           break;
         case 1: // delete
           Alert.alert(
-            'delete',
-            'delete?',
+            t('delete'),
+            t('deleteMessage'),
             [
               {
-                text: 'Cancel', // TODO: i18n
+                text: 'Cancel',
                 style: 'cancel'
               },
               {
@@ -100,8 +98,8 @@ export default class Archive extends Component<Props, State> {
     UIManager.showPopupMenu(
       ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
       [
-        'edit',// TODO: i18n
-        'delete'
+        t('edit'),
+        t('delete')
       ],
       () => console.warn('something went wrong with the popup menu'),
       (event, index) => this.handlePopupMenuItemSelected(event, index, item)

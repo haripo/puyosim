@@ -4,6 +4,9 @@ import { themeColor, themeLightColor } from "../../shared/utils/constants";
 import { Navigation } from "react-native-navigation";
 import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 
+// @ts-ignore
+import { t } from "../../shared/utils/i18n";
+
 export type Props = {
   componentId: string,
   onSavePressed: (id: string | null, title: string) => void,
@@ -21,7 +24,7 @@ export default class SaveModal extends Component<Props, State> {
     return {
       topBar: {
         title: {
-          text: 'Save field', // TODO: i18n
+          text: t('saveArchive'),
           color: themeLightColor
         },
         background: {
@@ -34,7 +37,7 @@ export default class SaveModal extends Component<Props, State> {
           {
             id: 'save-done',
             color: 'white',
-            text: 'DONE'
+            text: t('saveModalDone')
           }
         ]
       },
@@ -87,10 +90,10 @@ export default class SaveModal extends Component<Props, State> {
     return (
       <View style={ styles.container }>
         <Text>
-          Title
+          { t('saveModalTitle') }
         </Text>
         <TextInput
-          placeholder={ 'タイトル' }
+          placeholder={ t('saveModalTitlePlaceholder') }
           style={ styles.titleInput }
           value={ this.state.title }
           onChangeText={ this.handleTitleChanged.bind(this) }

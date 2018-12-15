@@ -3,6 +3,9 @@ import _ from 'lodash';
 
 const translations = {
   'ja': {
+    edit: '編集',
+    delete: '削除',
+
     chain: '連鎖',
     points: '点',
     total: 'トータル',
@@ -43,6 +46,13 @@ const translations = {
     puyoSkinDefault: 'デフォルト',
     puyoSkinCharacter: '文字',
 
+    // right drawer
+    numChain: '連鎖数',
+    chainScore: '連鎖スコア',
+    totalScore: '累計スコア',
+    numHands: '手数',
+    numSplit: 'ちぎり回数',
+
     // share
     share: '共有',
     shareWholeHistory: 'すべての操作履歴をシェア',
@@ -55,6 +65,11 @@ const translations = {
 
     // archive
     lastModified: '更新日',
+    saveArchive: '保存',
+    saveModalDone: '完了',
+    saveModalTitlePlaceholder: 'タイトルを入力',
+    saveModalTitle: 'タイトル',
+    deleteMessage: '削除しますか？',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
@@ -68,6 +83,9 @@ const translations = {
     }
   },
   'en': {
+    edit: 'Edit',
+    delete: 'Delete',
+
     chain: 'chain',
     points: 'points',
     total: 'total',
@@ -107,6 +125,13 @@ const translations = {
     puyoSkinDefault: 'Default',
     puyoSkinCharacter: 'Character',
 
+    // right drawer
+    numChain: 'chain',
+    chainScore: 'chain score',
+    totalScore: 'total score',
+    numHands: 'hands',
+    numSplit: 'splits',
+
     // share
     share: 'Share',
     shareWholeHistory: 'Share whole moves',
@@ -118,7 +143,12 @@ const translations = {
     openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
 
     // archive
+    saveArchive: 'Save field',
     lastModified: 'Last modified',
+    saveModalDone: 'done',
+    saveModalTitlePlaceholder: 'some title here',
+    saveModalTitle: 'Title',
+    deleteMessage: 'Delete?',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
