@@ -43,7 +43,8 @@ export default class SaveModal extends Component<Props, State> {
       },
       layout: {
         orientation: 'portrait'
-      }
+      },
+      blurOnUnmount: true
     }
   }
 

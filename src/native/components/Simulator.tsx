@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Platform, StyleSheet, View, ViewStyle } from 'react-native';
+import { Alert, Text, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
@@ -49,7 +49,8 @@ export type Props = {
 }
 
 type State = {
-  isVisible: boolean
+  isVisible: boolean,
+  isLoading: boolean
 }
 
 export default class Simulator extends Component<Props, State> {
@@ -84,7 +85,8 @@ export default class Simulator extends Component<Props, State> {
     Navigation.events().bindComponent(this);
 
     this.state = {
-      isVisible: true
+      isVisible: true,
+      isLoading: false
     }
   }
 
@@ -151,7 +153,11 @@ export default class Simulator extends Component<Props, State> {
   }
 
   componentDidAppear() {
-    this.setState({ isVisible: true });
+    // Android でキーボードが表示されているとレイアウトが崩れる
+    // （LayoutBaseContainer がキーボードを含まない範囲を view と認識する）
+    // ので、キーボードが消えるまで 1000ms 程度待つ
+    this.setState({ isVisible: true, isLoading: true });
+    setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
 
   componentDidDisappear() {
@@ -160,7 +166,7 @@ export default class Simulator extends Component<Props, State> {
 
   render() {
     return (
-      <LayoutBaseContainer>
+      <LayoutBaseContainer isLoading={ this.state.isLoading }>
         <View
           style={ styles.container }>
           <View style={ styles.contents }>

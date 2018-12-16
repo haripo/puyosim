@@ -17,7 +17,8 @@ type LayoutEvent = {
 
 type Props = {
   theme: Theme,
-  onLayout: (_: { width: number, height: number }) => void
+  onLayout: (_: { width: number, height: number }) => void,
+  isLoading?: boolean
 }
 
 type State = {
@@ -70,7 +71,7 @@ class LayoutBaseContainer extends Component<Props, State> {
         style={{ flex: 1 }}
         onLayout={ this.handleLayout.bind(this) }
         ref={ r => this.view = r }>
-        { this.state.loading ? this.renderIndicator() : this.props.children }
+        { this.state.loading || this.props.isLoading ? this.renderIndicator() : this.props.children }
       </View>
     )
   }
