@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import ReactNative, { Alert, FlatList, StyleSheet, Text, TouchableOpacity, UIManager, View } from 'react-native';
+import ReactNative, {
+  ActionSheetIOS,
+  Alert,
+  FlatList,
+  LayoutAnimation, Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  UIManager,
+  View
+} from 'react-native';
 import { contentsMargin, fieldCols, themeColor, themeLightColor } from '../../shared/utils/constants';
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
@@ -45,6 +55,8 @@ export default class Archive extends Component<Props, State> {
 
   componentDidMount() {
     this.props.onArchiveOpened();
+
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
   handleItemClicked(id: string) {
@@ -54,6 +66,7 @@ export default class Archive extends Component<Props, State> {
 
   handleDeleteConfirmed(item: ArchivedPlay) {
     // TODO: delete item
+    LayoutAnimation.easeInEaseOut();
     this.props.onDeleteSelected(item.id);
   }
 
