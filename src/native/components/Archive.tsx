@@ -95,15 +95,26 @@ export default class Archive extends Component<Props, State> {
 
   handleItemLongPressed(item: ArchivedPlay, itemIndex: number) {
     // @ts-ignore
-    UIManager.showPopupMenu(
-      ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
-      [
-        t('edit'),
-        t('delete')
-      ],
-      () => console.warn('something went wrong with the popup menu'),
-      (event, index) => this.handlePopupMenuItemSelected(event, index, item)
-    );
+    if (Platform.OS === 'android') {
+      UIManager.showPopupMenu(
+        ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
+        [
+          t('edit'),
+          t('delete')
+        ],
+        () => console.warn('something went wrong with the popup menu'),
+        (event, index) => this.handlePopupMenuItemSelected(event, index, item)
+      );
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions({
+        options: [
+          t('edit'),
+          t('delete')
+        ],
+      }, buttonIndex => {
+        this.handlePopupMenuItemSelected('itemSelected', buttonIndex, item);
+      })
+    }
   }
 
   handleEndReached() {
