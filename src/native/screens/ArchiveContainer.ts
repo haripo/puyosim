@@ -16,8 +16,7 @@ import { State } from "../../shared/reducers";
 import {
   deleteArchive,
   loadArchive,
-  loadArchivesListFirstPage,
-  loadArchivesListNextPage
+  loadArchiveListFirstPage, loadArchiveListNextPage
 } from "../../shared/actions/actions";
 import { getArchivedPlays } from "../../shared/selectors/archiveSelectors";
 
@@ -46,13 +45,13 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onArchiveOpened() {
-      dispatch(loadArchivesListFirstPage());
+      dispatch(loadArchiveListFirstPage());
     },
     onItemPressed(id: string) {
       dispatch(loadArchive(id));
     },
     onEndReached() {
-      dispatch(loadArchivesListNextPage());
+      dispatch(loadArchiveListNextPage());
     },
     onDeleteSelected(id: string) {
       dispatch(deleteArchive(id))

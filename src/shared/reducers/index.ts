@@ -23,7 +23,7 @@ let initialState: State = {
 
 export default function (state: State = initialState, action): State {
   return produce<State>(state, _state => {
-    _state.simulator = simulator.reducer(_state.simulator, action, _state.config);
+    _state.simulator = simulator.reducer(_state.simulator, action, _state.config, _state.archive);
     _state.config = config.reducer(_state.config, action);
     _state.layout = layout.reducer(_state.layout, action);
     _state.theme = theme.reducer(_state.theme, action);

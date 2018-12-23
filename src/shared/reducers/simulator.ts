@@ -286,8 +286,8 @@ function reconstructHistory(state: SimulatorState, action): SimulatorState {
   return state;
 }
 
-function loadArchiveFinished(state: SimulatorState, action) {
-  const play: ArchivedPlay = action.play;
+function loadArchive(state: SimulatorState, action, archive) {
+  const play: ArchivedPlay = archive.plays[action.id];
   state.playId = play.id;
   state.queue = _.chunk(play.queue, 2);
   state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(play.history), state.queue);
@@ -330,7 +330,7 @@ export function getInitialState(config) {
   return loadOrCreateInitialState(config);
 }
 
-export const reducer = (state, action, config) => {
+export const reducer = (state, action, config, archive) => {
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
@@ -364,8 +364,8 @@ export const reducer = (state, action, config) => {
       return restart(state, action, config);
     case RECONSTRUCT_HISTORY:
       return reconstructHistory(state, action);
-    case LOAD_ARCHIVE_FINISHED:
-      return loadArchiveFinished(state, action);
+    case LOAD_ARCHIVE:
+      return loadArchive(state, action, archive);
     case OPEN_TWITTER_SHARE:
       return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:

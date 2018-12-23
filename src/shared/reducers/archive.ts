@@ -1,8 +1,9 @@
 import { ArchivedPlay, loadArchivedPlays } from "../utils/StorageService.native";
 import {
-  DELETE_ARCHIVE_FINISHED, EDIT_ARCHIVE_FINISHED,
-  LOAD_ARCHIVES_LIST_FIRST_PAGE,
-  LOAD_ARCHIVES_LIST_NEXT_PAGE
+  DELETE_ARCHIVE_FINISHED,
+  EDIT_ARCHIVE_FINISHED,
+  LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED,
+  LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED
 } from "../actions/actions";
 
 export type ArchiveState = {
@@ -15,23 +16,19 @@ export const initialState: ArchiveState = {
   sortedIds: []
 };
 
-const pageSize = 20;
-
-function loadArchivesListFirstPage(state: ArchiveState, action): ArchiveState {
-  const items = loadArchivedPlays(0, pageSize);
-  for (let item of items) {
+function loadArchiveListFirstPageFinished(state: ArchiveState, { plays }): ArchiveState {
+  for (let item of plays) {
     state.plays[item.id] = item;
   }
-  state.sortedIds = items.map(item => item.id);
+  state.sortedIds = plays.map(item => item.id);
   return state;
 }
 
-function loadArchivesListNextPage(state: ArchiveState, action): ArchiveState {
-  const items = loadArchivedPlays(state.sortedIds.length, pageSize);
-  for (let item of items) {
+function loadArchivesListNextPageFinished(state: ArchiveState, { plays }): ArchiveState {
+  for (let item of plays) {
     state.plays[item.id] = item;
   }
-  state.sortedIds.push(...items.map(item => item.id));
+  state.sortedIds.push(...plays.map(item => item.id));
   return state;
 }
 
@@ -56,10 +53,10 @@ function editArchiveFinished(state: ArchiveState, action): ArchiveState {
 
 export const reducer = (state: ArchiveState, action): ArchiveState => {
   switch (action.type) {
-    case LOAD_ARCHIVES_LIST_FIRST_PAGE:
-      return loadArchivesListFirstPage(state, action);
-    case LOAD_ARCHIVES_LIST_NEXT_PAGE:
-      return loadArchivesListNextPage(state, action);
+    case LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED:
+      return loadArchiveListFirstPageFinished(state, action);
+    case LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED:
+      return loadArchivesListNextPageFinished(state, action);
     case EDIT_ARCHIVE_FINISHED:
       return editArchiveFinished(state, action);
     case DELETE_ARCHIVE_FINISHED:

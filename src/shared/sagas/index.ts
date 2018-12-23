@@ -1,43 +1,50 @@
-import { put, select, take, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
   ARCHIVE_CURRENT_FIELD,
   DELETE_ARCHIVE,
-  DELETE_ARCHIVE_FINISHED, EDIT_ARCHIVE, EDIT_ARCHIVE_FINISHED, editArchiveFinished,
-  LOAD_ARCHIVE,
-  LOAD_ARCHIVE_FINISHED
+  deleteArchiveFinished,
+  EDIT_ARCHIVE,
+  editArchiveFinished,
+  LOAD_ARCHIVE_LIST_FIRST_PAGE,
+  LOAD_ARCHIVE_LIST_NEXT_PAGE,
+  loadArchiveListFirstPageFinished,
+  loadArchiveListNextPageFinished
 } from "../actions/actions";
-import {
-  archiveCurrentPlay,
-  deleteArchivedPlay,
-  editArchivedPlay,
-  loadArchivedPlay
-} from "../utils/StorageService.native";
 import { getArchivedPlay } from "../selectors/simulatorSelectors";
+import { deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
+import { State } from "../reducers";
 
 function* handleArchiveField(action) {
   const play = yield select<any>(state => getArchivedPlay(state.simulator, action.title));
-  // いつか非同期にしたい
-  archiveCurrentPlay(play);
+  yield call(saveArchive, play);
 }
 
-function* handleLoadArchivedPlay(action) {
-  const play = loadArchivedPlay(action.id);
-  yield put({ type: LOAD_ARCHIVE_FINISHED, play })
+function* handleLoadArchiveListFirstPage(action) {
+  const plays = yield call(loadArchiveList, null, 5);
+  yield put(loadArchiveListFirstPageFinished(plays));
+}
+
+function* handleLoadArchiveListNextPage(action) {
+  const ids = yield select<State>(state => state.archive.sortedIds);
+  const lastItem = yield select<State>(state => state.archive.plays[ids[ids.length - 1]]);
+  const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count);
+  yield put(loadArchiveListNextPageFinished(plays));
 }
 
 function* handleEditArchivedPlay(action) {
-  const play = editArchivedPlay(action.id, action.title);
+  const play = yield call(saveArchive, action.play);
   yield put(editArchiveFinished(play));
 }
 
 function* handleDeleteArchivedPlay(action) {
-  deleteArchivedPlay(action.id);
-  yield put({ type: DELETE_ARCHIVE_FINISHED, id: action.id })
+  yield call(deleteArchive, action.id);
+  yield put(deleteArchiveFinished(action.id));
 }
 
 function* sagas() {
   yield takeEvery(ARCHIVE_CURRENT_FIELD, handleArchiveField);
-  yield takeEvery(LOAD_ARCHIVE, handleLoadArchivedPlay);
+  yield takeEvery(LOAD_ARCHIVE_LIST_FIRST_PAGE, handleLoadArchiveListFirstPage);
+  yield takeEvery(LOAD_ARCHIVE_LIST_NEXT_PAGE, handleLoadArchiveListNextPage);
   yield takeEvery(EDIT_ARCHIVE, handleEditArchivedPlay);
   yield takeEvery(DELETE_ARCHIVE, handleDeleteArchivedPlay);
 }

@@ -4,6 +4,7 @@ import SaveModal from "../components/SaveModal";
 import { getStack } from "../../shared/selectors/simulatorSelectors";
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
+import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 
 const mapStateToProps = (state) => {
   return {
@@ -16,11 +17,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSavePressed: (id: string | null, title: string) => {
-      if (id) {
-        dispatch(editArchive(id, title));
+    onSavePressed: (play: ArchivedPlay) => {
+      if (play.id) {
+        dispatch(editArchive(play));
       } else {
-        dispatch(archiveCurrentField(title));
+        dispatch(archiveCurrentField(play.title));
       }
     },
   };
