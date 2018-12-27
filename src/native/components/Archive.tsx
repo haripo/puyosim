@@ -25,6 +25,7 @@ export interface Props {
   onItemPressed: (id: string) => void,
   onEndReached: () => void,
   onDeleteSelected: (id: string) => void
+  onLoginRequested: () => void
 }
 
 interface State {
@@ -45,6 +46,7 @@ export default class Archive extends Component<Props, State> {
 
   componentDidMount() {
     this.props.onArchiveOpened();
+    this.props.onLoginRequested();
   }
 
   handleItemClicked(id: string) {

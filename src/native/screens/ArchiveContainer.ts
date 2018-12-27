@@ -16,7 +16,7 @@ import { State } from "../../shared/reducers";
 import {
   deleteArchive,
   loadArchive,
-  loadArchiveListFirstPage, loadArchiveListNextPage
+  loadArchiveListFirstPage, loadArchiveListNextPage, requestLogin
 } from "../../shared/actions/actions";
 import { getArchivedPlays } from "../../shared/selectors/archiveSelectors";
 
@@ -55,6 +55,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDeleteSelected(id: string) {
       dispatch(deleteArchive(id))
+    },
+    onLoginRequested() {
+      dispatch(requestLogin());
     }
   };
 };

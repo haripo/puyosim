@@ -3,6 +3,7 @@ import * as config from './config';
 import * as layout from './layout';
 import * as theme from './theme';
 import * as archive from './archive';
+import * as auth from './auth';
 import produce from 'immer';
 
 export interface State {
@@ -10,7 +11,8 @@ export interface State {
   config: any,
   layout: layout.LayoutState,
   theme: theme.ThemeState,
-  archive: archive.ArchiveState
+  archive: archive.ArchiveState,
+  auth: auth.AuthState
 }
 
 let initialState: State = {
@@ -18,7 +20,8 @@ let initialState: State = {
   config: config.initialState,
   layout: layout.initialState,
   theme: theme.initialState,
-  archive: archive.initialState
+  archive: archive.initialState,
+  auth: auth.initialState
 };
 
 export default function (state: State = initialState, action): State {
@@ -28,6 +31,7 @@ export default function (state: State = initialState, action): State {
     _state.layout = layout.reducer(_state.layout, action);
     _state.theme = theme.reducer(_state.theme, action);
     _state.archive = archive.reducer(_state.archive, action);
+    _state.auth = auth.reducer(_state.auth, action);
     return _state;
   });
 };
