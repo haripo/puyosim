@@ -29,12 +29,13 @@ export interface Props {
   layout: Layout,
   stack: StackForRendering,
 
-  archivedPlays: ArchivedPlay[],
+  archivedPlays: ArchivedPlay[],  
 
   onArchiveOpened: () => void,
   onItemPressed: (id: string) => void,
   onEndReached: () => void,
   onDeleteSelected: (id: string) => void
+  onLoginRequested: () => void
 }
 
 interface State {
@@ -55,7 +56,7 @@ export default class Archive extends Component<Props, State> {
 
   componentDidMount() {
     this.props.onArchiveOpened();
-
+    this.props.onLoginRequested();
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 

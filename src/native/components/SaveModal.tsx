@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { themeColor, themeLightColor } from "../../shared/utils/constants";
@@ -9,7 +10,7 @@ import { t } from "../../shared/utils/i18n";
 
 export type Props = {
   componentId: string,
-  onSavePressed: (id: string | null, title: string) => void,
+  onSavePressed: (play: ArchivedPlay) => void,
 
   editItem: ArchivedPlay | undefined,
 }
@@ -54,7 +55,7 @@ export default class SaveModal extends Component<Props, State> {
 
     if (props.editItem) {
       this.state = {
-        title: props.editItem.title.toString() // realm オブジェクトを文字列に直す
+        title: props.editItem.title
       }
     } else {
       this.state = {
@@ -64,10 +65,9 @@ export default class SaveModal extends Component<Props, State> {
   }
 
   handleDonePressed() {
-    this.props.onSavePressed(
-      this.props.editItem ? this.props.editItem.id : null,
-      this.state.title || 'No title'
-    );
+    let play = _.cloneDeep(this.props.editItem || {}) as ArchivedPlay;
+    play.title = this.state.title || 'No title';
+    this.props.onSavePressed(play);
 
     // TODO: show loading indicator
     Navigation.pop(this.props.componentId);

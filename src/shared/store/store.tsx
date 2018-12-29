@@ -28,7 +28,7 @@ function getSagaMiddleware() {
 
 function getMiddleware(saga, raven, logger) {
   if (__DEV__) {
-    return composeWithDevTools(applyMiddleware(saga/*, logger*/));
+    return composeWithDevTools(applyMiddleware(saga, logger));
   }
   return applyMiddleware(saga, raven);
 }

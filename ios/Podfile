@@ -22,8 +22,11 @@ target 'PuyoSimulator' do
   # use_frameworks!
 
   # Pods for PuyoSimulator
-  pod 'Firebase/Core', '~> 5.3.0'
-  pod 'Firebase/DynamicLinks'
+  pod 'GoogleAppMeasurement', '~> 5.3.0'
+  pod 'Firebase/Core', '~> 5.11.0'
+  pod 'Firebase/DynamicLinks', '~> 5.11.0'
+  pod 'Firebase/Firestore', '~> 5.11.0'
+  pod 'Firebase/Auth', '~> 5.11.0'
 
 # pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 

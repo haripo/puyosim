@@ -23,6 +23,7 @@ import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.links.RNFirebaseLinksPackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.realm.react.RealmReactPackage;
 import io.sentry.RNSentryPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
@@ -47,6 +48,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                     new RNSharePackage(),
                     new RNFirebasePackage(),
                     new RNFirebaseFirestorePackage(),
+                    new RNFirebaseAuthPackage(),
                     new RealmReactPackage(),
                     new RNVersionNumberPackage(),
                     new VectorIconsPackage(),
@@ -99,6 +101,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                 new RNFirebasePackage(),
                 new RNFirebaseFirestorePackage(),
                 new RNFirebaseLinksPackage(),
+                new RNFirebaseAuthPackage(),
                 new RealmReactPackage(),
                 new RNSharePackage(),
                 new RNVersionNumberPackage(),
