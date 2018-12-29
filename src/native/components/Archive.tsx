@@ -29,7 +29,7 @@ export interface Props {
   layout: Layout,
   stack: StackForRendering,
 
-  archivedPlays: ArchivedPlay[],  
+  archivedPlays: ArchivedPlay[],
 
   onArchiveOpened: () => void,
   onItemPressed: (id: string) => void,
@@ -108,8 +108,8 @@ export default class Archive extends Component<Props, State> {
   }
 
   handleItemLongPressed(item: ArchivedPlay, itemIndex: number) {
-    // @ts-ignore
     if (Platform.OS === 'android') {
+      // @ts-ignore
       UIManager.showPopupMenu(
         ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
         [
