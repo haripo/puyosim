@@ -6,7 +6,6 @@ import { isWeb, themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
 import compareWith from '../../utils/compareWith';
 import { Animated, Platform } from "react-native";
-import AnimatedValue = Animated.AnimatedValue;
 import { Rotation } from "../../models/move";
 
 const arrowImages = {
@@ -26,7 +25,7 @@ const numberImages = [
 ];
 
 export type Props = {
-  x: AnimatedValue | number,
+  x: Animated.AnimatedValue | number,
   y: number,
   futureX?: number,
   currentX?: number,
@@ -37,7 +36,7 @@ export type Props = {
   onPress?: (e: any) => void
 }
 
-const isAnimatedValue = (value: any): value is AnimatedValue => !!value.addListener;
+const isAnimatedValue = (value: any): value is Animated.AnimatedValue => !!value.addListener;
 
 export default class HistoryTreeNode extends React.Component<Props, {}> {
   g: any;

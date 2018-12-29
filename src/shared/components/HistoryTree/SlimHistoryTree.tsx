@@ -13,7 +13,6 @@ import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Path, Rect, } from 'react-native-svg';
 import HistoryTreeNode from './HistoryTreeNode';
 import { HistoryRecord } from "../../models/history";
-import AnimatedValue = Animated.AnimatedValue;
 import HistoryHand from "./HistoryHand";
 
 export interface Props {
@@ -23,7 +22,7 @@ export interface Props {
 }
 
 interface State {
-  nodeAnimated: AnimatedValue[],
+  nodeAnimated: Animated.AnimatedValue[],
   width: number,
   height: number
 }
