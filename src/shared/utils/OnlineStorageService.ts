@@ -11,7 +11,7 @@ export async function loadArchiveList(startAt: Date | null, size: number, uid: s
   startAt.setSeconds(startAt.getSeconds() - 1);
 
   const querySnapshot = await collectionReference
-    //.where('uid', '==', uid)
+    .where('uid', '==', uid)
     .orderBy('play.updatedAt', 'desc')
     .startAt(startAt)
     .limit(size)
