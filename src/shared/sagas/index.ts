@@ -15,25 +15,43 @@ import { deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStor
 import { State } from "../reducers";
 import firebase from "react-native-firebase";
 
+function* getOrRequestLogin() {
+  const currentUid = yield select<State>(state => state.auth.uid);
+
+  if (currentUid !== null) {
+    return yield currentUid;
+  }
+
+  return yield call(() => firebase.auth().signInAnonymously());
+}
+
 function* handleArchiveField(action) {
   const play = yield select<any>(state => getArchivedPlay(state.simulator, action.title));
-  yield call(saveArchive, play);
+  const user = yield getOrRequestLogin();
+  yield call(saveArchive, play, user.uid);
 }
 
 function* handleLoadArchiveListFirstPage(action) {
-  const plays = yield call(loadArchiveList, null, 5);
-  yield put(loadArchiveListFirstPageFinished(plays));
+  try {
+    const user = yield getOrRequestLogin();
+    const plays = yield call(loadArchiveList, null, 20, user.uid);
+    yield put(loadArchiveListFirstPageFinished(plays));
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function* handleLoadArchiveListNextPage(action) {
+  const user = yield getOrRequestLogin();
   const ids = yield select<State>(state => state.archive.sortedIds);
   const lastItem = yield select<State>(state => state.archive.plays[ids[ids.length - 1]]);
-  const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count);
+  const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count, user.uid);
   yield put(loadArchiveListNextPageFinished(plays));
 }
 
 function* handleEditArchivedPlay(action) {
-  const play = yield call(saveArchive, action.play);
+  const user = yield getOrRequestLogin();
+  const play = yield call(saveArchive, action.play, user.uid);
   yield put(editArchiveFinished(play));
 }
 
@@ -44,11 +62,8 @@ function* handleDeleteArchivedPlay(action) {
 
 function* handleRequestLogin(action) {
   try {
-    const currentUid = yield select<State>(state => state.auth.uid);
-    if (currentUid === null) {
-      const user = yield call(() => firebase.auth().signInAnonymously());
-      yield put(requestLoginSucceed(user));
-    }
+    const user = getOrRequestLogin();
+    yield put(requestLoginSucceed(user));
   } catch (e) {
     console.error(e);
   }

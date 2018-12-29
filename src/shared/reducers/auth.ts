@@ -1,5 +1,4 @@
 import { REQUEST_LOGIN_SUCCEED } from '../actions/actions';
-import { RNFirebase } from "react-native-firebase";
 
 export type AuthState = {
   uid: string | null

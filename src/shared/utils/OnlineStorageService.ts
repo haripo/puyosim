@@ -5,22 +5,28 @@ import { ArchivedPlay } from "./StorageService.native";
 
 const collectionReference = firebase.firestore().collection('test-history');
 
-export async function loadArchiveList(startAt: Date | null, size: number) {
+export async function loadArchiveList(startAt: Date | null, size: number, uid: string) {
   startAt = startAt ? startAt : new Date();
 
-  // 1 秒引くと最後にとった Archive と同じものが返ってくる
   startAt.setSeconds(startAt.getSeconds() - 1);
 
   const querySnapshot = await collectionReference
-    .orderBy('updatedAt', 'desc')
+    //.where('uid', '==', uid)
+    .orderBy('play.updatedAt', 'desc')
     .startAt(startAt)
-    .limit(20)
+    .limit(size)
     .get();
-  return querySnapshot.docs.map(d => d.data());
+
+  return querySnapshot.docs
+    .map(d => d.data())
+    .map(d => d['play']);
 }
 
-export async function saveArchive(play: ArchivedPlay) {
-  await collectionReference.doc(play.id).set(play);
+export async function saveArchive(play: ArchivedPlay, uid: string) {
+  await collectionReference.doc(play.id).set({
+    play,
+    uid
+  });
   return play;
 }
 
