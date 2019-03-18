@@ -130,43 +130,43 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.6.1)
-  - React (0.57.2):
-    - React/Core (= 0.57.2)
-  - React/Core (0.57.2):
-    - yoga (= 0.57.2.React)
-  - React/CxxBridge (0.57.2):
+  - React (0.57.8):
+    - React/Core (= 0.57.8)
+  - React/Core (0.57.8):
+    - yoga (= 0.57.8.React)
+  - React/CxxBridge (0.57.8):
     - Folly (= 2016.10.31.00)
     - React/Core
     - React/cxxreact
-  - React/cxxreact (0.57.2):
+  - React/cxxreact (0.57.8):
     - boost-for-react-native (= 1.63.0)
     - Folly (= 2016.10.31.00)
     - React/jschelpers
     - React/jsinspector
-  - React/DevSupport (0.57.2):
+  - React/DevSupport (0.57.8):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.57.2)
-  - React/jschelpers (0.57.2):
+  - React/fishhook (0.57.8)
+  - React/jschelpers (0.57.8):
     - Folly (= 2016.10.31.00)
     - React/PrivateDatabase
-  - React/jsinspector (0.57.2)
-  - React/PrivateDatabase (0.57.2)
-  - React/RCTAnimation (0.57.2):
+  - React/jsinspector (0.57.8)
+  - React/PrivateDatabase (0.57.8)
+  - React/RCTAnimation (0.57.8):
     - React/Core
-  - React/RCTBlob (0.57.2):
+  - React/RCTBlob (0.57.8):
     - React/Core
-  - React/RCTNetwork (0.57.2):
+  - React/RCTNetwork (0.57.8):
     - React/Core
-  - React/RCTText (0.57.2):
+  - React/RCTText (0.57.8):
     - React/Core
-  - React/RCTWebSocket (0.57.2):
+  - React/RCTWebSocket (0.57.8):
     - React/Core
     - React/fishhook
     - React/RCTBlob
   - RNLanguages (3.0.1):
     - React
-  - yoga (0.57.2.React)
+  - yoga (0.57.8.React)
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -256,6 +256,6 @@ SPEC CHECKSUMS:
   RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: dfda7722f35cb10e371637516406c4427be7d82f
+PODFILE CHECKSUM: b465036adec344c9a4038cf1235b8343d6223a26
 
 COCOAPODS: 1.5.3

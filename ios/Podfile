@@ -52,3 +52,11 @@ target 'PuyoSimulator-tvOS' do
 
 end
 
+# https://github.com/facebook/react-native/issues/12814
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
+end
