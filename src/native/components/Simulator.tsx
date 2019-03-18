@@ -62,7 +62,7 @@ export default class Simulator extends Component<Props, State> {
           // @ts-ignore
           width: (Platform.OS === 'ios' ? 200 : undefined),
           enabled: true,
-          visible: true
+          visible: false
         }
       },
       topBar: {
