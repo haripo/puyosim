@@ -98,14 +98,14 @@ export default class HistoryTreeNode extends React.Component<Props, {}> {
       <React.Fragment>
         <Image
           x={ iconPadding + x }
-          y={ Platform.OS === 'ios' ? -y : y }
+          y={ y }
           width={ iconSize }
           height={ iconSize }
           href={ numberImages[col] }
         />
         <Image
           x={ iconSize - iconPadding + x }
-          y={ Platform.OS === 'ios' ? -y : y } // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
+          y={ y }
           width={ iconSize }
           height={ iconSize }
           href={ arrowImages[rotation] }

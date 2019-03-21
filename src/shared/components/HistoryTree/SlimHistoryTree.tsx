@@ -128,13 +128,12 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const x = this.handsX;
     const puyoSkin = 'puyoSkinDefault';
 
-    // FIXME: https://github.com/react-native-community/react-native-svg/issues/762
     return (
       <HistoryHand
         key={ index }
         hand={ hand }
         x={ x }
-        y={ Platform.OS === 'ios' ? -this.puyoMarginY : this.puyoMarginY }
+        y={ this.puyoMarginY }
         puyoSkin={ puyoSkin }
         puyoSize={ this.puyoSize }
       />
