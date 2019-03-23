@@ -156,13 +156,13 @@ export default class RightDrawer extends Component<Props, State> {
           </View>
           {/*<View style={ styles.buttonGroup }>*/}
             {/*<IconButton*/}
-              {/*icon='archive'*/}
+              {/*icon='cloud_upload'*/}
               {/*text='save'*/}
               {/*onPressed={ this.handleSavePressed.bind(this) }*/}
             {/*/>*/}
             {/*<IconButton*/}
               {/*style={ styles.controllerRightButton }*/}
-              {/*icon='unarchive'*/}
+              {/*icon='cloud_download'*/}
               {/*text='load'*/}
               {/*onPressed={ this.handleLoadPressed.bind(this) }*/}
             {/*/>*/}
