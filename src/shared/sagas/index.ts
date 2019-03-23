@@ -8,12 +8,13 @@ import {
   LOAD_ARCHIVE_LIST_FIRST_PAGE,
   LOAD_ARCHIVE_LIST_NEXT_PAGE,
   loadArchiveListFirstPageFinished,
-  loadArchiveListNextPageFinished, REQUEST_LOGIN, requestLoginSucceed
+  loadArchiveListNextPageFinished, REQUEST_LOGIN, requestLoginSucceed, RESTART
 } from "../actions/actions";
 import { getArchivedPlay } from "../selectors/simulatorSelectors";
 import { deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
 import { State } from "../reducers";
 import firebase from "react-native-firebase";
+import { Platform, YellowBox } from "react-native";
 
 function* getOrRequestLogin() {
   const currentUid = yield select<State>(state => state.auth.uid);
@@ -69,6 +70,20 @@ function* handleRequestLogin(action) {
   }
 }
 
+function *handleRestart(action) {
+  if (Platform.OS === 'ios') {
+    const unitId = 'ca-app-pub-1876795357833764/6072079756';
+    const advert = firebase.admob().interstitial(unitId);
+    const AdRequest = firebase.admob.AdRequest;
+    const request = new AdRequest();
+    advert.loadAd(request.build());
+
+    advert.on('onAdLoaded', () => {
+      advert.show();
+    });
+  }
+}
+
 function* sagas() {
   yield takeEvery(ARCHIVE_CURRENT_FIELD, handleArchiveField);
   yield takeEvery(LOAD_ARCHIVE_LIST_FIRST_PAGE, handleLoadArchiveListFirstPage);
@@ -76,6 +91,7 @@ function* sagas() {
   yield takeEvery(EDIT_ARCHIVE, handleEditArchivedPlay);
   yield takeEvery(DELETE_ARCHIVE, handleDeleteArchivedPlay);
   yield takeEvery(REQUEST_LOGIN, handleRequestLogin);
+  yield takeEvery(RESTART, handleRestart);
 }
 
 export default sagas;

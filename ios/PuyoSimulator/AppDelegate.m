@@ -32,6 +32,7 @@
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
+  [GADMobileAds configureWithApplicationID:@"ca-app-pub-1876795357833764~6972251977"];
 
   // [RNSplashScreen show];
   return YES;
