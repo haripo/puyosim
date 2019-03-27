@@ -211,3 +211,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+// https://github.com/invertase/react-native-firebase/issues/1789
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
