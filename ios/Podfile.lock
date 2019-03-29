@@ -161,7 +161,7 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - RNLanguages (3.0.1):
+  - RNLanguages (3.0.2):
     - React
   - yoga (0.59.2.React)
 
