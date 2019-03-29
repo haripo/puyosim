@@ -119,7 +119,8 @@ async function launch() {
     },
     sideMenu: {
       right: {
-        enabled: false
+        enabled: false,
+        visible: false
       }
     }
   });

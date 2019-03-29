@@ -41,6 +41,14 @@ export default class SettingsPage extends Component<Props, {}> {
       },
       layout: {
         orientation: 'portrait'
+      },
+      // react-native-navigation のバグだと思うが、
+      // setDefaultOptions の設定をここで再指定する必要がある
+      sideMenu: {
+        right: {
+          enabled: false,
+          visible: false
+        }
       }
     }
   }
