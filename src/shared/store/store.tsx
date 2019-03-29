@@ -16,7 +16,7 @@ function getRavenMiddleware() {
 }
 
 function getLoggerMiddleware() {
-  const stateTransformer = state => state;
+  const stateTransformer = state => ""; // state のログが多すぎるので消す
   return createLogger({
     stateTransformer
   });

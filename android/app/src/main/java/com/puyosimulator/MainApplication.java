@@ -24,9 +24,11 @@ import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.links.RNFirebaseLinksPackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import io.realm.react.RealmReactPackage;
 import io.sentry.RNSentryPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
+import com.google.android.gms.ads.MobileAds;
 
 
 public class MainApplication extends NavigationApplication implements ShareApplication /*, ReactApplication */ {
@@ -49,6 +51,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                     new RNFirebasePackage(),
                     new RNFirebaseFirestorePackage(),
                     new RNFirebaseAuthPackage(),
+                    new RNFirebaseAdMobPackage(),
                     new RealmReactPackage(),
                     new RNVersionNumberPackage(),
                     new VectorIconsPackage(),
@@ -73,6 +76,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
+        MobileAds.initialize(this, "ca-app-pub-1876795357833764~3946633388");
     }
 
     // @Override
@@ -102,6 +106,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
                 new RNFirebaseFirestorePackage(),
                 new RNFirebaseLinksPackage(),
                 new RNFirebaseAuthPackage(),
+                new RNFirebaseAdMobPackage(),
                 new RealmReactPackage(),
                 new RNSharePackage(),
                 new RNVersionNumberPackage(),

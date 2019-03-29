@@ -15,6 +15,7 @@ import { deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStor
 import { State } from "../reducers";
 import firebase from "react-native-firebase";
 import { Platform, YellowBox } from "react-native";
+import { reloadAd } from "../models/admob";
 
 function* getOrRequestLogin() {
   const currentUid = yield select<State>(state => state.auth.uid);
@@ -71,17 +72,7 @@ function* handleRequestLogin(action) {
 }
 
 function *handleRestart(action) {
-  if (Platform.OS === 'ios') {
-    const unitId = 'ca-app-pub-1876795357833764/6072079756';
-    const advert = firebase.admob().interstitial(unitId);
-    const AdRequest = firebase.admob.AdRequest;
-    const request = new AdRequest();
-    advert.loadAd(request.build());
-
-    advert.on('onAdLoaded', () => {
-      advert.show();
-    });
-  }
+  reloadAd.show();
 }
 
 function* sagas() {

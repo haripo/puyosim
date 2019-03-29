@@ -195,12 +195,16 @@ dependencies {
     // https://stackoverflow.com/questions/49112190/error-program-type-already-present-android-support-design-widget-coordinatorl
     implementation 'com.android.support:design:27.1.1'
 
+    // admob
+    // implementation 'com.google.android.gms:play-services-ads:17.1.1'
+
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.6"
     implementation "com.google.firebase:firebase-firestore:17.1.5"
     implementation "com.google.firebase:firebase-invites:16.0.6"
     implementation "com.google.firebase:firebase-auth:16.1.0"
+    implementation "com.google.firebase:firebase-ads:15.0.1"
 }
 
 // Run this once to be able to run the application with BUCK
