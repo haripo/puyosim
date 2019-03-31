@@ -4,11 +4,11 @@ import {
   DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
-  INITIALIZE_SIMULATOR, LOAD_ARCHIVE, LOAD_ARCHIVE_FINISHED,
+  INITIALIZE_SIMULATOR,
+  LOAD_ARCHIVE,
   MOVE_HIGHLIGHTS_LEFT,
   MOVE_HIGHLIGHTS_RIGHT,
   MOVE_HISTORY,
-  OPEN_TWITTER_SHARE,
   PUT_NEXT_PAIR,
   RECONSTRUCT_HISTORY,
   REDO_FIELD,
@@ -34,9 +34,6 @@ import {
   History,
   HistoryRecord
 } from '../models/history';
-// TODO: ここで react-native を import しない
-import { Linking } from 'react-native';
-import generateIPSSimulatorURL from '../../shared/utils/generateIPSSimulatorURL';
 import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair, Stack } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
@@ -239,23 +236,6 @@ function restart(state: SimulatorState, action, config) {
   return createInitialState(config);
 }
 
-function openTwitterShare(state: SimulatorState, action) {
-  // traverse history
-  let i: number = state.historyIndex;
-  let record: HistoryRecord;
-  let records: HistoryRecord[] = [];
-  do {
-    record = state.history[i];
-    i = record.prev!;
-    records.push(record!);
-  } while (i > 0);
-
-  const simulatorURL = generateIPSSimulatorURL(records);
-  const tweetURL = `https://twitter.com/intent/tweet?url=${simulatorURL}&text=[http://puyos.im]`;
-  Linking.openURL(tweetURL);
-  return state;
-}
-
 function setPattern(state: SimulatorState, action) {
   state.stack = setPatternByName(state.stack, action.name);
   return state;
@@ -366,8 +346,6 @@ export const reducer = (state, action, config, archive) => {
       return reconstructHistory(state, action);
     case LOAD_ARCHIVE:
       return loadArchive(state, action, archive);
-    case OPEN_TWITTER_SHARE:
-      return openTwitterShare(state, action);
     case DEBUG_SET_PATTERN:
       return setPattern(state, action);
     case DEBUG_SET_HISTORY:
