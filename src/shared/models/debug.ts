@@ -71,6 +71,7 @@ export function setRandomHistory(history: History, stack: Stack): History {
       stack,
       0,
       0,
+      0,
       0);
     appendHistoryRecord(history, record);
 

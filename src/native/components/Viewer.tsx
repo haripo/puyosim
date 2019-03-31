@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-import { PendingPair, PendingPairPuyo, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
 import { Navigation } from "react-native-navigation";
+import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
   stack: StackForRendering,
@@ -84,7 +85,7 @@ export default class Viewer extends Component<Props, State> {
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }
-                style={ styles.handlingPuyos as ViewStyle }
+                style={ styles.handlingPuyos }
                 layout={ this.props.layout }>
               </HandlingPuyos>
               <Field

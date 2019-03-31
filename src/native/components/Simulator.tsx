@@ -174,7 +174,7 @@ export default class Simulator extends Component<Props, State> {
               <HandlingPuyos
                 pair={ this.props.pendingPair }
                 puyoSkin={ this.props.puyoSkin }
-                style={ styles.handlingPuyos as ViewStyle }
+                style={ styles.handlingPuyos }
                 layout={ this.props.layout }>
               </HandlingPuyos>
               <Field
