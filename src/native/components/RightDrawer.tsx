@@ -154,19 +154,19 @@ export default class RightDrawer extends Component<Props, State> {
               onPressed={ this.handleShareSelected.bind(this) }
             />
           </View>
-          {/*<View style={ styles.buttonGroup }>*/}
-            {/*<IconButton*/}
-              {/*icon='cloud_upload'*/}
-              {/*text='save'*/}
-              {/*onPressed={ this.handleSavePressed.bind(this) }*/}
-            {/*/>*/}
-            {/*<IconButton*/}
-              {/*style={ styles.controllerRightButton }*/}
-              {/*icon='cloud_download'*/}
-              {/*text='load'*/}
-              {/*onPressed={ this.handleLoadPressed.bind(this) }*/}
-            {/*/>*/}
-          {/*</View>*/}
+          <View style={ styles.buttonGroup }>
+            <IconButton
+              icon='cloud-upload'
+              text='save'
+              onPressed={ this.handleSavePressed.bind(this) }
+            />
+            <IconButton
+              style={ styles.controllerRightButton }
+              icon='cloud-download'
+              text='load'
+              onPressed={ this.handleLoadPressed.bind(this) }
+            />
+          </View>
           <View style={ styles.buttonGroup }>
             <IconButton
               icon='settings'
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'column',
-    height: 300 / 4 * 3 // 300 = SimulatorControls の component.height の半分
+    height: 300 // SimulatorControls の component.height の半分
   },
   buttonGroup: {
     flex: 1,
