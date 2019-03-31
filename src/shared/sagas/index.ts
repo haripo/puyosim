@@ -55,8 +55,8 @@ function* handleLoadArchiveListNextPage(action) {
 }
 
 function* handleEditArchivedPlay(action) {
-  const user = yield getOrRequestLogin();
-  const play = yield call(saveArchive, action.play, user.uid);
+  const uid = yield call(getOrRequestLogin);
+  const play = yield call(saveArchive, action.play, uid);
   yield put(editArchiveFinished(play));
 }
 
