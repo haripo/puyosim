@@ -20,26 +20,26 @@ import { reloadAd } from "../models/admob";
 import { ArchivedPlay } from "../utils/StorageService.native";
 
 function* getOrRequestLogin() {
-  const currentUid = yield select<(State) => string>(state => state.auth.uid);
+  const currentUid = yield select<(State) => string>(state => state.uid);
 
-  if (currentUid !== null) {
+  if (currentUid) {
     return yield currentUid;
   }
 
   const credential = yield call(() => firebase.auth().signInAnonymously());
-  return credential.user;
+  return yield credential.user.uid;
 }
 
 function* handleArchiveField(action) {
   const play = yield select<any>(state => getArchivedPlay(state.simulator, action.title));
-  const user = yield getOrRequestLogin();
-  yield call(saveArchive, play, user.uid);
+  const uid = yield getOrRequestLogin();
+  yield call(saveArchive, play, uid);
 }
 
 function* handleLoadArchiveListFirstPage(action) {
   try {
-    const user = yield getOrRequestLogin();
-    const plays = yield call(loadArchiveList, null, 20, user.uid);
+    const uid = yield call(getOrRequestLogin);
+    const plays = yield call(loadArchiveList, null, 20, uid);
     yield put(loadArchiveListFirstPageFinished(plays));
   } catch (e) {
     console.error(e);
@@ -47,10 +47,10 @@ function* handleLoadArchiveListFirstPage(action) {
 }
 
 function* handleLoadArchiveListNextPage(action) {
-  const user = yield getOrRequestLogin();
+  const uid = yield call(getOrRequestLogin);
   const ids = yield select<(State) => string[]>(state => state.archive.sortedIds);
   const lastItem = yield select<(State) => { [id: string]: ArchivedPlay }>(state => state.archive.plays[ids[ids.length - 1]]);
-  const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count, user.uid);
+  const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count, uid);
   yield put(loadArchiveListNextPageFinished(plays));
 }
 
