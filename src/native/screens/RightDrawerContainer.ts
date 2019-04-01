@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
-import { openTwitterShare, resetField, restart } from '../../shared/actions/actions';
+import { archiveCurrentField, refreshPlayId, resetField, restart } from '../../shared/actions/actions';
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import RightDrawer from "../components/RightDrawer";
+import { Navigation } from "react-native-navigation";
 
 const mapStateToProps = (state) => {
   return {
@@ -10,7 +11,8 @@ const mapStateToProps = (state) => {
     chain: state.simulator.chain,
     chainScore: state.simulator.chainScore,
     numSplit: state.simulator.numSplit,
-    numHands: state.simulator.numHands
+    numHands: state.simulator.numHands,
+    isSaved: state.simulator.isSaved
   };
 };
 
@@ -22,9 +24,12 @@ const mapDispatchToProps = (dispatch) => {
     onRestartSelected: () => {
       dispatch(restart());
     },
-    onShareSelected: () => {
-      dispatch(openTwitterShare());
+    onOverwriteArchiveSelected: () => {
+      dispatch(archiveCurrentField());
     },
+    onSaveCopySelected: () => {
+      dispatch(refreshPlayId());
+    }
   };
 };
 

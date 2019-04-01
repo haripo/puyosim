@@ -1,6 +1,6 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
-  ARCHIVE_CURRENT_FIELD,
+  ARCHIVE_CURRENT_FIELD, archiveCurrentFieldFinished,
   DELETE_ARCHIVE,
   deleteArchiveFinished,
   EDIT_ARCHIVE,
@@ -34,6 +34,7 @@ function* handleArchiveField(action) {
   const play = yield select<any>(state => getArchivedPlay(state.simulator, action.title));
   const uid = yield getOrRequestLogin();
   yield call(saveArchive, play, uid);
+  yield put(archiveCurrentFieldFinished());
 }
 
 function* handleLoadArchiveListFirstPage(action) {

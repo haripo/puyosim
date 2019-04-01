@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { contentsMargin, contentsPadding, themeLightColor } from "../../shared/utils/constants";
 import IconButton from "../../shared/components/IconButton";
 import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
-
 // @ts-ignore
 import t from '../../shared/utils/i18n';
 
@@ -14,12 +13,15 @@ export type Props = {
   score: number,
   chainScore: number,
   numHands: number,
-  chain: number,
   numSplit: number,
+  chain: number,
+
+  isSaved: boolean,
 
   onResetSelected: () => void,
   onRestartSelected: () => void,
-  onShareSelected: () => void,
+  onSaveCopySelected: () => void,
+  onOverwriteArchiveSelected: () => void
 }
 
 type State = {}
@@ -70,13 +72,47 @@ export default class RightDrawer extends Component<Props, State> {
 
   handleSavePressed() {
     this.closeDrawer();
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.SaveModal' }
-    });
+    if (this.props.isSaved) {
+      Alert.alert(
+        'Overwrite?',
+        ``,
+        [
+          {
+            text: 'Overwrite',
+            onPress: () => {
+              this.props.onOverwriteArchiveSelected();
+            }
+          },
+          {
+            text: 'Save a copy',
+            onPress: () => {
+              this.props.onSaveCopySelected(); // playId を更新する
+              Navigation.push('centerStack', {
+                component: { name: 'com.puyosimulator.SaveModal' }
+              });
+            },
+          },
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+        ],
+        {
+          cancelable: false
+        },
+      );
+    } else {
+      Navigation.push('centerStack', {
+        component: { name: 'com.puyosimulator.SaveModal' }
+      });
+    }
   }
 
   handleLoadPressed() {
     this.closeDrawer();
+
+    // open save dialog
     Navigation.push('centerStack', {
       component: { name: 'com.puyosimulator.Archive' }
     });

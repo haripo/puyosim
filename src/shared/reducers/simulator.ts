@@ -1,5 +1,6 @@
 import {
   APPLY_GRAVITY,
+  ARCHIVE_CURRENT_FIELD_FINISHED,
   DEBUG_SET_HISTORY,
   DEBUG_SET_PATTERN,
   FINISH_DROPPING_ANIMATIONS,
@@ -12,6 +13,7 @@ import {
   PUT_NEXT_PAIR,
   RECONSTRUCT_HISTORY,
   REDO_FIELD,
+  REFRESH_PLAY_ID,
   RESET_FIELD,
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
@@ -56,7 +58,8 @@ export type SimulatorState = {
   historyIndex: number,
 
   playId: string,
-  startDateTime: Date // Date を直接編集すると immer が immutability を保証しないので注意
+  startDateTime: Date, // Date を直接編集すると immer が immutability を保証しないので注意
+  isSaved: boolean
 };
 
 function rotateHighlightsLeft(state: SimulatorState, action) {
@@ -273,8 +276,19 @@ function loadArchive(state: SimulatorState, action, archive) {
   state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(play.history), state.queue);
   state.historyIndex = play.historyIndex;
   state.startDateTime = play.createdAt;
+  state.isSaved = true;
 
   state = revert(state, state.historyIndex);
+  return state;
+}
+
+function archiveCurrentFieldFinished(state: SimulatorState, action) {
+  state.isSaved = true;
+  return state;
+}
+
+function refreshPlayId(state: SimulatorState, action) {
+  state.playId = uuid();
   return state;
 }
 
@@ -296,7 +310,8 @@ function createInitialState(config): SimulatorState {
     history: [createInitialHistoryRecord(stack)],
     historyIndex: 0,
     startDateTime: new Date(),
-    playId: uuid()
+    playId: uuid(),
+    isSaved: false
   };
 }
 
@@ -346,6 +361,10 @@ export const reducer = (state, action, config, archive) => {
       return reconstructHistory(state, action);
     case LOAD_ARCHIVE:
       return loadArchive(state, action, archive);
+    case ARCHIVE_CURRENT_FIELD_FINISHED:
+      return archiveCurrentFieldFinished(state, action);
+    case REFRESH_PLAY_ID:
+      return refreshPlayId(state, action);
     case DEBUG_SET_PATTERN:
       return setPattern(state, action);
     case DEBUG_SET_HISTORY:
