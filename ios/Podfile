@@ -33,6 +33,8 @@ target 'PuyoSimulator' do
 
   pod 'RNLanguages', :path => '../node_modules/react-native-languages'
 
+  pod 'RNSnackbar', :path => '../node_modules/react-native-snackbar'
+
   target 'PuyoSimulatorTests' do
     inherit! :search_paths
     # Pods for testing

@@ -29,6 +29,7 @@ import io.realm.react.RealmReactPackage;
 import io.sentry.RNSentryPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.google.android.gms.ads.MobileAds;
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
 
 
 public class MainApplication extends NavigationApplication implements ShareApplication /*, ReactApplication */ {
@@ -44,6 +45,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new SnackbarPackage(),
                     new RNLanguagesPackage(),
                     //new SplashScreenReactPackage(),
                     new RNViewShotPackage(),
@@ -101,6 +103,7 @@ public class MainApplication extends NavigationApplication implements ShareAppli
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
                 // new SplashScreenReactPackage(),
+                new SnackbarPackage(),
                 new RNLanguagesPackage(),
                 new RNFirebasePackage(),
                 new RNFirebaseFirestorePackage(),

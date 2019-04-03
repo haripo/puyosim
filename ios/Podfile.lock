@@ -163,6 +163,8 @@ PODS:
     - React/RCTBlob
   - RNLanguages (3.0.2):
     - React
+  - RNSnackbar (0.5.5):
+    - React
   - yoga (0.59.2.React)
 
 DEPENDENCIES:
@@ -183,6 +185,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNLanguages (from `../node_modules/react-native-languages`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -219,6 +222,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   RNLanguages:
     :path: "../node_modules/react-native-languages"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -248,8 +253,9 @@ SPEC CHECKSUMS:
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
+  RNSnackbar: 90718c3ffbe9ca9178763c96fc2aa7e81d78851f
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: c364d4d8448041f95b5f6683da34b70d9141ac9d
+PODFILE CHECKSUM: 73de6e21d15770688c4ca31fa97a0aefee5efded
 
 COCOAPODS: 1.5.3
