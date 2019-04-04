@@ -70,6 +70,12 @@ const translations = {
     saveModalTitlePlaceholder: 'タイトルを入力',
     saveModalTitle: 'タイトル',
     deleteMessage: '削除しますか？',
+    saveSucceeded: '保存しました',
+    saveFailed: '保存に失敗しました。しばらく後にもう一度お試しください',
+    loadFailed: '読み込みに失敗しました。しばらく後にもう一度お試しください',
+    editFailed: '編集に失敗しました。しばらく後にもう一度お試しください',
+    deleteFailed: '削除に失敗しました。しばらく後にもう一度お試しください',
+    authFailed: '接続に失敗しました。しばらく後にもう一度お試しください',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
@@ -149,6 +155,12 @@ const translations = {
     saveModalTitlePlaceholder: 'some title here',
     saveModalTitle: 'Title',
     deleteMessage: 'Delete?',
+    saveSucceeded: 'Save succeeded',
+    saveFailed: 'Save failed. Please try again later',
+    loadFailed: 'Load failed. Please try again later',
+    editFailed: 'Edit failed. Please try again later',
+    deleteFailed: 'Delete failed. Please try again later',
+    authFailed: 'Connection failed. Please try again later',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),

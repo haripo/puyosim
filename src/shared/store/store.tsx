@@ -7,6 +7,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import Raven from "raven-js";
 import createRavenMiddleware from "raven-for-redux";
 
+// @ts-ignore
+import snackbarMiddleware from "../middlewares/snackbarMiddleware";
+
 function getRavenMiddleware() {
   return createRavenMiddleware(Raven, {
     // stateTransformer: state => {
@@ -28,9 +31,9 @@ function getSagaMiddleware() {
 
 function getMiddleware(saga, raven, logger) {
   if (__DEV__) {
-    return composeWithDevTools(applyMiddleware(saga, logger));
+    return composeWithDevTools(applyMiddleware(saga, logger, snackbarMiddleware));
   }
-  return applyMiddleware(saga, raven);
+  return applyMiddleware(saga, raven, snackbarMiddleware);
 }
 
 export function getStore(reducers, sagas) {
