@@ -2,8 +2,10 @@
 
 import firebase from 'react-native-firebase';
 import { ArchivedPlay } from "./StorageService.native";
+import { FIRESTORE_ARCHIVE_COLLECTION, FIRESTORE_ARCHIVE_COLLECTION_DEBUG } from 'react-native-dotenv';
 
-const collectionReference = firebase.firestore().collection('test-history');
+const collection_name = __DEV__ ? FIRESTORE_ARCHIVE_COLLECTION_DEBUG : FIRESTORE_ARCHIVE_COLLECTION;
+const collectionReference = firebase.firestore().collection(collection_name);
 
 export async function loadArchiveList(startAt: Date | null, size: number, uid: string) {
   startAt = startAt ? startAt : new Date();
