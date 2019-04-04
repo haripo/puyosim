@@ -34,6 +34,7 @@
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
     moduleName:@"PuyoSimulator"
     initialProperties:nil];
+  [RNSentry installWithRootView:rootView];
 
   NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
