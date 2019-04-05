@@ -28,6 +28,7 @@ target 'PuyoSimulator' do
   pod 'Firebase/Firestore', '~> 5.15.0'
   pod 'Firebase/Auth', '~> 5.15.0'
   pod 'Firebase/AdMob', '~> 5.15.0'
+  pod 'Firebase/RemoteConfig', '~> 5.15.0'
 
 # pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
