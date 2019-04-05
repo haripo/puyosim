@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Text, Platform, StyleSheet, View, ViewStyle } from 'react-native';
+import { Alert, Text, Platform, StyleSheet, View, ViewStyle, Linking } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
@@ -18,6 +18,9 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
 import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
+// @ts-ignore
+import { getMinimumSupportedAppVersion } from "../../shared/utils/RemoteConfig";
+import VersionNumber from "react-native-version-number";
 
 export type Props = {
   componentId: string,
@@ -86,7 +89,7 @@ export default class Simulator extends Component<Props, State> {
 
     this.state = {
       isVisible: true,
-      isLoading: false
+      isLoading: true
     }
   }
 
@@ -109,9 +112,33 @@ export default class Simulator extends Component<Props, State> {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // SplashScreen.hide();
 
+    // deprecated version warning
+    const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
+    if (Platform.OS !== 'web' && VersionNumber.buildVersion < minimumSupportedAppVersion) {
+      Alert.alert(
+        'App deprecated',
+        t('updateRequired'),
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (Platform.OS === 'ios') {
+                Linking.openURL(`itms-apps://itunes.apple.com/app/1435074935`);
+              } else if (Platform.OS === 'android') {
+                Linking.openURL(
+                  `market://details?id=com.puyosimulator`
+                );
+              }
+            }
+          }
+        ]
+      );
+    }
+
+    // open URL in viewer mode
     firebase.links()
       .getInitialLink()
       .then((url) => {

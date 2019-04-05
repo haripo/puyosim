@@ -80,6 +80,8 @@ const translations = {
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
 
+    // system
+    updateRequired: 'アプリの更新が必要です',
 
     // datetime
     datetime: {
@@ -161,6 +163,9 @@ const translations = {
     editFailed: 'Edit failed. Please try again later',
     deleteFailed: 'Delete failed. Please try again later',
     authFailed: 'Connection failed. Please try again later',
+
+    // system
+    updateRequired: 'App update required',
 
     // handset patterns
     ..._.fromPairs(handsetPatterns[2].map(p => [p, p])),
