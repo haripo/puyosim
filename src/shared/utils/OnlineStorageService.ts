@@ -1,6 +1,8 @@
 // Firebase
 
 import firebase from 'react-native-firebase';
+import VersionNumber from 'react-native-version-number';
+
 import { ArchivedPlay } from "./StorageService.native";
 import { FIRESTORE_ARCHIVE_COLLECTION, FIRESTORE_ARCHIVE_COLLECTION_DEBUG } from 'react-native-dotenv';
 
@@ -27,7 +29,10 @@ export async function loadArchiveList(startAt: Date | null, size: number, uid: s
 export async function saveArchive(play: ArchivedPlay, uid: string) {
   await collectionReference.doc(play.id).set({
     play,
-    uid
+    uid,
+    schema_version: 1,
+    app_version: VersionNumber.appVersion,
+    build_version: VersionNumber.buildVersion
   });
   return play;
 }
