@@ -117,7 +117,7 @@ export default class Simulator extends Component<Props, State> {
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
-    if (Platform.OS !== 'web' && VersionNumber.buildVersion < minimumSupportedAppVersion) {
+    if (Platform.OS !== 'web' && VersionNumber.appVersion < minimumSupportedAppVersion) {
       Alert.alert(
         'App deprecated',
         t('updateRequired'),
