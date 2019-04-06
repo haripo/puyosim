@@ -29,19 +29,19 @@ function getSagaMiddleware() {
   return createSagaMiddleware();
 }
 
-function getMiddleware(saga, raven, logger) {
-  if (__DEV__) {
-    return composeWithDevTools(applyMiddleware(saga, logger, snackbarMiddleware));
-  }
-  return applyMiddleware(saga, raven, snackbarMiddleware);
-}
-
 export function getStore(reducers, sagas) {
   const raven = getRavenMiddleware();
   const logger = getLoggerMiddleware();
   const saga = getSagaMiddleware();
 
-  const store = createStore(reducers, getMiddleware(saga, raven, logger));
+  let middleware;
+  if (__DEV__) {
+    middleware = composeWithDevTools(applyMiddleware(saga, logger, snackbarMiddleware));
+  } else {
+    middleware = applyMiddleware(saga, raven, snackbarMiddleware);
+  }
+
+  const store = createStore(reducers, middleware);
 
   saga.run(sagas);
 
