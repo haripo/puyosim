@@ -19,7 +19,9 @@ export async function getMinimumSupportedAppVersion() {
       console.info('Fetched data not activated');
     }
 
-    const snapshot = await firebase.config().getValue('minimumSupportVersion');
+    const key = 'minimumSupportVersion' + (__DEV__ ? 'Debug' : '');
+
+    const snapshot = await firebase.config().getValue(key);
     return snapshot.val();
   } catch (e) {
     Sentry.captureException(e);
