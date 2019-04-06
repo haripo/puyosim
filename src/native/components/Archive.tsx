@@ -64,7 +64,7 @@ export default class Archive extends Component<Props, State> {
 
   componentDidMount() {
     this.props.onArchiveOpened();
-    this.props.onLoginRequested();
+    //this.props.onLoginRequested();
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
@@ -117,8 +117,8 @@ export default class Archive extends Component<Props, State> {
 
   handleItemLongPressed(item: ArchivedPlay, itemIndex: number) {
     if (Platform.OS === 'android') {
-      // @ts-ignore
       UIManager.showPopupMenu(
+        // @ts-ignore
         ReactNative.findNodeHandle(this.itemRefs[itemIndex]),
         [
           t('edit'),
