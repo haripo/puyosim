@@ -94,7 +94,10 @@ export function generateQueue(configs) {
     }
   }
 
-  if (configs.initialAllClear === 'avoidIn2Hands') {
+  if (configs.initialAllClear === 'avoidIn2Hands'
+    // 2 手まで固定だった場合は全消し拒否と矛盾するので無視する
+    && configs.specify1stHand === 'notSpecified'
+    && configs.specify2ndHand === 'notSpecified') {
     if (queue[0] === queue[1] &&
       queue[0] === queue[2] &&
       queue[0] === queue[3]) {
