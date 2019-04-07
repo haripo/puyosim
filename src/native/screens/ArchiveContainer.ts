@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Archive from '../components/Archive';
+import ArchiveList from '../components/ArchiveList';
 import {
   canRedo,
   canUndo,
@@ -18,7 +18,7 @@ import {
   loadArchive,
   loadArchiveListFirstPage, loadArchiveListNextPage, requestLogin
 } from "../../shared/actions/actions";
-import { getArchivedPlays } from "../../shared/selectors/archiveSelectors";
+import { getArchives } from "../../shared/selectors/archiveSelectors";
 
 const mapStateToProps = (state: State) => {
   return {
@@ -38,7 +38,7 @@ const mapStateToProps = (state: State) => {
     layout: getLayoutForArchivedListField(),
     theme: getTheme(state.theme),
 
-    archivedPlays: getArchivedPlays(state.archive)
+    archives: getArchives(state.archive)
   };
 };
 
@@ -65,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Archive);
+)(ArchiveList);

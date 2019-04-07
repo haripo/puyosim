@@ -14,12 +14,12 @@ import { contentsMargin, fieldCols, themeColor, themeLightColor } from '../../sh
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
-import { ArchivedPlay } from "../../shared/utils/StorageService.native";
 import _ from 'lodash';
 import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
 import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
+import { Archive } from "../../shared/utils/OnlineStorageService";
 
 export interface Props {
   componentId: string,
@@ -29,7 +29,7 @@ export interface Props {
   layout: Layout,
   stack: StackForRendering,
 
-  archivedPlays: ArchivedPlay[],
+  archives: Archive[],
 
   onArchiveOpened: () => void,
   onItemPressed: (id: string) => void,
@@ -41,7 +41,7 @@ export interface Props {
 interface State {
 }
 
-export default class Archive extends Component<Props, State> {
+export default class ArchiveList extends Component<Props, State> {
   itemRefs: any = [];
 
   static options() {
@@ -73,13 +73,13 @@ export default class Archive extends Component<Props, State> {
     Navigation.pop(this.props.componentId);
   }
 
-  handleDeleteConfirmed(item: ArchivedPlay) {
+  handleDeleteConfirmed(item: Archive) {
     // TODO: delete item
     LayoutAnimation.easeInEaseOut();
-    this.props.onDeleteSelected(item.id);
+    this.props.onDeleteSelected(item.play.id);
   }
 
-  handlePopupMenuItemSelected(event: string, index: number, item: ArchivedPlay): void {
+  handlePopupMenuItemSelected(event: string, index: number, item: Archive): void {
     if (event === 'itemSelected') {
       switch (index) {
         case 0: // edit
@@ -115,7 +115,7 @@ export default class Archive extends Component<Props, State> {
     }
   }
 
-  handleItemLongPressed(item: ArchivedPlay, itemIndex: number) {
+  handleItemLongPressed(item: Archive, itemIndex: number) {
     if (Platform.OS === 'android') {
       UIManager.showPopupMenu(
         // @ts-ignore
@@ -143,11 +143,11 @@ export default class Archive extends Component<Props, State> {
     this.props.onEndReached();
   }
 
-  renderItem({ item, index, separators }: { item: ArchivedPlay, index: number, separators: any }) {
+  renderItem({ item, index, separators }: { item: Archive, index: number, separators: any }) {
     return (
       <TouchableOpacity
         ref={ e => { this.itemRefs[index] = e } }
-        onPress={ this.handleItemClicked.bind(this, item.id) }
+        onPress={ this.handleItemClicked.bind(this, item.play.id) }
         onLongPress={ () => this.handleItemLongPressed(item, index) }
         style={ styles.itemWrapper }>
         <View style={ styles.fieldWrapper }>
@@ -156,7 +156,7 @@ export default class Archive extends Component<Props, State> {
             theme={ this.props.theme }
             puyoSkin={ this.props.puyoSkin }
             isActive={ false }
-            stack={ getStackForRendering(_.chunk(item.stack, fieldCols), []) }
+            stack={ getStackForRendering(_.chunk(item.play.stack, fieldCols), []) }
             ghosts={ [] }
             style={ { width: 10 } }
           />
@@ -167,10 +167,10 @@ export default class Archive extends Component<Props, State> {
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              { t('lastModified') }: { formatDateTime(item.updatedAt) }
+              { t('lastModified') }: { formatDateTime(item.play.updatedAt) }
             </Text>
             <Text style={ styles.stats }>
-              { item.maxChain } chain, { item.score } pts.
+              { item.play.maxChain } chain, { item.play.score } pts.
             </Text>
           </View>
         </View>
@@ -183,9 +183,9 @@ export default class Archive extends Component<Props, State> {
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <FlatList
-            data={ this.props.archivedPlays }
+            data={ this.props.archives }
             renderItem={ this.renderItem.bind(this) }
-            keyExtractor={ item => item.id }
+            keyExtractor={ item => item.play.id }
             onEndReached={ this.handleEndReached.bind(this) }
           />
         </View>

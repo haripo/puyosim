@@ -1,41 +1,41 @@
-import { ArchivedPlay } from "../utils/StorageService.native";
 import {
   DELETE_ARCHIVE_FINISHED,
   EDIT_ARCHIVE_FINISHED,
   LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED,
   LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED
 } from "../actions/actions";
+import { Archive } from "../utils/OnlineStorageService";
 
 export type ArchiveState = {
-  plays: { [id: string]: ArchivedPlay },
+  archives: { [id: string]: Archive },
   sortedIds: string[];
 }
 
 export const initialState: ArchiveState = {
-  plays: {},
+  archives: {},
   sortedIds: []
 };
 
-function loadArchiveListFirstPageFinished(state: ArchiveState, { plays }): ArchiveState {
-  for (let item of plays) {
-    state.plays[item.id] = item;
+function loadArchiveListFirstPageFinished(state: ArchiveState, { archives }): ArchiveState {
+  for (let item of archives) {
+    state.archives[item.play.id] = item;
   }
-  state.sortedIds = plays.map(item => item.id);
+  state.sortedIds = archives.map(item => item.play.id);
   return state;
 }
 
-function loadArchivesListNextPageFinished(state: ArchiveState, { plays }): ArchiveState {
-  for (let item of plays) {
-    state.plays[item.id] = item;
+function loadArchivesListNextPageFinished(state: ArchiveState, { archives }): ArchiveState {
+  for (let item of archives) {
+    state.archives[item.play.id] = item;
   }
-  state.sortedIds.push(...plays.map(item => item.id));
+  state.sortedIds.push(...archives.map(item => item.play.id));
   return state;
 }
 
 function deleteArchiveFinished(state: ArchiveState, action): ArchiveState {
   const { id } = action;
 
-  delete state.plays[id];
+  delete state.archives[id];
 
   const index = state.sortedIds.findIndex( item => item === id);
   state.sortedIds.splice(index, 1);
@@ -44,9 +44,9 @@ function deleteArchiveFinished(state: ArchiveState, action): ArchiveState {
 }
 
 function editArchiveFinished(state: ArchiveState, action): ArchiveState {
-  const { play } = action;
+  const { archive } = action;
 
-  state.plays[play.id] = play;
+  state.archives[archive.play.id] = archive;
 
   return state;
 }

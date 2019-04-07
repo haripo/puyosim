@@ -1,13 +1,38 @@
-// Firebase
-
 import firebase from 'react-native-firebase';
 import VersionNumber from 'react-native-version-number';
 
-import { ArchivedPlay } from "./StorageService.native";
 import { FIRESTORE_ARCHIVE_COLLECTION, FIRESTORE_ARCHIVE_COLLECTION_DEBUG } from 'react-native-dotenv';
 
 const collection_name = __DEV__ ? FIRESTORE_ARCHIVE_COLLECTION_DEBUG : FIRESTORE_ARCHIVE_COLLECTION;
 const collectionReference = firebase.firestore().collection(collection_name);
+
+type ArchivePlay = {
+  id: string,
+  queue: number[],
+  stack: number[],
+  maxChain: number,
+  score: number,
+  history: string,
+  historyIndex: number,
+  createdAt: Date,
+  updatedAt: Date,
+};
+
+export type ArchiveRequestPayload = {
+  play: ArchivePlay,
+  title: string
+}
+
+export type Archive = {
+  uid: string,
+  play: ArchivePlay,
+  title: string,
+  version: {
+    schema: number,
+    app: string,
+    build: string,
+  }
+}
 
 export async function loadArchiveList(startAt: Date | null, size: number, uid: string) {
   startAt = startAt ? startAt : new Date();
@@ -23,18 +48,20 @@ export async function loadArchiveList(startAt: Date | null, size: number, uid: s
 
   return querySnapshot.docs
     .map(d => d.data())
-    .map(d => d['play']);
 }
 
-export async function saveArchive(play: ArchivedPlay, uid: string) {
-  await collectionReference.doc(play.id).set({
-    play,
+export async function saveArchive(payload: ArchiveRequestPayload, uid: string): Promise<Archive> {
+  const request: Archive = {
+    ...payload,
     uid,
-    schema_version: 1,
-    app_version: VersionNumber.appVersion,
-    build_version: VersionNumber.buildVersion
-  });
-  return play;
+    version: {
+      schema: 1,
+      app: VersionNumber.appVersion,
+      build: VersionNumber.buildVersion
+    }
+  };
+  await collectionReference.doc(payload.play.id).set(request);
+  return request;
 }
 
 export async function deleteArchive(id: string) {

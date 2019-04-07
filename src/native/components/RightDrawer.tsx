@@ -6,6 +6,7 @@ import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
 // @ts-ignore
 import t from '../../shared/utils/i18n';
+import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
 
 export type Props = {
   componentId: string,
@@ -17,11 +18,12 @@ export type Props = {
   chain: number,
 
   isSaved: boolean,
+  archivePayload: ArchiveRequestPayload
 
   onResetSelected: () => void,
   onRestartSelected: () => void,
   onSaveCopySelected: () => void,
-  onOverwriteArchiveSelected: () => void
+  onOverwriteArchiveSelected: (archive: ArchiveRequestPayload) => void
 }
 
 type State = {}
@@ -80,7 +82,7 @@ export default class RightDrawer extends Component<Props, State> {
           {
             text: 'Overwrite',
             onPress: () => {
-              this.props.onOverwriteArchiveSelected();
+              this.props.onOverwriteArchiveSelected(this.props.archivePayload);
             }
           },
           {
@@ -88,7 +90,12 @@ export default class RightDrawer extends Component<Props, State> {
             onPress: () => {
               this.props.onSaveCopySelected(); // playId を更新する
               Navigation.push('centerStack', {
-                component: { name: 'com.puyosimulator.SaveModal' }
+                component: {
+                  name: 'com.puyosimulator.SaveModal',
+                  passProps: {
+                    editItem: this.props.archivePayload
+                  }
+                }
               });
             },
           },
@@ -104,7 +111,12 @@ export default class RightDrawer extends Component<Props, State> {
       );
     } else {
       Navigation.push('centerStack', {
-        component: { name: 'com.puyosimulator.SaveModal' }
+        component: {
+          name: 'com.puyosimulator.SaveModal',
+          passProps: {
+            editItem: this.props.archivePayload
+          }
+        }
       });
     }
   }

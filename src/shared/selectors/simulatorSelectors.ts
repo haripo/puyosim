@@ -1,16 +1,21 @@
 import { fieldCols, fieldRows } from '../utils/constants';
 import { getDefaultMove, getFirstCol, getSecondCol, Move } from '../models/move';
 import {
-  Color, createField, isValidPosition,
-  getDropPositions as getDropPositionsStack, StackForRendering, getStackForRendering
+  Color,
+  createField,
+  getDropPositions as getDropPositionsStack,
+  getStackForRendering,
+  isValidPosition,
+  StackForRendering
 } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
-import { ArchivedPlay } from "../utils/StorageService.native";
 import _ from 'lodash';
+
+import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
 
 export function isActive(state): boolean {
   return !(
@@ -318,17 +323,19 @@ export function getShareURL(state: SimulatorState): ShareUrls {
   }
 }
 
-export function getArchivedPlay(state: SimulatorState, title: string): ArchivedPlay {
+export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {
   return {
-    id: state.playId,
-    history: serializeHistoryRecords(state.history),
-    historyIndex: state.historyIndex,
-    maxChain: _.max(state.history.map(h => h.chain)) || 0,
-    queue: _.flatten(state.queue),
-    title: title,
-    stack: _.flatten(state.stack),
-    score: state.score,
-    updatedAt: new Date(),
-    createdAt: state.startDateTime
+    title: state.title,
+    play: {
+      id: state.playId,
+      history: serializeHistoryRecords(state.history),
+      historyIndex: state.historyIndex,
+      maxChain: _.max(state.history.map(h => h.chain)) || 0,
+      queue: _.flatten(state.queue),
+      stack: _.flatten(state.stack),
+      score: state.score,
+      updatedAt: new Date(),
+      createdAt: state.startDateTime
+    }
   }
 }

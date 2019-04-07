@@ -1,7 +1,6 @@
-import { ArchivedPlay } from "../utils/StorageService.native";
 import { ArchiveState } from "../reducers/archive";
-import _ from 'lodash';
+import { Archive } from "../utils/OnlineStorageService";
 
-export function getArchivedPlays(state: ArchiveState): ArchivedPlay[] {
-  return state.sortedIds.map(id => state.plays[id]);
+export function getArchives(state: ArchiveState): Archive[] {
+  return state.sortedIds.map(id => state.archives[id]);
 }

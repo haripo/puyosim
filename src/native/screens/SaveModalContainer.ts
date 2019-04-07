@@ -4,24 +4,25 @@ import SaveModal from "../components/SaveModal";
 import { getStack } from "../../shared/selectors/simulatorSelectors";
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
-import { ArchivedPlay } from "../../shared/utils/StorageService.native";
+import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
 
 const mapStateToProps = (state) => {
   return {
     stack: getStack(state.simulator),
     puyoSkin: state.config.puyoSkin as string,
     layout: getLayout(state.layout),
-    theme: getTheme(state.theme)
+    theme: getTheme(state.theme),
+    isSaved: state.simulator.isSaved,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSavePressed: (play: ArchivedPlay) => {
-      if (play.id) {
-        dispatch(editArchive(play));
+    onSavePressed: (edited: ArchiveRequestPayload, isSaved: boolean) => {
+      if (isSaved) {
+        dispatch(editArchive(edited));
       } else {
-        dispatch(archiveCurrentField(play.title));
+        dispatch(archiveCurrentField(edited));
       }
     },
   };

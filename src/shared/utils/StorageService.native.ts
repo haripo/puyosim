@@ -1,36 +1,6 @@
 import Realm from 'realm';
 import _ from 'lodash';
 
-const archivedPlaySchema = {
-  name: 'ArchivedPlay',
-  primaryKey: 'id',
-  properties: {
-    id: { type: 'string' },
-    queue: { type: 'list', objectType: 'int' },
-    stack: { type: 'list', objectType: 'int' },
-    maxChain: { type: 'int' },
-    score: { type: 'int' },
-    history: { type: 'string' },
-    historyIndex: { type: 'int' },
-    createdAt: { type: 'date' },
-    updatedAt: { type: 'date' },
-    title: { type: 'string' },
-  }
-};
-
-export interface ArchivedPlay {
-  id: string,
-  queue: number[],
-  stack: number[],
-  maxChain: number,
-  score: number,
-  history: string,
-  historyIndex: number,
-  createdAt: Date,
-  updatedAt: Date,
-  title: string,
-}
-
 const configSchema = {
   name: 'Config',
   primaryKey: 'key',
@@ -47,7 +17,6 @@ interface Config {
 
 let realm = new Realm({
   schema: [
-    archivedPlaySchema,
     configSchema
   ]
 });

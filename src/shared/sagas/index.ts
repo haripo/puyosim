@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
-  ARCHIVE_CURRENT_FIELD, archiveCurrentFieldFinished,
+  ARCHIVE_CURRENT_FIELD,
+  archiveCurrentFieldFinished,
   DELETE_ARCHIVE,
   deleteArchiveFinished,
   EDIT_ARCHIVE,
@@ -11,14 +12,12 @@ import {
   loadArchiveListNextPageFinished,
   REQUEST_LOGIN,
   requestLoginSucceed,
-  RESTART, showSnackbar
+  RESTART,
+  showSnackbar
 } from "../actions/actions";
-import { getArchivedPlay } from "../selectors/simulatorSelectors";
-import { deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
+import { Archive, deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
 import firebase from "react-native-firebase";
 import { reloadAd } from "../models/admob";
-import { ArchivedPlay } from "../utils/StorageService.native";
-
 // @ts-ignore
 import { t } from "../../shared/utils/i18n";
 import { Sentry } from "react-native-sentry";
@@ -36,12 +35,10 @@ function* getOrRequestLogin() {
 
 function* handleArchiveField(action) {
   try {
-    const play = yield select<any>(state => getArchivedPlay(state.simulator, action.title));
     const uid = yield getOrRequestLogin();
-
-    yield call(saveArchive, play, uid);
+    const archive = yield call(saveArchive, action.archivePayload, uid);
     yield put(showSnackbar(t('saveSucceeded')));
-    yield put(archiveCurrentFieldFinished());
+    yield put(archiveCurrentFieldFinished(archive));
   } catch (e) {
     console.error(e);
     Sentry.captureException(e);
@@ -52,8 +49,8 @@ function* handleArchiveField(action) {
 function* handleLoadArchiveListFirstPage(action) {
   try {
     const uid = yield call(getOrRequestLogin);
-    const plays = yield call(loadArchiveList, null, 20, uid);
-    yield put(loadArchiveListFirstPageFinished(plays));
+    const archives = yield call(loadArchiveList, null, 20, uid);
+    yield put(loadArchiveListFirstPageFinished(archives));
   } catch (e) {
     console.error(e);
     Sentry.captureException(e);
@@ -65,9 +62,9 @@ function* handleLoadArchiveListNextPage(action) {
   try {
     const uid = yield call(getOrRequestLogin);
     const ids = yield select<(State) => string[]>(state => state.archive.sortedIds);
-    const lastItem = yield select<(State) => { [id: string]: ArchivedPlay }>(state => state.archive.plays[ids[ids.length - 1]]);
-    const plays = yield call(loadArchiveList, lastItem.updatedAt, action.count, uid);
-    yield put(loadArchiveListNextPageFinished(plays));
+    const lastItem = yield select<(State) => Archive>(state => state.archive.archives[ids[ids.length - 1]]);
+    const archives = yield call(loadArchiveList, lastItem.play.updatedAt, action.count, uid);
+    yield put(loadArchiveListNextPageFinished(archives));
   } catch (e) {
     console.error(e);
     Sentry.captureException(e);
@@ -78,7 +75,7 @@ function* handleLoadArchiveListNextPage(action) {
 function* handleEditArchivedPlay(action) {
   try {
     const uid = yield call(getOrRequestLogin);
-    const play = yield call(saveArchive, action.play, uid);
+    const play = yield call(saveArchive, action.archivePayload, uid);
     yield put(editArchiveFinished(play));
     yield put(showSnackbar(t('saveSucceeded')));
   } catch (e) {

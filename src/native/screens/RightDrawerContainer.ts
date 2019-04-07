@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { archiveCurrentField, refreshPlayId, resetField, restart } from '../../shared/actions/actions';
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import RightDrawer from "../components/RightDrawer";
-import { Navigation } from "react-native-navigation";
+import { getArchivePayload } from "../../shared/selectors/simulatorSelectors";
+import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +13,8 @@ const mapStateToProps = (state) => {
     chainScore: state.simulator.chainScore,
     numSplit: state.simulator.numSplit,
     numHands: state.simulator.numHands,
-    isSaved: state.simulator.isSaved
+    isSaved: state.simulator.isSaved,
+    archivePayload: getArchivePayload(state.simulator)
   };
 };
 
@@ -24,8 +26,8 @@ const mapDispatchToProps = (dispatch) => {
     onRestartSelected: () => {
       dispatch(restart());
     },
-    onOverwriteArchiveSelected: () => {
-      dispatch(archiveCurrentField());
+    onOverwriteArchiveSelected: (archive: ArchiveRequestPayload) => {
+      dispatch(archiveCurrentField(archive));
     },
     onSaveCopySelected: () => {
       dispatch(refreshPlayId());

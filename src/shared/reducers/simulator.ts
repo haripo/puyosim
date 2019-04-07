@@ -2,7 +2,7 @@ import {
   APPLY_GRAVITY,
   ARCHIVE_CURRENT_FIELD_FINISHED,
   DEBUG_SET_HISTORY,
-  DEBUG_SET_PATTERN,
+  DEBUG_SET_PATTERN, EDIT_ARCHIVE_FINISHED,
   FINISH_DROPPING_ANIMATIONS,
   FINISH_VANISHING_ANIMATIONS,
   INITIALIZE_SIMULATOR,
@@ -39,8 +39,9 @@ import {
 import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair, Stack } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
-import { ArchivedPlay } from "../utils/StorageService.native";
 import _ from 'lodash';
+import { Archive } from "../utils/OnlineStorageService";
+import { ArchiveState } from "./archive";
 
 export type SimulatorState = {
   queue: number[][],
@@ -57,8 +58,10 @@ export type SimulatorState = {
   history: HistoryRecord[],
   historyIndex: number,
 
-  playId: string,
   startDateTime: Date, // Date を直接編集すると immer が immutability を保証しないので注意
+
+  playId: string,
+  title: string,
   isSaved: boolean
 };
 
@@ -269,21 +272,32 @@ function reconstructHistory(state: SimulatorState, action): SimulatorState {
   return state;
 }
 
-function loadArchive(state: SimulatorState, action, archive) {
-  const play: ArchivedPlay = archive.plays[action.id];
-  state.playId = play.id;
-  state.queue = _.chunk(play.queue, 2);
-  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(play.history), state.queue);
-  state.historyIndex = play.historyIndex;
-  state.startDateTime = play.createdAt;
+function loadArchive(state: SimulatorState, action, archives) {
+  const archive: Archive = archives.archives[action.id];
+  state.playId = archive.play.id;
+  state.queue = _.chunk(archive.play.queue, 2);
+  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(archive.play.history), state.queue);
+  state.historyIndex = archive.play.historyIndex;
+  state.startDateTime = archive.play.createdAt;
   state.isSaved = true;
+  state.title = archive.title;
 
   state = revert(state, state.historyIndex);
   return state;
 }
 
 function archiveCurrentFieldFinished(state: SimulatorState, action) {
+  const { archive } = action;
   state.isSaved = true;
+  state.title = archive.title;
+  return state;
+}
+
+function editArchiveFinished(state: SimulatorState, action) {
+  const { archive } = action;
+  if (archive.play.id === state.playId) {
+    state.title = archive.title;
+  }
   return state;
 }
 
@@ -311,7 +325,8 @@ function createInitialState(config): SimulatorState {
     historyIndex: 0,
     startDateTime: new Date(),
     playId: uuid(),
-    isSaved: false
+    isSaved: false,
+    title: ''
   };
 }
 
@@ -363,6 +378,8 @@ export const reducer = (state, action, config, archive) => {
       return loadArchive(state, action, archive);
     case ARCHIVE_CURRENT_FIELD_FINISHED:
       return archiveCurrentFieldFinished(state, action);
+    case EDIT_ARCHIVE_FINISHED:
+      return editArchiveFinished(state, action);
     case REFRESH_PLAY_ID:
       return refreshPlayId(state, action);
     case DEBUG_SET_PATTERN:
