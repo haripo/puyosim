@@ -4,7 +4,7 @@ import {
   finishVanishingAnimations,
   initializeSimulator,
   moveHighlightsLeft,
-  moveHighlightsRight, moveHistory, openTwitterShare,
+  moveHighlightsRight, moveHistory,
   putNextPair, redoField,
   resetField,
   restart,
@@ -73,9 +73,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRestartSelected: () => {
       dispatch(restart());
-    },
-    onShareSelected: () => {
-      dispatch(openTwitterShare());
     },
     onHistoryNodePressed: (index) => {
       dispatch(moveHistory(index));

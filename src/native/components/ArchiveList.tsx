@@ -3,7 +3,8 @@ import ReactNative, {
   ActionSheetIOS,
   Alert,
   FlatList,
-  LayoutAnimation, Platform,
+  LayoutAnimation,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,7 +16,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
 import _ from 'lodash';
-import { getStackForRendering, StackForRendering } from "../../shared/models/stack";
+import { getStackForRendering } from "../../shared/models/stack";
 import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
@@ -27,7 +28,6 @@ export interface Props {
   theme: Theme,
   puyoSkin: string,
   layout: Layout,
-  stack: StackForRendering,
 
   archives: Archive[],
 
