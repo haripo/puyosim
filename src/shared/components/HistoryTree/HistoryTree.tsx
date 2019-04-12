@@ -92,7 +92,7 @@ export default class HistoryTree extends React.Component<Props, State> {
         rotation={ move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
-        key={ `${row}-${col}-${historyIndex}` }
+        key={ `${ row }-${ col }-${ historyIndex }` }
         onPress={ e => this.handleNodePressed(historyIndex, e) }
       />
     );
@@ -107,7 +107,7 @@ export default class HistoryTree extends React.Component<Props, State> {
 
     return (
       <HistoryTreePath
-        key={ `${from.row}-${from.col}-${to.row}-${to.col}` }
+        key={ `${ from.row }-${ from.col }-${ to.row }-${ to.col }` }
         startX={ x1 }
         startY={ y1 }
         endX={ x2 }
@@ -141,23 +141,23 @@ export default class HistoryTree extends React.Component<Props, State> {
           To ignore this, wrap Svg by View and specifying its size.
         */ }
         <ScrollView>
-        <View width={ svgWidth } height={ svgHeight }>
-          <Svg width={ svgWidth } height={ svgHeight }>
-            { this.renderTree(nodes, paths) }
-          </Svg>
-        </View>
-        <View style={ styles.handView } height={ svgHeight }>
-          <Svg width={ this.handWidth } height={ svgHeight }>
-            <Rect
-              x={ 0 }
-              y={ 0 }
-              width={ this.handWidth }
-              height={ svgHeight }
-              fill={ themeLightColor }
-            />
-            { hands.map((hand, i) => this.renderHand(hand, i)) }
-          </Svg>
-        </View>
+          <View width={ svgWidth } height={ svgHeight }>
+            <Svg width={ svgWidth } height={ svgHeight }>
+              { this.renderTree(nodes, paths) }
+            </Svg>
+          </View>
+          <View style={ styles.handView } height={ svgHeight }>
+            <Svg width={ this.handWidth } height={ svgHeight }>
+              <Rect
+                x={ 0 }
+                y={ 0 }
+                width={ this.handWidth }
+                height={ svgHeight }
+                fill={ themeLightColor }
+              />
+              { hands.map((hand, i) => this.renderHand(hand, i)) }
+            </Svg>
+          </View>
         </ScrollView>
       </View>
     );

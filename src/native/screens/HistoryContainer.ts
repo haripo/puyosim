@@ -1,11 +1,14 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity, finishDroppingAnimations,
+  applyGravity,
+  finishDroppingAnimations,
   finishVanishingAnimations,
   initializeSimulator,
   moveHighlightsLeft,
-  moveHighlightsRight, moveHistory,
-  putNextPair, redoField,
+  moveHighlightsRight,
+  moveHistory,
+  putNextPair,
+  redoField,
   resetField,
   restart,
   rotateHighlightsLeft,
@@ -14,7 +17,10 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import {
-  canRedo, canUndo, getGhost, getHistoryTreeLayout, getPendingPair, getStack, getVanishingPuyos,
+  getGhost,
+  getPendingPair,
+  getStack,
+  getVanishingPuyos,
   isActive
 } from '../../shared/selectors/simulatorSelectors';
 import History from '../components/History';
@@ -23,21 +29,20 @@ import { getTheme } from "../../shared/selectors/themeSelectors";
 
 const mapStateToProps = (state) => {
   return {
+    theme: getTheme(state.theme),
+    layout: getLayout(state.layout),
+
     stack: getStack(state.simulator),
-    current: state.simulator.queue[0],
     ghosts: getGhost(state.simulator),
-    pendingPair: getPendingPair(state.simulator),
+    current: state.simulator.queue[0],
     droppingPuyos: state.simulator.droppingPuyos,
     vanishingPuyos: getVanishingPuyos(state.simulator),
     isActive: isActive(state),
     puyoSkin: state.config.puyoSkin,
-    canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator),
+    pendingPair: getPendingPair(state.simulator),
+
     history: state.simulator.history,
-    historyTreeLayout: getHistoryTreeLayout(state.simulator),
     historyIndex: state.simulator.historyIndex,
-    layout: getLayout(state.layout),
-    theme: getTheme(state.theme)
   };
 };
 
