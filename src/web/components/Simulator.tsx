@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { parse } from 'query-string';
 import Modal from 'react-modal';
 
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { contentsMargin, contentsPadding, screenHeight, simulatorWidth } from '../../shared/utils/constants';
+import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
