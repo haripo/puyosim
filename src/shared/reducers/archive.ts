@@ -1,6 +1,6 @@
 import {
   DELETE_ARCHIVE_FINISHED,
-  EDIT_ARCHIVE_FINISHED,
+  EDIT_ARCHIVE_FINISHED, LOAD_ARCHIVE, LOAD_ARCHIVE_LIST_FIRST_PAGE,
   LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED,
   LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED
 } from "../actions/actions";
@@ -8,19 +8,27 @@ import { Archive } from "../utils/OnlineStorageService";
 
 export type ArchiveState = {
   archives: { [id: string]: Archive },
-  sortedIds: string[];
+  sortedIds: string[],
+  isLoading: boolean
 }
 
 export const initialState: ArchiveState = {
   archives: {},
-  sortedIds: []
+  sortedIds: [],
+  isLoading: false
 };
+
+function loadArchiveListFirstPage(state: ArchiveState): ArchiveState {
+  state.isLoading = true;
+  return state;
+}
 
 function loadArchiveListFirstPageFinished(state: ArchiveState, { archives }): ArchiveState {
   for (let item of archives) {
     state.archives[item.play.id] = item;
   }
   state.sortedIds = archives.map(item => item.play.id);
+  state.isLoading = false;
   return state;
 }
 
@@ -53,6 +61,8 @@ function editArchiveFinished(state: ArchiveState, action): ArchiveState {
 
 export const reducer = (state: ArchiveState, action): ArchiveState => {
   switch (action.type) {
+    case LOAD_ARCHIVE_LIST_FIRST_PAGE:
+      return loadArchiveListFirstPage(state, action);
     case LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED:
       return loadArchiveListFirstPageFinished(state, action);
     case LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED:

@@ -18,7 +18,8 @@ const mapStateToProps = (state: State) => {
     layout: getLayoutForArchivedListField(),
     theme: getTheme(state.theme),
 
-    archives: getArchives(state.archive)
+    archives: getArchives(state.archive),
+    isLoading: state.archive.isLoading,
   };
 };
 

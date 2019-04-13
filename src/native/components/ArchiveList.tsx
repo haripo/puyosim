@@ -21,6 +21,7 @@ import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
 import { Archive } from "../../shared/utils/OnlineStorageService";
+import Loading from "../../shared/components/Loading";
 
 export interface Props {
   componentId: string,
@@ -30,6 +31,7 @@ export interface Props {
   layout: Layout,
 
   archives: Archive[],
+  isLoading: boolean,
 
   onArchiveOpened: () => void,
   onItemPressed: (id: string) => void,
@@ -182,12 +184,14 @@ export default class ArchiveList extends Component<Props, State> {
     return (
       <View style={ styles.container }>
         <View style={ styles.contents }>
-          <FlatList
-            data={ this.props.archives }
-            renderItem={ this.renderItem.bind(this) }
-            keyExtractor={ item => item.play.id }
-            onEndReached={ this.handleEndReached.bind(this) }
-          />
+          <Loading isLoading={ this.props.isLoading } theme={ this.props.theme }>
+            <FlatList
+              data={ this.props.archives }
+              renderItem={ this.renderItem.bind(this) }
+              keyExtractor={ item => item.play.id }
+              onEndReached={ this.handleEndReached.bind(this) }
+            />
+          </Loading>
         </View>
       </View>
     );
