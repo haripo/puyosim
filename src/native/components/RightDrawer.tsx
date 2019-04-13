@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
-import { contentsMargin, contentsPadding, themeLightColor } from "../../shared/utils/constants";
+import { Alert, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { contentsMargin, contentsPadding, screenWidth, themeLightColor } from "../../shared/utils/constants";
 import IconButton from "../../shared/components/IconButton";
 import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
@@ -101,7 +101,8 @@ export default class RightDrawer extends Component<Props, State> {
           },
           {
             text: 'Cancel',
-            onPress: () => {},
+            onPress: () => {
+            },
             style: 'cancel',
           },
         ],
@@ -171,78 +172,81 @@ export default class RightDrawer extends Component<Props, State> {
     ];
 
     return (
-      <View style={ [styles.container, Platform.OS === 'ios' ? styles.iosStyle : null] }>
-        <View style={ styles.metrics }>
-          { metrics.map(m => this.renderMetric(m)) }
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={ [styles.container, Platform.OS === 'ios' ? styles.iosStyle : null] }>
+          <View style={ styles.metrics }>
+            { metrics.map(m => this.renderMetric(m)) }
+          </View>
+          <View style={ styles.buttons }>
+            <View style={ styles.buttonGroup }>
+              <IconButton
+                icon='history'
+                text='history'
+                onPressed={ this.handleHistoryPressed.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
+                icon='fast-rewind'
+                text='reset'
+                onPressed={ this.handleResetSelected.bind(this) }
+              />
+            </View>
+            <View style={ styles.buttonGroup }>
+              <IconButton
+                icon='delete'
+                text='restart'
+                onPressed={ this.handleRestartSelected.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
+                icon='share'
+                text='share'
+                onPressed={ this.handleShareSelected.bind(this) }
+              />
+            </View>
+            <View style={ styles.buttonGroup }>
+              <IconButton
+                icon='cloud-upload'
+                text='save'
+                onPressed={ this.handleSavePressed.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
+                icon='cloud-download'
+                text='load'
+                onPressed={ this.handleLoadPressed.bind(this) }
+              />
+            </View>
+            <View style={ styles.buttonGroup }>
+              <IconButton
+                icon='settings'
+                text='settings'
+                onPressed={ this.handleSettingsSelected.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
+                icon='feedback'
+                text='about'
+                onPressed={ this.handleAboutSelected.bind(this) }
+              />
+            </View>
+          </View>
         </View>
-        <View style={ styles.buttons }>
-          <View style={ styles.buttonGroup }>
-            <IconButton
-              icon='history'
-              text='history'
-              onPressed={ this.handleHistoryPressed.bind(this) }
-            />
-            <IconButton
-              style={ styles.controllerRightButton }
-              icon='fast-rewind'
-              text='reset'
-              onPressed={ this.handleResetSelected.bind(this) }
-            />
-          </View>
-          <View style={ styles.buttonGroup }>
-            <IconButton
-              icon='delete'
-              text='restart'
-              onPressed={ this.handleRestartSelected.bind(this) }
-            />
-            <IconButton
-              style={ styles.controllerRightButton }
-              icon='share'
-              text='share'
-              onPressed={ this.handleShareSelected.bind(this) }
-            />
-          </View>
-          <View style={ styles.buttonGroup }>
-            <IconButton
-              icon='cloud-upload'
-              text='save'
-              onPressed={ this.handleSavePressed.bind(this) }
-            />
-            <IconButton
-              style={ styles.controllerRightButton }
-              icon='cloud-download'
-              text='load'
-              onPressed={ this.handleLoadPressed.bind(this) }
-            />
-          </View>
-          <View style={ styles.buttonGroup }>
-            <IconButton
-              icon='settings'
-              text='settings'
-              onPressed={ this.handleSettingsSelected.bind(this) }
-            />
-            <IconButton
-              style={ styles.controllerRightButton }
-              icon='feedback'
-              text='about'
-              onPressed={ this.handleAboutSelected.bind(this) }
-            />
-          </View>
-        </View>
-      </View>
+      </SafeAreaView>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'white',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    padding: contentsPadding
+    padding: contentsPadding,
   },
   buttons: {
     flexDirection: 'column',
@@ -257,8 +261,7 @@ const styles = StyleSheet.create({
     marginLeft: contentsMargin
   },
   iosStyle: {
-    width: 200,
-    paddingTop: 20
+    width: screenWidth * (3.0 / 4.0), // FIXME
   },
   metrics: {
     padding: contentsPadding

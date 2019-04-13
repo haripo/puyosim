@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Text, Platform, StyleSheet, View, ViewStyle, Linking } from 'react-native';
+import { Alert, Text, Platform, StyleSheet, View, ViewStyle, Linking, SafeAreaView } from 'react-native';
 import { parse } from 'query-string';
 import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
@@ -62,11 +62,13 @@ export default class Simulator extends Component<Props, State> {
     return {
       sideMenu: {
         right: {
-          // @ts-ignore
-          width: (Platform.OS === 'ios' ? 200 : undefined),
           enabled: true,
           //visible: false
-        }
+        },
+        // @ts-ignore
+        // specifying animation type enables SafeAreaView functionality
+        // https://github.com/wix/react-native-navigation/issues/3418#issuecomment-462822967
+        animationType: 'none'
       },
       topBar: {
         title: {
@@ -196,56 +198,59 @@ export default class Simulator extends Component<Props, State> {
       <LayoutBaseContainer isLoading={ this.state.isLoading }>
         <View
           style={ styles.container }>
-          <View style={ styles.contents }>
-            <View>
-              <HandlingPuyos
-                pair={ this.props.pendingPair }
-                puyoSkin={ this.props.puyoSkin }
-                style={ styles.handlingPuyos }
-                layout={ this.props.layout }>
-              </HandlingPuyos>
-              <Field
-                stack={ this.props.stack }
-                ghosts={ this.props.ghosts }
-                isActive={ this.props.isActive }
-                droppings={ this.props.droppings }
-                vanishings={ this.props.vanishings }
-                style={ styles.field }
-                layout={ this.props.layout }
-                theme={ this.props.theme }
-                puyoSkin={ this.props.puyoSkin }
-                onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
-                onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
-              />
-              { /*
+          <SafeAreaView style={ { flex: 1 } }>
+            <View style={ styles.contents }>
+              <View>
+                <HandlingPuyos
+                  pair={ this.props.pendingPair }
+                  puyoSkin={ this.props.puyoSkin }
+                  style={ styles.handlingPuyos }
+                  layout={ this.props.layout }>
+                </HandlingPuyos>
+                <Field
+                  stack={ this.props.stack }
+                  ghosts={ this.props.ghosts }
+                  isActive={ this.props.isActive }
+                  droppings={ this.props.droppings }
+                  vanishings={ this.props.vanishings }
+                  style={ styles.field }
+                  layout={ this.props.layout }
+                  theme={ this.props.theme }
+                  puyoSkin={ this.props.puyoSkin }
+                  onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
+                  onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
+                />
+                { /*
                 this.state.isiVisible == false のとき、
                 このコンポーネントは history 画面などの screen によって隠されている。
                 その場合、アニメーション完了時のコールバックが history 画面のものとあわせて
                 2 回発行されてしまうため、それを防ぐ。
                */ }
-            </View>
-            <View style={ styles.side }>
-              <View style={ styles.sideHead }>
-                <NextWindowContainer/>
-                <ChainResultContainer/>
               </View>
-              <SimulatorControls
-                onUndoSelected={ this.props.onUndoSelected }
-                onRedoSelected={ this.props.onRedoSelected }
-                onRotateLeftPressed={ this.props.onRotateLeftPressed }
-                onRotateRightPressed={ this.props.onRotateRightPressed }
-                onMoveLeftPressed={ this.props.onMoveLeftPressed }
-                onMoveRightPressed={ this.props.onMoveRightPressed }
-                onDropPressed={ this.props.onDropPressed }
-                isActive={ this.props.isActive }
-                canUndo={ this.props.canUndo }
-                canRedo={ this.props.canRedo }
-              />
+              <View style={ styles.side }>
+                <View style={ styles.sideHead }>
+                  <NextWindowContainer/>
+                  <ChainResultContainer/>
+                </View>
+                <SimulatorControls
+                  onUndoSelected={ this.props.onUndoSelected }
+                  onRedoSelected={ this.props.onRedoSelected }
+                  onRotateLeftPressed={ this.props.onRotateLeftPressed }
+                  onRotateRightPressed={ this.props.onRotateRightPressed }
+                  onMoveLeftPressed={ this.props.onMoveLeftPressed }
+                  onMoveRightPressed={ this.props.onMoveRightPressed }
+                  onDropPressed={ this.props.onDropPressed }
+                  isActive={ this.props.isActive }
+                  canUndo={ this.props.canUndo }
+                  canRedo={ this.props.canRedo }
+                />
+              </View>
             </View>
-          </View>
+          </SafeAreaView>
         </View>
       </LayoutBaseContainer>
-    );
+    )
+      ;
   }
 }
 
@@ -269,6 +274,7 @@ const styles = StyleSheet.create({
   side: {
     flex: 1,
     marginRight: contentsMargin,
+    marginTop: contentsMargin,
     marginBottom: contentsMargin
   },
   sideHead: {

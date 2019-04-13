@@ -121,7 +121,8 @@ async function launch() {
       right: {
         enabled: false,
         visible: false
-      }
+      },
+      animationType: 'parallax'
     }
   });
 }
