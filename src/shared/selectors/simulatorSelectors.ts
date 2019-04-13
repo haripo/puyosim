@@ -10,12 +10,13 @@ import {
 } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
-import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
+import { deserializeHistoryRecords, serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
 
 import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
+import { Sentry } from "react-native-sentry";
 
 export function isActive(state): boolean {
   return !(
@@ -324,6 +325,23 @@ export function getShareURL(state: SimulatorState): ShareUrls {
 }
 
 export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {
+  // serialize に失敗するパターンがあるようなので、デバッグのため確認する。
+  let serialized = 'not set';
+  let deserialized = 'not set';
+  try {
+    serialized = serializeHistoryRecords(state.history);
+    deserialized = deserializeHistoryRecords(serialized);
+    if (_.isEqual(state.history, deserialized)) {
+      throw new Error('Not succeeded');
+    }
+  } catch (e) {
+    console.error(state);
+    console.error(e);
+    console.error(serialized);
+    console.error(deserialized);
+    Sentry.captureException(e);
+  }
+
   return {
     title: state.title,
     play: {
