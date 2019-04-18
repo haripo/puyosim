@@ -1,4 +1,4 @@
-import firebase from 'react-native-firebase';
+import firebase  from 'react-native-firebase';
 import VersionNumber from 'react-native-version-number';
 
 import { FIRESTORE_ARCHIVE_COLLECTION, FIRESTORE_ARCHIVE_COLLECTION_DEBUG } from 'react-native-dotenv';
@@ -66,4 +66,8 @@ export async function saveArchive(payload: ArchiveRequestPayload, uid: string): 
 
 export async function deleteArchive(id: string) {
   return await collectionReference.doc(id).delete();
+}
+
+export function requestLogin(): Promise<any> {
+  return firebase.auth().signInAnonymously();
 }

@@ -14,11 +14,15 @@ class InterstitialAd extends Ad {
     super();
 
     this.unitId = unitId;
+    // FIXME
+    // @ts-ignore
     this.ad = firebase.admob().interstitial(this.unitId);
     this.load();
   }
 
   load() {
+    // FIXME
+    // @ts-ignore
     const AdRequest = firebase.admob.AdRequest;
     const request = new AdRequest();
     this.ad.loadAd(request.build());

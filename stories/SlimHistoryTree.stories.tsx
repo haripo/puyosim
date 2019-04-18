@@ -3,10 +3,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
-
-import { Button, Welcome } from '@storybook/react/demo';
 import { HistoryRecord } from "../src/shared/models/history";
-import { createField, Pair, Stack } from "../src/shared/models/stack";
+import { createField } from "../src/shared/models/stack";
 import { fieldCols, fieldRows } from "../src/shared/utils/constants";
 import SlimHistoryTree from "../src/shared/components/HistoryTree/SlimHistoryTree";
 
@@ -21,7 +19,8 @@ const simpleTree: HistoryRecord[] = [
     chainScore: 0,
     prev: null,
     next: [1, 2],
-    defaultNext: 1
+    defaultNext: 1,
+    numSplit: 0
   },
   {
     move: { col: 2, rotation: 'top' },
@@ -33,7 +32,8 @@ const simpleTree: HistoryRecord[] = [
     chainScore: 0,
     prev: 0,
     next: [3],
-    defaultNext: 3
+    defaultNext: 3,
+    numSplit: 0
   },
   {
     move: { col: 3, rotation: 'top' },
@@ -45,7 +45,8 @@ const simpleTree: HistoryRecord[] = [
     chainScore: 0,
     prev: 0,
     next: [],
-    defaultNext: null
+    defaultNext: null,
+    numSplit: 0
   },
   {
     move: { col: 4, rotation: 'top' },
@@ -57,7 +58,8 @@ const simpleTree: HistoryRecord[] = [
     chainScore: 0,
     prev: 2,
     next: [],
-    defaultNext: null
+    defaultNext: null,
+    numSplit: 0
   }
 ];
 

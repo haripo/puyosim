@@ -15,8 +15,11 @@ import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
 
+// @ts-ignore
 import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
-import { Sentry } from "react-native-sentry";
+
+// @ts-ignore
+import { captureException } from "../utils/Sentry";
 
 export function isActive(state): boolean {
   return !(
@@ -327,7 +330,7 @@ export function getShareURL(state: SimulatorState): ShareUrls {
 export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {
   // serialize に失敗するパターンがあるようなので、デバッグのため確認する。
   let serialized = 'not set';
-  let deserialized = 'not set';
+  let deserialized: any = null;
   try {
     serialized = serializeHistoryRecords(state.history);
     deserialized = deserializeHistoryRecords(serialized);
@@ -339,7 +342,7 @@ export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload 
     console.error(e);
     console.error(serialized);
     console.error(deserialized);
-    Sentry.captureException(e);
+    captureException(e);
   }
 
   return {

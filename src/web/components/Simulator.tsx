@@ -13,7 +13,7 @@ import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
 import WebToolbar from './WebToolbar';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-import { PendingPair, PendingPairPuyo, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
@@ -21,6 +21,7 @@ import { HistoryRecord } from "../../shared/models/history";
 import ShareModalContainer from "../containers/ShareModalContainer";
 import ViewerControls from "../../shared/components/ViewerControls";
 import MediaQuery from "react-native-web-responsive";
+import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
   match: any,
@@ -83,10 +84,11 @@ export default class Simulator extends Component<Props, State> {
 
     const query = parse(this.props.location.search);
     if ('q' in query && 'h' in query) {
+      // FIXME: type conversions
       this.props.onReconstructHistoryRequested(
-        query['h'],
-        query['q'],
-        'i' in query ? parseInt(query['i']) : 0,
+        query['h'] as string,
+        query['q'] as string,
+        'i' in query ? parseInt(query['i'] as string) : 0,
       )
     }
   }
@@ -193,7 +195,7 @@ export default class Simulator extends Component<Props, State> {
                     droppings={ this.props.droppings }
                     vanishings={ this.props.vanishings }
                     isActive={ this.props.isActive }
-                    style={ styles.field }
+                    style={ {} }
                     theme={ this.props.theme }
                     layout={ this.props.layout }
                     puyoSkin={ this.props.puyoSkin }

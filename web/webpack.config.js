@@ -11,6 +11,7 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'src/web'),
     path.resolve(appDirectory, 'src/shared'),
     path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
+    path.resolve(appDirectory, 'node_modules/react-native-sentry'),
   ],
   use: {
     loader: 'babel-loader',
@@ -19,14 +20,37 @@ const babelLoaderConfiguration = {
       plugins: [
         'react-native-web',
         'transform-flow-strip-types',
-        [
-          'module-alias',
-          [
-            { src: path.resolve(appDirectory, 'src/web'), expose: 'specific' }
-          ]
-        ]
+        // [
+        //   'module-alias',
+        //   [
+        //     { src: path.resolve(appDirectory, 'src/web'), expose: 'specific' }
+        //   ]
+        // ]
+        // Stage 0
+        // "@babel/plugin-proposal-function-bind",
+        //
+        // // Stage 1
+        // "@babel/plugin-proposal-export-default-from",
+        // "@babel/plugin-proposal-logical-assignment-operators",
+        // ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
+        // ["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }],
+        // ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
+        // "@babel/plugin-proposal-do-expressions",
+        //
+        // // Stage 2
+        // ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        // "@babel/plugin-proposal-function-sent",
+        // "@babel/plugin-proposal-export-namespace-from",
+        // "@babel/plugin-proposal-numeric-separator",
+        // "@babel/plugin-proposal-throw-expressions",
+        //
+        // // Stage 3
+        // "@babel/plugin-syntax-dynamic-import",
+        // "@babel/plugin-syntax-import-meta",
+        ["@babel/plugin-proposal-class-properties", { "loose": false }],
+        // "@babel/plugin-proposal-json-strings"
       ],
-      presets: ['react-native', 'react-native-stage-0']
+      presets: ['@babel/preset-env']
     }
   }
 };
@@ -70,7 +94,7 @@ const tsLoaderConfiguration = {
 };
 
 module.exports = {
-  entry: [path.resolve(appDirectory, 'index.web.js'), 'babel-polyfill'],
+  entry: [path.resolve(appDirectory, 'index.web.js'), '@babel/polyfill'],
   output: {
     filename: 'bundle.web.js',
     path: path.resolve(appDirectory, 'web/public')
@@ -92,7 +116,8 @@ module.exports = {
   resolve: {
     extensions: ['.web.js', '.js', '.ts', '.tsx', '.web.ts', '.web.tsx'],
     alias: {
-      'react-native-svg': 'react-native-svg-web'
+      'react-native-svg': 'react-native-svg-web',
+      'react-native': 'react-native-web'
     }
   },
   devServer: {

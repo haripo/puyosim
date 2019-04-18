@@ -102,10 +102,11 @@ export default class Simulator extends Component<Props, State> {
 
     const query = parse(url.split('?')[1]);
     if ('q' in query && 'h' in query) {
+      // TODO: type conversion
       this.props.onReconstructHistoryRequested(
-        query['h'],
-        query['q'],
-        'i' in query ? parseInt(query['i']) : 0,
+        query['h'] as string,
+        query['q'] as string,
+        'i' in query ? parseInt(query['i'] as string) : 0,
       )
     }
 
@@ -119,7 +120,9 @@ export default class Simulator extends Component<Props, State> {
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
-    if (Platform.OS !== 'web' && VersionNumber.appVersion < minimumSupportedAppVersion) {
+    // FIXME: minimumSupportedAppVersion possibly null
+    // @ts-ignore
+    if (Platform.OS !== 'web' && VersionNumber.appVersion < (minimumSupportedAppVersion || '0')) {
       Alert.alert(
         'App deprecated',
         t('updateRequired'),

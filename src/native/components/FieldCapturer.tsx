@@ -5,8 +5,9 @@ import { StyleSheet, View } from "react-native";
 import Field from "../../shared/components/Field";
 import React from "react";
 import { contentsMargin, themeLightColor } from "../../shared/utils/constants";
-import { PendingPair, StackForRendering } from "../../shared/selectors/simulatorSelectors";
+import { PendingPair } from "../../shared/selectors/simulatorSelectors";
 import { CaptureOptions, captureRef } from "react-native-view-shot";
+import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
   puyoSkin: string,

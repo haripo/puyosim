@@ -4,6 +4,8 @@ import {
   LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED,
   LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED
 } from "../actions/actions";
+
+// @ts-ignore
 import { Archive } from "../utils/OnlineStorageService";
 
 export type ArchiveState = {
@@ -62,7 +64,7 @@ function editArchiveFinished(state: ArchiveState, action): ArchiveState {
 export const reducer = (state: ArchiveState, action): ArchiveState => {
   switch (action.type) {
     case LOAD_ARCHIVE_LIST_FIRST_PAGE:
-      return loadArchiveListFirstPage(state, action);
+      return loadArchiveListFirstPage(state);
     case LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED:
       return loadArchiveListFirstPageFinished(state, action);
     case LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED:

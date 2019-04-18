@@ -141,12 +141,14 @@ export default class HistoryTree extends React.Component<Props, State> {
           To ignore this, wrap Svg by View and specifying its size.
         */ }
         <ScrollView>
-          <View width={ svgWidth } height={ svgHeight }>
+          {/*<View width={ svgWidth } height={ svgHeight }>*/}
+          <View>
             <Svg width={ svgWidth } height={ svgHeight }>
               { this.renderTree(nodes, paths) }
             </Svg>
           </View>
-          <View style={ styles.handView } height={ svgHeight }>
+          <View style={ styles.handView }>
+            {/*<View style={ styles.handView } height={ svgHeight }>*/}
             <Svg width={ this.handWidth } height={ svgHeight }>
               <Rect
                 x={ 0 }

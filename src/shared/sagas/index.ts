@@ -15,12 +15,19 @@ import {
   RESTART,
   showSnackbar
 } from "../actions/actions";
+
+// @ts-ignore
 import { Archive, deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
-import firebase from "react-native-firebase";
+// @ts-ignore
 import { reloadAd } from "../models/admob";
 // @ts-ignore
 import { t } from "../../shared/utils/i18n";
-import { Sentry } from "react-native-sentry";
+
+// @ts-ignore
+import { captureException } from "../utils/Sentry";
+
+// @ts-ignore
+import { requestLogin } from "../utils/OnlineStorageService";
 
 function* getOrRequestLogin() {
   const currentUid = yield select<(State) => string>(state => state.uid);
@@ -29,7 +36,8 @@ function* getOrRequestLogin() {
     return yield currentUid;
   }
 
-  const credential = yield call(() => firebase.auth().signInAnonymously());
+  // @ts-ignore
+  const credential = yield call(requestLogin());
   return yield credential.user.uid;
 }
 
@@ -41,7 +49,7 @@ function* handleArchiveField(action) {
     yield put(archiveCurrentFieldFinished(archive));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('saveFailed')));
   }
 }
@@ -53,7 +61,7 @@ function* handleLoadArchiveListFirstPage(action) {
     yield put(loadArchiveListFirstPageFinished(archives));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('loadFailed')));
   }
 }
@@ -67,7 +75,7 @@ function* handleLoadArchiveListNextPage(action) {
     yield put(loadArchiveListNextPageFinished(archives));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('loadFailed')));
   }
 }
@@ -80,7 +88,7 @@ function* handleEditArchivedPlay(action) {
     yield put(showSnackbar(t('saveSucceeded')));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('editFailed')));
   }
 }
@@ -91,7 +99,7 @@ function* handleDeleteArchivedPlay(action) {
     yield put(deleteArchiveFinished(action.id));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('deleteFailed')));
   }
 }
@@ -102,12 +110,13 @@ function* handleRequestLogin(action) {
     yield put(requestLoginSucceed(user));
   } catch (e) {
     console.error(e);
-    Sentry.captureException(e);
+    captureException(e);
     yield put(showSnackbar(t('authFailed')));
   }
 }
 
 function* handleRestart(action) {
+  // @ts-ignore
   reloadAd.show();
 }
 
