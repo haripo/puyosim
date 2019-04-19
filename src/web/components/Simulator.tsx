@@ -169,14 +169,13 @@ export default class Simulator extends Component<Props, State> {
       <HotKeys
         keyMap={ keyMap }
         handlers={ keyHandlers }
-        style={ { outline: '0', display: 'flex', alignItems: 'stretch', flexGrow: 1 } }
+        style={ { display: 'flex', alignItems: 'stretch', flexGrow: 1 } }
         focused>
         { /* Focused on mounted to enable hotkeys */ }
         <View
           ref={ c => this.hotkeyElementRef = c }
-          tabIndex={ -1 }
-          // @ts-ignore
-          style={ { outline: '0', display: 'flex', alignItems: 'stretch', flexGrow: 1, flexDirection: 'column' } }>
+          // tabIndex={ -1 }
+          style={ { display: 'flex', alignItems: 'stretch', flexGrow: 1, flexDirection: 'column' } }>
           <WebToolbar
             onSharePressed={ this.handleSharePressed.bind(this) }
           />
@@ -261,8 +260,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: simulatorWidth - contentsMargin,
     // height: screenHeight - contentsPadding * 2,
-    // @ts-ignore
-    outline: '0'
   },
   side: {
     flex: 1,

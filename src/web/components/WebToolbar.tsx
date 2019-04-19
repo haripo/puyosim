@@ -59,7 +59,5 @@ const styles = StyleSheet.create({
   navigationItem: {
     lineHeight: webToolbarSize - 3,
     color: 'white',
-    // @ts-ignore
-    outline: '0'
   }
 });
