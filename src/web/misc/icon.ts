@@ -6,7 +6,7 @@ import iconFont from 'react-native-vector-icons/Fonts/MaterialIcons.ttf';
 
 const iconFontStyles = `@font-face {
   src: url(${iconFont});
-  font-family: Material Icons;
+  font-family: MaterialIcons;
 }`;
 
 const style = document.createElement('style');
