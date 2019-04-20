@@ -37,7 +37,7 @@ function* getOrRequestLogin() {
   }
 
   // @ts-ignore
-  const credential = yield call(requestLogin());
+  const credential = yield call(requestLogin);
   return yield credential.user.uid;
 }
 
