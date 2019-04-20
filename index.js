@@ -88,7 +88,8 @@ async function launch() {
               sideMenu: {
                 right: {
                   enabled: false,
-                  visible: false
+                  visible: false,
+                  width: 200
                 },
                 openGestureMode: "bezel"
               }
@@ -122,7 +123,8 @@ async function launch() {
         enabled: false,
         visible: false
       },
-      animationType: 'parallax'
+      animationType: 'none'
+      // なぜか animationType を指定しないと sidemenu の横幅が画面サイズになる
     }
   });
 }

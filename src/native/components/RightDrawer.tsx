@@ -7,6 +7,7 @@ import * as _ from "lodash";
 // @ts-ignore
 import t from '../../shared/utils/i18n';
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
+import { getInset } from "../../shared/utils/safeAreaHelper";
 
 export type Props = {
   componentId: string,
@@ -60,16 +61,20 @@ export default class RightDrawer extends Component<Props, State> {
 
   handleHistoryPressed() {
     this.closeDrawer();
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.History' }
-    });
+    setTimeout(() => {
+      Navigation.push('centerStack', {
+        component: { name: 'com.puyosimulator.History' }
+      });
+    }, 500);
   }
 
   handleShareSelected() {
     this.closeDrawer();
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.Share' }
-    });
+    setTimeout(() => {
+      Navigation.push('centerStack', {
+        component: { name: 'com.puyosimulator.Share' }
+      });
+    }, 500);
   }
 
   handleSavePressed() {
@@ -111,14 +116,16 @@ export default class RightDrawer extends Component<Props, State> {
         },
       );
     } else {
-      Navigation.push('centerStack', {
-        component: {
-          name: 'com.puyosimulator.SaveModal',
-          passProps: {
-            editItem: this.props.archivePayload
+      setTimeout(() => {
+        Navigation.push('centerStack', {
+          component: {
+            name: 'com.puyosimulator.SaveModal',
+            passProps: {
+              editItem: this.props.archivePayload
+            }
           }
-        }
-      });
+        });
+      }, 500);
     }
   }
 
@@ -172,8 +179,8 @@ export default class RightDrawer extends Component<Props, State> {
     ];
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={ [styles.container, Platform.OS === 'ios' ? styles.iosStyle : null] }>
+      <View style={{ flexGrow: 1, paddingTop: getInset('top'), paddingBottom: getInset('bottom') }}>
+        <View style={ styles.container }>
           <View style={ styles.metrics }>
             { metrics.map(m => this.renderMetric(m)) }
           </View>
@@ -232,7 +239,7 @@ export default class RightDrawer extends Component<Props, State> {
             </View>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     )
   }
 }
@@ -259,9 +266,6 @@ const styles = StyleSheet.create({
   },
   controllerRightButton: {
     marginLeft: contentsMargin
-  },
-  iosStyle: {
-    width: screenWidth * (3.0 / 4.0), // FIXME
   },
   metrics: {
     padding: contentsPadding
