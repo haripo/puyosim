@@ -17,7 +17,7 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
 import _ from 'lodash';
 import { getStackForRendering } from "../../shared/models/stack";
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
 import { Archive } from "../../shared/utils/OnlineStorageService";

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { contentsMargin, contentsPadding, screenWidth, themeLightColor } from "../../shared/utils/constants";
 import IconButton from "../../shared/components/IconButton";
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
 // @ts-ignore
 import t from '../../shared/utils/i18n';

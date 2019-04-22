@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Text, Platform, StyleSheet, View, ViewStyle, Linking, SafeAreaView } from 'react-native';
 import { parse } from 'query-string';
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
@@ -17,7 +17,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
-import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
+// import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
 // @ts-ignore
 import { getMinimumSupportedAppVersion } from "../../shared/utils/RemoteConfig";
 import VersionNumber from "react-native-version-number";
@@ -87,7 +87,7 @@ export default class Simulator extends Component<Props, State> {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this);
+    // Navigation.events().bindComponent(this);
 
     this.state = {
       isVisible: true,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { themeColor, themeLightColor } from "../../shared/utils/constants";
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import { t } from "../../shared/utils/i18n";
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";

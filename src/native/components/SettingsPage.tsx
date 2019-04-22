@@ -8,7 +8,7 @@ import { defaultValues } from '../../shared/models/config';
 
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {
