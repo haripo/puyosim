@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -11,12 +10,10 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <ReactNativeNavigation/ReactNativeNavigation.h>
 
 #import <Firebase.h>
 #import "RNFirebaseLinks.h"
 #import "RNSplashScreen.h"
-
 #if __has_include(<React/RNSentry.h>)
 #import <React/RNSentry.h> // This is used for versions of react >= 0.40
 #else
@@ -29,22 +26,25 @@
 {
   [FIROptions defaultOptions].deepLinkURLScheme = @"com.haripo.puyosim";
   [FIRApp configure];
-
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-    moduleName:@"PuyoSimulator"
-    initialProperties:nil];
-  [RNSentry installWithRootView:rootView];
-
-  NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-  [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
-
   [GADMobileAds configureWithApplicationID:@"ca-app-pub-1876795357833764~6972251977"];
 
-  // [RNSplashScreen show];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+                                                   moduleName:@"PuyoSimulator"
+                                            initialProperties:nil];
+  [RNSentry installWithRootView:rootView];
+
+  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+
+  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  UIViewController *rootViewController = [UIViewController new];
+  rootViewController.view = rootView;
+  self.window.rootViewController = rootViewController;
+  [self.window makeKeyAndVisible];
+
+  [RNSplashScreen show];
   return YES;
 }
-
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
@@ -53,20 +53,6 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
-}
-
-// react-native-firebase dynamic links
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options {
-  return [[RNFirebaseLinks instance] application:application openURL:url options:options];
-}
-
-// react-native-firebase dynamic links
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(NSUserActivity *)userActivity
- restorationHandler:(void (^)(NSArray *))restorationHandler {
-  return [[RNFirebaseLinks instance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end
