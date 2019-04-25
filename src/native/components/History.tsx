@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -7,6 +7,7 @@ import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree
 import { HistoryRecord } from "../../shared/models/history";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
+import { NavigationScreenProps } from "react-navigation";
 
 export interface Props {
   theme: Theme,
@@ -30,24 +31,10 @@ export interface Props {
 interface State {
 }
 
-export default class History extends Component<Props, State> {
-  static options() {
-    return {
-      topBar: {
-        title: {
-          text: 'History',
-        },
-      },
-      // react-native-navigation のバグだと思うが、
-      // setDefaultOptions の設定をここで再指定する必要がある
-      sideMenu: {
-        right: {
-          enabled: false,
-          visible: false
-        }
-      }
-    }
-  }
+export default class History extends Component<Props & NavigationScreenProps, State> {
+  static navigationOptions = () => ({
+    title: 'History'
+  });
 
   render() {
     return (

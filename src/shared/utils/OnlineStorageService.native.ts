@@ -1,4 +1,4 @@
-import firebase  from 'react-native-firebase';
+import firebase, { RNFirebase } from 'react-native-firebase';
 import VersionNumber from 'react-native-version-number';
 
 import { FIRESTORE_ARCHIVE_COLLECTION, FIRESTORE_ARCHIVE_COLLECTION_DEBUG } from 'react-native-dotenv';
@@ -14,8 +14,8 @@ type ArchivePlay = {
   score: number,
   history: string,
   historyIndex: number,
-  createdAt: Date,
-  updatedAt: Date,
+  createdAt: RNFirebase.firestore.Timestamp,
+  updatedAt: RNFirebase.firestore.Timestamp,
 };
 
 export type ArchiveRequestPayload = {
@@ -42,7 +42,7 @@ export async function loadArchiveList(startAt: Date | null, size: number, uid: s
   const querySnapshot = await collectionReference
     .where('uid', '==', uid)
     .orderBy('play.updatedAt', 'desc')
-    .startAt(startAt)
+    .startAt(firebase.firestore.Timestamp.fromDate(startAt))
     .limit(size)
     .get();
 

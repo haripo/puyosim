@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { NavigationScreenProps } from "react-navigation";
 import { themeColor, themeLightColor } from "../../shared/utils/constants";
-// import { Navigation } from "react-native-navigation";
+
 // @ts-ignore
 import { t } from "../../shared/utils/i18n";
+
+// @ts-ignore
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
+import Icon from "./Simulator";
 
 export type Props = {
   componentId: string,
@@ -18,51 +22,40 @@ type State = {
   title: string
 }
 
-export default class SaveModal extends Component<Props, State> {
+type Params = {
+  editItem: ArchiveRequestPayload,
+  handleDonePressed: () => void
+}
 
-  static options(passProps: Props) {
-    return {
-      topBar: {
-        title: {
-          text: t('saveArchive'),
-          color: themeLightColor
-        },
-        background: {
-          color: themeColor
-        },
-        backButton: {
-          color: 'white'
-        },
-        rightButtons: [
-          {
-            id: 'save-done',
-            color: 'white',
-            text: t('saveModalDone')
-          }
-        ]
-      },
-      layout: {
-        orientation: 'portrait'
-      },
-      // react-native-navigation のバグだと思うが、
-      // setDefaultOptions の設定をここで再指定する必要がある
-      sideMenu: {
-        right: {
-          enabled: false,
-          visible: false
-        }
-      },
-      blurOnUnmount: true
-    }
-  }
+export default class SaveModal extends Component<Props & NavigationScreenProps<Params>, State> {
+  static navigationOptions = ({ navigation }) => ({
+    title: t('saveArchive'),
+    headerRight: (
+      <TouchableOpacity
+        style={{ marginRight: 10 }}
+        onPress={ navigation.state.params.handleDonePressed }
+      >
+        <Text style={{ color: themeLightColor }}>{ t('saveModalDone').toUpperCase() }</Text>
+      </TouchableOpacity>
+    )
+  });
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this);
 
-    if (props.editItem) {
+    const { navigation } = this.props;
+    navigation.setParams({
+      handleDonePressed: this.handleDonePressed.bind(this)
+    });
+
+    const { params } = navigation.state;
+    if (params === undefined) {
+      throw '';
+    }
+
+    if (params.editItem) {
       this.state = {
-        title: props.editItem.title
+        title: params.editItem.title
       }
     } else {
       this.state = {
@@ -73,14 +66,15 @@ export default class SaveModal extends Component<Props, State> {
 
   handleDonePressed() {
     const title = this.state.title || 'No title';
-    console.warn(this.props.editItem);
+    const params = this.props.navigation.state.params;
+    const editItem = params ? params['editItem'] : {};
     this.props.onSavePressed({
-      ...this.props.editItem,
+      ...editItem,
       title
     }, this.props.isSaved);
 
     // TODO: show loading indicator
-    Navigation.pop(this.props.componentId);
+    this.props.navigation.pop();
   }
 
   navigationButtonPressed({ buttonId }) {

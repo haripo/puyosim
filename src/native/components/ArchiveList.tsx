@@ -17,11 +17,12 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
 import _ from 'lodash';
 import { getStackForRendering } from "../../shared/models/stack";
-// import { Navigation } from "react-native-navigation";
 // @ts-ignore
 import t, { formatDateTime } from '../../shared/utils/i18n';
+// @ts-ignore
 import { Archive } from "../../shared/utils/OnlineStorageService";
 import Loading from "../../shared/components/Loading";
+import { NavigationScreenProps } from "react-navigation";
 
 export interface Props {
   componentId: string,
@@ -43,36 +44,21 @@ export interface Props {
 interface State {
 }
 
-export default class ArchiveList extends Component<Props, State> {
+export default class ArchiveList extends Component<Props & NavigationScreenProps, State> {
   itemRefs: any = [];
 
-  static options() {
-    return {
-      topBar: {
-        title: {
-          text: 'Archive',
-        },
-      },
-      // react-native-navigation のバグだと思うが、
-      // setDefaultOptions の設定をここで再指定する必要がある
-      sideMenu: {
-        right: {
-          enabled: false,
-          visible: false
-        }
-      }
-    }
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Archive'
+  }); // TODO: i18n
 
   componentDidMount() {
     this.props.onArchiveOpened();
-    //this.props.onLoginRequested();
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
   handleItemClicked(id: string) {
     this.props.onItemPressed(id);
-    Navigation.pop(this.props.componentId);
+    this.props.navigation.pop();
   }
 
   handleDeleteConfirmed(item: Archive) {
@@ -85,16 +71,9 @@ export default class ArchiveList extends Component<Props, State> {
     if (event === 'itemSelected') {
       switch (index) {
         case 0: // edit
-          Navigation.push(
-            this.props.componentId,
-            {
-              component: {
-                name: 'com.puyosimulator.SaveModal',
-                passProps: {
-                  editItem: item
-                }
-              }
-            });
+          this.props.navigation.push('saveModal', {
+            editItem: item
+          });
           break;
         case 1: // delete
           Alert.alert(
@@ -169,7 +148,7 @@ export default class ArchiveList extends Component<Props, State> {
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              { t('lastModified') }: { formatDateTime(item.play.updatedAt) }
+              { t('lastModified') }: { formatDateTime(item.play.updatedAt.toDate()) }
             </Text>
             <Text style={ styles.stats }>
               { item.play.maxChain } chain, { item.play.score } pts.

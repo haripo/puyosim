@@ -71,7 +71,7 @@ function* handleLoadArchiveListNextPage(action) {
     const uid = yield call(getOrRequestLogin);
     const ids = yield select<(State) => string[]>(state => state.archive.sortedIds);
     const lastItem = yield select<(State) => Archive>(state => state.archive.archives[ids[ids.length - 1]]);
-    const archives = yield call(loadArchiveList, lastItem.play.updatedAt, action.count, uid);
+    const archives = yield call(loadArchiveList, lastItem.play.updatedAt.toDate(), action.count, uid);
     yield put(loadArchiveListNextPageFinished(archives));
   } catch (e) {
     console.error(e);

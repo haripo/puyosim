@@ -40,8 +40,9 @@ import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair,
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import _ from 'lodash';
+
+// @ts-ignore
 import { Archive } from "../utils/OnlineStorageService";
-import { ArchiveState } from "./archive";
 
 export type SimulatorState = {
   queue: number[][],
