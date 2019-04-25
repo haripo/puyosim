@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import io.sentry.RNSentryPackage;
@@ -28,7 +29,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication, ShareApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -76,5 +77,11 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+  }
+
+  // react-native-share
+  @Override
+  public String getFileProviderAuthority() {
+        return BuildConfig.APPLICATION_ID + ".provider";
   }
 }

@@ -31,5 +31,16 @@
     <meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
       android:value="ca-app-pub-1876795357833764~3946633388"/>
+
+    <!-- react-native-share -->
+    <provider
+      android:name="android.support.v4.content.FileProvider"
+      android:authorities="com.puyosimulator.provider"
+      android:grantUriPermissions="true"
+      android:exported="false">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/filepaths"/>
+    </provider>
   </application>
 </manifest>
