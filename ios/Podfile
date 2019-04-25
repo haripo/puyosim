@@ -29,12 +29,13 @@ target 'PuyoSimulator' do
   pod 'Firebase/RemoteConfig', '~> 5.20.1'
 
   # Add new pods below this line
+  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
+
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
   pod 'RNShare', :path => '../node_modules/react-native-share'
   pod 'RNLanguages', :path => '../node_modules/react-native-languages'
   pod 'RNSnackbar', :path => '../node_modules/react-native-snackbar'
-  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry/SentryReactNative.podspec'
 
   target 'PuyoSimulatorTests' do
     inherit! :search_paths
