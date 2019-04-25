@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { Alert, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { contentsMargin, contentsPadding, screenWidth, themeLightColor } from "../../shared/utils/constants";
+import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { contentsMargin, contentsPadding, themeLightColor } from "../../shared/utils/constants";
 import IconButton from "../../shared/components/IconButton";
-import { Navigation } from "react-native-navigation";
 import * as _ from "lodash";
+import { NavigationScreenProps } from "react-navigation";
 // @ts-ignore
 import t from '../../shared/utils/i18n';
+// @ts-ignore
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
-import { getInset } from "../../shared/utils/safeAreaHelper";
 
-export type Props = {
-  componentId: string,
-
+export type Props = NavigationScreenProps & {
   score: number,
   chainScore: number,
   numHands: number,
@@ -32,13 +30,7 @@ type State = {}
 export default class RightDrawer extends Component<Props, State> {
 
   private closeDrawer() {
-    Navigation.mergeOptions('sideMenu', {
-      sideMenu: {
-        right: {
-          visible: false
-        }
-      }
-    });
+    this.props.navigation.closeDrawer();
   }
 
   handleResetSelected() {
@@ -61,20 +53,12 @@ export default class RightDrawer extends Component<Props, State> {
 
   handleHistoryPressed() {
     this.closeDrawer();
-    setTimeout(() => {
-      Navigation.push('centerStack', {
-        component: { name: 'com.puyosimulator.History' }
-      });
-    }, 500);
+    this.props.navigation.push('history');
   }
 
   handleShareSelected() {
     this.closeDrawer();
-    setTimeout(() => {
-      Navigation.push('centerStack', {
-        component: { name: 'com.puyosimulator.Share' }
-      });
-    }, 500);
+    this.props.navigation.push('share');
   }
 
   handleSavePressed() {
@@ -94,13 +78,8 @@ export default class RightDrawer extends Component<Props, State> {
             text: 'Save a copy',
             onPress: () => {
               this.props.onSaveCopySelected(); // playId を更新する
-              Navigation.push('centerStack', {
-                component: {
-                  name: 'com.puyosimulator.SaveModal',
-                  passProps: {
-                    editItem: this.props.archivePayload
-                  }
-                }
+              this.props.navigation.push('saveModal', {
+                editItem: this.props.archivePayload
               });
             },
           },
@@ -116,40 +95,25 @@ export default class RightDrawer extends Component<Props, State> {
         },
       );
     } else {
-      setTimeout(() => {
-        Navigation.push('centerStack', {
-          component: {
-            name: 'com.puyosimulator.SaveModal',
-            passProps: {
-              editItem: this.props.archivePayload
-            }
-          }
-        });
-      }, 500);
+      this.props.navigation.push('saveModal', {
+        editItem: this.props.archivePayload
+      });
     }
   }
 
   handleLoadPressed() {
     this.closeDrawer();
-
-    // open save dialog
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.Archive' }
-    });
+    this.props.navigation.push('archive');
   }
 
   handleSettingsSelected() {
     this.closeDrawer();
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.Settings' }
-    });
+    this.props.navigation.push('settings');
   }
 
   handleAboutSelected() {
     this.closeDrawer();
-    Navigation.push('centerStack', {
-      component: { name: 'com.puyosimulator.About' }
-    });
+    this.props.navigation.push('about');
   }
 
   renderMetric({ name, value }) {
@@ -179,7 +143,7 @@ export default class RightDrawer extends Component<Props, State> {
     ];
 
     return (
-      <View style={{ flexGrow: 1, paddingTop: getInset('top'), paddingBottom: getInset('bottom') }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <View style={ styles.container }>
           <View style={ styles.metrics }>
             { metrics.map(m => this.renderMetric(m)) }
@@ -239,7 +203,7 @@ export default class RightDrawer extends Component<Props, State> {
             </View>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     )
   }
 }

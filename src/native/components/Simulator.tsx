@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, Text, Platform, StyleSheet, View, ViewStyle, Linking, SafeAreaView } from 'react-native';
+import { Alert, Linking, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { parse } from 'query-string';
-import { Navigation } from "react-native-navigation";
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
@@ -17,14 +16,14 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
 import { StackForRendering } from "../../shared/models/stack";
-import { Options } from "react-native-navigation/lib/dist/interfaces/Options";
 // @ts-ignore
 import { getMinimumSupportedAppVersion } from "../../shared/utils/RemoteConfig";
 import VersionNumber from "react-native-version-number";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import SplashScreen from 'react-native-splash-screen'
+import { NavigationScreenProps } from "react-navigation";
 
 export type Props = {
-  componentId: string,
-
   stack: StackForRendering,
   ghosts: PendingPairPuyo[],
   pendingPair: PendingPair,
@@ -56,38 +55,21 @@ type State = {
   isLoading: boolean
 }
 
-export default class Simulator extends Component<Props, State> {
-
-  static options(passProps): Options {
-    return {
-      sideMenu: {
-        right: {
-          enabled: true,
-          //visible: false
-        },
-        // @ts-ignore
-        // specifying animation type enables SafeAreaView functionality
-        // https://github.com/wix/react-native-navigation/issues/3418#issuecomment-462822967
-        animationType: 'none'
-      },
-      topBar: {
-        title: {
-          text: 'puyosim',
-          color: themeLightColor
-        },
-        background: {
-          color: themeColor
-        },
-        backButton: {
-          color: 'white'
-        },
-      }
-    }
-  }
+export default class Simulator extends Component<Props & NavigationScreenProps, State> {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'puyosim',
+    headerRight: (
+      <TouchableOpacity
+        style={{ marginRight: 10 }}
+        onPress={ () => navigation.toggleDrawer() }
+      >
+        <Icon name={ 'menu' } size={ 25 } color="#FFF" />
+      </TouchableOpacity>
+    ),
+  });
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this);
 
     this.state = {
       isVisible: true,
@@ -110,16 +92,15 @@ export default class Simulator extends Component<Props, State> {
       )
     }
 
-    Navigation.push(this.props.componentId, {
-      component: { name: 'com.puyosimulator.Viewer' }
-    });
+    this.props.navigation.push('viewer');
   }
 
   async componentDidMount() {
-    // SplashScreen.hide();
+    SplashScreen.hide();
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
+
     // FIXME: minimumSupportedAppVersion possibly null
     // @ts-ignore
     if (Platform.OS !== 'web' && VersionNumber.appVersion < (minimumSupportedAppVersion || '0')) {
@@ -168,23 +149,7 @@ export default class Simulator extends Component<Props, State> {
           { cancelable: false }
         );
       });
-  }
 
-  navigationButtonPressed({ buttonId }) {
-    switch (buttonId) {
-      case 'menu':
-        Navigation.mergeOptions('sideMenu', {
-          sideMenu: {
-            right: {
-              visible: true
-            }
-          }
-        });
-        break;
-    }
-  }
-
-  componentDidAppear() {
     // Android でキーボードが表示されているとレイアウトが崩れる
     // （LayoutBaseContainer がキーボードを含まない範囲を view と認識する）
     // ので、キーボードが消えるまで 1000ms 程度待つ
@@ -192,9 +157,9 @@ export default class Simulator extends Component<Props, State> {
     setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
 
-  componentDidDisappear() {
-    this.setState({ isVisible: false });
-  }
+  // componentDidDisappear() {
+  //   this.setState({ isVisible: false });
+  // }
 
   render() {
     return (
@@ -252,8 +217,7 @@ export default class Simulator extends Component<Props, State> {
           </SafeAreaView>
         </View>
       </LayoutBaseContainer>
-    )
-      ;
+    );
   }
 }
 

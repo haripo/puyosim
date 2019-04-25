@@ -11,7 +11,6 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
-import { Navigation } from "react-native-navigation";
 import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
@@ -60,7 +59,7 @@ export default class Viewer extends Component<Props, State> {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this);
+    //Navigation.events().bindComponent(this);
 
     this.state = {
       isVisible: true

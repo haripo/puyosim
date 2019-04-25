@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Image, ImageStyle, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Share from 'react-native-share';
 
-import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin, themeLightColor } from '../../shared/utils/constants';
 import { PendingPair, ShareUrls } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
@@ -25,31 +25,9 @@ export type Props = {
 type State = {}
 
 export default class ShareOption extends Component<Props, State> {
-
-  static options(passProps) {
-    return {
-      topBar: {
-        title: {
-          text: 'Share',
-          color: themeLightColor
-        },
-        background: {
-          color: themeColor
-        },
-      },
-      layout: {
-        orientation: 'portrait'
-      },
-      // react-native-navigation のバグだと思うが、
-      // setDefaultOptions の設定をここで再指定する必要がある
-      sideMenu: {
-        right: {
-          enabled: false,
-          visible: false
-        }
-      }
-    }
-  }
+  static navigationOptions = () => ({
+    title: 'Share'
+  });
 
   capturer: FieldCapturer | null = null;
 

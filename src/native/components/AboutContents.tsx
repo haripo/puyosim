@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Linking, StyleSheet, Text, View } from 'react-native';
+import { Button, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import VersionNumber from 'react-native-version-number';
 import { themeColor, themeLightColor } from '../../shared/utils/constants';
+import Icon from "./Simulator";
 
 type Props = {
   onSetKennySelected: () => void,
@@ -15,33 +16,9 @@ export default class AboutContents extends Component<Props, {}> {
   static feedbackURL = 'http://puyos.im/feedback.html';
   static licensesURL = 'http://puyos.im/license.txt';
 
-  static options(passProps) {
-    return {
-      topBar: {
-        title: {
-          text: 'About',
-          color: themeLightColor
-        },
-        background: {
-          color: themeColor
-        },
-      },
-      layout: {
-        orientation: 'portrait'
-      },
-      // react-native-navigation のバグだと思うが、
-      // setDefaultOptions の設定をここで再指定する必要がある
-      sideMenu: {
-        right: {
-          enabled: false,
-          visible: false
-        }
-      }
-    }
-  }
-
-  componentDidMount() {
-  }
+  static navigationOptions = () => ({
+    title: 'About'
+  });
 
   handleKennyPressed() {
     this.props.onSetKennySelected();
