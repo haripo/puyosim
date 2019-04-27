@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   applyGravityEditor,
   finishDroppingAnimationsEditor,
-  finishVanishingAnimationsEditor,
+  finishVanishingAnimationsEditor, initializeEditor,
   putCurrentItem,
   selectEditItem,
   vanishPuyosEditor,
@@ -53,6 +53,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onPlaySelected: () => {
       dispatch(applyGravityEditor());
+    },
+    onMounted: () => {
+      dispatch(initializeEditor());
     }
   };
 };

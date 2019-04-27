@@ -5,6 +5,7 @@ import {
   APPLY_GRAVITY_EDITOR,
   FINISH_DROPPING_ANIMATIONS_EDITOR,
   FINISH_VANISHING_ANIMATIONS_EDITOR,
+  INITIALIZE_EDITOR,
   PUT_CURRENT_ITEM,
   SELECT_EDIT_ITEM,
   VANISH_PUYOS_EDITOR
@@ -26,7 +27,7 @@ export type EditorState = {
   score: number,
 }
 
-function copyFromSimulator(state: EditorState, action, rootState: State) {
+function initializeEditor(state: EditorState, action, rootState: State) {
   state.stack = rootState.simulator.stack;
   state.queue = rootState.simulator.queue;
   return state;
@@ -42,7 +43,6 @@ function selectEditItem(state: EditorState, action) {
   state.currentItem = action.item;
   return state;
 }
-
 
 // simulator.ts からのコピペ
 function vanishPuyos(state: EditorState, action) {
@@ -109,8 +109,8 @@ export const initialState: EditorState = {
 
 export const reducer = (state: EditorState, action, rootState: State) => {
   switch (action.type) {
-    case 'INITIALIZE_EDITOR':
-      return copyFromSimulator(state, action, rootState);
+    case INITIALIZE_EDITOR:
+      return initializeEditor(state, action, rootState);
     case PUT_CURRENT_ITEM:
       return putCurrentItem(state, action);
     case SELECT_EDIT_ITEM:

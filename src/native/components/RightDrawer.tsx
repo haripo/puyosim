@@ -106,6 +106,11 @@ export default class RightDrawer extends Component<Props, State> {
     this.props.navigation.push('archive');
   }
 
+  handleEditPressed() {
+    this.closeDrawer();
+    this.props.navigation.push('editor');
+  }
+
   handleSettingsSelected() {
     this.closeDrawer();
     this.props.navigation.push('settings');
@@ -161,22 +166,21 @@ export default class RightDrawer extends Component<Props, State> {
                 text='reset'
                 onPressed={ this.handleResetSelected.bind(this) }
               />
-            </View>
-            <View style={ styles.buttonGroup }>
               <IconButton
+                style={ styles.controllerRightButton }
                 icon='delete'
                 text='restart'
                 onPressed={ this.handleRestartSelected.bind(this) }
               />
-              <IconButton
-                style={ styles.controllerRightButton }
-                icon='share'
-                text='share'
-                onPressed={ this.handleShareSelected.bind(this) }
-              />
             </View>
             <View style={ styles.buttonGroup }>
               <IconButton
+                icon='edit'
+                text='edit'
+                onPressed={ this.handleEditPressed.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
                 icon='cloud-upload'
                 text='save'
                 onPressed={ this.handleSavePressed.bind(this) }
@@ -190,6 +194,12 @@ export default class RightDrawer extends Component<Props, State> {
             </View>
             <View style={ styles.buttonGroup }>
               <IconButton
+                icon='share'
+                text='share'
+                onPressed={ this.handleShareSelected.bind(this) }
+              />
+              <IconButton
+                style={ styles.controllerRightButton }
                 icon='settings'
                 text='settings'
                 onPressed={ this.handleSettingsSelected.bind(this) }

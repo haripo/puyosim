@@ -28,6 +28,7 @@ export type Props = {
 
   isActive: boolean,
 
+  onMounted: () => void,
   onEditItemSelected: (item: number) => void,
   onFieldTouched: (row: number, col: number) => void,
   onPlaySelected: () => void,
@@ -49,7 +50,8 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
 
     this.state = {
       isVisible: true
-    }
+    };
+    this.props.onMounted();
   }
 
   render() {
