@@ -1,10 +1,8 @@
 import {
-  APPLY_GRAVITY,
   ARCHIVE_CURRENT_FIELD_FINISHED,
   DEBUG_SET_HISTORY,
-  DEBUG_SET_PATTERN, EDIT_ARCHIVE_FINISHED,
-  FINISH_DROPPING_ANIMATIONS,
-  FINISH_VANISHING_ANIMATIONS,
+  DEBUG_SET_PATTERN,
+  EDIT_ARCHIVE_FINISHED,
   INITIALIZE_SIMULATOR,
   LOAD_ARCHIVE,
   MOVE_HIGHLIGHTS_LEFT,
@@ -18,14 +16,12 @@ import {
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
   ROTATE_HIGHLIGHTS_RIGHT,
-  UNDO_FIELD,
-  VANISH_PUYOS
+  UNDO_FIELD
 } from '../actions/actions';
 import { getDefaultMove, Move, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import { calcChainStepScore } from '../models/score';
 import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
-import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
+import { createChainPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
@@ -36,26 +32,19 @@ import {
   History,
   HistoryRecord
 } from '../models/history';
-import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair, Stack } from '../models/stack';
+import { createField, getSplitHeight, setPair } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import _ from 'lodash';
-
 // @ts-ignore
 import { Archive } from "../utils/OnlineStorageService";
+import { createFieldReducer, FieldState, initialFieldState } from "./field";
 
-export type SimulatorState = {
+export type SimulatorState = FieldState & {
   queue: number[][],
   numHands: number,
-  stack: Stack,
-  chain: number,
-  chainScore: number,
-  score: number,
   numSplit: number,
-  isResetChainRequired: boolean,
   pendingPair: Move,
-  droppingPuyos: DroppingPlan[],
-  vanishingPuyos: VanishingPlan[],
   history: HistoryRecord[],
   historyIndex: number,
 
@@ -123,51 +112,6 @@ function putNextPair(state: SimulatorState, action) {
   state.history = result.records;
   state.historyIndex = result.currentIndex;
 
-  return state;
-}
-
-function vanishPuyos(state: SimulatorState, action) {
-  const plans = getVanishPlan(state.stack, fieldRows, fieldCols);
-
-  if (plans.length === 0) {
-    return state;
-  }
-
-  if (state.isResetChainRequired) {
-    state.isResetChainRequired = false;
-    state.chain = 0;
-    state.chainScore = 0;
-  }
-
-  state.stack = applyVanishPlans(state.stack, plans);
-  state.vanishingPuyos = plans;
-
-  state.chain += 1;
-
-  // update scores
-  const additionalScore = calcChainStepScore(state.chain, plans);
-  state.score += additionalScore;
-  state.chainScore += additionalScore;
-
-  return state;
-}
-
-function applyGravity(state: SimulatorState, action) {
-  const plans = getDropPlan(state.stack, fieldRows, fieldCols);
-
-  state.stack = applyDropPlans(state.stack, plans);
-  state.droppingPuyos = plans;
-
-  return state;
-}
-
-function finishDroppingAnimations(state: SimulatorState, action) {
-  state.droppingPuyos = [];
-  return state;
-}
-
-function finishVanishingAnimations(state: SimulatorState, action) {
-  state.vanishingPuyos = [];
   return state;
 }
 
@@ -311,17 +255,11 @@ function createInitialState(config): SimulatorState {
   const queue = generateQueue(config);
   const stack = createField(fieldRows, fieldCols);
   return {
+    ...initialFieldState,
     queue: queue,
     numHands: 0,
-    stack: stack,
-    chain: 0,
-    chainScore: 0,
-    score: 0,
     numSplit: 0,
-    isResetChainRequired: false,
     pendingPair: getDefaultMove(),
-    droppingPuyos: [],
-    vanishingPuyos: [],
     history: [createInitialHistoryRecord(stack)],
     historyIndex: 0,
     startDateTime: new Date(),
@@ -341,7 +279,14 @@ export function getInitialState(config) {
   return loadOrCreateInitialState(config);
 }
 
+const fieldReducer = createFieldReducer('simulator');
+
 export const reducer = (state, action, config, archive) => {
+  state = {
+    ...state,
+    ...fieldReducer(state, action)
+  };
+
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
@@ -355,14 +300,6 @@ export const reducer = (state, action, config, archive) => {
       return moveHighlightsRight(state, action);
     case PUT_NEXT_PAIR:
       return putNextPair(state, action);
-    case VANISH_PUYOS:
-      return vanishPuyos(state, action);
-    case APPLY_GRAVITY:
-      return applyGravity(state, action);
-    case FINISH_DROPPING_ANIMATIONS:
-      return finishDroppingAnimations(state, action);
-    case FINISH_VANISHING_ANIMATIONS:
-      return finishVanishingAnimations(state, action);
     case UNDO_FIELD:
       return undoField(state, action);
     case REDO_FIELD:

@@ -1,11 +1,8 @@
-import { fieldCols, fieldRows } from '../utils/constants';
 import { getDefaultMove, getFirstCol, getSecondCol, Move } from '../models/move';
 import {
   Color,
-  createField,
   getDropPositions as getDropPositionsStack,
   getStackForRendering,
-  isValidPosition,
   StackForRendering
 } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
@@ -14,20 +11,10 @@ import { deserializeHistoryRecords, serializeHistoryRecords, serializeQueue } fr
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
-
 // @ts-ignore
 import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
-
 // @ts-ignore
 import { captureException } from "../utils/Sentry";
-import { EditorState } from "../reducers/editor";
-
-export function isActive(state): boolean {
-  return !(
-    state.simulator.droppingPuyos.length > 0 ||
-    state.simulator.vanishingPuyos.length > 0
-  );
-}
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -128,48 +115,6 @@ export const getPendingPair = createSelector(
   }
 );
 
-export const getVanishingPuyos = createSelector(
-  [(state: SimulatorState) => state.vanishingPuyos],
-  _getVanishingPuyos
-);
-
-function _getVanishingPuyos(vanishings) {
-  let field = createField(fieldRows, fieldCols);
-
-  for (let plan of vanishings) {
-    for (let puyo of plan.puyos) {
-      field[puyo.row][puyo.col] = plan.color;
-    }
-  }
-
-  const hasConnection = (row, col, color) => {
-    return isValidPosition({ row, col }) && field[row][col] === color;
-  };
-
-  let result: any[] = [];
-
-  for (let plan of vanishings) {
-    for (let puyo of plan.puyos) {
-      const row = puyo.row;
-      const col = puyo.col;
-      const color = plan.color;
-      result.push({
-        row: row,
-        col: col,
-        color: plan.color,
-        connections: {
-          top: hasConnection(row - 1, col, color),
-          bottom: hasConnection(row + 1, col, color),
-          left: hasConnection(row, col - 1, color),
-          right: hasConnection(row, col + 1, color)
-        }
-      });
-    }
-  }
-
-  return result;
-}
-
 export type PuyoConnection = {
   top: boolean,
   left: boolean,
@@ -177,25 +122,6 @@ export type PuyoConnection = {
   right: boolean
 }
 
-export const getStack = createSelector(
-  [
-    (state: SimulatorState) => state.stack,
-    (state: SimulatorState) => state.droppingPuyos
-  ],
-  _getStack
-);
-
-function _getStack(stack, droppings): StackForRendering {
-  return getStackForRendering(stack, droppings);
-}
-
-export const getStackForEditor = createSelector(
-  [
-    (state: EditorState) => state.stack,
-    (state: EditorState) => state.droppingPuyos
-  ],
-  _getStack
-);
 
 export const getStackForSnapshot = createSelector(
   [
@@ -211,6 +137,10 @@ export const getStackForSnapshot = createSelector(
     }
   }
 );
+
+function _getStack(stack, droppings): StackForRendering {
+  return getStackForRendering(stack, droppings);
+}
 
 export const getDropPositions = createSelector(
   [

@@ -14,26 +14,20 @@ import {
   vanishPuyos,
 } from '../../shared/actions/actions';
 import Simulator from '../components/Simulator';
-import {
-  canRedo,
-  canUndo,
-  getGhost,
-  getPendingPair,
-  getStack,
-  getVanishingPuyos,
-  isActive
-} from '../../shared/selectors/simulatorSelectors';
+import { canRedo, canUndo, getGhost, getPendingPair, } from '../../shared/selectors/simulatorSelectors';
+import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
+import { State } from "../../shared/reducers";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     stack: getStack(state.simulator),
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
     droppings: state.simulator.droppingPuyos,
     vanishings: getVanishingPuyos(state.simulator),
-    isActive: isActive(state),
+    isActive: isActive(state.simulator),
     puyoSkin: state.config.puyoSkin as string,
     canUndo: canUndo(state.simulator),
     canRedo: canRedo(state.simulator),
@@ -57,27 +51,27 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(moveHighlightsLeft());
     },
     onDropPressed: () => {
-      dispatch(putNextPair());
-      dispatch(vanishPuyos());
+      dispatch(putNextPair('simulator'));
+      dispatch(vanishPuyos('simulator'));
     },
     onUndoSelected: () => {
       dispatch(undoField());
-      dispatch(vanishPuyos());
+      dispatch(vanishPuyos('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
-      dispatch(vanishPuyos());
+      dispatch(vanishPuyos('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))
     },
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
+      dispatch(finishVanishingAnimations('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
+      dispatch(finishDroppingAnimations('simulator'));
+      dispatch(vanishPuyos('simulator'));
     },
   };
 };

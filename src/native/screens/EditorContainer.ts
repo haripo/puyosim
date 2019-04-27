@@ -1,31 +1,26 @@
 import { connect } from 'react-redux';
 import {
-  applyGravityEditor,
-  finishDroppingAnimationsEditor,
-  finishVanishingAnimationsEditor, initializeEditor,
+  applyGravity,
+  finishDroppingAnimations,
+  finishVanishingAnimations,
+  initializeEditor,
   putCurrentItem,
   selectEditItem,
-  vanishPuyosEditor,
+  vanishPuyos,
 } from '../../shared/actions/actions';
-import { getStackForEditor, getVanishingPuyos } from '../../shared/selectors/simulatorSelectors';
+import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Editor from "../components/Editor";
+import { State } from "../../shared/reducers";
 
-export function isActive(state): boolean {
-  return !(
-    state.editor.droppingPuyos.length > 0 ||
-    state.editor.vanishingPuyos.length > 0
-  );
-}
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
-    stack: getStackForEditor(state.editor),
+    stack: getStack(state.editor),
 
     droppings: state.editor.droppingPuyos,
     vanishings: getVanishingPuyos(state.editor),
-    isActive: isActive(state),
+    isActive: isActive(state.editor),
 
     currentItem: state.editor.currentItem,
 
@@ -38,12 +33,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimationsEditor());
-      dispatch(applyGravityEditor());
+      dispatch(finishVanishingAnimations('editor'));
+      dispatch(applyGravity('editor'));
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimationsEditor());
-      dispatch(vanishPuyosEditor());
+      dispatch(finishDroppingAnimations('editor'));
+      dispatch(vanishPuyos('editor'));
     },
     onEditItemSelected: (item) => {
       dispatch(selectEditItem(item))
@@ -52,7 +47,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(putCurrentItem({ row, col }));
     },
     onPlaySelected: () => {
-      dispatch(applyGravityEditor());
+      dispatch(applyGravity('editor'));
     },
     onMounted: () => {
       dispatch(initializeEditor());
