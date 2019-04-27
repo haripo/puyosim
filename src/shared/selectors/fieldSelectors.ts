@@ -1,7 +1,9 @@
 import { fieldCols, fieldRows } from '../utils/constants';
-import { createField, getStackForRendering, isValidPosition, StackForRendering } from '../models/stack';
+import { Color, createField, getStackForRendering, isValidPosition, Stack, StackForRendering } from '../models/stack';
 import { createSelector } from 'reselect';
 import { FieldState } from "../reducers/field";
+import { DroppingPlan } from "../models/chainPlanner";
+import Field from "../components/Field";
 
 export function isActive(state: FieldState): boolean {
   return !(
@@ -63,3 +65,20 @@ export const getStack = createSelector(
 function _getStack(stack, droppings): StackForRendering {
   return getStackForRendering(stack, droppings);
 }
+
+
+export const hasDroppingPuyo = createSelector(
+  [
+    (state: FieldState) => state.stack
+  ],
+  (stack: Stack) => {
+    for (let i = 0; i < fieldCols; i++) {
+      for (let j = fieldRows - 1; 0 < j; j--) {
+        if (stack[j - 1][i] !== 0 && stack[j][i] === 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+);

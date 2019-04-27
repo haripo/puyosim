@@ -27,8 +27,10 @@ export type Props = {
   theme: Theme,
 
   isActive: boolean,
+  hasDroppingPuyo: boolean,
 
   onMounted: () => void,
+  onScreenBlur: () => void,
   onEditItemSelected: (item: number) => void,
   onFieldTouched: (row: number, col: number) => void,
   onPlaySelected: () => void,
@@ -51,7 +53,12 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
     this.state = {
       isVisible: true
     };
+
     this.props.onMounted();
+  }
+
+  componentWillUnmount(): void {
+    this.props.onScreenBlur();
   }
 
   render() {
@@ -98,6 +105,7 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
                   layout={ this.props.layout }
                   puyoSkin={ this.props.puyoSkin }
                   selectedItem={ this.props.currentItem }
+                  hasDroppingPuyo={ this.props.hasDroppingPuyo }
                   onSelected={ this.props.onEditItemSelected }
                   onPlaySelected={ this.props.onPlaySelected }
                 />

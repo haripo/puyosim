@@ -9,13 +9,14 @@ export type Props = {
   layout: Layout,
   puyoSkin: string,
   selectedItem: number,
+  hasDroppingPuyo: boolean,
   onSelected: (item: number) => void,
   onPlaySelected: () => void
 };
 
 export default class EditorControls extends PureComponent<Props> {
   renderPuyoButton(puyo: number, isRight: boolean) {
-    let style: any[] = [styles.controllerButton];
+    let style: any[] = [styles.controllerInactiveButton];
     if (isRight) style.push(styles.controllerRightButton);
     if (puyo === this.props.selectedItem) style.push(styles.controllerActiveButton);
 
@@ -35,9 +36,27 @@ export default class EditorControls extends PureComponent<Props> {
         <View style={ styles.buttonGroup }>
           <IconButton
             style={ styles.controllerFullWidthButton }
-            disabled={ false }
+            disabled={ !this.props.hasDroppingPuyo }
             icon='play-arrow'
             text='play'
+            onPressed={ this.props.onPlaySelected }
+            shortcutText={ '' }
+          />
+        </View>
+        <View style={ styles.buttonGroup }>
+          <IconButton
+            style={ [styles.controllerButton] }
+            disabled={ false }
+            icon='undo'
+            text='undo'
+            onPressed={ this.props.onPlaySelected }
+            shortcutText={ '' }
+          />
+          <IconButton
+            style={ [styles.controllerButton, styles.controllerRightButton] }
+            disabled={ false }
+            icon='fast-rewind'
+            text='reset'
             onPressed={ this.props.onPlaySelected }
             shortcutText={ '' }
           />
@@ -70,6 +89,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   controllerButton: {
+    flex: 1,
+    marginTop: contentsMargin,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: buttonColor,
+    borderRadius: 3,
+    elevation: 3,
+  },
+  controllerInactiveButton: {
     flex: 1,
     marginTop: contentsMargin,
     justifyContent: 'center',

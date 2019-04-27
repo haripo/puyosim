@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import {
+  applyEditorState,
   applyGravity,
   finishDroppingAnimations,
   finishVanishingAnimations,
@@ -8,7 +9,7 @@ import {
   selectEditItem,
   vanishPuyos,
 } from '../../shared/actions/actions';
-import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
+import { getStack, getVanishingPuyos, hasDroppingPuyo, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Editor from "../components/Editor";
@@ -21,6 +22,7 @@ const mapStateToProps = (state: State) => {
     droppings: state.editor.droppingPuyos,
     vanishings: getVanishingPuyos(state.editor),
     isActive: isActive(state.editor),
+    hasDroppingPuyo: hasDroppingPuyo(state.editor),
 
     currentItem: state.editor.currentItem,
 
@@ -51,6 +53,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onMounted: () => {
       dispatch(initializeEditor());
+    },
+    onScreenBlur: () => {
+      dispatch(applyEditorState());
     }
   };
 };

@@ -48,6 +48,7 @@ export type Props = {
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void,
   onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
+  onScreenAppeared: () => void,
 }
 
 type State = {
@@ -74,7 +75,11 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     this.state = {
       isVisible: true,
       isLoading: true
-    }
+    };
+
+    this.props.navigation.addListener('didFocus', () => {
+      this.props.onScreenAppeared();
+    });
   }
 
   private launchViewer(url) {

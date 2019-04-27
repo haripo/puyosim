@@ -38,6 +38,10 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onScreenAppeared: () => {
+      // editor から戻ってきたタイミングで浮いたぷよを落とす
+      dispatch(applyGravity('simulator'));
+    },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
     },

@@ -1,4 +1,5 @@
 import {
+  APPLY_EDITOR_STATE,
   ARCHIVE_CURRENT_FIELD_FINISHED,
   DEBUG_SET_HISTORY,
   DEBUG_SET_PATTERN,
@@ -39,6 +40,7 @@ import _ from 'lodash';
 // @ts-ignore
 import { Archive } from "../utils/OnlineStorageService";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
+import { State } from "./index";
 
 export type SimulatorState = FieldState & {
   queue: number[][],
@@ -251,6 +253,12 @@ function refreshPlayId(state: SimulatorState, action) {
   return state;
 }
 
+function applyEditorState(state: SimulatorState, action, rootState: State) {
+  state.stack = rootState.editor.stack;
+  state.queue = rootState.editor.queue;
+  return state;
+}
+
 function createInitialState(config): SimulatorState {
   const queue = generateQueue(config);
   const stack = createField(fieldRows, fieldCols);
@@ -281,7 +289,7 @@ export function getInitialState(config) {
 
 const fieldReducer = createFieldReducer('simulator');
 
-export const reducer = (state, action, config, archive) => {
+export const reducer = (state, action, rootState) => {
   state = {
     ...state,
     ...fieldReducer(state, action)
@@ -309,17 +317,19 @@ export const reducer = (state, action, config, archive) => {
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:
-      return restart(state, action, config);
+      return restart(state, action, rootState.config);
     case RECONSTRUCT_HISTORY:
       return reconstructHistory(state, action);
     case LOAD_ARCHIVE:
-      return loadArchive(state, action, archive);
+      return loadArchive(state, action, rootState.archive);
     case ARCHIVE_CURRENT_FIELD_FINISHED:
       return archiveCurrentFieldFinished(state, action);
     case EDIT_ARCHIVE_FINISHED:
       return editArchiveFinished(state, action);
     case REFRESH_PLAY_ID:
       return refreshPlayId(state, action);
+    case APPLY_EDITOR_STATE:
+      return applyEditorState(state, action, rootState);
     case DEBUG_SET_PATTERN:
       return setPattern(state, action);
     case DEBUG_SET_HISTORY:
