@@ -30,6 +30,7 @@ export type Props = {
 
   onEditItemSelected: (item: number) => void,
   onFieldTouched: (row: number, col: number) => void,
+  onPlaySelected: () => void,
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void
 }
@@ -49,14 +50,6 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
     this.state = {
       isVisible: true
     }
-  }
-
-  componentDidAppear() {
-    this.setState({ isVisible: true });
-  }
-
-  componentDidDisappear() {
-    this.setState({ isVisible: false });
   }
 
   render() {
@@ -104,6 +97,7 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
                   puyoSkin={ this.props.puyoSkin }
                   selectedItem={ this.props.currentItem }
                   onSelected={ this.props.onEditItemSelected }
+                  onPlaySelected={ this.props.onPlaySelected }
                 />
               </View>
             </View>

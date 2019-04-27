@@ -3,12 +3,14 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { buttonColor, contentsMargin, themeLightColor, } from '../utils/constants';
 import Puyo from "./Puyo";
 import { Layout } from "../selectors/layoutSelectors";
+import IconButton from "./IconButton";
 
 export type Props = {
   layout: Layout,
   puyoSkin: string,
   selectedItem: number,
   onSelected: (item: number) => void,
+  onPlaySelected: () => void
 };
 
 export default class EditorControls extends PureComponent<Props> {
@@ -30,6 +32,16 @@ export default class EditorControls extends PureComponent<Props> {
   render() {
     return (
       <View style={ styles.component }>
+        <View style={ styles.buttonGroup }>
+          <IconButton
+            style={ styles.controllerFullWidthButton }
+            disabled={ false }
+            icon='play-arrow'
+            text='play'
+            onPressed={ this.props.onPlaySelected }
+            shortcutText={ '' }
+          />
+        </View>
         <View style={ styles.buttonGroup }>
           { this.renderPuyoButton(1, false) }
           { this.renderPuyoButton(2, true) }

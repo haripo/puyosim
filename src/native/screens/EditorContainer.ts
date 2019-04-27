@@ -1,22 +1,30 @@
 import { connect } from 'react-redux';
 import {
-  applyGravity,
-  finishDroppingAnimations,
-  finishVanishingAnimations, putCurrentItem,
+  applyGravityEditor,
+  finishDroppingAnimationsEditor,
+  finishVanishingAnimationsEditor,
+  putCurrentItem,
   selectEditItem,
-  vanishPuyos,
+  vanishPuyosEditor,
 } from '../../shared/actions/actions';
-import { getStackForEditor, getVanishingPuyos, isActive } from '../../shared/selectors/simulatorSelectors';
+import { getStackForEditor, getVanishingPuyos } from '../../shared/selectors/simulatorSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Editor from "../components/Editor";
+
+export function isActive(state): boolean {
+  return !(
+    state.editor.droppingPuyos.length > 0 ||
+    state.editor.vanishingPuyos.length > 0
+  );
+}
 
 const mapStateToProps = (state) => {
   return {
     stack: getStackForEditor(state.editor),
 
-    droppings: state.simulator.droppingPuyos,
-    vanishings: getVanishingPuyos(state.simulator),
+    droppings: state.editor.droppingPuyos,
+    vanishings: getVanishingPuyos(state.editor),
     isActive: isActive(state),
 
     currentItem: state.editor.currentItem,
@@ -30,18 +38,21 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
+      dispatch(finishVanishingAnimationsEditor());
+      dispatch(applyGravityEditor());
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
+      dispatch(finishDroppingAnimationsEditor());
+      dispatch(vanishPuyosEditor());
     },
     onEditItemSelected: (item) => {
       dispatch(selectEditItem(item))
     },
     onFieldTouched : (row, col) => {
       dispatch(putCurrentItem({ row, col }));
+    },
+    onPlaySelected: () => {
+      dispatch(applyGravityEditor());
     }
   };
 };

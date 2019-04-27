@@ -192,7 +192,7 @@ function _getStack(stack, droppings): StackForRendering {
 export const getStackForEditor = createSelector(
   [
     (state: EditorState) => state.stack,
-    (state: EditorState) => []
+    (state: EditorState) => state.droppingPuyos
   ],
   _getStack
 );
