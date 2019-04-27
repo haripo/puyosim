@@ -10,6 +10,7 @@ import Viewer from './src/native/screens/ViewerContainer';
 import Archive from './src/native/screens/ArchiveContainer';
 import SaveModal from './src/native/screens/SaveModalContainer';
 import RightDrawer from './src/native/screens/RightDrawerContainer';
+import Editor from './src/native/screens/EditorContainer';
 import { getStore } from './src/shared/store/store';
 
 import sagas from './src/shared/sagas';
@@ -58,6 +59,7 @@ const AppNavigator = createStackNavigator(
     settings: Settings,
     share: Share,
     viewer: Viewer,
+    editor: Editor,
     archive: Archive,
     saveModal: SaveModal
   },

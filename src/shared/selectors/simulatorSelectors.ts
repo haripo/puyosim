@@ -20,6 +20,7 @@ import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
 
 // @ts-ignore
 import { captureException } from "../utils/Sentry";
+import { EditorState } from "../reducers/editor";
 
 export function isActive(state): boolean {
   return !(
@@ -187,6 +188,14 @@ export const getStack = createSelector(
 function _getStack(stack, droppings): StackForRendering {
   return getStackForRendering(stack, droppings);
 }
+
+export const getStackForEditor = createSelector(
+  [
+    (state: EditorState) => state.stack,
+    (state: EditorState) => []
+  ],
+  _getStack
+);
 
 export const getStackForSnapshot = createSelector(
   [
