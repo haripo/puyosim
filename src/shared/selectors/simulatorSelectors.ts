@@ -34,7 +34,7 @@ export function getDefaultNextRecord(state: SimulatorState): HistoryRecord | nul
 
 export function getDefaultNextMove(state: SimulatorState): Move {
   const nextRecord = getDefaultNextRecord(state);
-  if (nextRecord && nextRecord.move) {
+  if (nextRecord && nextRecord.type === 'move') {
     return nextRecord.move;
   } else {
     return getDefaultMove();
@@ -46,13 +46,14 @@ export function getGhost(state: SimulatorState): PendingPairPuyo[] {
 }
 
 export function getGhostForSnapshot(state: SimulatorState): PendingPairPuyo[] {
-  if (state.historyIndex === 0) {
+  const record = state.history[state.historyIndex];
+  if (record.type !== 'move') {
     return [];
   }
 
   return getDropPositionsStack(
     state.history[state.historyIndex - 1].stack,
-    state.history[state.historyIndex].move!,
+    record.move,
     getPreviousHand(state)
   )
 }

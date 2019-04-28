@@ -4,9 +4,10 @@ import { fieldCols, fieldRows } from "../utils/constants";
 import { createChainPlan } from "./chainPlanner";
 import _ from 'lodash';
 
-export type HistoryRecord = {
-  move: Move | null,
-  pair: Pair | null,
+export type MoveHistoryRecord = {
+  type: 'move',
+  move: Move,
+  pair: Pair,
   numHands: number,
   stack: Stack,
   score: number,
@@ -17,6 +18,21 @@ export type HistoryRecord = {
   next: number[],
   defaultNext: number | null
 }
+
+export type HeadHistoryRecord = {
+  type: 'head'
+  numHands: 0,
+  stack: Stack,
+  score: 0,
+  chain: 0,
+  chainScore: 0,
+  numSplit: 0,
+  prev: null,
+  next: number[],
+  defaultNext: number | null
+}
+
+export type HistoryRecord = MoveHistoryRecord | HeadHistoryRecord;
 
 export type History = {
   version: number;
@@ -38,12 +54,11 @@ export type MinimumHistory = {
   currentIndex: number;
 }
 
-export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
+export function createInitialHistoryRecord(stack: Stack): HeadHistoryRecord {
   return {
-    move: null,
-    pair: null,
+    type: 'head',
     numHands: 0,
-    stack: stack,
+    stack,
     score: 0,
     chain: 0,
     chainScore: 0,
@@ -56,8 +71,9 @@ export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
 
 export function createHistoryRecord(
   move: Move, pair: Pair, numHands: number, stack: Stack,
-  chain: number, score: number, chainScore: number, numSplit: number): HistoryRecord {
+  chain: number, score: number, chainScore: number, numSplit: number): MoveHistoryRecord {
   return {
+    type: 'move',
     move,
     pair,
     numHands,
@@ -72,7 +88,7 @@ export function createHistoryRecord(
   };
 }
 
-export function appendHistoryRecord(history: History, record: HistoryRecord): History {
+export function appendHistoryRecord(history: History, record: MoveHistoryRecord): History {
 
   const nextIndex = history.records.length;
   const lastState = history.records[history.currentIndex];
@@ -80,7 +96,8 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
   // 同じ Record があったら新たに増やさない
   if (history.records.length > 0) {
     for (let nextIndex of lastState.next) {
-      if (isEqualMove(history.records[nextIndex].move, record.move)) {
+      const nextRecord = history.records[nextIndex];
+      if (nextRecord.type !== 'head' && isEqualMove(nextRecord.move, record.move)) {
         lastState.defaultNext = nextIndex;
         history.currentIndex = nextIndex;
         return history;
@@ -165,6 +182,7 @@ export function createHistoryFromMinimumHistory(
     }
 
     resultRecords.push({
+      type: 'move',
       move: record.move,
       pair: pair,
       numHands: numHands,

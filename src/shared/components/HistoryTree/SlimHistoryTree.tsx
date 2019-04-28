@@ -143,9 +143,8 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
   renderNode(historyIndex: number, index: number, isMainPath: boolean) {
     const node = this.props.history[historyIndex];
     const isCurrentNode = historyIndex === this.props.currentIndex;
-    const { move } = node;
 
-    if (move === null) {
+    if (node.type === 'head') {
       return (
         <HistoryTreeNode
           x={ this.nodeMarginLeft }
@@ -162,8 +161,8 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
         y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
         currentX={ this.nodeMarginLeft + (isMainPath ? 0 : this.childrenLeft) }
         futureX={ this.nodeMarginLeft + (isMainPath ? this.childrenLeft : 0) }
-        col={ move.col }
-        rotation={ move.rotation }
+        col={ node.move.col }
+        rotation={ node.move.rotation }
         nodeWidth={ this.nodeWidth }
         isCurrentNode={ isCurrentNode }
       />
@@ -225,7 +224,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           fill={ color }
           fillOpacity={ 0.2 }
         />
-        { index > 0 ? this.renderPair(item.record.pair, index) : null }
+         { item.record.type !== 'head' ? this.renderPair(item.record.pair, index) : null }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
         { indices.map((historyIndex, i) => this.renderRow(item, historyIndex, i)) }
       </Svg>

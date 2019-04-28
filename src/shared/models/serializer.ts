@@ -86,8 +86,11 @@ export function serializeHistoryRecords(records: HistoryRecord[]): string {
     const record = records[i];
 
     // append move
-    const moveIndex = moveList.findIndex(m => isEqualMove(m, record.move));
-    if (0 <= moveIndex) {
+    if (record.type === 'move') {
+      const moveIndex = moveList.findIndex(m => isEqualMove(m, record.move));
+      if (moveIndex < 0) {
+        throw 'Invalid state, move not found';
+      }
       result += chars[moveIndex];
     }
 
