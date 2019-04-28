@@ -20,7 +20,10 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { HistoryRecord } from "../../shared/models/history";
 import ShareModalContainer from "../containers/ShareModalContainer";
 import ViewerControls from "../../shared/components/ViewerControls";
-import MediaQuery from "react-native-web-responsive";
+
+// TODO: https://github.com/vitalets/react-native-extended-stylesheet
+// import MediaQuery from "react-native-web-responsive";
+
 import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
@@ -210,14 +213,14 @@ export default class Simulator extends Component<Props, State> {
                   { this.renderControls(keyMap) }
                 </View>
               </View>
-              <MediaQuery minWidth={ 1224 }>
+              {/*<MediaQuery minWidth={ 1224 }>*/}
                 <View style={ styles.historyTree }>
                   <HistoryTree
                     historyTreeLayout={ this.props.historyTreeLayout }
                     onNodePressed={ this.props.onHistoryNodePressed }
                   />
                 </View>
-              </MediaQuery>
+              {/*</MediaQuery>*/}
             </View>
           </LayoutBaseContainer>
         </View>
