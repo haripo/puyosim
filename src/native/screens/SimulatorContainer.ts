@@ -61,10 +61,12 @@ const mapDispatchToProps = (dispatch) => {
     onUndoSelected: () => {
       dispatch(undoField());
       dispatch(vanishPuyos('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
       dispatch(vanishPuyos('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))
