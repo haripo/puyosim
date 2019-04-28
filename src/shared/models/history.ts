@@ -58,7 +58,12 @@ export type History = {
  * URL にシリアライズする際に利用する。
  */
 export type MinimumHistoryRecord = {
+  type: 'move',
   move: Move,
+  next: number[]
+} | {
+  type: 'edit'
+  stack: string,
   next: number[]
 }
 
@@ -155,8 +160,8 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
  * @param currentIndex current index
  */
 export function getCurrentPathRecords(
-    history: HistoryRecord[],
-    currentIndex: number): HistoryRecord[] {
+  history: HistoryRecord[],
+  currentIndex: number): HistoryRecord[] {
   let result: HistoryRecord[] = [];
 
   // extract records
@@ -194,13 +199,6 @@ export function createHistoryFromMinimumHistory(
   let index = 1;
 
   for (const record of minimumHistoryRecords) {
-    const prev = index in backtrack ? backtrack[index] : 0;
-    const numHands = resultRecords[prev].numHands + 1;
-    const pair = queue[(numHands - 1) % queue.length];
-    const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
-    const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
-    const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
-
     for (const nextPosition of record.next) {
       backtrack[nextPosition + 1] = index;
     }
@@ -212,20 +210,54 @@ export function createHistoryFromMinimumHistory(
       }
     }
 
-    resultRecords.push({
-      type: 'move',
-      move: record.move,
-      pair: pair,
-      numHands: numHands,
-      stack: currentStack,
-      score: chainResult.score + resultRecords[prev].score,
-      chain: chainResult.chain,
-      chainScore: chainResult.score,
-      next: record.next.map(n => n + 1),
-      numSplit: resultRecords[prev].numSplit + (splitHeight ? 1 : 0),
-      defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
-      prev: prev
-    });
+    const prev = index in backtrack ? backtrack[index] : 0;
+
+    switch (record.type) {
+      case 'move': {
+        const numHands = resultRecords[prev].numHands + 1;
+        const pair = queue[(numHands - 1) % queue.length];
+        const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
+        const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
+        const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
+
+        resultRecords.push({
+          type: 'move',
+          move: record.move,
+          pair: pair,
+          numHands: numHands,
+          stack: currentStack,
+          score: chainResult.score + resultRecords[prev].score,
+          chain: chainResult.chain,
+          chainScore: chainResult.score,
+          next: record.next.map(n => n + 1),
+          numSplit: resultRecords[prev].numSplit + (splitHeight ? 1 : 0),
+          defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
+          prev: prev
+        });
+        break;
+      }
+      case 'edit': {
+        const numHands = resultRecords[prev].numHands;
+        const pair = queue[(numHands - 1) % queue.length];
+        const currentStack = _.chunk(record.stack.split('').map(v => parseInt(v)), fieldCols);
+        const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
+
+        resultRecords.push({
+          type: 'edit',
+          pair: pair,
+          numHands: numHands,
+          stack: currentStack,
+          score: chainResult.score + resultRecords[prev].score,
+          chain: chainResult.chain,
+          chainScore: chainResult.score,
+          next: record.next.map(n => n + 1),
+          numSplit: resultRecords[prev].numSplit,
+          defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
+          prev: prev
+        });
+        break;
+      }
+    }
 
     index += 1;
   }

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { HistoryRecord, MinimumHistoryRecord } from "./history";
 import { isEqualMove, Move } from "./move";
+import { fieldCols, fieldRows } from "../utils/constants";
 
 const chars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -69,6 +70,7 @@ const specialChars = [
   { type: 'jump', numNextChars: 1 },
   { type: 'jump', numNextChars: 2 },
   { type: 'jump', numNextChars: 3 },
+  { type: 'edit' }
 ];
 
 function baseLog(value: number, base: number) {
@@ -92,6 +94,13 @@ export function serializeHistoryRecords(records: HistoryRecord[]): string {
         throw 'Invalid state, move not found';
       }
       result += chars[moveIndex];
+    }
+
+    if (record.type === 'edit') {
+      const specialIndex = specialChars.findIndex(c => c.type === 'edit');
+      result += chars[chars.length - (specialIndex + 1)];
+      let stack = _.flatten(record.stack).join('');
+      result += stack;
     }
 
     // append terminal mark
@@ -138,6 +147,7 @@ export function deserializeHistoryRecords(serialized: string): MinimumHistoryRec
     // parse move
     if (moveList[currentNumber] !== undefined) {
       result.push({
+        type: 'move',
         move: moveList[currentNumber]!,
         next: []
       });
@@ -148,6 +158,14 @@ export function deserializeHistoryRecords(serialized: string): MinimumHistoryRec
       result[result.length - 1].next.push(result.length);
     } else {
       switch (specialCommand.type) {
+        case 'edit':
+          result.push({
+            type: 'edit',
+            stack: serialized.slice(i, i + fieldRows * fieldCols),
+            next: []
+          });
+          i += fieldRows * fieldCols;
+          break;
         case 'tail':
           // tail node has empty next
           result[result.length - 1].next = [];
