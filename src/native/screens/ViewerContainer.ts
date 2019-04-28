@@ -12,10 +12,12 @@ import {
   canUndo,
   getGhost,
   getPendingPair,
+} from '../../shared/selectors/simulatorSelectors';
+import {
   getStack,
   getVanishingPuyos,
   isActive
-} from '../../shared/selectors/simulatorSelectors';
+} from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Viewer from "../components/Viewer";

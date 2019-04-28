@@ -19,15 +19,18 @@ import {
 import {
   getGhost,
   getPendingPair,
+} from '../../shared/selectors/simulatorSelectors';
+import {
   getStack,
   getVanishingPuyos,
   isActive
-} from '../../shared/selectors/simulatorSelectors';
+} from '../../shared/selectors/fieldSelectors';
 import History from '../components/History';
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
+import { State } from "../../shared/reducers";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     theme: getTheme(state.theme),
     layout: getLayout(state.layout),
@@ -37,7 +40,7 @@ const mapStateToProps = (state) => {
     current: state.simulator.queue[0],
     droppingPuyos: state.simulator.droppingPuyos,
     vanishingPuyos: getVanishingPuyos(state.simulator),
-    isActive: isActive(state),
+    isActive: isActive(state.simulator),
     puyoSkin: state.config.puyoSkin,
     pendingPair: getPendingPair(state.simulator),
 
