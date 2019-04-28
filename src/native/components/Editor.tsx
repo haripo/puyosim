@@ -70,7 +70,7 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
             <View style={ styles.contents }>
               <View>
                 <HandlingPuyos
-                  pair={ [ {row: 1, col:1, color:1},{row: 1, col:1, color:1} ] }
+                  pair={ this.props.pendingPair }
                   puyoSkin={ this.props.puyoSkin }
                   style={ styles.handlingPuyos }
                   layout={ this.props.layout }>

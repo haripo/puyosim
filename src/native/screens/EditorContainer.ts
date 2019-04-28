@@ -14,10 +14,12 @@ import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Editor from "../components/Editor";
 import { State } from "../../shared/reducers";
+import { getPendingPair } from "../../shared/selectors/simulatorSelectors";
 
 const mapStateToProps = (state: State) => {
   return {
     stack: getStack(state.editor),
+    pendingPair: getPendingPair(state.simulator),
 
     droppings: state.editor.droppingPuyos,
     vanishings: getVanishingPuyos(state.editor),

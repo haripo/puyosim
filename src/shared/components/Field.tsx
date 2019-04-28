@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableHighlight, View, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import DroppingPuyos from './DroppingPuyos';
 import VanishingPuyos from './VanishingPuyos';
-import {
-  cardBackgroundColor,
-  contentsPadding,
-  fieldCols,
-  fieldRows,
-  themeColor,
-  themeLightColor
-} from '../utils/constants';
+import { contentsPadding, fieldCols, fieldRows } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
@@ -99,20 +92,18 @@ export default class Field extends Component<Props, State> {
     for (let i = 0; i < fieldRows; i++) {
       for (let j = 0; j < fieldCols; j++) {
         l.push(
-          <TouchableHighlight
+          <TouchableOpacity
             key={ `t-${i}-${j}` }
             onPressOut={ () => onTouched(i, j) }
-            underlayColor={ 'white' }
             style={{
               position: 'absolute',
               top: i * puyoSize + contentsPadding,
               left: j * puyoSize + contentsPadding,
+              width: puyoSize,
+              height: puyoSize
             }}
           >
-            <View style={{ width: puyoSize, height: puyoSize }}>
-              <Text>{i},{j}</Text>
-            </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         );
       }
     }
@@ -120,7 +111,7 @@ export default class Field extends Component<Props, State> {
   }
 
   renderStack() {
-    const { stack, isActive, onTouched } = this.props;
+    const { stack, isActive } = this.props;
 
     return [
       isActive ? this.renderGhostPuyos() : null,
