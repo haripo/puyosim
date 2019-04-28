@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'column',
-    height: 300 // SimulatorControls の component.height の半分
+    height: 300 / 4 * 3 // SimulatorControls の component.height の半分
   },
   buttonGroup: {
     flex: 1,

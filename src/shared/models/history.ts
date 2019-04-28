@@ -32,7 +32,20 @@ export type HeadHistoryRecord = {
   defaultNext: number | null
 }
 
-export type HistoryRecord = MoveHistoryRecord | HeadHistoryRecord;
+export type EditHistoryRecord = {
+  type: 'edit'
+  numHands: number,
+  stack: Stack,
+  score: number,
+  chain: number,
+  chainScore: number,
+  numSplit: number,
+  prev: number | null,
+  next: number[],
+  defaultNext: number | null
+}
+
+export type HistoryRecord = MoveHistoryRecord | HeadHistoryRecord | EditHistoryRecord;
 
 export type History = {
   version: number;
@@ -88,7 +101,24 @@ export function createHistoryRecord(
   };
 }
 
-export function appendHistoryRecord(history: History, record: MoveHistoryRecord): History {
+export function createEditHistoryRecord(
+  numHands: number, stack: Stack,
+  chain: number, score: number, chainScore: number, numSplit: number): EditHistoryRecord {
+  return {
+    type: 'edit',
+    numHands,
+    stack,
+    score,
+    chain,
+    chainScore,
+    numSplit,
+    prev: null,
+    next: [],
+    defaultNext: null
+  };
+}
+
+export function appendHistoryRecord(history: History, record: HistoryRecord): History {
 
   const nextIndex = history.records.length;
   const lastState = history.records[history.currentIndex];
@@ -97,7 +127,8 @@ export function appendHistoryRecord(history: History, record: MoveHistoryRecord)
   if (history.records.length > 0) {
     for (let nextIndex of lastState.next) {
       const nextRecord = history.records[nextIndex];
-      if (nextRecord.type !== 'head' && isEqualMove(nextRecord.move, record.move)) {
+      // TODO: isEqual は重いかも
+      if (nextRecord.type !== 'head' && _.isEqual(nextRecord.stack, record.stack)) {
         lastState.defaultNext = nextIndex;
         history.currentIndex = nextIndex;
         return history;

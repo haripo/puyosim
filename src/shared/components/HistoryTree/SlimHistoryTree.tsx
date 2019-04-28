@@ -155,6 +155,11 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
       );
     }
 
+    if (node.type === 'edit') {
+      // いったん edit は無視しておく
+      return null;
+    }
+
     return (
       <HistoryTreeNode
         x={ this.state.nodeAnimated[historyIndex] }
@@ -224,7 +229,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
           fill={ color }
           fillOpacity={ 0.2 }
         />
-         { item.record.type !== 'head' ? this.renderPair(item.record.pair, index) : null }
+         { item.record.type === 'move' ? this.renderPair(item.record.pair, index) : null }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
         { indices.map((historyIndex, i) => this.renderRow(item, historyIndex, i)) }
       </Svg>
