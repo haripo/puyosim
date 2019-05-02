@@ -3,11 +3,12 @@ import { fieldCols, fieldRows } from "../utils/constants";
 import {
   APPLY_GRAVITY,
   FINISH_DROPPING_ANIMATIONS,
-  FINISH_VANISHING_ANIMATIONS,
+  FINISH_VANISHING_ANIMATIONS, RUN_CHAIN_ANIMATION,
   VANISH_PUYOS
 } from "../actions/actions";
 import { DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from "../models/chainPlanner";
 import { calcChainStepScore } from "../models/score";
+import { hasDroppingPuyo } from "../selectors/fieldSelectors";
 
 export type FieldState = {
   stack: Stack,
@@ -21,6 +22,18 @@ export type FieldState = {
   chain: number,
   chainScore: number,
   score: number,
+}
+
+/**
+ * Launch chain animation process
+ */
+function runChainAnimation(state: FieldState, action) {
+  // エディットによって 4 連結のぷよが浮いている状態にしたとき、
+  // アニメーションが落下を先に処理するか消去を先に処理するかがここで決定されている
+  if (hasDroppingPuyo(state)) {
+    return applyGravity(state, {});
+  }
+  return vanishPuyos(state, {});
 }
 
 function vanishPuyos(state: FieldState, action) {
@@ -49,7 +62,6 @@ function vanishPuyos(state: FieldState, action) {
   return state;
 }
 
-// simulator.ts からのコピペ
 function applyGravity(state: FieldState, action) {
   const plans = getDropPlan(state.stack, fieldRows, fieldCols);
 
@@ -59,13 +71,11 @@ function applyGravity(state: FieldState, action) {
   return state;
 }
 
-// simulator.ts からのコピペ
 function finishDroppingAnimations(state: FieldState, action) {
   state.droppingPuyos = [];
   return state;
 }
 
-// simulator.ts からのコピペ
 function finishVanishingAnimations(state: FieldState, action) {
   state.vanishingPuyos = [];
   return state;
@@ -84,12 +94,13 @@ export const initialFieldState: FieldState = {
 
 export const createFieldReducer = (fieldType: string) => {
   return (state: FieldState, action) => {
-    console.log(action.fieldType);
     if (action.fieldType !== fieldType) {
       return state;
     }
 
     switch (action.type) {
+      case RUN_CHAIN_ANIMATION:
+        return runChainAnimation(state, action);
       case VANISH_PUYOS:
         return vanishPuyos(state, action);
       case APPLY_GRAVITY:

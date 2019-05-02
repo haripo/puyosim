@@ -9,7 +9,7 @@ import {
   reconstructHistory,
   redoField,
   rotateHighlightsLeft,
-  rotateHighlightsRight,
+  rotateHighlightsRight, runChainAnimation,
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onScreenAppeared: () => {
       // editor から戻ってきたタイミングで浮いたぷよを落とす
-      dispatch(applyGravity('simulator'));
+      dispatch(runChainAnimation('simulator'));
     },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
@@ -56,20 +56,19 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDropPressed: () => {
       dispatch(putNextPair('simulator'));
-      dispatch(vanishPuyos('simulator'));
+      dispatch(runChainAnimation('simulator'));
     },
     onUndoSelected: () => {
       dispatch(undoField());
-      dispatch(vanishPuyos('simulator'));
-      dispatch(applyGravity('simulator'));
+      dispatch(runChainAnimation('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
-      dispatch(vanishPuyos('simulator'));
-      dispatch(applyGravity('simulator'));
+      dispatch(runChainAnimation('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
-      dispatch(reconstructHistory(history, queue, index))
+      dispatch(reconstructHistory(history, queue, index));
+      dispatch(runChainAnimation('simulator'));
     },
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations('simulator'));
