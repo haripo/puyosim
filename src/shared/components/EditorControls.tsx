@@ -11,7 +11,9 @@ export type Props = {
   selectedItem: number,
   hasDroppingPuyo: boolean,
   onSelected: (item: number) => void,
-  onPlaySelected: () => void
+  onPlaySelected: () => void,
+  onUndoSelected: () => void,
+  onResetSelected: () => void,
 };
 
 export default class EditorControls extends PureComponent<Props> {
@@ -49,7 +51,7 @@ export default class EditorControls extends PureComponent<Props> {
             disabled={ false }
             icon='undo'
             text='undo'
-            onPressed={ this.props.onPlaySelected }
+            onPressed={ this.props.onUndoSelected }
             shortcutText={ '' }
           />
           <IconButton
@@ -57,7 +59,7 @@ export default class EditorControls extends PureComponent<Props> {
             disabled={ false }
             icon='fast-rewind'
             text='reset'
-            onPressed={ this.props.onPlaySelected }
+            onPressed={ this.props.onResetSelected }
             shortcutText={ '' }
           />
         </View>

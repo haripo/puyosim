@@ -5,8 +5,8 @@ import {
   finishDroppingAnimations,
   finishVanishingAnimations,
   initializeEditor,
-  putCurrentItem,
-  selectEditItem,
+  putCurrentItem, resetEditorField,
+  selectEditItem, undoEditorField,
   vanishPuyos,
 } from '../../shared/actions/actions';
 import { getStack, getVanishingPuyos, hasDroppingPuyo, isActive } from '../../shared/selectors/fieldSelectors';
@@ -52,6 +52,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     onPlaySelected: () => {
       dispatch(applyGravity('editor'));
+    },
+    onUndoSelected: () => {
+      dispatch(undoEditorField());
+    },
+    onResetSelected: () => {
+      dispatch(resetEditorField());
     },
     onMounted: () => {
       dispatch(initializeEditor());

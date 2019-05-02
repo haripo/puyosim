@@ -34,6 +34,8 @@ export type Props = {
   onEditItemSelected: (item: number) => void,
   onFieldTouched: (row: number, col: number) => void,
   onPlaySelected: () => void,
+  onUndoSelected: () => void,
+  onResetSelected: () => void,
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void
 }
@@ -108,6 +110,8 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
                   hasDroppingPuyo={ this.props.hasDroppingPuyo }
                   onSelected={ this.props.onEditItemSelected }
                   onPlaySelected={ this.props.onPlaySelected }
+                  onUndoSelected={ this.props.onUndoSelected }
+                  onResetSelected={ this.props.onResetSelected }
                 />
               </View>
             </View>
