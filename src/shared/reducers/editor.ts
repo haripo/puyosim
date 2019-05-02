@@ -4,12 +4,10 @@ import { createFieldReducer, FieldState, initialFieldState } from "./field";
 
 export type EditorState = FieldState & {
   currentItem: number
-  queue: number[][],
 }
 
 function initializeEditor(state: EditorState, action, rootState: State) {
   state.stack = rootState.simulator.stack;
-  state.queue = rootState.simulator.queue;
   return state;
 }
 
@@ -26,8 +24,6 @@ function selectEditItem(state: EditorState, action) {
 
 export const initialState: EditorState = {
   currentItem: 0,
-  queue: [],
-
   ...initialFieldState
 };
 

@@ -255,19 +255,13 @@ function refreshPlayId(state: SimulatorState, action) {
 
 function applyEditorState(state: SimulatorState, action, rootState: State) {
 
-  if (state.stack === rootState.editor.stack
-    && state.queue === rootState.editor.queue) {
+  if (state.stack === rootState.editor.stack) {
     // Stack が変化しなかった場合、設置処理を行わない
     return state;
   }
 
   state.stack = rootState.editor.stack;
-  state.queue = rootState.editor.queue;
-
-  //state.numHands += 1;
   state.isResetChainRequired = true;
-  //state.pendingPair = getDefaultNextMove(state);
-  //state.numSplit += splitHeight ? 1 : 0;
 
   const record = createEditHistoryRecord(
     state.numHands,
