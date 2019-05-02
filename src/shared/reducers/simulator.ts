@@ -118,9 +118,6 @@ function putNextPair(state: SimulatorState, action) {
 }
 
 function revertFromRecord(state: SimulatorState, record: HistoryRecord) {
-  // simulate chain
-  createChainPlan(state.stack, fieldRows, fieldCols); // stack が連鎖後の状態に変更される
-
   state.numHands = record.numHands;
   state.stack = record.stack;
   state.chainScore = record.chainScore;
