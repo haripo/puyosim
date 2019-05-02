@@ -44,10 +44,8 @@ export default class EditorControls extends PureComponent<Props> {
             onPressed={ this.props.onPlaySelected }
             shortcutText={ '' }
           />
-        </View>
-        <View style={ styles.buttonGroup }>
           <IconButton
-            style={ [styles.controllerButton] }
+            style={ [styles.controllerButton, styles.controllerRightButton] }
             disabled={ false }
             icon='undo'
             text='undo'

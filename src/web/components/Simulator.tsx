@@ -4,7 +4,6 @@ import { parse } from 'query-string';
 import Modal from 'react-modal';
 
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -25,6 +24,7 @@ import ViewerControls from "../../shared/components/ViewerControls";
 // import MediaQuery from "react-native-web-responsive";
 
 import { StackForRendering } from "../../shared/models/stack";
+import ChainResult from "../../shared/components/ChainResult";
 
 export type Props = {
   match: any,
@@ -35,6 +35,10 @@ export type Props = {
   pendingPair: PendingPair,
   droppings: DroppingPlan[],
   vanishings: VanishingPlan[],
+
+  score: number,
+  chainScore: number,
+  chain: number,
 
   puyoSkin: string,
   layout: Layout,
@@ -208,7 +212,11 @@ export default class Simulator extends Component<Props, State> {
                 <View style={ styles.side }>
                   <View style={ styles.sideHead }>
                     <NextWindowContainer/>
-                    <ChainResultContainer/>
+                    <ChainResult
+                      score={ this.props.score }
+                      chain={ this.props.chain }
+                      chainScore={ this.props.chainScore }
+                    />
                   </View>
                   { this.renderControls(keyMap) }
                 </View>

@@ -12,18 +12,31 @@ import { Stack } from "../models/stack";
 export type EditorState = FieldState & {
   currentItem: number,
 
-  history: { stack: Stack }[],
+  history: {
+    stack: Stack,
+    chain: number,
+    score: number,
+    chainScore: number
+  }[],
   historyIndex: number
 }
 
 function initializeEditor(state: EditorState, action, rootState: State) {
   state.stack = rootState.simulator.stack;
+
   state.history = [
     {
-      stack: state.stack
+      stack: state.stack,
+      chain: 0,
+      score: 0,
+      chainScore: 0
     }
   ];
   state.historyIndex = 0;
+
+  state.chain = 0;
+  state.score = 0;
+  state.chainScore = 0;
   return state;
 }
 
@@ -34,8 +47,13 @@ function putCurrentItem(state: EditorState, action) {
   // update history
   state.historyIndex += 1;
   state.history[state.historyIndex] = {
-    stack: state.stack
+    stack: state.stack,
+    chain: state.chain,
+    score: state.score,
+    chainScore: state.chainScore
   };
+
+  state.isResetChainRequired = true;
 
   return state;
 }
@@ -51,13 +69,25 @@ function undoEditorField(state: EditorState): EditorState {
   }
 
   state.historyIndex -= 1;
-  state.stack = state.history[state.historyIndex].stack;
+
+  const record = state.history[state.historyIndex];
+  state.stack = record.stack;
+  state.chainScore = record.chainScore;
+  state.score = record.score;
+  state.chain = record.chain;
+
   return state;
 }
 
 function resetEditorField(state: EditorState): EditorState {
   state.historyIndex = 0;
-  state.stack = state.history[state.historyIndex].stack;
+
+  const record = state.history[state.historyIndex];
+  state.stack = record.stack;
+  state.chainScore = record.chainScore;
+  state.score = record.score;
+  state.chain = record.chain;
+
   return state;
 }
 

@@ -30,7 +30,11 @@ const mapStateToProps = (state: State) => {
 
     puyoSkin: state.config.puyoSkin as string,
     layout: getLayout(state.layout),
-    theme: getTheme(state.theme)
+    theme: getTheme(state.theme),
+
+    score: state.editor.score,
+    chainScore: state.editor.chainScore,
+    chain: state.editor.chain
   };
 };
 

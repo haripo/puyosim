@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -13,6 +12,7 @@ import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import { StackForRendering } from "../../shared/models/stack";
 import EditorControls from "../../shared/components/EditorControls";
 import { NavigationScreenProps } from "react-navigation";
+import ChainResult from "../../shared/components/ChainResult";
 
 export type Props = {
   stack: StackForRendering,
@@ -21,6 +21,10 @@ export type Props = {
   droppings: DroppingPlan[],
   vanishings: VanishingPlan[],
   currentItem: number,
+
+  score: number,
+  chainScore: number,
+  chain: number,
 
   puyoSkin: string,
   layout: Layout,
@@ -101,7 +105,11 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
               <View style={ styles.side }>
                 <View style={ styles.sideHead }>
                   <NextWindowContainer/>
-                  <ChainResultContainer/>
+                  <ChainResult
+                    score={ this.props.score }
+                    chain={ this.props.chain }
+                    chainScore={ this.props.chainScore }
+                  />
                 </View>
                 <EditorControls
                   layout={ this.props.layout }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -12,6 +11,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
 import { StackForRendering } from "../../shared/models/stack";
+import ChainResult from "../../shared/components/ChainResult";
 
 export type Props = {
   stack: StackForRendering,
@@ -19,6 +19,10 @@ export type Props = {
   pendingPair: PendingPair,
   droppings: DroppingPlan[],
   vanishings: VanishingPlan[],
+
+  score: number,
+  chainScore: number,
+  chain: number,
 
   puyoSkin: string,
   layout: Layout,
@@ -110,7 +114,11 @@ export default class Viewer extends Component<Props, State> {
             <View style={ styles.side }>
               <View style={ styles.sideHead }>
                 <NextWindowContainer/>
-                <ChainResultContainer/>
+                <ChainResult
+                  score={ this.props.score }
+                  chain={ this.props.chain }
+                  chainScore={ this.props.chainScore }
+                />
               </View>
               <ViewerControls
                 onUndoSelected={ this.props.onUndoSelected }
