@@ -1,19 +1,12 @@
 /**
  * Small component for render history-tree
  */
-import React, { Fragment } from 'react';
-import { ActivityIndicator, Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
-import {
-  cardBackgroundColor,
-  isWeb,
-  themeColor,
-  themeLightColor,
-} from '../../utils/constants';
-import SvgPuyo from '../SvgPuyo';
-import Svg, { G, Path, Rect, } from 'react-native-svg';
-import HistoryTreeNode from './HistoryTreeNode';
+import React from 'react';
+import { ActivityIndicator, Animated, FlatList, StyleSheet, View } from 'react-native';
+import { cardBackgroundColor, isWeb, themeColor, themeLightColor, } from '../../utils/constants';
 import { HistoryRecord } from "../../models/history";
 import HistoryHand from "./HistoryHand";
+import HistoryTreeNodeV2 from "./HistoryTreeNodeV2";
 
 export interface Props {
   history: HistoryRecord[],
@@ -30,7 +23,6 @@ interface State {
 type RecordIndexPair = { record: HistoryRecord, historyIndex: number };
 
 export default class SlimHistoryTree extends React.Component<Props, State> {
-
   // layout constants
   handsX = 8;
   handsY = 14;
@@ -76,6 +68,8 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
   /**
    * History の現在のパスのみを取得します
+   *
+   * TODO: selector に移動する
    */
   get flattenedHistory(): RecordIndexPair[] {
     const { history } = this.props;
@@ -144,9 +138,17 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const node = this.props.history[historyIndex];
     const isCurrentNode = historyIndex === this.props.currentIndex;
 
+    const animX = this.state.nodeAnimated[historyIndex].interpolate({
+      inputRange: [0, 1],
+      outputRange: [
+        this.nodeMarginLeft + (isMainPath ? this.childrenLeft : 0),
+        this.nodeMarginLeft + (isMainPath ? 0 : this.childrenLeft),
+      ]
+    });
+
     if (node.type === 'head') {
       return (
-        <HistoryTreeNode
+        <HistoryTreeNodeV2
           x={ this.nodeMarginLeft }
           y={ this.nodeMarginTop }
           nodeWidth={ this.nodeWidth }
@@ -157,15 +159,20 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
 
     if (node.type === 'edit') {
       // いったん edit は無視しておく
-      return null;
+      return (
+        <HistoryTreeNodeV2
+          x={ animX }
+          y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
+          nodeWidth={ this.nodeWidth }
+          isCurrentNode={ isCurrentNode }
+        />
+      );
     }
 
     return (
-      <HistoryTreeNode
-        x={ this.state.nodeAnimated[historyIndex] }
+      <HistoryTreeNodeV2
+        x={ animX }
         y={ index * (this.nodeHeight + this.nodeMarginBottom + this.nodeMarginTop) + this.nodeMarginTop }
-        currentX={ this.nodeMarginLeft + (isMainPath ? 0 : this.childrenLeft) }
-        futureX={ this.nodeMarginLeft + (isMainPath ? this.childrenLeft : 0) }
         col={ node.move.col }
         rotation={ node.move.rotation }
         nodeWidth={ this.nodeWidth }
@@ -179,36 +186,39 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const startY = hasPrev ? -1 : this.nodeHeight / 2;
     const endX = this.nodeWidth / 2 + this.nodeMarginLeft;
     const endY = hasNext ? svgHeight + 1 : this.nodeHeight / 2;
-    const path = `M ${startX} ${startY} C ${startX} ${startY} ${endX} ${endY} ${endX} ${endY}`;
     return (
-      <Path
-        d={ path }
-        stroke={ themeColor }
-        strokeWidth={ 2 }
-        fill="none"
+      <View
+        style={{
+          position: 'absolute',
+          left: startX,
+          top: startY,
+          width: 1,
+          height: endY - startY,
+          borderColor: themeColor,
+          borderWidth: 1,
+        }}
       />
     );
   }
 
   renderRow(item, historyIndex, i) {
     const height = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
-    const events = {
-      [isWeb ? 'onClick' : 'onPressOut']: e => this.handleNodePressed(historyIndex, e)
-    };
     return (
-      <Fragment key={ historyIndex }>
+      <View key={ historyIndex }>
         { this.renderNode(historyIndex, i, item.historyIndex === historyIndex) }
-        {/* touchable area */}
-        <Rect
-          x={ 0 }
-          y={ height * i }
-          width={ this.state.width }
-          height={ height }
-          fill={ 'transparent' }
+        <View
+          onTouchEnd={ e => this.handleNodePressed(historyIndex, e) }
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: height * i,
+            width: this.state.width,
+            height: height,
+            backgroundColor: 'transparent', // これがないと touch イベントがとれない
+          }}
           key={ i }
-          { ...events }
         />
-      </Fragment>
+      </View>
     );
   }
 
@@ -216,23 +226,16 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     const hasNext = item.record.defaultNext !== null;
     const hasPrev = item.record.prev !== null;
     const indices = item.record.prev !== null ? this.props.history[item.record.prev].next : [item.historyIndex];
-    const color = index % 2 === 0 ? themeLightColor : themeColor;
     const height = this.nodeMarginTop + this.nodeHeight + this.nodeMarginBottom;
     const svgHeight = height * indices.length;
     return (
-      <Svg width={ this.state.width } height={ svgHeight }>
-        <Rect
-          x={ 0 }
-          y={ 0 }
-          width={ this.state.width }
-          height={ svgHeight }
-          fill={ color }
-          fillOpacity={ 0.2 }
-        />
-         { item.record.type === 'move' ? this.renderPair(item.record.pair, index) : null }
+      <View
+        style={{ width: this.state.width, height: svgHeight }}
+      >
+        { item.record.type === 'move' ? this.renderPair(item.record.pair, index) : null }
         { this.renderMainPath(svgHeight, hasNext, hasPrev) }
         { indices.map((historyIndex, i) => this.renderRow(item, historyIndex, i)) }
-      </Svg>
+      </View>
     )
   }
 

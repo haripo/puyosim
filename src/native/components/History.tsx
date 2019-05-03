@@ -25,7 +25,7 @@ export interface Props {
 
   history: HistoryRecord[],
   historyIndex: number,
-  onHistoryNodePressed: Function,
+  onHistoryNodePressed: (index: number) => void,
 }
 
 interface State {

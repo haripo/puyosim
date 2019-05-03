@@ -1,6 +1,7 @@
 import React from 'react';
 import SvgPuyo from '../SvgPuyo';
 import { Pair } from "../../models/stack";
+import Puyo from "../Puyo";
 
 export type Props = {
   hand: Pair,
@@ -16,13 +17,13 @@ export default class HistoryHand extends React.Component<Props, {}> {
 
     return (
       <React.Fragment>
-        <SvgPuyo
+        <Puyo
           size={ puyoSize }
           puyo={ hand[0] }
           x={ x }
           y={ y }
           skin={ puyoSkin }/>
-        <SvgPuyo
+        <Puyo
           size={ puyoSize }
           puyo={ hand[1] }
           x={ x + puyoSize }
