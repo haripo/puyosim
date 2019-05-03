@@ -6,6 +6,7 @@ import { themeColor, themeLightColor } from '../../utils/constants';
 import compareWith from '../../utils/compareWith';
 import { Animated, Image, View } from "react-native";
 import { Rotation } from "../../models/move";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const arrowImages = {
   top: require('../../../../assets/history_tree/arrow-top.png'),
@@ -26,6 +27,7 @@ const numberImages = [
 export type Props = {
   x: Animated.AnimatedValue | Animated.AnimatedInterpolation | number,
   y: number,
+  type?: undefined | 'edit',
   col?: number,
   rotation?: Rotation,
   nodeWidth: number,
@@ -69,6 +71,25 @@ export default class HistoryTreeNodeV2 extends React.Component<Props, {}> {
 
   renderText(col, rotation, x, y, nodeWidth, iconSize) {
     const iconPadding = nodeWidth / 16;
+
+    if (this.props.type === 'edit') {
+      return (
+        <View>
+          <Icon
+            name='edit'
+            color={ 'black' }
+            size={ iconSize - 4 }
+            style={{
+              position: 'absolute',
+              left: iconPadding + iconSize / 2,
+              top: y + 1,
+              width: iconSize,
+              height: iconSize
+            }}
+          />
+        </View>
+      );
+    }
 
     if (!col && !rotation) {
       // root node 用に col, rotation を表示しないパターンが必要
