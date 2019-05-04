@@ -127,19 +127,18 @@ export function createChainPlan(stack: Stack, rows: number, cols: number): Chain
   };
 
   while (true) {
+    const dropPlans = getDropPlan(stack, rows, cols);
+    result.plan.push(dropPlans);
+
     const vanishPlans = getVanishPlan(stack, rows, cols);
 
     if (vanishPlans.length === 0) {
       break;
     }
 
-    result.plan.push(vanishPlans);
-
     result.chain += 1;
     result.score += calcChainStepScore(result.chain, vanishPlans);
-
-    const dropPlans = getDropPlan(stack, rows, cols);
-    result.plan.push(dropPlans);
+    result.plan.push(vanishPlans);
   }
 
   return result;

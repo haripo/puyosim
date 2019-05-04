@@ -240,7 +240,7 @@ export function createHistoryFromMinimumHistory(
         const numHands = resultRecords[prev].numHands;
         const pair = queue[(numHands - 1) % queue.length];
         const currentStack = _.chunk(record.stack.split('').map(v => parseInt(v)), fieldCols);
-        const chainResult = createChainPlan(_.cloneDeep(currentStack), fieldRows, fieldCols);
+        const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
 
         resultRecords.push({
           type: 'edit',
