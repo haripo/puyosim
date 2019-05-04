@@ -31,7 +31,7 @@ import {
   createHistoryRecord,
   createInitialHistoryRecord,
   History,
-  HistoryRecord
+  HistoryRecord, reindexDefaultNexts
 } from '../models/history';
 import { createField, getSplitHeight, setPair } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
@@ -167,13 +167,7 @@ function moveHistory(state: SimulatorState, action): SimulatorState {
   state = revert(state, next);
 
   // update defaultNext path
-  let index: number | null = state.historyIndex;
-  while (index !== null) {
-    let next = index;
-    index = state.history[index].prev;
-    if (index === null) break;
-    state.history[index].defaultNext = next;
-  }
+  state.history = reindexDefaultNexts(state.history, state.historyIndex);
 
   return state;
 }
@@ -206,7 +200,10 @@ function setHistory(state: SimulatorState, action) {
 function reconstructHistory(state: SimulatorState, action): SimulatorState {
   const { history, queue, index } = action;
   state.queue = deserializeQueue(queue);
-  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(history), state.queue);
+  state.history = createHistoryFromMinimumHistory(
+    deserializeHistoryRecords(history),
+    state.queue,
+    index);
   state.historyIndex = index;
 
   state.startDateTime = new Date();
@@ -220,7 +217,10 @@ function loadArchive(state: SimulatorState, action, archives) {
   const archive: Archive = archives.archives[action.id];
   state.playId = archive.play.id;
   state.queue = _.chunk(archive.play.queue, 2);
-  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(archive.play.history), state.queue);
+  state.history = createHistoryFromMinimumHistory(
+    deserializeHistoryRecords(archive.play.history),
+    state.queue,
+    archive.play.historyIndex);
   state.historyIndex = archive.play.historyIndex;
   state.startDateTime = archive.play.createdAt;
   state.isSaved = true;

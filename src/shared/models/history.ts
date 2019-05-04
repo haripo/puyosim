@@ -189,7 +189,8 @@ export function getCurrentPathRecords(
 
 export function createHistoryFromMinimumHistory(
   minimumHistoryRecords: MinimumHistoryRecord[],
-  queue: number[][]): HistoryRecord[] {
+  queue: number[][],
+  defaultIndex: number | undefined = undefined): HistoryRecord[] {
 
   let stack = createField(fieldRows, fieldCols);
   let resultRecords: HistoryRecord[] = [
@@ -262,5 +263,28 @@ export function createHistoryFromMinimumHistory(
     index += 1;
   }
 
+  if (defaultIndex !== undefined) {
+    resultRecords = reindexDefaultNexts(resultRecords, defaultIndex);
+  }
+
   return resultRecords;
+}
+
+/**
+ * Update defaultNext path in the history
+ *
+ * 引数 historyIndex までの履歴経路をデフォルトにするように、HistoryRecord の defaultNext を更新します
+ * @param history history object
+ * @param historyIndex index
+ * @return {HistoryRecord[]} updated history
+ */
+export function reindexDefaultNexts(history: HistoryRecord[], historyIndex: number | null) {
+  let index: number | null = historyIndex;
+  while (index !== null) {
+    let next = index;
+    index = history[index].prev;
+    if (index === null) break;
+    history[index].defaultNext = next;
+  }
+  return history;
 }
