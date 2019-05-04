@@ -1,30 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  applyGravity,
-  finishDroppingAnimations,
-  finishVanishingAnimations,
-  initializeSimulator,
-  moveHighlightsLeft,
-  moveHighlightsRight,
-  moveHistory,
-  putNextPair,
-  redoField,
-  resetField,
-  restart,
-  rotateHighlightsLeft,
-  rotateHighlightsRight,
-  undoField,
-  vanishPuyos,
-} from '../../shared/actions/actions';
-import {
-  getGhost,
-  getPendingPair,
-} from '../../shared/selectors/simulatorSelectors';
-import {
-  getStack,
-  getVanishingPuyos,
-  isActive
-} from '../../shared/selectors/fieldSelectors';
+import { moveHistory, } from '../../shared/actions/actions';
+import { getGhost, getPendingPair, } from '../../shared/selectors/simulatorSelectors';
+import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import History from '../components/History';
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
@@ -51,49 +28,17 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSimulatorLaunched: () => {
-      dispatch(initializeSimulator());
-    },
-    onRotateRightPressed: () => {
-      dispatch(rotateHighlightsRight());
-    },
-    onRotateLeftPressed: () => {
-      dispatch(rotateHighlightsLeft());
-    },
-    onMoveRightPressed: () => {
-      dispatch(moveHighlightsRight());
-    },
-    onMoveLeftPressed: () => {
-      dispatch(moveHighlightsLeft());
-    },
-    onDropPressed: () => {
-      dispatch(putNextPair());
-      dispatch(vanishPuyos());
-    },
-    onUndoSelected: () => {
-      dispatch(undoField());
-    },
-    onRedoSelected: () => {
-      dispatch(redoField());
-    },
-    onResetSelected: () => {
-      dispatch(resetField());
-    },
-    onRestartSelected: () => {
-      dispatch(restart());
-    },
     onHistoryNodePressed: (index) => {
       dispatch(moveHistory(index));
-      dispatch(vanishPuyos());
     },
-    onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
-    },
-    onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
-    }
+    // onVanishingAnimationFinished: () => {
+    //   dispatch(finishVanishingAnimations());
+    //   dispatch(applyGravity());
+    // },
+    // onDroppingAnimationFinished: () => {
+    //   dispatch(finishDroppingAnimations());
+    //   dispatch(vanishPuyos());
+    // }
   };
 };
 
