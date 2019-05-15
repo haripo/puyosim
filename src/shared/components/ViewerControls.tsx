@@ -1,9 +1,6 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  buttonColor,
-  contentsMargin,
-} from '../utils/constants';
+import { buttonColor, contentsMargin, } from '../utils/constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 
@@ -59,7 +56,7 @@ export default class ViewerControls extends PureComponent<Props> {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'column',
-    height: 150
+    height: 100
   },
   buttonGroup: {
     flex: 1,

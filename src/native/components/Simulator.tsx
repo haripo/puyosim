@@ -101,7 +101,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
       )
     }
 
-    this.props.navigation.push('viewer');
+    this.props.navigation.replace('viewer', { root: true });
   }
 
   async componentDidMount() {

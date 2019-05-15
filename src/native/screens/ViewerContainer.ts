@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   applyGravity,
   finishDroppingAnimations,
-  finishVanishingAnimations,
+  finishVanishingAnimations, moveHistory,
   redoField,
   undoField,
   vanishPuyos,
@@ -37,7 +37,10 @@ const mapStateToProps = (state) => {
     theme: getTheme(state.theme),
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
-    chain: state.simulator.chain
+    chain: state.simulator.chain,
+
+    history: state.simulator.history,
+    historyIndex: state.simulator.historyIndex,
   };
 };
 
@@ -58,7 +61,10 @@ const mapDispatchToProps = (dispatch) => {
     onDroppingAnimationFinished: () => {
       dispatch(finishDroppingAnimations());
       dispatch(vanishPuyos());
-    }
+    },
+    onHistoryNodePressed: (index) => {
+      dispatch(moveHistory(index));
+    },
   };
 };
 

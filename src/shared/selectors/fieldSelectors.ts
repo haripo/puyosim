@@ -6,6 +6,7 @@ import { DroppingPlan } from "../models/chainPlanner";
 import Field from "../components/Field";
 
 export function isActive(state: FieldState): boolean {
+  if (!state.droppingPuyos) return false;
   return !(
     state.droppingPuyos.length > 0 ||
     state.vanishingPuyos.length > 0

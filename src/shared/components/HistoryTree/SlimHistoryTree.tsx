@@ -12,7 +12,8 @@ import HistoryTreeNodeV2 from "./HistoryTreeNodeV2";
 export interface Props {
   history: HistoryRecord[],
   currentIndex: number,
-  onNodePressed: Function
+  onNodePressed: Function,
+  style: ViewStyle
 }
 
 interface State {
@@ -283,7 +284,7 @@ export default class SlimHistoryTree extends React.Component<Props, State> {
     }
 
     return (
-      <View style={ styles.component }>
+      <View style={ [styles.component, this.props.style] }>
         <FlatList
           data={ this.flattenedHistory }
           renderItem={ this.renderItem.bind(this) }
