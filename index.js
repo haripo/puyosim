@@ -2,7 +2,6 @@ import { AppRegistry, YellowBox } from 'react-native';
 import React from 'react';
 import { Provider } from 'react-redux';
 import Simulator from './src/native/screens/SimulatorContainer';
-import History from './src/native/screens/HistoryContainer';
 import About from './src/native/screens/AboutContainer';
 import Settings from './src/native/screens/SettingsContainer';
 import Share from './src/native/screens/ShareOptionContainer';
@@ -54,7 +53,6 @@ const AppNavigator = createStackNavigator(
         }
       ),
     },
-    history: History,
     about: About,
     settings: Settings,
     share: Share,
