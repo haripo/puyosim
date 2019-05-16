@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import DroppingPuyos from './DroppingPuyos';
 import VanishingPuyos from './VanishingPuyos';
-import { contentsPadding, fieldCols } from '../utils/constants';
+import { contentsPadding, fieldCols, fieldRows } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
@@ -22,6 +22,8 @@ export interface Props {
   droppings?: DroppingPlan[],
   vanishings?: VanishingPlan[],
   style: any,
+
+  onTouched?: (row: number, col: number) => void,
 
   onVanishingAnimationFinished?: () => void,
   onDroppingAnimationFinished?: () => void
@@ -81,11 +83,39 @@ export default class Field extends Component<Props, State> {
     ));
   }
 
+  renderTouchables() {
+    const { layout: { puyoSize }, onTouched } = this.props;
+
+    if (!onTouched) return;
+
+    let l: JSX.Element[] = [];
+    for (let i = 0; i < fieldRows; i++) {
+      for (let j = 0; j < fieldCols; j++) {
+        l.push(
+          <TouchableOpacity
+            key={ `t-${i}-${j}` }
+            onPressOut={ () => onTouched(i, j) }
+            style={{
+              position: 'absolute',
+              top: i * puyoSize + contentsPadding,
+              left: j * puyoSize + contentsPadding,
+              width: puyoSize,
+              height: puyoSize
+            }}
+          >
+          </TouchableOpacity>
+        );
+      }
+    }
+    return l;
+  }
+
   renderStack() {
     const { stack, isActive } = this.props;
+
     return [
       isActive ? this.renderGhostPuyos() : null,
-      this.renderPuyos(stack)
+      this.renderPuyos(stack),
     ];
   }
 
@@ -103,7 +133,7 @@ export default class Field extends Component<Props, State> {
   }
 
   render() {
-    const { layout, theme, style } = this.props;
+    const { layout, theme, style, onTouched } = this.props;
     const styles = createStyles(layout, theme);
 
     return (
@@ -130,6 +160,7 @@ export default class Field extends Component<Props, State> {
           ) : null
         }
         <View style={ styles.topShadow }/>
+        { onTouched ? this.renderTouchables() : null }
       </View>
     );
   }

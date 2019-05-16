@@ -75,8 +75,8 @@ const connectionImages = {
 export interface Props {
   puyo: number,
   connections?: PuyoConnection,
-  x: number,
-  y: number | Animated.Animated,
+  x?: number,
+  y?: number | Animated.Animated,
   a?: number | Animated.Animated,
   size: number,
   skin: string
@@ -90,22 +90,32 @@ interface State {
  */
 export default class Puyo extends Component<Props, State> {
   style(): ViewStyle {
-    return {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      transform: [
-        {
-          translateX: this.props.x,
-        },
-        {
-          translateY: this.props.y as number, // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
-        }
-      ],
-      width: this.props.size + 1,
-      height: this.props.size + 1,
-      opacity: this.props.a === undefined ? 1 : this.props.a as number  // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
-    };
+    const { x, y, size, a } = this.props;
+
+    if (x && y) {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        transform: [
+          {
+            translateX: x,
+          },
+          {
+            translateY: y as number, // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
+          }
+        ],
+        width: size + 1,
+        height: size + 1,
+        opacity: a === undefined ? 1 : a as number  // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
+      };
+    } else {
+      return {
+        width: size + 1,
+        height: size + 1,
+        opacity: a === undefined ? 1 : a as number  // TODO: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28164
+      }
+    }
   }
 
   shouldComponentUpdate(nextProps) {

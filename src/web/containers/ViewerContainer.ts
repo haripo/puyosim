@@ -20,10 +20,9 @@ import {
   canUndo,
   getGhost,
   getHistoryTreeLayout,
-  getPendingPair,
-  getStack, getVanishingPuyos,
-  isActive
+  getPendingPair
 } from '../../shared/selectors/simulatorSelectors';
+import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 

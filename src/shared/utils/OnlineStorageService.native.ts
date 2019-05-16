@@ -55,7 +55,7 @@ export async function saveArchive(payload: ArchiveRequestPayload, uid: string): 
     ...payload,
     uid,
     version: {
-      schema: 1,
+      schema: 2,
       app: VersionNumber.appVersion,
       build: VersionNumber.buildVersion
     }
@@ -68,6 +68,8 @@ export async function deleteArchive(id: string) {
   return await collectionReference.doc(id).delete();
 }
 
-export function requestLogin(): Promise<any> {
-  return firebase.auth().signInAnonymously();
+export async function requestLogin(): any {
+  const credential = await firebase.auth().signInAnonymously();
+  console.info('uid: ', credential.user.uid);
+  return credential;
 }

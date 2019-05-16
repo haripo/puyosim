@@ -3,6 +3,8 @@ import { archiveCurrentField, refreshPlayId, resetField, restart } from '../../s
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import RightDrawer from "../components/RightDrawer";
 import { getArchivePayload } from "../../shared/selectors/simulatorSelectors";
+
+// @ts-ignore
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
 
 const mapStateToProps = (state) => {

@@ -1,10 +1,9 @@
 import {
-  APPLY_GRAVITY,
+  APPLY_EDITOR_STATE,
   ARCHIVE_CURRENT_FIELD_FINISHED,
   DEBUG_SET_HISTORY,
-  DEBUG_SET_PATTERN, EDIT_ARCHIVE_FINISHED,
-  FINISH_DROPPING_ANIMATIONS,
-  FINISH_VANISHING_ANIMATIONS,
+  DEBUG_SET_PATTERN,
+  EDIT_ARCHIVE_FINISHED,
   INITIALIZE_SIMULATOR,
   LOAD_ARCHIVE,
   MOVE_HIGHLIGHTS_LEFT,
@@ -18,44 +17,36 @@ import {
   RESTART,
   ROTATE_HIGHLIGHTS_LEFT,
   ROTATE_HIGHLIGHTS_RIGHT,
-  UNDO_FIELD,
-  VANISH_PUYOS
+  UNDO_FIELD
 } from '../actions/actions';
 import { getDefaultMove, Move, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import { calcChainStepScore } from '../models/score';
 import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
-import { createChainPlan, DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from '../models/chainPlanner';
+import { createChainPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
-  appendHistoryRecord,
+  appendHistoryRecord, createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
   createInitialHistoryRecord,
   History,
-  HistoryRecord
+  HistoryRecord, reindexDefaultNexts
 } from '../models/history';
-import { applyDropPlans, applyVanishPlans, createField, getSplitHeight, setPair, Stack } from '../models/stack';
+import { createField, getSplitHeight, setPair } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import _ from 'lodash';
-
 // @ts-ignore
 import { Archive } from "../utils/OnlineStorageService";
+import { createFieldReducer, FieldState, initialFieldState } from "./field";
+import { State } from "./index";
 
-export type SimulatorState = {
+export type SimulatorState = FieldState & {
   queue: number[][],
   numHands: number,
-  stack: Stack,
-  chain: number,
-  chainScore: number,
-  score: number,
   numSplit: number,
-  isResetChainRequired: boolean,
   pendingPair: Move,
-  droppingPuyos: DroppingPlan[],
-  vanishingPuyos: VanishingPlan[],
   history: HistoryRecord[],
   historyIndex: number,
 
@@ -126,55 +117,7 @@ function putNextPair(state: SimulatorState, action) {
   return state;
 }
 
-function vanishPuyos(state: SimulatorState, action) {
-  const plans = getVanishPlan(state.stack, fieldRows, fieldCols);
-
-  if (plans.length === 0) {
-    return state;
-  }
-
-  if (state.isResetChainRequired) {
-    state.isResetChainRequired = false;
-    state.chain = 0;
-    state.chainScore = 0;
-  }
-
-  state.stack = applyVanishPlans(state.stack, plans);
-  state.vanishingPuyos = plans;
-
-  state.chain += 1;
-
-  // update scores
-  const additionalScore = calcChainStepScore(state.chain, plans);
-  state.score += additionalScore;
-  state.chainScore += additionalScore;
-
-  return state;
-}
-
-function applyGravity(state: SimulatorState, action) {
-  const plans = getDropPlan(state.stack, fieldRows, fieldCols);
-
-  state.stack = applyDropPlans(state.stack, plans);
-  state.droppingPuyos = plans;
-
-  return state;
-}
-
-function finishDroppingAnimations(state: SimulatorState, action) {
-  state.droppingPuyos = [];
-  return state;
-}
-
-function finishVanishingAnimations(state: SimulatorState, action) {
-  state.vanishingPuyos = [];
-  return state;
-}
-
 function revertFromRecord(state: SimulatorState, record: HistoryRecord) {
-  // simulate chain
-  createChainPlan(state.stack, fieldRows, fieldCols); // stack が連鎖後の状態に変更される
-
   state.numHands = record.numHands;
   state.stack = record.stack;
   state.chainScore = record.chainScore;
@@ -224,13 +167,7 @@ function moveHistory(state: SimulatorState, action): SimulatorState {
   state = revert(state, next);
 
   // update defaultNext path
-  let index: number | null = state.historyIndex;
-  while (index !== null) {
-    let next = index;
-    index = state.history[index].prev;
-    if (index === null) break;
-    state.history[index].defaultNext = next;
-  }
+  state.history = reindexDefaultNexts(state.history, state.historyIndex);
 
   return state;
 }
@@ -263,7 +200,10 @@ function setHistory(state: SimulatorState, action) {
 function reconstructHistory(state: SimulatorState, action): SimulatorState {
   const { history, queue, index } = action;
   state.queue = deserializeQueue(queue);
-  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(history), state.queue);
+  state.history = createHistoryFromMinimumHistory(
+    deserializeHistoryRecords(history),
+    state.queue,
+    index);
   state.historyIndex = index;
 
   state.startDateTime = new Date();
@@ -277,7 +217,10 @@ function loadArchive(state: SimulatorState, action, archives) {
   const archive: Archive = archives.archives[action.id];
   state.playId = archive.play.id;
   state.queue = _.chunk(archive.play.queue, 2);
-  state.history = createHistoryFromMinimumHistory(deserializeHistoryRecords(archive.play.history), state.queue);
+  state.history = createHistoryFromMinimumHistory(
+    deserializeHistoryRecords(archive.play.history),
+    state.queue,
+    archive.play.historyIndex);
   state.historyIndex = archive.play.historyIndex;
   state.startDateTime = archive.play.createdAt;
   state.isSaved = true;
@@ -307,21 +250,45 @@ function refreshPlayId(state: SimulatorState, action) {
   return state;
 }
 
+function applyEditorState(state: SimulatorState, action, rootState: State) {
+
+  if (state.stack === rootState.editor.stack) {
+    // Stack が変化しなかった場合、設置処理を行わない
+    return state;
+  }
+
+  state.stack = rootState.editor.stack;
+  state.isResetChainRequired = true;
+
+  const record = createEditHistoryRecord(
+    state.numHands,
+    state.stack,
+    state.chain,
+    state.score,
+    state.chainScore,
+    state.numSplit);
+
+  let result = appendHistoryRecord({
+    version: 0,
+    records: state.history,
+    currentIndex: state.historyIndex
+  }, record);
+
+  state.history = result.records;
+  state.historyIndex = result.currentIndex;
+
+  return state;
+}
+
 function createInitialState(config): SimulatorState {
   const queue = generateQueue(config);
   const stack = createField(fieldRows, fieldCols);
   return {
+    ...initialFieldState,
     queue: queue,
     numHands: 0,
-    stack: stack,
-    chain: 0,
-    chainScore: 0,
-    score: 0,
     numSplit: 0,
-    isResetChainRequired: false,
     pendingPair: getDefaultMove(),
-    droppingPuyos: [],
-    vanishingPuyos: [],
     history: [createInitialHistoryRecord(stack)],
     historyIndex: 0,
     startDateTime: new Date(),
@@ -341,7 +308,14 @@ export function getInitialState(config) {
   return loadOrCreateInitialState(config);
 }
 
-export const reducer = (state, action, config, archive) => {
+const fieldReducer = createFieldReducer('simulator');
+
+export const reducer = (state, action, rootState) => {
+  state = {
+    ...state,
+    ...fieldReducer(state, action)
+  };
+
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
       return state; // not implemented
@@ -355,14 +329,6 @@ export const reducer = (state, action, config, archive) => {
       return moveHighlightsRight(state, action);
     case PUT_NEXT_PAIR:
       return putNextPair(state, action);
-    case VANISH_PUYOS:
-      return vanishPuyos(state, action);
-    case APPLY_GRAVITY:
-      return applyGravity(state, action);
-    case FINISH_DROPPING_ANIMATIONS:
-      return finishDroppingAnimations(state, action);
-    case FINISH_VANISHING_ANIMATIONS:
-      return finishVanishingAnimations(state, action);
     case UNDO_FIELD:
       return undoField(state, action);
     case REDO_FIELD:
@@ -372,17 +338,19 @@ export const reducer = (state, action, config, archive) => {
     case RESET_FIELD:
       return resetField(state, action);
     case RESTART:
-      return restart(state, action, config);
+      return restart(state, action, rootState.config);
     case RECONSTRUCT_HISTORY:
       return reconstructHistory(state, action);
     case LOAD_ARCHIVE:
-      return loadArchive(state, action, archive);
+      return loadArchive(state, action, rootState.archive);
     case ARCHIVE_CURRENT_FIELD_FINISHED:
       return archiveCurrentFieldFinished(state, action);
     case EDIT_ARCHIVE_FINISHED:
       return editArchiveFinished(state, action);
     case REFRESH_PLAY_ID:
       return refreshPlayId(state, action);
+    case APPLY_EDITOR_STATE:
+      return applyEditorState(state, action, rootState);
     case DEBUG_SET_PATTERN:
       return setPattern(state, action);
     case DEBUG_SET_HISTORY:

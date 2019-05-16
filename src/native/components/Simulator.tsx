@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Alert, Linking, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { parse } from 'query-string';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
 import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
@@ -22,6 +21,7 @@ import VersionNumber from "react-native-version-number";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationScreenProps } from "react-navigation";
+import ChainResult from "../../shared/components/ChainResult";
 
 export type Props = {
   stack: StackForRendering,
@@ -29,6 +29,10 @@ export type Props = {
   pendingPair: PendingPair,
   droppings: DroppingPlan[],
   vanishings: VanishingPlan[],
+
+  score: number,
+  chainScore: number,
+  chain: number,
 
   puyoSkin: string,
   layout: Layout,
@@ -48,6 +52,7 @@ export type Props = {
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void,
   onReconstructHistoryRequested: (history: string, queue: string, index: number) => void,
+  onScreenAppeared: () => void,
 }
 
 type State = {
@@ -74,7 +79,11 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     this.state = {
       isVisible: true,
       isLoading: true
-    }
+    };
+
+    this.props.navigation.addListener('didFocus', () => {
+      this.props.onScreenAppeared();
+    });
   }
 
   private launchViewer(url) {
@@ -92,7 +101,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
       )
     }
 
-    this.props.navigation.push('viewer');
+    this.props.navigation.replace('viewer', { root: true });
   }
 
   async componentDidMount() {
@@ -125,11 +134,13 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     }
 
     // open URL in viewer mode
-    firebase.links()
-      .getInitialLink()
-      .then((url) => {
-        this.launchViewer(url);
-      });
+    if (!this.props.navigation.getParam('ignoreDeepLink', false)) {
+      firebase.links()
+        .getInitialLink()
+        .then((url) => {
+          this.launchViewer(url);
+        });
+    }
 
     firebase.links()
       .onLink(url => {
@@ -149,6 +160,10 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
           { cancelable: false }
         );
       });
+
+    // setTimeout(() => {
+    //   this.launchViewer("https://puyos.im/v?q=FrGDrFxsiryjEsiiDGyxwkDkGswjqksqrqrFDEpzppGkkkGkDzFswpplqxkwqGkzEEpFiGDzrywrrsijrFxjxFsDjiyjGFljizwyjsjFzxrGjplEqxxlGizslrwpwsFk&h=msapsghoeqfbmrccdfjkuqoiceuobqbahcgdvfhprrdpaicubneotmncfmpoccigfetqbdcphoidrpahc9&i=0");
+    // }, 1);
 
     // Android でキーボードが表示されているとレイアウトが崩れる
     // （LayoutBaseContainer がキーボードを含まない範囲を view と認識する）
@@ -198,7 +213,11 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
               <View style={ styles.side }>
                 <View style={ styles.sideHead }>
                   <NextWindowContainer/>
-                  <ChainResultContainer/>
+                  <ChainResult
+                    score={ this.props.score }
+                    chain={ this.props.chain }
+                    chainScore={ this.props.chainScore }
+                  />
                 </View>
                 <SimulatorControls
                   onUndoSelected={ this.props.onUndoSelected }

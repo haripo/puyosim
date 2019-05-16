@@ -9,8 +9,8 @@ import {
 } from '../../utils/constants';
 import SvgPuyo from '../SvgPuyo';
 import Svg, { G, Rect, } from 'react-native-svg';
-import TimerMixin from 'react-timer-mixin';
-import reactMixin from 'react-mixin';
+// import TimerMixin from 'react-timer-mixin';
+// import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
 
@@ -166,7 +166,7 @@ export default class HistoryTree extends React.Component<Props, State> {
   }
 }
 
-reactMixin(HistoryTree.prototype, TimerMixin);
+// reactMixin(HistoryTree.prototype, TimerMixin);
 
 const styles = StyleSheet.create({
   component: {

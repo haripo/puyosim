@@ -4,9 +4,10 @@ import { fieldCols, fieldRows } from "../utils/constants";
 import { createChainPlan } from "./chainPlanner";
 import _ from 'lodash';
 
-export type HistoryRecord = {
-  move: Move | null,
-  pair: Pair | null,
+export type MoveHistoryRecord = {
+  type: 'move',
+  move: Move,
+  pair: Pair,
   numHands: number,
   stack: Stack,
   score: number,
@@ -17,6 +18,34 @@ export type HistoryRecord = {
   next: number[],
   defaultNext: number | null
 }
+
+export type HeadHistoryRecord = {
+  type: 'head'
+  numHands: 0,
+  stack: Stack,
+  score: 0,
+  chain: 0,
+  chainScore: 0,
+  numSplit: 0,
+  prev: null,
+  next: number[],
+  defaultNext: number | null
+}
+
+export type EditHistoryRecord = {
+  type: 'edit'
+  numHands: number,
+  stack: Stack,
+  score: number,
+  chain: number,
+  chainScore: number,
+  numSplit: number,
+  prev: number | null,
+  next: number[],
+  defaultNext: number | null
+}
+
+export type HistoryRecord = MoveHistoryRecord | HeadHistoryRecord | EditHistoryRecord;
 
 export type History = {
   version: number;
@@ -29,7 +58,12 @@ export type History = {
  * URL にシリアライズする際に利用する。
  */
 export type MinimumHistoryRecord = {
+  type: 'move',
   move: Move,
+  next: number[]
+} | {
+  type: 'edit'
+  stack: string,
   next: number[]
 }
 
@@ -38,12 +72,11 @@ export type MinimumHistory = {
   currentIndex: number;
 }
 
-export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
+export function createInitialHistoryRecord(stack: Stack): HeadHistoryRecord {
   return {
-    move: null,
-    pair: null,
+    type: 'head',
     numHands: 0,
-    stack: stack,
+    stack,
     score: 0,
     chain: 0,
     chainScore: 0,
@@ -56,10 +89,28 @@ export function createInitialHistoryRecord(stack: Stack): HistoryRecord {
 
 export function createHistoryRecord(
   move: Move, pair: Pair, numHands: number, stack: Stack,
-  chain: number, score: number, chainScore: number, numSplit: number): HistoryRecord {
+  chain: number, score: number, chainScore: number, numSplit: number): MoveHistoryRecord {
   return {
+    type: 'move',
     move,
     pair,
+    numHands,
+    stack,
+    score,
+    chain,
+    chainScore,
+    numSplit,
+    prev: null,
+    next: [],
+    defaultNext: null
+  };
+}
+
+export function createEditHistoryRecord(
+  numHands: number, stack: Stack,
+  chain: number, score: number, chainScore: number, numSplit: number): EditHistoryRecord {
+  return {
+    type: 'edit',
     numHands,
     stack,
     score,
@@ -80,7 +131,9 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
   // 同じ Record があったら新たに増やさない
   if (history.records.length > 0) {
     for (let nextIndex of lastState.next) {
-      if (isEqualMove(history.records[nextIndex].move, record.move)) {
+      const nextRecord = history.records[nextIndex];
+      // TODO: isEqual は重いかも
+      if (nextRecord.type !== 'head' && _.isEqual(nextRecord.stack, record.stack)) {
         lastState.defaultNext = nextIndex;
         history.currentIndex = nextIndex;
         return history;
@@ -107,8 +160,8 @@ export function appendHistoryRecord(history: History, record: HistoryRecord): Hi
  * @param currentIndex current index
  */
 export function getCurrentPathRecords(
-    history: HistoryRecord[],
-    currentIndex: number): HistoryRecord[] {
+  history: HistoryRecord[],
+  currentIndex: number): HistoryRecord[] {
   let result: HistoryRecord[] = [];
 
   // extract records
@@ -136,7 +189,8 @@ export function getCurrentPathRecords(
 
 export function createHistoryFromMinimumHistory(
   minimumHistoryRecords: MinimumHistoryRecord[],
-  queue: number[][]): HistoryRecord[] {
+  queue: number[][],
+  defaultIndex: number | undefined = undefined): HistoryRecord[] {
 
   let stack = createField(fieldRows, fieldCols);
   let resultRecords: HistoryRecord[] = [
@@ -146,13 +200,6 @@ export function createHistoryFromMinimumHistory(
   let index = 1;
 
   for (const record of minimumHistoryRecords) {
-    const prev = index in backtrack ? backtrack[index] : 0;
-    const numHands = resultRecords[prev].numHands + 1;
-    const pair = queue[(numHands - 1) % queue.length];
-    const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
-    const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
-    const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
-
     for (const nextPosition of record.next) {
       backtrack[nextPosition + 1] = index;
     }
@@ -164,22 +211,80 @@ export function createHistoryFromMinimumHistory(
       }
     }
 
-    resultRecords.push({
-      move: record.move,
-      pair: pair,
-      numHands: numHands,
-      stack: currentStack,
-      score: chainResult.score + resultRecords[prev].score,
-      chain: chainResult.chain,
-      chainScore: chainResult.score,
-      next: record.next.map(n => n + 1),
-      numSplit: resultRecords[prev].numSplit + (splitHeight ? 1 : 0),
-      defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
-      prev: prev
-    });
+    const prev = index in backtrack ? backtrack[index] : 0;
+
+    switch (record.type) {
+      case 'move': {
+        const numHands = resultRecords[prev].numHands + 1;
+        const pair = queue[(numHands - 1) % queue.length];
+        const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
+        const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
+        const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
+
+        resultRecords.push({
+          type: 'move',
+          move: record.move,
+          pair: pair,
+          numHands: numHands,
+          stack: currentStack,
+          score: chainResult.score + resultRecords[prev].score,
+          chain: chainResult.chain,
+          chainScore: chainResult.score,
+          next: record.next.map(n => n + 1),
+          numSplit: resultRecords[prev].numSplit + (splitHeight ? 1 : 0),
+          defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
+          prev: prev
+        });
+        break;
+      }
+      case 'edit': {
+        const numHands = resultRecords[prev].numHands;
+        const pair = queue[(numHands - 1) % queue.length];
+        const currentStack = _.chunk(record.stack.split('').map(v => parseInt(v)), fieldCols);
+        const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
+
+        resultRecords.push({
+          type: 'edit',
+          pair: pair,
+          numHands: numHands,
+          stack: currentStack,
+          score: chainResult.score + resultRecords[prev].score,
+          chain: chainResult.chain,
+          chainScore: chainResult.score,
+          next: record.next.map(n => n + 1),
+          numSplit: resultRecords[prev].numSplit,
+          defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
+          prev: prev
+        });
+        break;
+      }
+    }
 
     index += 1;
   }
 
+  if (defaultIndex !== undefined) {
+    resultRecords = reindexDefaultNexts(resultRecords, defaultIndex);
+  }
+
   return resultRecords;
+}
+
+/**
+ * Update defaultNext path in the history
+ *
+ * 引数 historyIndex までの履歴経路をデフォルトにするように、HistoryRecord の defaultNext を更新します
+ * @param history history object
+ * @param historyIndex index
+ * @return {HistoryRecord[]} updated history
+ */
+export function reindexDefaultNexts(history: HistoryRecord[], historyIndex: number | null) {
+  let index: number | null = historyIndex;
+  while (index !== null) {
+    let next = index;
+    index = history[index].prev;
+    if (index === null) break;
+    history[index].defaultNext = next;
+  }
+  return history;
 }

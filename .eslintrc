@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "es6": true,
+    "browser": false
+  },
+  "rules": {
+//    "no-console": "error" // console.logなどのコンソール出力に対してエラーを出す設定
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}

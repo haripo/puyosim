@@ -1,4 +1,5 @@
 import * as simulator from './simulator';
+import * as editor from './editor';
 import * as config from './config';
 import * as layout from './layout';
 import * as theme from './theme';
@@ -8,6 +9,7 @@ import produce from 'immer';
 
 export interface State {
   simulator: simulator.SimulatorState,
+  editor: editor.EditorState,
   config: any,
   layout: layout.LayoutState,
   theme: theme.ThemeState,
@@ -17,6 +19,7 @@ export interface State {
 
 let initialState: State = {
   simulator: simulator.getInitialState(config.initialState),
+  editor: editor.initialState,
   config: config.initialState,
   layout: layout.initialState,
   theme: theme.initialState,
@@ -26,7 +29,8 @@ let initialState: State = {
 
 export default function (state: State = initialState, action): State {
   return produce<State>(state, _state => {
-    _state.simulator = simulator.reducer(_state.simulator, action, _state.config, _state.archive);
+    _state.simulator = simulator.reducer(_state.simulator, action, state);
+    _state.editor = editor.reducer(_state.editor, action, _state);
     _state.config = config.reducer(_state.config, action);
     _state.layout = layout.reducer(_state.layout, action);
     _state.theme = theme.reducer(_state.theme, action);

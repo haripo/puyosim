@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import ChainResultContainer from '../../shared/containers/ChainResultContainer';
-import { contentsMargin, themeColor, themeLightColor } from '../../shared/utils/constants';
+import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
@@ -12,6 +11,8 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
 import { StackForRendering } from "../../shared/models/stack";
+import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree";
+import { HistoryRecord } from "../../shared/models/history";
 
 export type Props = {
   stack: StackForRendering,
@@ -19,6 +20,10 @@ export type Props = {
   pendingPair: PendingPair,
   droppings: DroppingPlan[],
   vanishings: VanishingPlan[],
+
+  score: number,
+  chainScore: number,
+  chain: number,
 
   puyoSkin: string,
   layout: Layout,
@@ -28,51 +33,31 @@ export type Props = {
   canUndo: boolean,
   canRedo: boolean,
 
+  history: HistoryRecord[],
+  historyIndex: number,
+  onHistoryNodePressed: (index: number) => void,
+
   onUndoSelected: () => void,
   onRedoSelected: () => void,
   onDroppingAnimationFinished: () => void,
   onVanishingAnimationFinished: () => void
 }
 
-type State = {
-  isVisible: boolean
-}
+type State = {}
 
 export default class Viewer extends Component<Props, State> {
 
-  static options(passProps) {
-    return {
-      topBar: {
-        title: {
-          text: 'puyosim',
-          color: themeLightColor
-        },
-        background: {
-          color: themeColor
-        },
-      },
-      layout: {
-        orientation: 'portrait'
-      }
-    }
-  }
-
-  constructor(props) {
-    super(props);
-    //Navigation.events().bindComponent(this);
-
-    this.state = {
-      isVisible: true
-    }
-  }
-
-  componentDidAppear() {
-    this.setState({ isVisible: true });
-  }
-
-  componentDidDisappear() {
-    this.setState({ isVisible: false });
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Viewer',
+    headerRight: navigation.getParam('root', false) ? (
+      <TouchableOpacity
+        style={{ marginRight: 10 }}
+        onPress={ () => navigation.replace('simulator', { ignoreDeepLink: true }) }
+      >
+        <Text style={{ color: 'white' }}>OPEN SIMULATOR</Text>
+      </TouchableOpacity>
+    ) : null
+  });
 
   render() {
     return (
@@ -97,8 +82,8 @@ export default class Viewer extends Component<Props, State> {
                 layout={ this.props.layout }
                 theme={ this.props.theme }
                 puyoSkin={ this.props.puyoSkin }
-                onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
-                onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
+                onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+                onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
               />
               {/*
                 this.state.isiVisible == false のとき、
@@ -108,10 +93,13 @@ export default class Viewer extends Component<Props, State> {
                */}
             </View>
             <View style={ styles.side }>
-              <View style={ styles.sideHead }>
-                <NextWindowContainer/>
-                <ChainResultContainer/>
-              </View>
+              <NextWindowContainer/>
+              <SlimHistoryTree
+                style={{ marginTop: contentsMargin }}
+                history={ this.props.history }
+                currentIndex={ this.props.historyIndex }
+                onNodePressed={ this.props.onHistoryNodePressed }
+              />
               <ViewerControls
                 onUndoSelected={ this.props.onUndoSelected }
                 onRedoSelected={ this.props.onRedoSelected }

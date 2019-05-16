@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { archiveCurrentField, editArchive } from '../../shared/actions/actions';
 import SaveModal from "../components/SaveModal";
-import { getStack } from "../../shared/selectors/simulatorSelectors";
+import { getStack } from "../../shared/selectors/fieldSelectors";
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
