@@ -134,11 +134,13 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     }
 
     // open URL in viewer mode
-    firebase.links()
-      .getInitialLink()
-      .then((url) => {
-        this.launchViewer(url);
-      });
+    if (!this.props.navigation.getParam('ignoreDeepLink', false)) {
+      firebase.links()
+        .getInitialLink()
+        .then((url) => {
+          this.launchViewer(url);
+        });
+    }
 
     firebase.links()
       .onLink(url => {
@@ -158,6 +160,10 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
           { cancelable: false }
         );
       });
+
+    // setTimeout(() => {
+    //   this.launchViewer("https://puyos.im/v?q=FrGDrFxsiryjEsiiDGyxwkDkGswjqksqrqrFDEpzppGkkkGkDzFswpplqxkwqGkzEEpFiGDzrywrrsijrFxjxFsDjiyjGFljizwyjsjFzxrGjplEqxxlGizslrwpwsFk&h=msapsghoeqfbmrccdfjkuqoiceuobqbahcgdvfhprrdpaicubneotmncfmpoccigfetqbdcphoidrpahc9&i=0");
+    // }, 1);
 
     // Android でキーボードが表示されているとレイアウトが崩れる
     // （LayoutBaseContainer がキーボードを含まない範囲を view と認識する）
