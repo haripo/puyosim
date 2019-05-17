@@ -94,7 +94,7 @@ export default class Field extends Component<Props, State> {
         l.push(
           <TouchableOpacity
             key={ `t-${i}-${j}` }
-            onPressOut={ () => onTouched(i, j) }
+            onPress={ () => onTouched(i, j) }
             style={{
               position: 'absolute',
               top: i * puyoSize + contentsPadding,
