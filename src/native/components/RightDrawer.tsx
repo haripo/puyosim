@@ -53,7 +53,7 @@ export default class RightDrawer extends Component<Props, State> {
 
   handleHistoryPressed() {
     this.closeDrawer();
-    this.props.navigation.push('history');
+    this.props.navigation.push('viewer');
   }
 
   handleShareSelected() {
