@@ -127,7 +127,7 @@ export default class HistoryTreeNodeV2 extends React.Component<Props, {}> {
     const iconSize = nodeWidth / 2;
 
     return (
-      <Animated.View onTouchEnd={ onPress } style={{ translateX: x }}>
+      <Animated.View onTouchEnd={ onPress } style={{ transform: [{ translateX: x} ] }}>
         { this.renderFrame(x, y, nodeWidth, isCurrentNode, iconSize) }
         { this.renderText(col, rotation, x, y, nodeWidth, iconSize) }
       </Animated.View>
