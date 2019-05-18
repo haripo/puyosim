@@ -109,10 +109,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
-
-    // FIXME: minimumSupportedAppVersion possibly null
-    // @ts-ignore
-    if (Platform.OS !== 'web' && VersionNumber.appVersion < (minimumSupportedAppVersion || '0')) {
+    if (semver.lt(VersionNumber.appVersion, minimumSupportedAppVersion || '0')) {
       Alert.alert(
         'App deprecated',
         t('updateRequired'),
