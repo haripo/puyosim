@@ -22,6 +22,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationScreenProps } from "react-navigation";
 import ChainResult from "../../shared/components/ChainResult";
+import semver from 'semver';
 
 export type Props = {
   stack: StackForRendering,
@@ -83,6 +84,13 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
     this.props.navigation.addListener('didFocus', () => {
       this.props.onScreenAppeared();
+      this.setState({ isVisible: true });
+    });
+
+    this.props.navigation.addListener('didBlur', () => {
+      // コンポーネントが非表示の時 isVisible = false とし，
+      // 連鎖アニメーションのループが simulator と viewer で重複しないようにする
+      this.setState({ isVisible: false });
     });
   }
 
@@ -169,10 +177,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
 
-  // componentDidDisappear() {
-  //   this.setState({ isVisible: false });
-  // }
-
   render() {
     return (
       <LayoutBaseContainer isLoading={ this.state.isLoading }>
@@ -200,12 +204,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
                   onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
                   onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
                 />
-                { /*
-                this.state.isiVisible == false のとき、
-                このコンポーネントは history 画面などの screen によって隠されている。
-                その場合、アニメーション完了時のコールバックが history 画面のものとあわせて
-                2 回発行されてしまうため、それを防ぐ。
-               */ }
               </View>
               <View style={ styles.side }>
                 <View style={ styles.sideHead }>
@@ -224,7 +222,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
                   onMoveLeftPressed={ this.props.onMoveLeftPressed }
                   onMoveRightPressed={ this.props.onMoveRightPressed }
                   onDropPressed={ this.props.onDropPressed }
-                  isActive={ this.props.isActive }
+                  isActive={ this.props.isActive && this.state.isVisible }
                   canUndo={ this.props.canUndo }
                   canRedo={ this.props.canRedo }
                 />

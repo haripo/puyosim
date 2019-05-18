@@ -3,7 +3,7 @@ import {
   applyGravity,
   finishDroppingAnimations,
   finishVanishingAnimations, moveHistory,
-  redoField,
+  redoField, runChainAnimation,
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -48,19 +48,19 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onUndoSelected: () => {
       dispatch(undoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
+      dispatch(finishVanishingAnimations('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
+      dispatch(finishDroppingAnimations('simulator'));
+      dispatch(vanishPuyos('simulator'));
     },
     onHistoryNodePressed: (index) => {
       dispatch(moveHistory(index));
