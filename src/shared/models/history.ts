@@ -218,7 +218,12 @@ export function createHistoryFromMinimumHistory(
         const numHands = resultRecords[prev].numHands + 1;
         const pair = queue[(numHands - 1) % queue.length];
         const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
-        const currentStack = setPair(resultRecords[prev].stack, record.move, pair);
+
+        let currentStack = resultRecords[prev].stack;
+        createChainPlan(currentStack, fieldRows, fieldCols); // emulate chain
+        currentStack = setPair(currentStack, record.move, pair);
+
+        const originalStack = _.cloneDeep(currentStack);
         const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
 
         resultRecords.push({
@@ -226,7 +231,7 @@ export function createHistoryFromMinimumHistory(
           move: record.move,
           pair: pair,
           numHands: numHands,
-          stack: currentStack,
+          stack: originalStack, // 連鎖前の状態を保存する
           score: chainResult.score + resultRecords[prev].score,
           chain: chainResult.chain,
           chainScore: chainResult.score,
@@ -235,19 +240,22 @@ export function createHistoryFromMinimumHistory(
           defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
           prev: prev
         });
+
+
         break;
       }
       case 'edit': {
         const numHands = resultRecords[prev].numHands;
         const pair = queue[(numHands - 1) % queue.length];
         const currentStack = _.chunk(record.stack.split('').map(v => parseInt(v)), fieldCols);
+        const originalStack = _.cloneDeep(currentStack);
         const chainResult = createChainPlan(currentStack, fieldRows, fieldCols);
 
         resultRecords.push({
           type: 'edit',
           pair: pair,
           numHands: numHands,
-          stack: currentStack,
+          stack: originalStack,
           score: chainResult.score + resultRecords[prev].score,
           chain: chainResult.chain,
           chainScore: chainResult.score,
