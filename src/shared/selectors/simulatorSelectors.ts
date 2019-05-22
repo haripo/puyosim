@@ -300,3 +300,15 @@ export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload 
     }
   }
 }
+
+export const hasEditRecord = createSelector(
+  [
+    (state: SimulatorState) => state.history,
+    (state: SimulatorState) => state.historyIndex,
+  ],
+  (history, index) => {
+    return getCurrentPathRecords(history, index)
+      .map(record => record.type === 'edit')
+      .reduce((a, b) => a || b);
+  }
+);

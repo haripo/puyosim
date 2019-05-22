@@ -15,6 +15,7 @@ export type Props = {
   stack: StackForRendering,
   ghosts: PendingPair
   shareURLs: ShareUrls,
+  hasEditRecord: boolean,
 
   puyoSkin: string,
   layout: Layout,
@@ -115,7 +116,7 @@ export default class ShareOption extends Component<Props, State> {
                 {/*this.handleWholeSharePressed.bind(this))*/}
             {/*}*/}
             {
-              this.renderItem(
+              this.props.hasEditRecord ? null : this.renderItem(
                 t('shareCurrentHistory'),
                 t('shareCurrentHistoryDescription'),
                 require('../../../assets/share-single-history.png'),
