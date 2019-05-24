@@ -42,5 +42,8 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/filepaths"/>
     </provider>
+
+    <!-- https://stackoverflow.com/questions/50461881/java-lang-noclassdeffounderrorfailed-resolution-of-lorg-apache-http-protocolve -->
+    <uses-library android:name="org.apache.http.legacy" android:required="false" />
   </application>
 </manifest>
