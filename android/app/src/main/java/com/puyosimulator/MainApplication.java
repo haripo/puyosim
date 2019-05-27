@@ -21,6 +21,7 @@ import io.invertase.firebase.links.RNFirebaseLinksPackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -58,7 +59,8 @@ public class MainApplication extends Application implements ReactApplication, Sh
             new RNFirebaseLinksPackage(),
             new RNFirebaseAuthPackage(),
             new RNFirebaseAdMobPackage(),
-            new RNFirebaseRemoteConfigPackage()
+            new RNFirebaseRemoteConfigPackage(),
+            new RNFirebaseAnalyticsPackage()
       );
     }
 

@@ -27,6 +27,7 @@ target 'PuyoSimulator' do
   pod 'Firebase/Auth', '~> 5.20.1'
   pod 'Firebase/AdMob', '~> 5.20.1'
   pod 'Firebase/RemoteConfig', '~> 5.20.1'
+  pod 'GoogleIDFASupport', '~> 3.14.0'
 
   # Add new pods below this line
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'

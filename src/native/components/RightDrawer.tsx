@@ -9,6 +9,8 @@ import t from '../../shared/utils/i18n';
 // @ts-ignore
 import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
 
+import { EventTracker } from "../../shared/utils/EventTracker.common";
+
 export type Props = NavigationScreenProps & {
   score: number,
   chainScore: number,
@@ -54,6 +56,7 @@ export default class RightDrawer extends Component<Props, State> {
   handleHistoryPressed() {
     this.closeDrawer();
     this.props.navigation.push('viewer');
+    EventTracker.openHistoryFromSimulator();
   }
 
   handleShareSelected() {
