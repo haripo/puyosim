@@ -26,7 +26,6 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		163F63272AF14F6F9884D810 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F72886F15D843D8B3D83C05 /* FontAwesome5_Brands.ttf */; };
 		170718198CC94D77A8168B23 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9330107102E74514BC979555 /* Zocial.ttf */; };
-		25073271FF134784AD1B1774 /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EDDE7F90994405289C1C32F /* libRealmReact.a */; };
 		25EFBDD5DB004779BE5E498C /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CB657FEC79342ADA0E6DF08 /* FontAwesome5_Regular.ttf */; };
 		2A745B62609545139512C33A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68AA2A7C848449A495E15AA1 /* MaterialIcons.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -42,7 +41,6 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* PuyoSimulatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PuyoSimulatorTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
-		305F285BF8D945B0AE744232 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E4A4342533643AFA3202274 /* libc++.tbd */; };
 		33933DA79A9D4EA3B0673C89 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 746397475F954900ACE7C0FC /* libz.tbd */; };
 		43AC95575CD140E2BE5EF40D /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46D2097BEB2F4A9CBD220A59 /* FontAwesome.ttf */; };
 		46E35BA3226F7E8D00830B12 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46E35B71226F7E8C00830B12 /* GoogleService-Info.plist */; };
@@ -327,13 +325,6 @@
 			remoteGlobalIDString = 94DDAC5C1F3D024300EED511;
 			remoteInfo = "RNSVG-tvOS";
 		};
-		460BF71F226E18C5007D4760 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D656E4829E494A3B98365DFF /* RealmReact.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F60690131CA2766F0003FB26;
-			remoteInfo = RealmReact;
-		};
 		460BF732226E18C5007D4760 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4B9EDF4A6F2A4BE9A210975A /* RNVersionNumber.xcodeproj */;
@@ -442,7 +433,6 @@
 		089880FB0461471DA73C3C59 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		0D2A160E3EFA4618AB18D0F3 /* libRNVectorIcons-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNVectorIcons-tvOS.a"; sourceTree = "<group>"; };
 		0E3F2732AED74433A45C671C /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		0EDDE7F90994405289C1C32F /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		0EE976A9DD334B788B144A27 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		0F2CAA57F03E46958F2CAFEC /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
@@ -468,7 +458,6 @@
 		46E35B71226F7E8C00830B12 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4B9EDF4A6F2A4BE9A210975A /* RNVersionNumber.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVersionNumber.xcodeproj; path = "../node_modules/react-native-version-number/ios/RNVersionNumber.xcodeproj"; sourceTree = "<group>"; };
 		4CB657FEC79342ADA0E6DF08 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		4E4A4342533643AFA3202274 /* libc++.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		548C02EA58864387B2D3F5B1 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		60945DEE56D9D0A760E6605B /* libPods-PuyoSimulator-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PuyoSimulator-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -494,7 +483,6 @@
 		C6F71FB584234C418B200502 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		CAB8557B1E47464E9B7BD88C /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		D470B95E2C72407FA5DADF2E /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		D656E4829E494A3B98365DFF /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		DC014E99AD6740E3863E5EE7 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
 		E0613C5E18AC47BE9DEC752C /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		E127871478A293A950BC550B /* libPods-PuyoSimulatorTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PuyoSimulatorTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -539,8 +527,6 @@
 				C0BB2CE1A5204FDA813CE851 /* libRNVectorIcons.a in Frameworks */,
 				E075C967119748E0A0C897A0 /* libRNVersionNumber.a in Frameworks */,
 				0BBEE27974704EAB930D58C1 /* libRNViewShot.a in Frameworks */,
-				25073271FF134784AD1B1774 /* libRealmReact.a in Frameworks */,
-				305F285BF8D945B0AE744232 /* libc++.tbd in Frameworks */,
 				556D1D59E009469AAEC3C4E7 /* libRNGestureHandler.a in Frameworks */,
 				69C14DC0BB0530D41B7AB77E /* libPods-PuyoSimulator.a in Frameworks */,
 			);
@@ -703,7 +689,6 @@
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				746397475F954900ACE7C0FC /* libz.tbd */,
-				4E4A4342533643AFA3202274 /* libc++.tbd */,
 				C4232ABDB36E36624AADC2AA /* libPods-PuyoSimulator.a */,
 				60945DEE56D9D0A760E6605B /* libPods-PuyoSimulator-tvOS.a */,
 				C1A7106D9F9B038EFE3CA1E3 /* libPods-PuyoSimulator-tvOSTests.a */,
@@ -735,14 +720,6 @@
 			children = (
 				460BF719226E18C5007D4760 /* libRNSVG.a */,
 				460BF71B226E18C5007D4760 /* libRNSVG-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		460BF71C226E18C5007D4760 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				460BF720226E18C5007D4760 /* libRealmReact.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -828,7 +805,6 @@
 				EE20C6E106E94842BE251E4B /* RNVectorIcons.xcodeproj */,
 				4B9EDF4A6F2A4BE9A210975A /* RNVersionNumber.xcodeproj */,
 				A5DF7057E4834D03905C6FD3 /* RNViewShot.xcodeproj */,
-				D656E4829E494A3B98365DFF /* RealmReact.xcodeproj */,
 				C6F71FB584234C418B200502 /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
@@ -1093,10 +1069,6 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-				},
-				{
-					ProductGroup = 460BF71C226E18C5007D4760 /* Products */;
-					ProjectRef = D656E4829E494A3B98365DFF /* RealmReact.xcodeproj */;
 				},
 				{
 					ProductGroup = 460BF750226E18C5007D4760 /* Products */;
@@ -1370,13 +1342,6 @@
 			fileType = archive.ar;
 			path = "libRNSVG-tvOS.a";
 			remoteRef = 460BF71A226E18C5007D4760 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		460BF720226E18C5007D4760 /* libRealmReact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRealmReact.a;
-			remoteRef = 460BF71F226E18C5007D4760 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		460BF733226E18C5007D4760 /* libRNVersionNumber.a */ = {
@@ -1757,7 +1722,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = PuyoSimulatorTests/Info.plist;
@@ -1788,7 +1752,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = PuyoSimulatorTests/Info.plist;
@@ -1820,7 +1783,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = PuyoSimulator/Info.plist;
@@ -1850,7 +1812,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = PuyoSimulator/Info.plist;
@@ -1886,7 +1847,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOS/Info.plist";
@@ -1924,7 +1884,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOS/Info.plist";
@@ -1961,7 +1920,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOSTests/Info.plist";
@@ -1998,7 +1956,6 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-version-number/ios",
 					"$(SRCROOT)/../node_modules/react-native-view-shot/ios",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOSTests/Info.plist";

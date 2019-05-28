@@ -11,7 +11,6 @@ import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import io.sentry.RNSentryPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import io.realm.react.RealmReactPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -50,7 +49,6 @@ public class MainApplication extends Application implements ReactApplication, Sh
             new SnackbarPackage(),
             new RNSentryPackage(),
             new RNGestureHandlerPackage(),
-            new RealmReactPackage(),
             new RNViewShotPackage(),
             new RNVersionNumberPackage(),
             new VectorIconsPackage(),
