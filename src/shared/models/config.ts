@@ -144,6 +144,19 @@ export const configItems = {
   ]
 };
 
+export type ConfigValues = {
+  numColors: string,
+  colorBalance: string,
+  initialColors: string,
+  initialAllClear: string,
+
+  specify1stHand: string,
+  specify2ndHand: string,
+  specify3rdHand: string,
+  numVisibleNext: string,
+  puyoSkin: string
+}
+
 // default values
 export const defaultValues = {
   numColors: '4',
@@ -157,13 +170,3 @@ export const defaultValues = {
   numVisibleNext: 'visibleDoubleNext',
   puyoSkin: 'puyoSkinDefault'
 };
-
-export default function getInitialState(loadedConfig) {
-  let value = defaultValues;
-  for (let item in loadedConfig) {
-    if (loadedConfig.hasOwnProperty(item)) {
-      value[item] = loadedConfig[item];
-    }
-  }
-  return value;
-}

@@ -93,6 +93,7 @@ PODS:
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
+  - GoogleIDFASupport (3.14.0)
   - GoogleUtilities/AppDelegateSwizzler (5.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -179,6 +180,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNCAsyncStorage (1.4.2):
+    - React
   - RNLanguages (3.0.2):
     - React
   - RNShare (1.1.3):
@@ -188,7 +191,7 @@ PODS:
   - Sentry (4.1.3):
     - Sentry/Core (= 4.1.3)
   - Sentry/Core (4.1.3)
-  - SentryReactNative (0.42.0):
+  - SentryReactNative (0.40.3):
     - React
     - Sentry (~> 4.1.3)
   - yoga (0.59.5.React)
@@ -203,6 +206,7 @@ DEPENDENCIES:
   - Firebase/RemoteConfig (~> 5.20.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GoogleIDFASupport (~> 3.14.0)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
@@ -211,10 +215,11 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNLanguages (from `../node_modules/react-native-languages`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNSnackbar (from `../node_modules/react-native-snackbar`)
-  - SentryReactNative (from `../node_modules/react-native-sentry/SentryReactNative.podspec`)
+  - SentryReactNative (from `../node_modules/react-native-sentry`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -234,6 +239,7 @@ SPEC REPOS:
     - FirebaseRemoteConfig
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
+    - GoogleIDFASupport
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -254,6 +260,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNLanguages:
     :path: "../node_modules/react-native-languages"
   RNShare:
@@ -261,7 +269,7 @@ EXTERNAL SOURCES:
   RNSnackbar:
     :path: "../node_modules/react-native-snackbar"
   SentryReactNative:
-    :path: "../node_modules/react-native-sentry/SentryReactNative.podspec"
+    :path: "../node_modules/react-native-sentry"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -284,6 +292,7 @@ SPEC CHECKSUMS:
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Mobile-Ads-SDK: e911f5544fc6488f8372a183627a802c8bdb5e36
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
+  GoogleIDFASupport: aaf8c10bd429abb1c15349d5252244f5eda8ead1
   GoogleUtilities: 273e67030e0de313e7304f6dcfa96fc5214f6c23
   "gRPC-C++": e76441995900ac90e9bd98644ab4733f12521edf
   gRPC-Core: 4028031ed2c5267cca0d846c876d8046b1ecb9b6
@@ -293,13 +302,14 @@ SPEC CHECKSUMS:
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
+  RNCAsyncStorage: 6ae5aba8a41bfe0a9f21885ec91faf23ca3fe7ee
   RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
   RNShare: d875e8e37f3e5e8eb7a103ae01e06490af1796f6
   RNSnackbar: 90718c3ffbe9ca9178763c96fc2aa7e81d78851f
   Sentry: 4e8a17b61ddd116f89536cc81d567fdee1ebca96
-  SentryReactNative: fc630be25b30c1a494b478ba1fa38f761cc6da20
+  SentryReactNative: 4c4ac0518ba34bb90832af4ceb8f2e9db861c1ed
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: c435da53539d52cccc5e671ac181dbe4f82df01b
+PODFILE CHECKSUM: ee4e26343b6acbcda56236332d3403eed189618b
 
 COCOAPODS: 1.5.3

@@ -43,6 +43,7 @@ export type Props = {
   canUndo: boolean,
   canRedo: boolean,
 
+  onMounted: () => void,
   onUndoSelected: () => void,
   onRedoSelected: () => void,
   onRotateLeftPressed: () => void,
@@ -114,6 +115,8 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
   async componentDidMount() {
     SplashScreen.hide();
+
+    this.props.onMounted();
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();

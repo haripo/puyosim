@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery, fork } from "redux-saga/effects";
 import {
   ARCHIVE_CURRENT_FIELD,
   archiveCurrentFieldFinished,
@@ -15,6 +15,7 @@ import {
   RESTART,
   showSnackbar
 } from "../actions/actions";
+import configSagas from './config';
 
 // @ts-ignore
 import { Archive, deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
@@ -128,6 +129,7 @@ function* sagas() {
   yield takeEvery(DELETE_ARCHIVE, handleDeleteArchivedPlay);
   yield takeEvery(REQUEST_LOGIN, handleRequestLogin);
   yield takeEvery(RESTART, handleRestart);
+  yield fork(configSagas);
 }
 
 export default sagas;

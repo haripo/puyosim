@@ -30,6 +30,8 @@ target 'PuyoSimulator' do
   pod 'GoogleIDFASupport', '~> 3.14.0'
 
   # Add new pods below this line
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'

@@ -1,30 +1,49 @@
-import { SAVE_CONFIG } from '../actions/actions';
-import getInitialState from '../models/config';
+import { ConfigValues, defaultValues } from '../models/config';
 
 // @ts-ignore
 import { saveConfig, loadConfig } from '../utils/StorageService';
 
-function save(state, { key, value }) {
-  if (key === 'numColors') {
-    // 初手固定の設定をリセットする
-    state.initialColors = 'noLimit';
-    state.specify1stHand = 'AA';
-    state.specify2ndHand = 'notSpecified';
-    state.specify3rdHand = 'notSpecified';
+function loadConfigCompleted(state: ConfigState, action): ConfigState {
+  return {
+    ...state,
+    ...action.config,
+    isLoaded: true
   }
-  saveConfig(key, value);
-  state[key] = value;
-  return state;
 }
 
-export const initialState = getInitialState(loadConfig());
+function saveConfigCompleted(state: ConfigState, action): ConfigState {
+  console.warn(action);
+  return {
+    ...state,
+    ...action.config
+  }
+}
 
-console.info('Loaded config: ', initialState);
+export type ConfigState = ConfigValues & {
+  isLoaded: boolean
+}
+
+export default function getDefaultConsideredConfig(loadedConfig): ConfigValues {
+  let value = defaultValues;
+  for (let item in loadedConfig) {
+    if (loadedConfig.hasOwnProperty(item)) {
+      value[item] = loadedConfig[item];
+    }
+  }
+  return value;
+}
+
+export const initialState: ConfigState = {
+  ...getDefaultConsideredConfig({}),
+  isLoaded: false
+};
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'SAVE_CONFIG':
-      return save(state, action);
+    case 'LOAD_CONFIG_COMPLETED':
+      return loadConfigCompleted(state, action);
+    case 'SAVE_CONFIG_COMPLETED':
+      return saveConfigCompleted(state, action);
     default:
       return state;
   }

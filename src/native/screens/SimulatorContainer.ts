@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   applyGravity,
   finishDroppingAnimations,
-  finishVanishingAnimations,
+  finishVanishingAnimations, loadConfig,
   moveHighlightsLeft,
   moveHighlightsRight,
   putNextPair,
@@ -44,6 +44,9 @@ const mapDispatchToProps = (dispatch) => {
     onScreenAppeared: () => {
       // editor から戻ってきたタイミングで浮いたぷよを落とす
       dispatch(runChainAnimation('simulator'));
+    },
+    onMounted: () => {
+      dispatch(loadConfig());
     },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
