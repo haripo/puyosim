@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { buttonColor, contentsMargin, themeLightColor, } from '../utils/constants';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { buttonColor, contentsMargin, themeColor, themeLightColor, } from '../utils/constants';
 import Puyo from "./Puyo";
 import { Layout } from "../selectors/layoutSelectors";
 import IconButton from "./IconButton";
+
+const eraserIcon = require('../../../assets/eraser.png');
 
 export type Props = {
   layout: Layout,
@@ -17,20 +19,37 @@ export type Props = {
 };
 
 export default class EditorControls extends PureComponent<Props> {
-  renderPuyoButton(puyo: number, isRight: boolean) {
+  renderToggleButton(inner: JSX.Element, itemId: number, isRight: boolean) {
     let style: any[] = [styles.controllerInactiveButton];
     if (isRight) style.push(styles.controllerRightButton);
-    if (puyo === this.props.selectedItem) style.push(styles.controllerActiveButton);
+    if (itemId === this.props.selectedItem) style.push(styles.controllerActiveButton);
 
     return (
       <TouchableOpacity
         style={ style }
         activeOpacity={ 0.7 }
-        onPress={ () => this.props.onSelected(puyo) }>
-        <Puyo puyo={ puyo } size={ 30 } skin={ this.props.puyoSkin }/>
+        onPress={ () => this.props.onSelected(itemId) }>
+        { inner }
       </TouchableOpacity>
     );
   }
+
+  renderPuyoButton(puyo: number, isRight: boolean) {
+    return this.renderToggleButton(
+      <Puyo puyo={ puyo } size={ 30 } skin={ this.props.puyoSkin }/>,
+      puyo,
+      isRight
+    );
+  }
+
+  renderIconButton(icon: any, puyo: number, isRight: boolean) {
+    return this.renderToggleButton(
+      <Image source={ icon } style={{ width: 30, height: 30 }} />,
+      puyo,
+      isRight
+    );
+  }
+
 
   render() {
     return (
@@ -71,7 +90,7 @@ export default class EditorControls extends PureComponent<Props> {
         </View>
         <View style={ styles.buttonGroup }>
           { this.renderPuyoButton(5, false) }
-          { this.renderPuyoButton(0, true) }
+          { this.renderIconButton(eraserIcon, 0, true) }
         </View>
       </View>
     );

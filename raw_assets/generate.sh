@@ -47,6 +47,7 @@ mv cropped_ojama_005.png ../assets/ojama_crown.png
 
 convert misc.xcf -crop 16x16 -sample 400% cropped_misc_%03d.png
 mv cropped_misc_000.png ../assets/cross.png
+mv cropped_misc_001.png ../assets/eraser.png
 
 convert controls.xcf -crop 32x32 -sample 400% cropped_controls_%03d.png
 mv cropped_controls_000.png ../assets/control_a.png
