@@ -102,7 +102,7 @@ export default class EditorControls extends PureComponent<Props> {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'column',
-    height: 300
+    height: 360
   },
   buttonGroup: {
     flex: 1,
