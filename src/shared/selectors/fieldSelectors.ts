@@ -74,7 +74,7 @@ export const hasDroppingPuyo = createSelector(
   ],
   (stack: Stack) => {
     for (let i = 0; i < fieldCols; i++) {
-      for (let j = fieldRows - 1; 0 < j; j--) {
+      for (let j = 1; j < fieldRows; j++) {
         if (stack[j - 1][i] !== 0 && stack[j][i] === 0) {
           return true;
         }

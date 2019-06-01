@@ -5,7 +5,7 @@ import {
   finishDroppingAnimations,
   finishVanishingAnimations,
   initializeEditor,
-  putCurrentItem, resetEditorField,
+  putCurrentItem, resetEditorField, runChainAnimation,
   selectEditItem, undoEditorField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -24,7 +24,6 @@ const mapStateToProps = (state: State) => {
     droppings: state.editor.droppingPuyos,
     vanishings: getVanishingPuyos(state.editor),
     isActive: isActive(state.editor),
-    hasDroppingPuyo: hasDroppingPuyo(state.editor),
 
     currentItem: state.editor.currentItem,
 
@@ -55,7 +54,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(putCurrentItem({ row, col }));
     },
     onPlaySelected: () => {
-      dispatch(applyGravity('editor'));
+      dispatch(runChainAnimation('editor'));
     },
     onUndoSelected: () => {
       dispatch(undoEditorField());

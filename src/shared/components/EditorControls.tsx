@@ -11,7 +11,6 @@ export type Props = {
   layout: Layout,
   puyoSkin: string,
   selectedItem: number,
-  hasDroppingPuyo: boolean,
   onSelected: (item: number) => void,
   onPlaySelected: () => void,
   onUndoSelected: () => void,
@@ -57,7 +56,6 @@ export default class EditorControls extends PureComponent<Props> {
         <View style={ styles.buttonGroup }>
           <IconButton
             style={ styles.controllerFullWidthButton }
-            disabled={ !this.props.hasDroppingPuyo }
             icon='play-arrow'
             text='play'
             onPressed={ this.props.onPlaySelected }
