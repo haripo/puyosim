@@ -6,6 +6,8 @@ mv cropped_puyo_001.png ../assets/puyo_green.png
 mv cropped_puyo_002.png ../assets/puyo_blue.png
 mv cropped_puyo_003.png ../assets/puyo_yellow.png
 mv cropped_puyo_004.png ../assets/puyo_purple.png
+mv cropped_puyo_005.png ../assets/puyo_ojama.png
+mv cropped_puyo_006.png ../assets/puyo_block.png
 
 mv cropped_puyo_010.png ../assets/puyo_red_connect_horizontal.png
 mv cropped_puyo_011.png ../assets/puyo_green_connect_horizontal.png
@@ -24,6 +26,8 @@ mv cropped_puyo_031.png ../assets/puyo_green_char.png
 mv cropped_puyo_032.png ../assets/puyo_blue_char.png
 mv cropped_puyo_033.png ../assets/puyo_yellow_char.png
 mv cropped_puyo_034.png ../assets/puyo_purple_char.png
+mv cropped_puyo_035.png ../assets/puyo_ojama_char.png
+mv cropped_puyo_036.png ../assets/puyo_block_char.png
 
 mv cropped_puyo_040.png ../assets/puyo_red_connect_horizontal_char.png
 mv cropped_puyo_041.png ../assets/puyo_green_connect_horizontal_char.png

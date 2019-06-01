@@ -13,7 +13,9 @@ const puyoImages = {
     require('../../../assets/puyo_green.png'),
     require('../../../assets/puyo_blue.png'),
     require('../../../assets/puyo_yellow.png'),
-    require('../../../assets/puyo_purple.png')
+    require('../../../assets/puyo_purple.png'),
+    require('../../../assets/puyo_ojama.png'),
+    require('../../../assets/puyo_block.png')
   ],
   'puyoSkinCharacter': [
     null,
@@ -21,7 +23,9 @@ const puyoImages = {
     require('../../../assets/puyo_green_char.png'),
     require('../../../assets/puyo_blue_char.png'),
     require('../../../assets/puyo_yellow_char.png'),
-    require('../../../assets/puyo_purple_char.png')
+    require('../../../assets/puyo_purple_char.png'),
+    require('../../../assets/puyo_ojama_char.png'),
+    require('../../../assets/puyo_block_char.png')
   ]
 };
 
