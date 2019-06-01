@@ -1,16 +1,11 @@
 import { connect } from 'react-redux';
 import {
   applyGravity,
-  finishDroppingAnimations, finishVanishingAnimations,
-  initializeSimulator,
-  moveHighlightsLeft,
-  moveHighlightsRight,
+  finishDroppingAnimations,
+  finishVanishingAnimations,
   moveHistory,
-  putNextPair, reconstructHistory, redoField,
-  resetField,
-  restart,
-  rotateHighlightsLeft,
-  rotateHighlightsRight,
+  reconstructHistory,
+  redoField,
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -48,25 +43,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSimulatorLaunched: () => {
-      dispatch(initializeSimulator());
-    },
-    onRotateRightPressed: () => {
-      // dispatch(rotateHighlightsRight());
-    },
-    onRotateLeftPressed: () => {
-      // dispatch(rotateHighlightsLeft());
-    },
-    onMoveRightPressed: () => {
-      // dispatch(moveHighlightsRight());
-    },
-    onMoveLeftPressed: () => {
-      // dispatch(moveHighlightsLeft());
-    },
-    onDropPressed: () => {
-      // dispatch(putNextPair());
-      // dispatch(vanishPuyos());
-    },
     onUndoSelected: () => {
       dispatch(undoField());
       dispatch(vanishPuyos());
@@ -74,12 +50,6 @@ const mapDispatchToProps = (dispatch) => {
     onRedoSelected: () => {
       dispatch(redoField());
       dispatch(vanishPuyos());
-    },
-    onResetSelected: () => {
-      // dispatch(resetField());
-    },
-    onRestartSelected: () => {
-      // dispatch(restart());
     },
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));

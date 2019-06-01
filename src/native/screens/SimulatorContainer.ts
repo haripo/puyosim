@@ -35,7 +35,8 @@ const mapStateToProps = (state: State) => {
     theme: getTheme(state.theme),
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
-    chain: state.simulator.chain
+    chain: state.simulator.chain,
+    isReady: state.simulator.isReady
   };
 };
 

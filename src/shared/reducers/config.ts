@@ -12,7 +12,6 @@ function loadConfigCompleted(state: ConfigState, action): ConfigState {
 }
 
 function saveConfigCompleted(state: ConfigState, action): ConfigState {
-  console.warn(action);
   return {
     ...state,
     ...action.config

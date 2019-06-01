@@ -22,7 +22,6 @@ import {
 import { getDefaultMove, Move, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
-import { createChainPlan } from '../models/chainPlanner';
 import { generateQueue } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
@@ -41,6 +40,7 @@ import _ from 'lodash';
 import { Archive } from "../utils/OnlineStorageService";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
 import { State } from "./index";
+import { ConfigState } from "./config";
 
 export type SimulatorState = FieldState & {
   queue: number[][],
@@ -54,7 +54,9 @@ export type SimulatorState = FieldState & {
 
   playId: string,
   title: string,
-  isSaved: boolean
+  isSaved: boolean,
+
+  isReady: boolean, // config のロードなどを終えた状態フラグ
 };
 
 function rotateHighlightsLeft(state: SimulatorState, action) {
@@ -177,7 +179,10 @@ function resetField(state: SimulatorState, action) {
 }
 
 function restart(state: SimulatorState, action, config) {
-  return createInitialState(config);
+  return {
+    ...createInitialState(config),
+    isReady: true,
+  };
 }
 
 function setPattern(state: SimulatorState, action) {
@@ -280,6 +285,13 @@ function applyEditorState(state: SimulatorState, action, rootState: State) {
   return state;
 }
 
+function initializeSimulator(state: SimulatorState, config: ConfigState) {
+  return {
+    ...createInitialState(config),
+    isReady: true
+  };
+}
+
 function createInitialState(config): SimulatorState {
   const queue = generateQueue(config);
   const stack = createField(fieldRows, fieldCols);
@@ -294,18 +306,13 @@ function createInitialState(config): SimulatorState {
     startDateTime: new Date(),
     playId: uuid(),
     isSaved: false,
-    title: ''
+    title: '',
+    isReady: false
   };
 }
 
-
-function loadOrCreateInitialState(config) {
-  // TODO : load last state
-  return createInitialState(config);
-}
-
 export function getInitialState(config) {
-  return loadOrCreateInitialState(config);
+  return createInitialState(config);
 }
 
 const fieldReducer = createFieldReducer('simulator');
@@ -318,7 +325,7 @@ export const reducer = (state, action, rootState) => {
 
   switch (action.type) {
     case INITIALIZE_SIMULATOR:
-      return state; // not implemented
+      return initializeSimulator(state, rootState.config);
     case ROTATE_HIGHLIGHTS_LEFT:
       return rotateHighlightsLeft(state, action);
     case ROTATE_HIGHLIGHTS_RIGHT:

@@ -3,7 +3,6 @@ import {
   applyGravity,
   finishDroppingAnimations,
   finishVanishingAnimations,
-  initializeSimulator,
   moveHighlightsLeft,
   moveHighlightsRight,
   moveHistory,
@@ -54,9 +53,6 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSimulatorLaunched: () => {
-      dispatch(initializeSimulator());
-    },
     onRotateRightPressed: () => {
       dispatch(rotateHighlightsRight());
     },

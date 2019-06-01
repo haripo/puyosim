@@ -1,6 +1,12 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
 import { ConfigState } from "../reducers/config";
-import { LOAD_CONFIG, loadConfigCompleted, SAVE_CONFIG, saveConfigCompleted } from "../actions/actions";
+import {
+  initializeSimulator,
+  LOAD_CONFIG,
+  loadConfigCompleted,
+  SAVE_CONFIG,
+  saveConfigCompleted
+} from "../actions/actions";
 
 // @ts-ignore
 import { loadConfig, saveConfig } from "../utils/StorageService";
@@ -19,6 +25,7 @@ function* load() {
   }
 
   yield put(loadConfigCompleted(config));
+  yield put(initializeSimulator());
 }
 
 function* save(action) {

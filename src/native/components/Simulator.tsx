@@ -39,6 +39,7 @@ export type Props = {
   layout: Layout,
   theme: Theme,
 
+  isReady: boolean,
   isActive: boolean,
   canUndo: boolean,
   canRedo: boolean,
@@ -59,7 +60,6 @@ export type Props = {
 
 type State = {
   isVisible: boolean,
-  isLoading: boolean
 }
 
 export default class Simulator extends Component<Props & NavigationScreenProps, State> {
@@ -80,7 +80,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
     this.state = {
       isVisible: true,
-      isLoading: true
     };
 
     this.props.navigation.addListener('didFocus', () => {
@@ -172,17 +171,11 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     // setTimeout(() => {
     //   this.launchViewer("https://puyos.im/v?q=FrGDrFxsiryjEsiiDGyxwkDkGswjqksqrqrFDEpzppGkkkGkDzFswpplqxkwqGkzEEpFiGDzrywrrsijrFxjxFsDjiyjGFljizwyjsjFzxrGjplEqxxlGizslrwpwsFk&h=msapsghoeqfbmrccdfjkuqoiceuobqbahcgdvfhprrdpaicubneotmncfmpoccigfetqbdcphoidrpahc9&i=0");
     // }, 1);
-
-    // Android でキーボードが表示されているとレイアウトが崩れる
-    // （LayoutBaseContainer がキーボードを含まない範囲を view と認識する）
-    // ので、キーボードが消えるまで 1000ms 程度待つ
-    this.setState({ isVisible: true, isLoading: true });
-    setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
 
   render() {
     return (
-      <LayoutBaseContainer isLoading={ this.state.isLoading }>
+      <LayoutBaseContainer isLoading={ !this.props.isReady }>
         <View
           style={ styles.container }>
           <SafeAreaView style={ { flex: 1 } }>
