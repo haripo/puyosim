@@ -1,5 +1,5 @@
 import { calcChainStepScore } from './score';
-import { Stack, Position, Color } from './stack';
+import { Stack, Position, Color, connectableColors } from './stack';
 
 export type DroppingPlan = {
   row: number,
@@ -68,11 +68,21 @@ export function getVanishPlan(stack: Stack, rows: number, cols: number): Vanishi
   }
 
   let plan: VanishingPlan[] = [];
+  const neighbors = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
   connections.forEach(connection => {
     plan.push(connection);
     connection.puyos.forEach(puyo => {
       stack[puyo.row][puyo.col] = 0;
+
+      // vanish ojama
+      for (let n of neighbors) {
+        const r = puyo.row + n[0];
+        const c = puyo.col + n[1];
+        if (stack[r] && stack[r][c] && stack[r][c] === 6) {
+          stack[r][c] = 0;
+        }
+      }
     });
   });
 
@@ -100,7 +110,7 @@ function getConnections(stack: Stack, rows: number, cols: number) {
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      if (stack[row][col] === 0) continue;
+      if (!connectableColors.has(stack[row][col])) continue;
       if (connectionIds[row][col] === 0) {
         id++;
         search(row, col, stack[row][col]);

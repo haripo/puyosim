@@ -90,6 +90,10 @@ export default class EditorControls extends PureComponent<Props> {
         </View>
         <View style={ styles.buttonGroup }>
           { this.renderPuyoButton(5, false) }
+          { this.renderPuyoButton(6, true) }
+        </View>
+        <View style={ styles.buttonGroup }>
+          { this.renderPuyoButton(7, false) }
           { this.renderIconButton(eraserIcon, 0, true) }
         </View>
       </View>

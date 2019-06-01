@@ -9,6 +9,8 @@ export type Color = 0 | 1 | 2 | 3 | 4 | 5;
 export type Position = { row: number, col: number };
 export type Pair = number[]; // use Color[]
 
+export const connectableColors = new Set([1, 2, 3, 4, 5]);
+
 /**
  * Create plain javascript pairQueue object
  * @param row row size
@@ -133,7 +135,7 @@ export function getStackForRendering(stack: Stack, droppings): StackForRendering
     return isValidPosition({ row, col }) &&
       0 < row &&
       stack[row][col] === color &&
-      color !== 0 &&
+      connectableColors.has(color) &&
       !isDropping(row, col);
   };
 
