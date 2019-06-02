@@ -131,11 +131,7 @@ export const getStackForSnapshot = createSelector(
     (state: SimulatorState) => state.droppingPuyos
   ],
   (history: HistoryRecord[], historyIndex: number, droppings: DroppingPlan[]): StackForRendering => {
-    if (historyIndex === 0) {
-      return _getStack(history[0].stack, droppings);
-    } else {
-      return _getStack(history[historyIndex - 1].stack, droppings);
-    }
+    return _getStack(history[historyIndex].stack, droppings);
   }
 );
 
