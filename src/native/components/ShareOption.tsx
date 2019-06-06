@@ -8,7 +8,6 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import FieldCapturer from "./FieldCapturer";
 import { StackForRendering } from "../../shared/models/stack";
 
 export type Props = {
@@ -30,24 +29,22 @@ export default class ShareOption extends Component<Props, State> {
     title: 'Share'
   });
 
-  capturer: FieldCapturer | null = null;
-
   constructor(props) {
     super(props);
   }
 
   async share(shareUrl: string | null) {
     try {
-      if (this.capturer === null) {
-        return;
-      }
-      const imageUri = await this.capturer.capture();
+      const r = await fetch("https://us-central1-puyosim-web.cloudfunctions.net/helloWorld");
+      const data = await r.text();
+      const imageUri = "data:image/gif;base64," + data;
 
       // share
       const shareOptions = {
         url: imageUri,
         message: shareUrl || undefined
       };
+
       const response = await Share.open(shareOptions);
 
       if (response['message'] !== 'OK') {
@@ -98,12 +95,6 @@ export default class ShareOption extends Component<Props, State> {
   }
 
   render() {
-    const captureViewStyle = {
-      left: this.props.layout.screen.width * 2, // off-screen
-      width: this.props.layoutForCapturingField.field.width,
-      height: this.props.layoutForCapturingField.field.height
-    };
-
     return (
       <View style={ styles.container }>
         <View style={ styles.contents }>
@@ -131,11 +122,6 @@ export default class ShareOption extends Component<Props, State> {
             }
           </ScrollView>
         </View>
-
-        <FieldCapturer
-          ref={ ref => this.capturer = ref }
-          { ...this.props }
-        />
       </View>
     );
   }

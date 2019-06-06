@@ -1,0 +1,36 @@
+{
+  "name": "functions",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "build": "webpack --mode production",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "emulate": "npm run build && firebase emulators:start --only functions"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "canvas": "^2.5.0",
+    "firebase-admin": "~7.0.0",
+    "firebase-functions": "^2.3.0",
+    "gifencoder": "^2.0.1",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.1.6",
+    "ts-loader": "^6.0.2",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-emit-all-plugin": "^2.0.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "private": true
+}
