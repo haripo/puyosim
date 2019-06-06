@@ -1,10 +1,5 @@
-import { getDefaultMove, getFirstCol, getSecondCol, Move } from '../models/move';
-import {
-  Color,
-  getDropPositions as getDropPositionsStack,
-  getStackForRendering,
-  StackForRendering
-} from '../models/stack';
+import { getDefaultMove, getFirstCol, getSecondCol } from '../models/move';
+import { getDropPositions as getDropPositionsStack, getStackForRendering, } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
 import { deserializeHistoryRecords, serializeHistoryRecords, serializeQueue } from "../models/serializer";
@@ -15,6 +10,7 @@ import _ from 'lodash';
 import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
 // @ts-ignore
 import { captureException } from "../utils/Sentry";
+import { Color, Move, PendingPair, PendingPairPuyo, ShareUrls, StackForRendering } from "../../types";
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -90,12 +86,6 @@ export const getDoubleNextHand = createSelector(
   (queue, numHands) => queue[(numHands + 2) % queue.length]
 );
 
-export type PendingPairPuyo = {
-  row: number,
-  col: number,
-  color: Color
-}
-export type PendingPair = PendingPairPuyo[];
 
 const _getPendingPair = state => state.pendingPair;
 
@@ -115,14 +105,6 @@ export const getPendingPair = createSelector(
     ];
   }
 );
-
-export type PuyoConnection = {
-  top: boolean,
-  left: boolean,
-  bottom: boolean,
-  right: boolean
-}
-
 
 export const getStackForSnapshot = createSelector(
   [
@@ -231,10 +213,6 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   };
 }
 
-export type ShareUrls = {
-  whole: string,
-  current: string
-}
 
 function createShareURL(q: string, h: string | null): string {
   const head = 'https://puyosim.page.link/';

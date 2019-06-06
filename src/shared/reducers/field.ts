@@ -1,4 +1,4 @@
-import { applyDropPlans, applyVanishPlans, createField, Stack } from "../models/stack";
+import { applyDropPlans, applyVanishPlans, createField } from "../models/stack";
 import { fieldCols, fieldRows } from "../utils/constants";
 import {
   APPLY_GRAVITY,
@@ -9,6 +9,7 @@ import {
 import { DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from "../models/chainPlanner";
 import { calcChainStepScore } from "../models/score";
 import { hasDroppingPuyo } from "../selectors/fieldSelectors";
+import { Stack } from "../../types";
 
 export type FieldState = {
   stack: Stack,

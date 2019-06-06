@@ -9,12 +9,10 @@ import SimulatorControls from '../../shared/components/SimulatorControls';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
-import { StackForRendering } from "../../shared/models/stack";
 // @ts-ignore
 import { getMinimumSupportedAppVersion } from "../../shared/utils/RemoteConfig";
 import VersionNumber from "react-native-version-number";
@@ -23,6 +21,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { NavigationScreenProps } from "react-navigation";
 import ChainResult from "../../shared/components/ChainResult";
 import semver from 'semver';
+import { PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 
 export type Props = {
   stack: StackForRendering,
@@ -119,7 +118,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
-    if (semver.lt(VersionNumber.appVersion, minimumSupportedAppVersion || '0')) {
+    if (semver.lt(VersionNumber.appVersion, minimumSupportedAppVersion || '0.0.1')) {
       Alert.alert(
         'App deprecated',
         t('updateRequired'),

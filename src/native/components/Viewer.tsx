@@ -5,14 +5,13 @@ import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import ViewerControls from "../../shared/components/ViewerControls";
-import { StackForRendering } from "../../shared/models/stack";
 import SlimHistoryTree from "../../shared/components/HistoryTree/SlimHistoryTree";
 import { HistoryRecord } from "../../shared/models/history";
+import { PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 
 export type Props = {
   stack: StackForRendering,

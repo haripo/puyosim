@@ -5,8 +5,8 @@ import React  from 'react';
 import { themeColor, themeLightColor } from '../../utils/constants';
 import compareWith from '../../utils/compareWith';
 import { Animated, Image, View } from "react-native";
-import { Rotation } from "../../models/move";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { Rotation } from "../../../types";
 
 const arrowImages = {
   top: require('../../../../assets/history_tree/arrow-top.png'),

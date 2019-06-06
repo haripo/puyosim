@@ -1,7 +1,6 @@
 import React from 'react';
-import SvgPuyo from '../SvgPuyo';
-import { Pair } from "../../models/stack";
 import Puyo from "../Puyo";
+import { Pair } from "../../../types";
 
 export type Props = {
   hand: Pair,

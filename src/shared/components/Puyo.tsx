@@ -2,8 +2,8 @@ import React from 'react';
 import { Component } from 'react';
 import { Animated, Image, ViewStyle } from 'react-native';
 import _ from 'lodash';
-import { PuyoConnection } from "../selectors/simulatorSelectors";
 import { puyoImages, connectionImages } from "../assets/puyoImages";
+import { PuyoConnection } from "../../types";
 
 export interface Props {
   puyo: number,

@@ -3,12 +3,11 @@ import { Image, ImageStyle, ScrollView, StyleSheet, Text, TouchableOpacity, View
 import Share from 'react-native-share';
 
 import { contentsMargin, themeLightColor } from '../../shared/utils/constants';
-import { PendingPair, ShareUrls } from "../../shared/selectors/simulatorSelectors";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
 import t from '../../shared/utils/i18n';
-import { StackForRendering } from "../../shared/models/stack";
+import { PendingPair, ShareUrls, StackForRendering } from "../../types";
 
 export type Props = {
   stack: StackForRendering,

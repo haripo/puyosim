@@ -1,3 +1,4 @@
+
 export type Stack = number[][];
 export type Color = 0 | 1 | 2 | 3 | 4 | 5;
 export type Position = { row: number, col: number };
@@ -31,3 +32,11 @@ export type PuyoForRendering = {
 }
 
 export type StackForRendering = PuyoForRendering[][];
+
+export type Rotation = 'top' | 'right' | 'bottom' | 'left';
+
+export type Move = {
+  col: number,
+  rotation: Rotation,
+};
+

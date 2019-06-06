@@ -1,7 +1,6 @@
 import { fieldRows, fieldCols } from "../utils/constants";
 import { appendHistoryRecord, createHistoryRecord, History } from "./history";
-import { Stack } from "./stack";
-import { Rotation } from "./move";
+import { Rotation, Stack } from "../../types";
 
 const colorToNumber = {
   ' ': 0,

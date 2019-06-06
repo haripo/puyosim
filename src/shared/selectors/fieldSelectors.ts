@@ -1,9 +1,8 @@
 import { fieldCols, fieldRows } from '../utils/constants';
-import { Color, createField, getStackForRendering, isValidPosition, Stack, StackForRendering } from '../models/stack';
+import { createField, getStackForRendering, isValidPosition } from '../models/stack';
 import { createSelector } from 'reselect';
 import { FieldState } from "../reducers/field";
-import { DroppingPlan } from "../models/chainPlanner";
-import Field from "../components/Field";
+import { Stack, StackForRendering } from "../../types";
 
 export function isActive(state: FieldState): boolean {
   if (!state.droppingPuyos) return false;

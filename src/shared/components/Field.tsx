@@ -6,11 +6,10 @@ import { contentsPadding, fieldCols, fieldRows } from '../utils/constants';
 import GhostPuyo from './GhostPuyo';
 import Puyo from './Puyo';
 import { Layout } from '../selectors/layoutSelectors';
-import { PendingPairPuyo } from "../selectors/simulatorSelectors";
 import { Theme } from "../selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
-import { PuyoForRendering, StackForRendering } from "../models/stack";
+import { PendingPairPuyo, PuyoForRendering, StackForRendering } from "../../types";
 
 export interface Props {
   layout: Layout,

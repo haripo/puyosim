@@ -1,8 +1,13 @@
-import { createField, getSplitHeight, Pair, setPair, Stack } from './stack';
-import { isEqualMove, Move } from "./move";
-import { fieldCols, fieldRows } from "../utils/constants";
+import { createField, getSplitHeight, setPair } from './stack';
+import { isEqualMove } from "./move";
 import { createChainPlan } from "./chainPlanner";
-import _ from 'lodash';
+import * as _ from 'lodash';
+import { Move, Pair, Stack } from "../../types";
+
+// TODO: refactoring constants
+export const fieldRows = 13;
+export const fieldCols = 6;
+
 
 export type MoveHistoryRecord = {
   type: 'move',

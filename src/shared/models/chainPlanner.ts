@@ -1,5 +1,6 @@
 import { calcChainStepScore } from './score';
-import { Stack, Position, Color, connectableColors } from './stack';
+import { connectableColors } from './stack';
+import { Color, Stack, Position } from "../../types";
 
 export type DroppingPlan = {
   row: number,

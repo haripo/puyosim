@@ -3,7 +3,7 @@ import { View, ViewStyle } from 'react-native';
 import { cardBackgroundColor, fieldCols } from '../utils/constants';
 import Puyo from './Puyo';
 import { Layout } from "../selectors/layoutSelectors";
-import { PendingPair } from "../selectors/simulatorSelectors";
+import { PendingPair } from "../../types";
 
 export type Props = {
   pair: PendingPair,
