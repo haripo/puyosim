@@ -96,6 +96,21 @@ describe('serializer', () => {
       expect(result).toEqual("b6babh9");
     });
 
+    test('deserialize history with long jump', () => {
+      const result = deserializeHistoryRecords("b7bah9");
+      expect(result[0].next).toContain(61);
+    });
+
+    test('deserialize history with long jump', () => {
+      const result = deserializeHistoryRecords("b7cBh9");
+      expect(result[0].next).toContain(150);
+    });
+
+    test('deserialize history with long jump 2', () => {
+      const result = deserializeHistoryRecords("b6babh9");
+      expect(result[0].next).toContain(3844);
+    });
+
     test('serialize queue', () => {
       const queue = [[1, 2], [3, 4], [1, 2], [3, 4], [5, 6]];
       const result = serializeQueue(queue);

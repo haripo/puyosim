@@ -174,10 +174,11 @@ export function deserializeHistoryRecords(serialized: string): MinimumHistoryRec
           // parse jump destination
           let destination = 0;
           for (let j = 0; j < specialCommand.numNextChars!; j++) {
-            destination *= (j === 0 ? 1 : chars.length);
-            destination += chars.indexOf(serialized[i++]) - 1;
+            destination += Math.pow(
+              chars.length,
+              specialCommand.numNextChars! - j - 1) * (chars.indexOf(serialized[i++]));
           }
-          result[result.length - 1].next.push(destination);
+          result[result.length - 1].next.push(destination - 1);
           break;
         default:
           throw new Error('Invalid special command');
