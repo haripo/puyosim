@@ -10,10 +10,10 @@ describe('serializer', () => {
   describe('queue', () => {
     test('serialize history', () => {
       const history = createHistoryFromMinimumHistory([
-          { move: { rotation: 'top', col: 1 }, next: [1] },
-          { move: { rotation: 'bottom', col: 1 }, next: [2] },
-          { move: { rotation: 'left', col: 3 }, next: [3] },
-          { move: { rotation: 'right', col: 3 }, next: [] }
+          { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+          { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [2] },
+          { type: 'move', move: { rotation: 'left', col: 3 }, next: [3] },
+          { type: 'move', move: { rotation: 'right', col: 3 }, next: [] }
         ],
         [[1, 2], [3, 4], [1, 2], [3, 4]]);
 
@@ -23,10 +23,10 @@ describe('serializer', () => {
 
     test('deserialize history', () => {
       const expected = [
-          { move: { rotation: 'top', col: 1 }, next: [1] },
-          { move: { rotation: 'bottom', col: 1 }, next: [2] },
-          { move: { rotation: 'left', col: 3 }, next: [3] },
-          { move: { rotation: 'right', col: 3 }, next: [] }
+          { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+          { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [2] },
+          { type: 'move', move: { rotation: 'left', col: 3 }, next: [3] },
+          { type: 'move', move: { rotation: 'right', col: 3 }, next: [] }
       ];
 
       const result = deserializeHistoryRecords('bhtp9');
@@ -35,13 +35,13 @@ describe('serializer', () => {
 
     test('serialize history with jump', () => {
       const history = createHistoryFromMinimumHistory([
-          { move: { rotation: 'top', col: 1 }, next: [1] },
-          { move: { rotation: 'bottom', col: 1 }, next: [2, 4] },
-          { move: { rotation: 'left', col: 3 }, next: [3] },
-          { move: { rotation: 'right', col: 3 }, next: [] },
-          { move: { rotation: 'top', col: 3 }, next: [] },
-          { move: { rotation: 'top', col: 4 }, next: [6] }, // derived from root
-          { move: { rotation: 'top', col: 5 }, next: [] }
+          { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+          { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [2, 4] },
+          { type: 'move', move: { rotation: 'left', col: 3 }, next: [3] },
+          { type: 'move', move: { rotation: 'right', col: 3 }, next: [] },
+          { type: 'move', move: { rotation: 'top', col: 3 }, next: [] },
+          { type: 'move', move: { rotation: 'top', col: 4 }, next: [6] }, // derived from root
+          { type: 'move', move: { rotation: 'top', col: 5 }, next: [] }
         ],
         [[1, 2]]);
 
@@ -53,13 +53,13 @@ describe('serializer', () => {
 
     test('deserialize history with jump', () => {
       const history = [
-        { move: { rotation: 'top', col: 1 }, next: [1] },
-        { move: { rotation: 'bottom', col: 1 }, next: [2, 4] },
-        { move: { rotation: 'left', col: 3 }, next: [3] },
-        { move: { rotation: 'right', col: 3 }, next: [] },
-        { move: { rotation: 'top', col: 3 }, next: [] },
-        { move: { rotation: 'top', col: 4 }, next: [6] }, // derived from root
-        { move: { rotation: 'top', col: 5 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+        { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [2, 4] },
+        { type: 'move', move: { rotation: 'left', col: 3 }, next: [3] },
+        { type: 'move', move: { rotation: 'right', col: 3 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 4 }, next: [6] }, // derived from root
+        { type: 'move', move: { rotation: 'top', col: 5 }, next: [] }
       ];
 
       const result = deserializeHistoryRecords('bh8ftp9d9ef9');
@@ -68,8 +68,8 @@ describe('serializer', () => {
 
     test('serialize history with long jump', () => {
       const history = createHistoryFromMinimumHistory([
-        { move: { rotation: 'top', col: 1 }, next: [61] },
-        { move: { rotation: 'bottom', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [61] },
+        { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [] },
       ], [[1, 1]]);
 
       const result = serializeHistoryRecords(history);
@@ -78,8 +78,8 @@ describe('serializer', () => {
 
     test('serialize history with long jump 2', () => {
       const history = createHistoryFromMinimumHistory([
-        { move: { rotation: 'top', col: 1 }, next: [150] },
-        { move: { rotation: 'bottom', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [150] },
+        { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [] },
       ], [[1, 1]]);
 
       const result = serializeHistoryRecords(history);
@@ -88,8 +88,8 @@ describe('serializer', () => {
 
     test('serialize history with long jump 3', () => {
       const history = createHistoryFromMinimumHistory([
-        { move: { rotation: 'top', col: 1 }, next: [3844] },
-        { move: { rotation: 'bottom', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [3844] },
+        { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [] },
       ], [[1, 1]]);
 
       const result = serializeHistoryRecords(history);
