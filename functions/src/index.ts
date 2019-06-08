@@ -1,9 +1,14 @@
 import * as functions from 'firebase-functions';
 import FieldImageRenderer from './FieldImageRenderer';
 import { deserializeHistoryRecords, deserializeQueue } from "../../src/shared/models/serializer";
-import { createHistoryFromMinimumHistory, getCurrentPathRecords } from "../../src/shared/models/history";
+import { createHistoryFromMinimumHistory } from "../../src/shared/models/history";
 
-export const helloWorld = functions.https.onRequest(async (request, response) => {
+const runtimeOptions: functions.RuntimeOptions = {
+  timeoutSeconds: 300,
+  memory: '1GB'
+};
+
+export const helloWorld = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
   const theme = {
     cardBackgroundColor: '#EFEBE9',
     buttonColor: '#8D6E63',
@@ -13,13 +18,13 @@ export const helloWorld = functions.https.onRequest(async (request, response) =>
 
   const strQueue = request.query.q;
   const strHistory = request.query.h;
-  const index = parseInt(request.query.i);
 
   const queue = deserializeQueue(strQueue);
-  const history = createHistoryFromMinimumHistory(deserializeHistoryRecords(strHistory), queue, index);
-  const path = getCurrentPathRecords(history, index);
+  const minimumHistory = deserializeHistoryRecords(strHistory);
+  const history = createHistoryFromMinimumHistory(minimumHistory, queue, minimumHistory.length - 1);
 
   const renderer = new FieldImageRenderer(theme, 'puyoSkinDefault');
-  const buf = await renderer.renderVideo(path);
+  const buf = await renderer.renderVideo(history);
+
   response.send(buf);
 });

@@ -12,9 +12,17 @@ const cross = require('../../assets/cross.png');
 const fieldCols = 13;
 const fieldRows = 6;
 
+let assetCache = {};
+async function loadImageWithCache(asset: any) {
+  if (!(asset in assetCache)) {
+    assetCache[asset] = await loadImage(asset);
+  }
+  return assetCache[asset];
+}
+
 export default class FieldImageRenderer {
 
-  puyoSize = 64;
+  puyoSize = 32;
   margin = 3;
 
   puyoSkin: string;
@@ -23,37 +31,6 @@ export default class FieldImageRenderer {
   constructor(theme: Theme, puyoSkin: string) {
     this.theme = theme;
     this.puyoSkin = puyoSkin;
-  }
-
-  async render(stack: StackForRendering) {
-    const fieldWidth = this.puyoSize * 6;
-    const fieldHeight = this.puyoSize * 13;
-
-    const canvas = createCanvas(
-      fieldWidth + this.margin * 2,
-      fieldHeight + this.margin * 2);
-
-    const encoder = new GIFEncoder(canvas.width, canvas.height);
-    encoder.setRepeat(0);
-    encoder.setDelay(500);
-    encoder.setQuality(10);
-
-    const context = canvas.getContext('2d');
-
-    if (context === null) {
-      throw new Error('Failed to get canvas context');
-    }
-
-    encoder.start();
-
-    for (let i = 0; i < 10; i++) {
-      await this.renderField(context, stack, this.margin, this.margin);
-      encoder.addFrame(context);
-    }
-
-    encoder.finish();
-
-    return encoder.out.getData().toString('base64');
   }
 
   async renderVideo(history: HistoryRecord[]) {
@@ -111,7 +88,7 @@ export default class FieldImageRenderer {
       fieldHeight);
 
     {
-      let img = await loadImage(cross);
+      let img = await loadImageWithCache(cross);
       context.drawImage(img, x + this.puyoSize * 2, y, this.puyoSize, this.puyoSize);
     }
 
@@ -119,7 +96,7 @@ export default class FieldImageRenderer {
       for (let j = 0; j < fieldCols; j++) {
         const resource = puyoImages[this.puyoSkin][stack[j][i].color];
         if (resource !== null) {
-          const img = await loadImage(resource);
+          const img = await loadImageWithCache(resource);
           context.drawImage(
             img,
             x + this.puyoSize * i,
@@ -135,7 +112,7 @@ export default class FieldImageRenderer {
         const connection = stack[j][i].connections;
         if (connection.bottom) {
           const resource = connectionImages[this.puyoSkin][stack[j][i].color - 1].vertical;
-          const img = await loadImage(resource);
+          const img = await loadImageWithCache(resource);
           context.drawImage(
             img,
             x + this.puyoSize * i,
@@ -146,7 +123,7 @@ export default class FieldImageRenderer {
 
         if (stack[j][i].connections.right) {
           const resource = connectionImages[this.puyoSkin][stack[j][i].color - 1].horizontal;
-          const img = await loadImage(resource);
+          const img = await loadImageWithCache(resource);
           context.drawImage(
             img,
             x + this.puyoSize * i + this.puyoSize / 2,
