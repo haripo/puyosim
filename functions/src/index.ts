@@ -16,8 +16,11 @@ export const helloWorld = functions.runWith(runtimeOptions).https.onRequest(asyn
     themeLightColor: '#EFEBE9'
   };
 
-  const strQueue = request.query.q;
-  const strHistory = request.query.h;
+  const strQueue = 'DEpGGxwjkswFyppxxzsGiqqizFDrDxkkxpFlyGDEjDzjjrjysjwxzqljDwxGjFkzrrpyqjDDislyDsFFikDkqyGxEGljrzxpFqjDFDxqziwkjsFzixGjksFlxsDkyEpr';
+  const strHistory = 'mmiqsognsjakfklqfqedfdartlnornmagmmobdoep9';
+
+  // const strQueue = request.query.q;
+  // const strHistory = request.query.h;
 
   const queue = deserializeQueue(strQueue);
   const minimumHistory = deserializeHistoryRecords(strHistory);
