@@ -1,15 +1,14 @@
-import { Theme } from "../../src/shared/selectors/themeSelectors";
+import * as fs from "fs";
+import tempfile from 'tempfile';
+import { spawn } from "child-process-promise";
 import { CanvasRenderingContext2D, createCanvas, loadImage } from 'canvas';
-import { StackForRendering } from "../../src/types";
+
+import { Theme } from "../../src/shared/selectors/themeSelectors";
+import { Stack, StackForRendering } from "../../src/types";
 import { connectionImages, puyoImages } from "../../src/shared/assets/puyoImages";
 import { HistoryRecord } from "../../src/shared/models/history";
 import { getStackForRendering } from "../../src/shared/models/stack";
 import { getDropPlan, getVanishPlan } from "../../src/shared/models/chainPlanner";
-import * as fs from "fs";
-import { spawn } from "child_process";
-import tempfile = require("tempfile");
-
-const GIFEncoder = require('gifencoder');
 
 const cross = require('../../assets/cross.png');
 
@@ -26,7 +25,7 @@ async function loadImageWithCache(asset: any) {
 
 export default class FieldImageRenderer {
 
-  puyoSize = 32;
+  puyoSize = 64;
   margin = 3;
 
   puyoSkin: string;
@@ -45,84 +44,53 @@ export default class FieldImageRenderer {
       fieldWidth + this.margin * 2,
       fieldHeight + this.margin * 2);
 
-    const encoder = new GIFEncoder(canvas.width, canvas.height);
-
-    encoder.setRepeat(0);
-    encoder.setDelay(500);
-    encoder.setQuality(10);
-
     const context = canvas.getContext('2d');
 
     if (context === null) {
       throw new Error('Failed to get canvas context');
     }
 
-    encoder.start();
-    let buf;
     let files: string[] = [];
+    const renderAndSave = async (stack: Stack) => {
+      const renderingStack = getStackForRendering(stack, []);
+      await this.renderField(context, renderingStack, this.margin, this.margin);
+      const f = tempfile('.png');
+      fs.writeFileSync(f, canvas.toBuffer('image/png'));
+      files.push(f);
+    };
 
-    for (let record of history) {
+    for (const record of history) {
       const stack = record.stack;
+      await renderAndSave(stack);
 
-      await this.renderField(context, getStackForRendering(stack, []), this.margin, this.margin);
-      // encoder.addFrame(context);
-      buf = context.getImageData(0, 0, canvas.width, canvas.height).data;
-
-      {
-        let f = tempfile('.png');
-        fs.writeFileSync(f, canvas.toBuffer('image/png'));
-        files.push(f);
-      }
-
+      // run chains
       while (true) {
         const dropPlans = getDropPlan(stack, fieldRows, fieldCols);
-        // console.log("DROP", JSON.stringify(dropPlans));
         if (dropPlans.length > 0) {
-          // console.log(JSON.stringify(stack));
-          await this.renderField(context, getStackForRendering(stack, []), this.margin, this.margin);
-          {
-            let f = tempfile('.png');
-            fs.writeFileSync(f, canvas.toBuffer('image/png'));
-            files.push(f);
-            console.warn(f);
-          }
-          // encoder.addFrame(context);
+          await renderAndSave(stack);
         }
 
         const vanishPlans = getVanishPlan(stack, fieldRows, fieldCols);
-        // console.log("VANI", JSON.stringify(vanishPlans));
         if (vanishPlans.length > 0) {
-          // console.log(JSON.stringify(stack));
-          await this.renderField(context, getStackForRendering(stack, []), this.margin, this.margin);
-          {
-            let f = tempfile('.png');
-            fs.writeFileSync(f, canvas.toBuffer('image/png'));
-            files.push(f);
-            console.warn(f);
-          }
-          // encoder.addFrame(context);
+          await renderAndSave(stack);
         } else {
           break;
         }
       }
     }
 
+    const outputFile = tempfile('.gif');
     await spawn(
       'convert',
-      ['-layers', 'optimize', '-loop', '0', '-delay', '20', ...files, 'movei.gif'],
-      // {capture: ['stdout', 'stderr']}
-      );
+      ['-layers', 'optimize', '-loop', '0', '-delay', '60', ...files, outputFile]);
 
-    return fs.readFileSync('movei.gif').toString('base64');
-
+    return fs.readFileSync(outputFile).toString('base64');
   }
 
   async renderField(
     context: CanvasRenderingContext2D,
     stack: StackForRendering,
     x: number, y: number) {
-
-    // console.log("STACK", JSON.stringify(stack));
 
     const fieldWidth = this.puyoSize * 6;
     const fieldHeight = this.puyoSize * 13;
@@ -142,7 +110,7 @@ export default class FieldImageRenderer {
       fieldHeight);
 
     {
-      let img = await loadImageWithCache(cross);
+      const img = await loadImageWithCache(cross);
       context.drawImage(img, x + this.puyoSize * 2, y, this.puyoSize, this.puyoSize);
     }
 
