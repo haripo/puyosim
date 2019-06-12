@@ -49,7 +49,8 @@ const AppNavigator = createStackNavigator(
         {
           drawerPosition: 'right',
           navigationOptions: Simulator.navigationOptions,
-          contentComponent: RightDrawer
+          contentComponent: RightDrawer,
+          edgeWidth: 10
         }
       ),
     },
