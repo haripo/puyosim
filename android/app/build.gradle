@@ -116,8 +116,8 @@ android {
         applicationId "com.puyosimulator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
-        versionName "2.5.2"
+        versionCode 28
+        versionName "2.5.3"
 
         // https://stackoverflow.com/questions/36785014/the-number-of-method-references-in-a-dex-file-cannot-exceed-64k-api-17
         multiDexEnabled true
