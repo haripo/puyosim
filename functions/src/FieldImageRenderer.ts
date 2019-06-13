@@ -11,6 +11,7 @@ import { getStackForRendering } from "../../src/shared/models/stack";
 import { getDropPlan, getVanishPlan } from "../../src/shared/models/chainPlanner";
 
 const cross = require('../../assets/cross.png');
+import { performance } from 'perf_hooks';
 
 const fieldRows = 13;
 const fieldCols = 6;
@@ -25,7 +26,7 @@ async function loadImageWithCache(asset: any) {
 
 export default class FieldImageRenderer {
 
-  puyoSize = 64;
+  puyoSize = 16;
   margin = 3;
 
   puyoSkin: string;
@@ -59,6 +60,8 @@ export default class FieldImageRenderer {
       files.push(f);
     };
 
+    const time1 = performance.now();
+
     for (const record of history) {
       const stack = record.stack;
       await renderAndSave(stack);
@@ -79,10 +82,16 @@ export default class FieldImageRenderer {
       }
     }
 
+    const time2 = performance.now();
+
     const outputFile = tempfile('.gif');
     await spawn(
       'convert',
-      ['-layers', 'optimize', '-loop', '0', '-delay', '60', ...files, outputFile]);
+      ['-loop', '0', '-delay', '60', ...files, '-treedepth', '2', '-layers', 'optimize', '-sample', '200%', outputFile]);
+
+    const time3 = performance.now();
+
+    console.info("Tick", time2 - time1, time3 - time2);
 
     return fs.readFileSync(outputFile).toString('base64');
   }
