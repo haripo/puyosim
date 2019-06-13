@@ -29,5 +29,6 @@ export const helloWorld = functions.runWith(runtimeOptions).https.onRequest(asyn
   const renderer = new FieldImageRenderer(theme, 'puyoSkinDefault');
   const buf = await renderer.renderVideo(history);
 
+  response.contentType('image/gif');
   response.send(buf);
 });

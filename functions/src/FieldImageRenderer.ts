@@ -93,7 +93,7 @@ export default class FieldImageRenderer {
 
     console.info("Tick", time2 - time1, time3 - time2);
 
-    return fs.readFileSync(outputFile).toString('base64');
+    return fs.readFileSync(outputFile);
   }
 
   async renderField(
