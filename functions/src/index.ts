@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as functions from 'firebase-functions';
 import FieldImageRenderer from './FieldImageRenderer';
 import { deserializeHistoryRecords, deserializeQueue } from "../../src/shared/models/serializer";
@@ -15,33 +16,60 @@ const theme = {
   themeLightColor: '#EFEBE9'
 };
 
-function parseHistory(strQueue: string, strHistory: string) {
+async function createGifMovie(strQueue: string, strHistory: string, skin: string) {
   const queue = deserializeQueue(strQueue);
   const minimumHistory = deserializeHistoryRecords(strHistory);
-  return createHistoryFromMinimumHistory(minimumHistory, queue, minimumHistory.length - 1);
+  const history = createHistoryFromMinimumHistory(minimumHistory, queue, minimumHistory.length - 1);
+
+  const renderer = new FieldImageRenderer(theme, skin);
+  return await renderer.renderVideo(history);
 }
+
+async function createGif(strField: string, skin: string) {
+  const field = _.chunk(strField.split('').map(v => parseInt(v)), 6);
+  const renderer = new FieldImageRenderer(theme, skin);
+  return await renderer.renderField(field);
+}
+
+export const renderGif = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
+  const skin = request.query.skin || 'puyoSkinDefault';
+
+  response.contentType('image/gif');
+  response.send(await createGif(request.query.s, skin));
+});
+
+export const renderGifDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
+  const s = `000000\
+000000\
+000000\
+000000\
+000000\
+000000\
+000000\
+000000\
+000000\
+000001\
+000003\
+000002\
+000000`;
+  response.contentType('image/gif');
+  response.send(await createGif(s, 'puyoSkinDefault'));
+});
+
 
 export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
   const strQueue = request.query.q;
   const strHistory = request.query.h;
   const skin = request.query.skin || 'puyoSkinDefault';
 
-  const history = parseHistory(strQueue, strHistory);
-  const renderer = new FieldImageRenderer(theme, skin);
-  const buf = await renderer.renderVideo(history);
-
   response.contentType('image/gif');
-  response.send(buf);
+  response.send(await createGifMovie(strQueue, strHistory, skin));
 });
 
 export const renderGifMovieDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
   const strQueue = 'DEpGGxwjkswFyppxxzsGiqqizFDrDxkkxpFlyGDEjDzjjrjysjwxzqljDwxGjFkzrrpyqjDDislyDsFFikDkqyGxEGljrzxpFqjDFDxqziwkjsFzixGjksFlxsDkyEpr';
   const strHistory = 'mmiqsognsjakfklqfqedfdartlnornmagmmobdoep9';
 
-  const history = parseHistory(strQueue, strHistory);
-  const renderer = new FieldImageRenderer(theme, 'puyoSkinDefault');
-  const buf = await renderer.renderVideo(history);
-
   response.contentType('image/gif');
-  response.send(buf);
+  response.send(await createGifMovie(strQueue, strHistory, 'puyoSkinDefault'));
 });
