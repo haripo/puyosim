@@ -16,6 +16,7 @@ import {
   showSnackbar
 } from "../actions/actions";
 import configSagas from './config';
+import shareSagas from './share';
 
 // @ts-ignore
 import { Archive, deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
@@ -130,6 +131,7 @@ function* sagas() {
   yield takeEvery(REQUEST_LOGIN, handleRequestLogin);
   yield takeEvery(RESTART, handleRestart);
   yield fork(configSagas);
+  yield fork(shareSagas);
 }
 
 export default sagas;

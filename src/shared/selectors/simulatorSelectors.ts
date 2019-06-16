@@ -2,7 +2,7 @@ import { getDefaultMove, getFirstCol, getSecondCol } from '../models/move';
 import { getDropPositions as getDropPositionsStack, getStackForRendering, } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
-import { deserializeHistoryRecords, serializeHistoryRecords, serializeQueue } from "../models/serializer";
+import { deserializeHistoryRecords, serializeHistoryRecords } from "../models/serializer";
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
 // @ts-ignore
 import { captureException } from "../utils/Sentry";
-import { Color, Move, PendingPair, PendingPairPuyo, ShareUrls, StackForRendering } from "../../types";
+import { Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -211,34 +211,6 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     width: rightmostRow,
     height: deepestColumn
   };
-}
-
-
-function createShareURL(q: string, h: string | null): string {
-  const head = 'https://puyosim.page.link/';
-  const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
-  const link = encodeURIComponent('https://puyos.im/v?' + query);
-  return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
-}
-
-export function getShareURL(state: SimulatorState): ShareUrls {
-  const q = serializeQueue(state.queue);
-  // const i = state.historyIndex.toString();
-  const whole = serializeHistoryRecords(state.history);
-  const current = serializeHistoryRecords(
-    getCurrentPathRecords(state.history, state.historyIndex));
-
-  if (state.history.length <= 1) {
-    return {
-      whole: createShareURL(q, null),
-      current: createShareURL(q, null),
-    }
-  }
-
-  return {
-    whole: createShareURL(q, whole),
-    current: createShareURL(q, current),
-  }
 }
 
 export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {

@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import { Image, ImageStyle, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Share from 'react-native-share';
 
-import { contentsMargin, themeLightColor } from '../../shared/utils/constants';
+import { Button, Left, ListItem, Radio, Right, Text as NativeBaseText } from 'native-base';
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
-import t from '../../shared/utils/i18n';
-import { PendingPair, ShareUrls, StackForRendering } from "../../types";
+import { PendingPair, StackForRendering } from "../../types";
+import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "../../shared/reducers/shareOption";
 
 export type Props = {
+  shareOption: ShareOptionType,
+
   stack: StackForRendering,
   ghosts: PendingPair
-  shareURLs: ShareUrls,
   hasEditRecord: boolean,
 
   puyoSkin: string,
   layout: Layout,
   layoutForCapturingField: Layout,
   theme: Theme,
+
+  onShareOptionChanged: (hasUrl: UrlShareType, hasMedia: MediaShareType) => void,
+  onSharePressed: () => void
 }
 
 type State = {}
@@ -28,98 +32,83 @@ export default class ShareOption extends Component<Props, State> {
     title: 'Share'
   });
 
-  constructor(props) {
-    super(props);
-  }
-
-  async share(shareUrl: string | null) {
-    try {
-      const r = await fetch("https://us-central1-puyosim-web.cloudfunctions.net/helloWorld");
-      const data = await r.text();
-      const imageUri = "data:image/gif;base64," + data;
-
-      // share
-      const shareOptions = {
-        url: imageUri,
-        message: shareUrl || undefined
-      };
-
-      const response = await Share.open(shareOptions);
-
-      if (response['message'] !== 'OK') {
-        // error
-        console.warn(response);
-      }
-    } catch (e) {
-      // handle error
-      console.warn(e)
-    }
-  }
-
-  async handleWholeSharePressed() {
-    return await this.share(this.props.shareURLs.whole);
-  }
-
-  async handleCurrentSharePressed() {
-    return await this.share(this.props.shareURLs.current);
-  }
-
-  async handleSnapshotSharePressed() {
-    return await this.share(null);
-  }
-
-  renderItem(title: string, description: string, image: any, handler: () => void) {
-    return (
-      <View style={ styles.shareCard }>
-        <TouchableOpacity onPress={ handler }>
-          <View style={ styles.description }>
-            <View style={ { flex: 1 } }>
-              <Text style={ styles.title }>
-                { title }
-              </Text>
-              <Text>
-                { description }
-              </Text>
-            </View>
-            <View style={ { flex: 0 } }>
-              <Image
-                source={ image }
-                style={ styles.image as ImageStyle }
-              />
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+  handleUrlOptionChanged(selected) {
+    this.props.onShareOptionChanged(
+      selected,
+      this.props.shareOption.hasMedia
     );
   }
 
+  handleMediaOptionChanged(selected) {
+    this.props.onShareOptionChanged(
+      this.props.shareOption.hasUrl,
+      selected
+    );
+  }
+
+  async handleSharePressed() {
+    this.props.onSharePressed();
+  }
+
   render() {
+    const option = this.props.shareOption;
     return (
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <ScrollView>
-            {/*{*/}
-              {/*this.renderItem(*/}
-                {/*t('shareWholeHistory'),*/}
-                {/*t('shareWholeHistoryDescription'),*/}
-                {/*require('../../../assets/share-whole-history.png'),*/}
-                {/*this.handleWholeSharePressed.bind(this))*/}
-            {/*}*/}
-            {
-              this.props.hasEditRecord ? null : this.renderItem(
-                t('shareCurrentHistory'),
-                t('shareCurrentHistoryDescription'),
-                require('../../../assets/share-single-history.png'),
-                this.handleCurrentSharePressed.bind(this))
-            }
-            {
-              this.renderItem(
-                t('shareSnapshot'),
-                t('shareSnapshotDescription'),
-                require('../../../assets/share-snapshot.png'),
-                this.handleSnapshotSharePressed.bind(this))
-            }
+            <Text style={ styles.radioTitle }>ぷよ譜 URL</Text>
+            <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'none') }>
+              <Left>
+                <Text>なし</Text>
+              </Left>
+              <Right>
+                <Radio selected={ option.hasUrl === 'none' } />
+              </Right>
+            </ListItem>
+            <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'current') }>
+              <Left>
+                <Text>あり</Text>
+              </Left>
+              <Right>
+                <Radio selected={ option.hasUrl === 'current' } />
+              </Right>
+            </ListItem>
+
+            <Text style={ styles.radioTitle }>メディア</Text>
+            <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'none') }>
+              <Left>
+                <Text>なし</Text>
+              </Left>
+              <Right>
+                <Radio selected={ option.hasMedia === 'none' } />
+              </Right>
+            </ListItem>
+            <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'image') }>
+              <Left>
+                <Text>画像</Text>
+              </Left>
+              <Right>
+                <Radio selected={ option.hasMedia === 'image' } />
+              </Right>
+            </ListItem>
+            <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'video') }>
+              <Left>
+                <Text>動画</Text>
+              </Left>
+              <Right>
+                <Radio selected={ option.hasMedia === 'video' } />
+              </Right>
+            </ListItem>
           </ScrollView>
+
+          <Button
+            primary
+            full
+            style={ styles.shareButton }
+            onPress={ this.handleSharePressed.bind(this) }
+          >
+            <NativeBaseText>share</NativeBaseText>
+          </Button>
         </View>
       </View>
     );
@@ -137,25 +126,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  shareCard: {
-    margin: contentsMargin,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 18,
-    paddingBottom: 8,
-    backgroundColor: themeLightColor
-  },
-  title: {
-    marginBottom: 6,
+  radioTitle: {
     fontSize: 14,
-    fontWeight: "bold"
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginTop: 20
   },
-  image: {
-    width: 80,
-    height: 80,
-    marginLeft: 20
-  },
-  description: {
-    flexDirection: 'row'
+  shareButton: {
+    margin: 8,
   }
 });

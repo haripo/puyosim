@@ -53,6 +53,8 @@ export const EDIT_ARCHIVE_FINISHED = 'EDIT_ARCHIVE_FINISHED';
 export const DELETE_ARCHIVE = 'DELETE_ARCHIVE';
 export const DELETE_ARCHIVE_FINISHED = 'DELETE_ARCHIVE_FINISHED';
 export const SNOW_SNACKBAR = 'SNOW_SNACKBAR';
+export const CHANGE_SHARE_OPTION = 'CHANGE_SHARE_OPTION';
+export const SHARE_CONFIRMED = 'SHARE_CONFIRMED';
 export const DEBUG_SET_PATTERN = 'DEBUG_SET_PATTERN';
 export const DEBUG_SET_HISTORY = 'DEBUG_SET_HISTORY';
 
@@ -100,6 +102,8 @@ export const editArchive = makeActionCreator(EDIT_ARCHIVE,  'archivePayload');
 export const editArchiveFinished = makeActionCreator(EDIT_ARCHIVE_FINISHED, 'archive');
 export const deleteArchive = makeActionCreator(DELETE_ARCHIVE, 'id');
 export const deleteArchiveFinished = makeActionCreator(DELETE_ARCHIVE_FINISHED, 'id');
+export const changeShareOption = makeActionCreator(CHANGE_SHARE_OPTION, 'shareOption');
+export const shareConfirmed = makeActionCreator(SHARE_CONFIRMED);
 export const showSnackbar = makeActionCreator(SNOW_SNACKBAR, 'message');
 export const debugSetPattern = makeActionCreator(DEBUG_SET_PATTERN, 'name');
 export const debugSetHistory = makeActionCreator(DEBUG_SET_HISTORY, 'name');

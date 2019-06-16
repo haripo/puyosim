@@ -5,6 +5,7 @@ import * as layout from './layout';
 import * as theme from './theme';
 import * as archive from './archive';
 import * as auth from './auth';
+import * as shareOption from './shareOption';
 import produce from 'immer';
 
 export interface State {
@@ -14,7 +15,8 @@ export interface State {
   layout: layout.LayoutState,
   theme: theme.ThemeState,
   archive: archive.ArchiveState,
-  auth: auth.AuthState
+  auth: auth.AuthState,
+  shareOption: shareOption.ShareOptionState
 }
 
 let initialState: State = {
@@ -24,7 +26,8 @@ let initialState: State = {
   layout: layout.initialState,
   theme: theme.initialState,
   archive: archive.initialState,
-  auth: auth.initialState
+  auth: auth.initialState,
+  shareOption: shareOption.initialState
 };
 
 export default function (state: State = initialState, action): State {
@@ -36,6 +39,7 @@ export default function (state: State = initialState, action): State {
     _state.theme = theme.reducer(_state.theme, action);
     _state.archive = archive.reducer(_state.archive, action);
     _state.auth = auth.reducer(_state.auth, action);
+    _state.shareOption = shareOption.reducer(_state.shareOption, action);
     return _state;
   });
 };

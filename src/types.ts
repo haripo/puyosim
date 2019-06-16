@@ -18,11 +18,6 @@ export type PuyoConnection = {
   right: boolean
 }
 
-export type ShareUrls = {
-  whole: string,
-  current: string
-}
-
 export type PuyoForRendering = {
   row: number,
   col: number,
