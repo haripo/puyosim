@@ -62,8 +62,12 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const strHistory = request.query.h;
   const skin = request.query.skin || 'puyoSkinDefault';
 
-  response.contentType('image/gif');
-  response.send(await createGifMovie(strQueue, strHistory, skin));
+  if (request.query.base64) {
+    response.send((await createGifMovie(strQueue, strHistory, skin)).toString('base64'));
+  } else {
+    response.contentType('image/gif');
+    response.send(await createGifMovie(strQueue, strHistory, skin));
+  }
 });
 
 export const renderGifMovieDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
