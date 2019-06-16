@@ -21,6 +21,11 @@ import { Sentry } from 'react-native-sentry';
 import { themeColor, themeLightColor } from './src/shared/utils/constants';
 import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 
+// native-base theming
+import { StyleProvider, Container, Content } from 'native-base';
+import getTheme from './native-base-theme/components';
+import material from './native-base-theme/variables/material';
+
 // https://github.com/facebook/react-native/issues/18175#issuecomment-370575211
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -79,7 +84,9 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={ store }>
-        <Navigation/>
+        <StyleProvider style={getTheme(material)}>
+          <Navigation/>
+        </StyleProvider>
       </Provider>
     );
   }

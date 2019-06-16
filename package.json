@@ -21,6 +21,7 @@
     "i18n-js": "^3.2.1",
     "immer": "^3.1.1",
     "lodash": "^4.17.11",
+    "native-base": "^2.12.1",
     "query-string": "^6.4.2",
     "raven-for-redux": "^1.4.0",
     "react": "16.8.3",
