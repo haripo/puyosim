@@ -90,7 +90,7 @@ export default class FieldImageRenderer {
     const outputFile = tempfile('.gif');
     await spawn(
       'convert',
-      ['-loop', '0', '-delay', '60', ...files, '-treedepth', '2', '-layers', 'optimize', '-sample', '200%', outputFile]);
+      ['-loop', '0', '-delay', '40', ...files, '-treedepth', '2', '-layers', 'optimize', '-sample', '400%', outputFile]);
 
     const time3 = performance.now();
 
