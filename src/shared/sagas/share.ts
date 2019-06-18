@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { saveConfigCompleted, SHARE_CONFIRMED } from "../actions/actions";
+import { saveConfigCompleted, SHARE_CONFIRMED, shareMediaGenerationCompleted } from "../actions/actions";
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
@@ -40,12 +40,13 @@ function* share() {
       shareParam.url = 'data:image/gif;base64,' + data;
     }
 
+    yield put(shareMediaGenerationCompleted());
+
     const shareResponse = yield call(() => Share.open(shareParam));
     if (shareResponse['message'] !== 'OK') {
       console.warn(shareResponse);
     }
 
-    //yield put(saveConfigCompleted(configState));
   } catch (e) {
     console.error(e);
   }

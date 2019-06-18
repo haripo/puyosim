@@ -1,20 +1,16 @@
 import { connect } from 'react-redux';
 import ShareOption from "../components/ShareOption";
-import {
-  getGhostForSnapshot,
-  getStackForSnapshot,
-  hasEditRecord
-} from "../../shared/selectors/simulatorSelectors";
+import { getGhostForSnapshot, getStackForSnapshot, hasEditRecord } from "../../shared/selectors/simulatorSelectors";
 import { getLayout, getLayoutForCapturingField } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
 import { State } from "../../shared/reducers";
 import { changeShareOption, shareConfirmed } from "../../shared/actions/actions";
-import { getShareUrl } from "../../shared/selectors/shareOptionSelectors";
 
 const mapStateToProps = (state: State) => {
   return {
     shareOption: state.shareOption.shareOption,
     hasEditRecord: hasEditRecord(state.simulator),
+    isGenerating: state.shareOption.isGenerating,
 
     stack: getStackForSnapshot(state.simulator),
     ghosts: getGhostForSnapshot(state.simulator),

@@ -1,4 +1,4 @@
-import { CHANGE_SHARE_OPTION } from "../actions/actions";
+import { CHANGE_SHARE_OPTION, SHARE_CONFIRMED, SHARE_MEDIA_GENERATION_COMPLETED } from "../actions/actions";
 
 export type UrlShareType = 'none' | 'current';
 export type MediaShareType = 'none' | 'image' | 'video';
@@ -8,14 +8,16 @@ export type ShareOption = {
 }
 
 export type ShareOptionState = {
-  shareOption: ShareOption
+  shareOption: ShareOption,
+  isGenerating: boolean
 };
 
 export const initialState: ShareOptionState = {
   shareOption: {
     hasUrl: 'current',
     hasMedia: 'video'
-  }
+  },
+  isGenerating: false
 };
 
 function changeShareOption(state: ShareOptionState, action) {
@@ -23,10 +25,24 @@ function changeShareOption(state: ShareOptionState, action) {
   return state;
 }
 
+function shareConfirmed(state: ShareOptionState) {
+  state.isGenerating = true;
+  return state;
+}
+
+function shareMediaGenerationCompleted(state: ShareOptionState) {
+  state.isGenerating = false;
+  return state;
+}
+
 export const reducer = (state: ShareOptionState, action): ShareOptionState => {
   switch (action.type) {
     case CHANGE_SHARE_OPTION:
       return changeShareOption(state, action);
+    case SHARE_CONFIRMED:
+      return shareConfirmed(state);
+    case SHARE_MEDIA_GENERATION_COMPLETED:
+      return shareMediaGenerationCompleted(state);
     default:
       return state;
   }

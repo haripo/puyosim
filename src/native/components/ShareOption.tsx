@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Share from 'react-native-share';
 
 import { Button, Left, ListItem, Radio, Right, Text as NativeBaseText } from 'native-base';
@@ -11,6 +11,7 @@ import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "..
 
 export type Props = {
   shareOption: ShareOptionType,
+  isGenerating: boolean,
 
   stack: StackForRendering,
   ghosts: PendingPair
@@ -110,6 +111,41 @@ export default class ShareOption extends Component<Props, State> {
             <NativeBaseText>share</NativeBaseText>
           </Button>
         </View>
+
+        <Modal
+          transparent
+          animationType={"none"}
+          visible={this.props.isGenerating}
+          onRequestClose={() => null}
+        >
+          <View
+            style={[
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center"
+              },
+              { backgroundColor: `rgba(0,0,0,${0.4})` }
+            ]}
+          >
+            <View style={{
+              backgroundColor: "white",
+              height: 100,
+              width: 100,
+              borderRadius: 10,
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <ActivityIndicator animating={true} color={'blue'} size={20} />
+              <Text style={{
+                position: "absolute",
+                paddingTop: 50
+              }} numberOfLines={1}>
+                動画生成中
+              </Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
