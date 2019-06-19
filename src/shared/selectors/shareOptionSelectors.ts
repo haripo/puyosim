@@ -42,7 +42,7 @@ export const getStackImageUrl = createSelector(
   ],
   (stack) => {
     const s = stack.map(r => r.join('')).join('');
-    const param = { s };
+    const param = { s, base64: 1 };
     return `${ functionHost }/renderGif?${ createQuery(param) }`;
   }
 );

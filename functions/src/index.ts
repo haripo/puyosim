@@ -33,9 +33,14 @@ async function createGif(strField: string, skin: string) {
 
 export const renderGif = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
   const skin = request.query.skin || 'puyoSkinDefault';
+  const data = await createGif(request.query.s, skin);
 
-  response.contentType('image/gif');
-  response.send(await createGif(request.query.s, skin));
+  if (request.query.base64) {
+    response.send(data.toString('base64'));
+  } else {
+    response.contentType('image/gif');
+    response.send(data);
+  }
 });
 
 export const renderGifDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
@@ -61,12 +66,13 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const strQueue = request.query.q;
   const strHistory = request.query.h;
   const skin = request.query.skin || 'puyoSkinDefault';
+  const data = await createGifMovie(strQueue, strHistory, skin);
 
   if (request.query.base64) {
-    response.send((await createGifMovie(strQueue, strHistory, skin)).toString('base64'));
+    response.send(data.toString('base64'));
   } else {
     response.contentType('image/gif');
-    response.send(await createGifMovie(strQueue, strHistory, skin));
+    response.send(data);
   }
 });
 
