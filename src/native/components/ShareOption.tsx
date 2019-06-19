@@ -111,6 +111,7 @@ export default class ShareOption extends Component<Props, State> {
             full
             style={ styles.shareButton }
             onPress={ this.handleSharePressed.bind(this) }
+            disabled={ this.props.shareOption.hasMedia === 'none' && this.props.shareOption.hasUrl === 'none' }
           >
             <NativeBaseText>{ t('confirmShare') }</NativeBaseText>
           </Button>
