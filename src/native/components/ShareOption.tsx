@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Share from 'react-native-share';
 
 import { Button, Left, ListItem, Radio, Right, Text as NativeBaseText } from 'native-base';
@@ -8,6 +8,7 @@ import { Theme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
 import { PendingPair, StackForRendering } from "../../types";
 import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "../../shared/reducers/shareOption";
+import ModalIndicator from "../../shared/components/ModalIndicator";
 
 export type Props = {
   shareOption: ShareOptionType,
@@ -112,40 +113,7 @@ export default class ShareOption extends Component<Props, State> {
           </Button>
         </View>
 
-        <Modal
-          transparent
-          animationType={"none"}
-          visible={this.props.isGenerating}
-          onRequestClose={() => null}
-        >
-          <View
-            style={[
-              {
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center"
-              },
-              { backgroundColor: `rgba(0,0,0,${0.4})` }
-            ]}
-          >
-            <View style={{
-              backgroundColor: "white",
-              height: 100,
-              width: 100,
-              borderRadius: 10,
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <ActivityIndicator animating={true} color={'blue'} size={20} />
-              <Text style={{
-                position: "absolute",
-                paddingTop: 50
-              }} numberOfLines={1}>
-                動画生成中
-              </Text>
-            </View>
-          </View>
-        </Modal>
+        <ModalIndicator visible={ this.props.isGenerating }/>
       </View>
     );
   }
