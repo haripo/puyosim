@@ -1,8 +1,10 @@
 import React from 'react';
 import { ActivityIndicator, Modal, StyleSheet, Text, View } from "react-native";
+import { themeColor } from "../utils/constants";
 
 type Props = {
-  visible: boolean
+  visible: boolean,
+  text: string
 }
 
 const ModalIndicator = (props: Props) => {
@@ -15,12 +17,12 @@ const ModalIndicator = (props: Props) => {
     >
       <View style={ styles.background }>
         <View style={ styles.card }>
-          <ActivityIndicator animating={ true } color={ 'blue' } size={ 20 }/>
+          <ActivityIndicator animating={ true } color={ themeColor } size={ 20 }/>
           <Text style={ {
             position: "absolute",
             paddingTop: 50
           } } numberOfLines={ 1 }>
-            メディア生成中
+            { props.text }
           </Text>
         </View>
       </View>

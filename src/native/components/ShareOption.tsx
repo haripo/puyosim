@@ -10,6 +10,9 @@ import { PendingPair, StackForRendering } from "../../types";
 import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "../../shared/reducers/shareOption";
 import ModalIndicator from "../../shared/components/ModalIndicator";
 
+// @ts-ignore
+import { t } from "../../shared/utils/i18n";
+
 export type Props = {
   shareOption: ShareOptionType,
   isGenerating: boolean,
@@ -58,10 +61,10 @@ export default class ShareOption extends Component<Props, State> {
       <View style={ styles.container }>
         <View style={ styles.contents }>
           <ScrollView>
-            <Text style={ styles.radioTitle }>ぷよ譜 URL</Text>
+            <Text style={ styles.radioTitle }>{ t('shareUrlType') }</Text>
             <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'none') }>
               <Left>
-                <Text>なし</Text>
+                <Text>{ t('shareUrlTypeNone') }</Text>
               </Left>
               <Right>
                 <Radio selected={ option.hasUrl === 'none' } />
@@ -69,17 +72,17 @@ export default class ShareOption extends Component<Props, State> {
             </ListItem>
             <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'current') }>
               <Left>
-                <Text>あり</Text>
+                <Text>{ t('shareUrlTypeSimple') }</Text>
               </Left>
               <Right>
                 <Radio selected={ option.hasUrl === 'current' } />
               </Right>
             </ListItem>
 
-            <Text style={ styles.radioTitle }>メディア</Text>
+            <Text style={ styles.radioTitle }>{ t('shareMediaType') }</Text>
             <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'none') }>
               <Left>
-                <Text>なし</Text>
+                <Text>{ t('shareMediaTypeNone') }</Text>
               </Left>
               <Right>
                 <Radio selected={ option.hasMedia === 'none' } />
@@ -87,7 +90,7 @@ export default class ShareOption extends Component<Props, State> {
             </ListItem>
             <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'image') }>
               <Left>
-                <Text>画像</Text>
+                <Text>{ t('shareMediaTypeImage') }</Text>
               </Left>
               <Right>
                 <Radio selected={ option.hasMedia === 'image' } />
@@ -95,7 +98,7 @@ export default class ShareOption extends Component<Props, State> {
             </ListItem>
             <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'video') }>
               <Left>
-                <Text>動画</Text>
+                <Text>{ t('shareMediaTypeMovie') }</Text>
               </Left>
               <Right>
                 <Radio selected={ option.hasMedia === 'video' } />
@@ -109,11 +112,11 @@ export default class ShareOption extends Component<Props, State> {
             style={ styles.shareButton }
             onPress={ this.handleSharePressed.bind(this) }
           >
-            <NativeBaseText>share</NativeBaseText>
+            <NativeBaseText>{ t('confirmShare') }</NativeBaseText>
           </Button>
         </View>
 
-        <ModalIndicator visible={ this.props.isGenerating }/>
+        <ModalIndicator visible={ this.props.isGenerating } text={ t('shareProcessing') } />
       </View>
     );
   }

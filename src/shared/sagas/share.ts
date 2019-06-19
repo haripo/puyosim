@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { saveConfigCompleted, SHARE_CONFIRMED, shareMediaGenerationCompleted } from "../actions/actions";
+import { SHARE_CONFIRMED, shareMediaGenerationCompleted } from "../actions/actions";
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
