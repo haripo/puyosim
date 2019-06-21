@@ -17,7 +17,7 @@ const ModalIndicator = (props: Props) => {
     >
       <View style={ styles.background }>
         <View style={ styles.card }>
-          <ActivityIndicator animating={ true } color={ themeColor } size={ 20 }/>
+          <ActivityIndicator animating={ true } color={ themeColor } size={ 'small' }/>
           <Text style={ {
             position: "absolute",
             paddingTop: 50

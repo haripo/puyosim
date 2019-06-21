@@ -42,7 +42,14 @@ function* share() {
 
     yield put(shareMediaGenerationCompleted());
 
-    const shareResponse = yield call(() => Share.open(shareParam));
+    // なぜか setTimeout にしないと iOS でシェアできない
+    const shareResponse = yield call(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(Share.open(shareParam));
+        }, 1);
+      });
+    });
     if (shareResponse['message'] !== 'OK') {
       console.warn(shareResponse);
     }
