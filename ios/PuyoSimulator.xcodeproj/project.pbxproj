@@ -47,6 +47,7 @@
 		3AF46701009C46B8B4BDCE54 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 710B30FCED324B88A0146E2A /* Ionicons.ttf */; };
 		43AC95575CD140E2BE5EF40D /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46D2097BEB2F4A9CBD220A59 /* FontAwesome.ttf */; };
 		46E35BA3226F7E8D00830B12 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46E35B71226F7E8C00830B12 /* GoogleService-Info.plist */; };
+		46FEDB7C22BD1B5A009409EA /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46FEDB7B22BD1B59009409EA /* libRNShare.a */; };
 		532C0DD738D24826BB809D8B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6D99C07447F488192AA4A48 /* FontAwesome5_Solid.ttf */; };
 		556D1D59E009469AAEC3C4E7 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2CAA57F03E46958F2CAFEC /* libRNGestureHandler.a */; };
 		5920CD9F64D246B79FD2B315 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A1F3CDD4AA44ED1A79906CA /* Roboto_medium.ttf */; };
@@ -472,6 +473,7 @@
 		4289D5956734265DFCD0A332 /* Pods-PuyoSimulator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PuyoSimulator.release.xcconfig"; path = "Pods/Target Support Files/Pods-PuyoSimulator/Pods-PuyoSimulator.release.xcconfig"; sourceTree = "<group>"; };
 		46D2097BEB2F4A9CBD220A59 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		46E35B71226F7E8C00830B12 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		46FEDB7B22BD1B59009409EA /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B9EDF4A6F2A4BE9A210975A /* RNVersionNumber.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVersionNumber.xcodeproj; path = "../node_modules/react-native-version-number/ios/RNVersionNumber.xcodeproj"; sourceTree = "<group>"; };
 		4CB657FEC79342ADA0E6DF08 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		548C02EA58864387B2D3F5B1 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46FEDB7C22BD1B5A009409EA /* libRNShare.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -710,6 +713,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				46FEDB7B22BD1B59009409EA /* libRNShare.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
@@ -734,7 +738,6 @@
 				0D2A160E3EFA4618AB18D0F3 /* libRNVectorIcons-tvOS.a */,
 				7663DC074FA04BC89AE42BF7 /* libRNVersionNumber-tvOS.a */,
 				DC014E99AD6740E3863E5EE7 /* libRNGestureHandler-tvOS.a */,
-				9968987D6DAE4DD694C4AECE /* libRealmReact.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1759,9 +1762,7 @@
 				INFOPLIST_FILE = PuyoSimulatorTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1790,9 +1791,7 @@
 				INFOPLIST_FILE = PuyoSimulatorTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1883,9 +1882,7 @@
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1921,9 +1918,7 @@
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1958,9 +1953,7 @@
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1995,9 +1988,7 @@
 				);
 				INFOPLIST_FILE = "PuyoSimulator-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
