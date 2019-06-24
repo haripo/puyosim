@@ -4,10 +4,11 @@ import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
 import Share from "react-native-share";
+import fs from 'react-native-fs';
 
 type ShareParams = {
-  url: string,
-  message: string
+  url: string | null,
+  message: string | null
 };
 
 function fetchMediaUrl(state: State, mediaType: MediaShareType) {
@@ -25,19 +26,28 @@ function* share() {
     const option: ShareOption = yield select<(State) => ShareOption>(state => state.shareOption.shareOption);
 
     let shareParam: ShareParams = {
-      url: '',
-      message: ''
+      url: null,
+      message: "#puyosim "
     };
 
     if (option.hasUrl === "current") {
-      shareParam.message += yield select<(State) => string>(getShareUrl);
+      shareParam.message = yield select<(State) => string>(getShareUrl);
     }
 
-    const url = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
-    if (url !== null) {
-      const response = yield call(() => fetch(url));
-      const data = yield call(() => response.text());
-      shareParam.url = 'data:image/gif;base64,' + data;
+    if (option.hasMedia !== 'none') {
+      const url = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
+
+      // 画像は base64 で受け渡ししてもシェアできるが，動画はファイルでないとうまくいかない
+      // （Twitter は拡張子によってファイル形式が判別するらしく，base64 で共有すると動画と認識してくれない）
+      const cacheFilePath = fs.CachesDirectoryPath + (option.hasMedia === 'video' ? '/cache.mp4' : '/cache.gif');
+      const { promise } = fs.downloadFile({
+        fromUrl: url,
+        toFile: cacheFilePath,
+      });
+
+      // wait download completed
+      yield call(() => promise);
+      shareParam.url = 'file://' + cacheFilePath;
     }
 
     yield put(shareMediaGenerationCompleted());
@@ -50,6 +60,7 @@ function* share() {
         }, 1);
       });
     });
+
     if (shareResponse['message'] !== 'OK') {
       console.warn(shareResponse);
     }

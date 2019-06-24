@@ -42,7 +42,7 @@ export const getStackImageUrl = createSelector(
   ],
   (stack) => {
     const s = stack.map(r => r.join('')).join('');
-    const param = { s, base64: 1 };
+    const param = { s };
     return `${ functionHost }/renderGif?${ createQuery(param) }`;
   }
 );
@@ -56,7 +56,7 @@ export const getHistoryMovieUrl = createSelector(
   (queue, history, historyIndex) => {
     const q = serializeQueue(queue);
     const h = serializeHistoryRecords(getCurrentPathRecords(history, historyIndex));
-    const param = { q, h, base64: 1 };
+    const param = { q, h };
     return `${ functionHost }/renderGifMovie?${ createQuery(param) }`;
   }
 );
