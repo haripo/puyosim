@@ -71,7 +71,7 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
-    response.contentType('image/gif');
+    response.contentType('video/mp4');
     response.send(data);
   }
 });
@@ -80,6 +80,6 @@ export const renderGifMovieDebug = functions.runWith(runtimeOptions).https.onReq
   const strQueue = 'DEpGGxwjkswFyppxxzsGiqqizFDrDxkkxpFlyGDEjDzjjrjysjwxzqljDwxGjFkzrrpyqjDDislyDsFFikDkqyGxEGljrzxpFqjDFDxqziwkjsFzixGjksFlxsDkyEpr';
   const strHistory = 'mmiqsognsjakfklqfqedfdartlnornmagmmobdoep9';
 
-  response.contentType('image/gif');
+  response.contentType('video/mp4');
   response.send(await createGifMovie(strQueue, strHistory, 'puyoSkinDefault'));
 });

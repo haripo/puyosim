@@ -13,10 +13,13 @@ import { getDropPlan, getVanishPlan } from "../../src/shared/models/chainPlanner
 const cross = require('../../assets/cross.png');
 import { performance } from 'perf_hooks';
 
+import ffmpeg from 'ffmpeg-static';
+
 const fieldRows = 13;
 const fieldCols = 6;
 
 let assetCache = {};
+
 async function loadImageWithCache(asset: any) {
   if (!(asset in assetCache)) {
     assetCache[asset] = await loadImage(asset);
@@ -54,13 +57,13 @@ export default class FieldImageRenderer {
   }
 
   async renderVideo(history: HistoryRecord[]) {
-    let files: string[] = [];
+    let filePrefix = tempfile();
+    let fileCount = 0;
     const renderAndSave = async (stack: Stack) => {
       const renderingStack = getStackForRendering(stack, []);
       await this.renderStack(renderingStack, this.margin, this.margin);
-      const f = tempfile('.png');
+      const f = filePrefix + String(fileCount++).padStart(5, '0') + '.png';
       fs.writeFileSync(f, this.canvas.toBuffer('image/png'));
-      files.push(f);
     };
 
     const time1 = performance.now();
@@ -87,13 +90,25 @@ export default class FieldImageRenderer {
 
     const time2 = performance.now();
 
-    const outputFile = tempfile('.gif');
-    await spawn(
-      'convert',
-      ['-loop', '0', '-delay', '40', ...files, '-treedepth', '2', '-layers', 'optimize', '-sample', '400%', outputFile]);
+    const outputFile = tempfile('.mp4');
+    const spawnResponse = spawn(
+      ffmpeg.path,
+      ['-framerate', '3', '-i', filePrefix + '%05d.png', '-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-sws_flags', 'neighbor', '-vf', '"scale=408:-1"', outputFile],
+      { shell: true });
+
+    let ffmpegOutput = '';
+    spawnResponse.childProcess.stdout.on('data', data => {
+      ffmpegOutput += '[spawn] stdout: ' + data.toString() + '\n';
+    });
+    spawnResponse.childProcess.stderr.on('data', data => {
+      ffmpegOutput += '[spawn] stderr: ' + data.toString() + '\n';
+    });
+
+    await spawnResponse;
 
     const time3 = performance.now();
 
+    console.info("Ffmpeg finished: \n" + ffmpegOutput);
     console.info("Tick", time2 - time1, time3 - time2);
 
     return fs.readFileSync(outputFile);
