@@ -1,4 +1,9 @@
-import { CHANGE_SHARE_OPTION, SHARE_CONFIRMED, SHARE_MEDIA_GENERATION_COMPLETED } from "../actions/actions";
+import {
+  CHANGE_SHARE_OPTION,
+  SHARE_CONFIRMED,
+  SHARE_MEDIA_GENERATION_COMPLETED,
+  SHARE_MEDIA_GENERATION_FAILED
+} from "../actions/actions";
 
 export type UrlShareType = 'none' | 'current';
 export type MediaShareType = 'none' | 'image' | 'video';
@@ -35,6 +40,11 @@ function shareMediaGenerationCompleted(state: ShareOptionState) {
   return state;
 }
 
+function shareMediaGenerationFailed(state: ShareOptionState) {
+  state.isGenerating = false;
+  return state;
+}
+
 export const reducer = (state: ShareOptionState, action): ShareOptionState => {
   switch (action.type) {
     case CHANGE_SHARE_OPTION:
@@ -43,6 +53,8 @@ export const reducer = (state: ShareOptionState, action): ShareOptionState => {
       return shareConfirmed(state);
     case SHARE_MEDIA_GENERATION_COMPLETED:
       return shareMediaGenerationCompleted(state);
+    case SHARE_MEDIA_GENERATION_FAILED:
+      return shareMediaGenerationFailed(state);
     default:
       return state;
   }

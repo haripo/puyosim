@@ -64,6 +64,7 @@ const translations = {
     shareUrlTypeNone: 'なし',
     shareUrlTypeSimple: 'あり',
     shareProcessing: '処理中',
+    shareFailed: '共有に失敗しました',
 
     openInExistingAppAlert: 'URL を開きますか？既存の状態は破棄されます。',
 
@@ -155,6 +156,7 @@ const translations = {
     shareUrlTypeNone: 'No',
     shareUrlTypeSimple: 'Yes',
     shareProcessing: 'Processing',
+    shareFailed: 'Failed to share',
 
     openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
 

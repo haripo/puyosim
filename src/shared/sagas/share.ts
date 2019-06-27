@@ -1,10 +1,21 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { SHARE_CONFIRMED, shareMediaGenerationCompleted } from "../actions/actions";
+import {
+  SHARE_CONFIRMED,
+  shareMediaGenerationCompleted,
+  shareMediaGenerationFailed,
+  showSnackbar
+} from "../actions/actions";
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
 import Share from "react-native-share";
 import fs from 'react-native-fs';
+
+// @ts-ignore
+import { captureException } from "../utils/Sentry";
+
+// @ts-ignore
+import { t } from "../utils/i18n";
 
 type ShareParams = {
   url: string | null,
@@ -35,19 +46,27 @@ function* share() {
     }
 
     if (option.hasMedia !== 'none') {
-      const url = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
+      try {
+        const url = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
 
-      // 画像は base64 で受け渡ししてもシェアできるが，動画はファイルでないとうまくいかない
-      // （Twitter は拡張子によってファイル形式が判別するらしく，base64 で共有すると動画と認識してくれない）
-      const cacheFilePath = fs.CachesDirectoryPath + (option.hasMedia === 'video' ? '/cache.mp4' : '/cache.gif');
-      const { promise } = fs.downloadFile({
-        fromUrl: url,
-        toFile: cacheFilePath,
-      });
+        // 画像は base64 で受け渡ししてもシェアできるが，動画はファイルでないとうまくいかない
+        // （Twitter は拡張子によってファイル形式が判別するらしく，base64 で共有すると動画と認識してくれない）
+        const cacheFilePath = fs.CachesDirectoryPath + (option.hasMedia === 'video' ? '/cache.mp4' : '/cache.gif');
+        const { promise } = fs.downloadFile({
+          fromUrl: url,
+          toFile: cacheFilePath,
+        });
 
-      // wait download completed
-      yield call(() => promise);
-      shareParam.url = 'file://' + cacheFilePath;
+        // wait download completed
+        yield call(() => promise);
+        shareParam.url = 'file://' + cacheFilePath;
+      } catch (e) {
+        yield put(showSnackbar(t('shareFailed')));
+        console.error(e);
+        captureException(e);
+        yield put(shareMediaGenerationFailed());
+        return;
+      }
     }
 
     yield put(shareMediaGenerationCompleted());
@@ -66,6 +85,7 @@ function* share() {
     }
 
   } catch (e) {
+    captureException(e);
     console.error(e);
   }
 }

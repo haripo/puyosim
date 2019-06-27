@@ -56,6 +56,7 @@ export const SNOW_SNACKBAR = 'SNOW_SNACKBAR';
 export const CHANGE_SHARE_OPTION = 'CHANGE_SHARE_OPTION';
 export const SHARE_CONFIRMED = 'SHARE_CONFIRMED';
 export const SHARE_MEDIA_GENERATION_COMPLETED = 'SHARE_MEDIA_GENERATION_COMPLETED';
+export const SHARE_MEDIA_GENERATION_FAILED = 'SHARE_MEDIA_GENERATION_FAILED';
 export const DEBUG_SET_PATTERN = 'DEBUG_SET_PATTERN';
 export const DEBUG_SET_HISTORY = 'DEBUG_SET_HISTORY';
 
@@ -106,6 +107,7 @@ export const deleteArchiveFinished = makeActionCreator(DELETE_ARCHIVE_FINISHED, 
 export const changeShareOption = makeActionCreator(CHANGE_SHARE_OPTION, 'shareOption');
 export const shareConfirmed = makeActionCreator(SHARE_CONFIRMED);
 export const shareMediaGenerationCompleted = makeActionCreator(SHARE_MEDIA_GENERATION_COMPLETED);
+export const shareMediaGenerationFailed = makeActionCreator(SHARE_MEDIA_GENERATION_FAILED);
 export const showSnackbar = makeActionCreator(SNOW_SNACKBAR, 'message');
 export const debugSetPattern = makeActionCreator(DEBUG_SET_PATTERN, 'name');
 export const debugSetHistory = makeActionCreator(DEBUG_SET_HISTORY, 'name');
