@@ -116,8 +116,8 @@ android {
         applicationId "com.puyosimulator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
-        versionName "2.5.3"
+        versionCode 29
+        versionName "2.6.0"
 
         // https://stackoverflow.com/questions/36785014/the-number-of-method-references-in-a-dex-file-cannot-exceed-64k-api-17
         multiDexEnabled true
@@ -164,6 +164,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fs')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-share')
@@ -171,7 +172,6 @@ dependencies {
     implementation project(':react-native-snackbar')
     implementation project(':react-native-sentry')
     implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-view-shot')
     implementation project(':react-native-version-number')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-svg')

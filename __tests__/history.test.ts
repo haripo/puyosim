@@ -1,7 +1,7 @@
 import {
   createHistoryFromMinimumHistory,
   getCurrentPathRecords,
-  MinimumHistoryRecord
+  MinimumHistoryRecord, MoveHistoryRecord
 } from '../src/shared/models/history';
 
 describe('history', () => {
@@ -9,10 +9,10 @@ describe('history', () => {
     test('with simple history', () => {
       const queue = [[1, 2], [3, 4], [1, 2], [3, 4]];
       const history: MinimumHistoryRecord[] = [
-        { move: { rotation: 'top', col: 1 }, next: [1] },
-        { move: { rotation: 'bottom', col: 1 }, next: [2] },
-        { move: { rotation: 'left', col: 3 }, next: [3] },
-        { move: { rotation: 'right', col: 3 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+        { type: 'move', move: { rotation: 'bottom', col: 1 }, next: [2] },
+        { type: 'move', move: { rotation: 'left', col: 3 }, next: [3] },
+        { type: 'move', move: { rotation: 'right', col: 3 }, next: [] }
       ];
 
       const result = createHistoryFromMinimumHistory(history, queue);
@@ -56,12 +56,12 @@ describe('history', () => {
     test('with chain', () => {
       const queue = [[1, 1], [2, 2], [1, 1], [3, 3], [2, 2], [1, 1]];
       const history: MinimumHistoryRecord[] = [
-        { move: { rotation: 'top', col: 1 }, next: [1] },
-        { move: { rotation: 'top', col: 2 }, next: [2] },
-        { move: { rotation: 'top', col: 2 }, next: [3] },
-        { move: { rotation: 'top', col: 2 }, next: [4] },
-        { move: { rotation: 'top', col: 3 }, next: [5] },
-        { move: { rotation: 'top', col: 3 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [1] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [2] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [3] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [4] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [5] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [] }
       ];
 
       const result = createHistoryFromMinimumHistory(history, queue);
@@ -101,12 +101,12 @@ describe('history', () => {
     test('with branches', () => {
       const queue = [[1, 1], [2, 2], [1, 1], [3, 3], [2, 2], [1, 1]];
       const history: MinimumHistoryRecord[] = [
-        { move: { rotation: 'top', col: 1 }, next: [1, 2, 4] },
-        { move: { rotation: 'top', col: 1 }, next: [] },
-        { move: { rotation: 'top', col: 2 }, next: [3] },
-        { move: { rotation: 'top', col: 2 }, next: [] },
-        { move: { rotation: 'top', col: 3 }, next: [5] },
-        { move: { rotation: 'top', col: 3 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [1, 2, 4] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [3] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [5] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [] }
       ];
 
       const result = createHistoryFromMinimumHistory(history, queue);
@@ -140,22 +140,23 @@ describe('history', () => {
     test('' , () => {
       const queue = [[1, 1]];
       const history: MinimumHistoryRecord[] = [
-        { move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
-        { move: { rotation: 'top', col: 1 }, next: [] },
-        { move: { rotation: 'top', col: 2 }, next: [3] },
-        { move: { rotation: 'top', col: 3 }, next: [] },
-        { move: { rotation: 'top', col: 4 }, next: [5] },
-        { move: { rotation: 'top', col: 5 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [3] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 4 }, next: [5] },
+        { type: 'move', move: { rotation: 'top', col: 5 }, next: [] }
       ];
       const target = createHistoryFromMinimumHistory(history, queue);
 
       {
         const actual = getCurrentPathRecords(target, 3);
-        expect(actual[0].move).toBeNull();
-        expect(actual[1].move!.col).toEqual(0);
+        expect(actual[0].type).toBe("head");
+        expect(actual[1].type).toBe("move");
+        expect((actual[1] as MoveHistoryRecord).move.col).toEqual(0);
         expect(actual[1].next).toEqual([2]);
         expect(actual[1].defaultNext).toEqual(2);
-        expect(actual[2].move!.col).toEqual(2);
+        expect((actual[2] as MoveHistoryRecord).move.col).toEqual(2);
         expect(actual[2].next).toEqual([]);
         expect(actual[2].defaultNext).toBeNull();
       }
@@ -164,25 +165,25 @@ describe('history', () => {
     test('' , () => {
       const queue = [[1, 1]];
       const history: MinimumHistoryRecord[] = [
-        { move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
-        { move: { rotation: 'top', col: 1 }, next: [] },
-        { move: { rotation: 'top', col: 2 }, next: [3] },
-        { move: { rotation: 'top', col: 3 }, next: [] },
-        { move: { rotation: 'top', col: 4 }, next: [5] },
-        { move: { rotation: 'top', col: 5 }, next: [] }
+        { type: 'move', move: { rotation: 'top', col: 0 }, next: [1, 2, 4] },
+        { type: 'move', move: { rotation: 'top', col: 1 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 2 }, next: [3] },
+        { type: 'move', move: { rotation: 'top', col: 3 }, next: [] },
+        { type: 'move', move: { rotation: 'top', col: 4 }, next: [5] },
+        { type: 'move', move: { rotation: 'top', col: 5 }, next: [] }
       ];
       const target = createHistoryFromMinimumHistory(history, queue);
 
       {
         const actual = getCurrentPathRecords(target, 4);
-        expect(actual[0].move).toBeNull();
-        expect(actual[1].move!.col).toEqual(0);
+        expect(actual[0].type).toBe("head");
+        expect((actual[1] as MoveHistoryRecord).move.col).toEqual(0);
         expect(actual[1].next).toEqual([2]);
         expect(actual[1].defaultNext).toEqual(2);
-        expect(actual[2].move!.col).toEqual(2);
+        expect((actual[2] as MoveHistoryRecord).move.col).toEqual(2);
         expect(actual[2].next).toEqual([3]);
         expect(actual[2].defaultNext).toEqual(3);
-        expect(actual[3].move!.col).toEqual(3);
+        expect((actual[3] as MoveHistoryRecord).move.col).toEqual(3);
         expect(actual[3].next).toEqual([]);
         expect(actual[3].defaultNext).toBeNull();
       }

@@ -2,7 +2,7 @@
  * Component for render history-tree node
  */
 import React from 'react';
-import { isWeb, themeColor, themeLightColor } from '../../utils/constants';
+import { themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
 import compareWith from '../../utils/compareWith';
 import { Animated, Platform } from "react-native";
@@ -120,14 +120,14 @@ export default class HistoryTreeNode extends React.Component<Props, {}> {
 
     // Android では G 要素の onPress がとれなかったので、
     // onClick のみでよさそう
-    const eventName = isWeb ? 'onClick' : 'onPress';
+    const eventName = Platform.OS === 'web' ? 'onClick' : 'onPress';
     const events = {
       [eventName]: e => (onPress ? onPress(e) : null)
     };
 
     let x = isAnimatedValue(this.props.x) ? 0 : this.props.x;
 
-    if (isWeb) {
+    if (Platform.OS === 'web') {
       return (
         <G { ...events }>
           { this.renderFrame(x, y, nodeWidth, isCurrentNode, iconSize, events) }

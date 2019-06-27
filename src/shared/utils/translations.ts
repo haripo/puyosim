@@ -55,12 +55,17 @@ const translations = {
 
     // share
     share: '共有',
-    shareWholeHistory: 'すべての操作履歴をシェア',
-    shareCurrentHistory: '現在手までの操作履歴をシェア',
-    shareSnapshot: '現在のスナップショットをシェア',
-    shareWholeHistoryDescription: '分岐を含む全ての履歴と現在手のスナップショットを共有します。',
-    shareCurrentHistoryDescription: '分岐を含まない現在手までの履歴とスナップショットを共有します。',
-    shareSnapshotDescription: '現在のスナップショット画像のみ共有します。',
+    confirmShare: '確定',
+    shareMediaType: 'メディア形式',
+    shareMediaTypeNone: 'なし',
+    shareMediaTypeImage: '画像',
+    shareMediaTypeMovie: '動画',
+    shareUrlType: 'ぷよ譜 URL',
+    shareUrlTypeNone: 'なし',
+    shareUrlTypeSimple: 'あり',
+    shareProcessing: '処理中',
+    shareFailed: '共有に失敗しました',
+
     openInExistingAppAlert: 'URL を開きますか？既存の状態は破棄されます。',
 
     // archive
@@ -142,12 +147,17 @@ const translations = {
 
     // share
     share: 'Share',
-    shareWholeHistory: 'Share whole moves',
-    shareCurrentHistory: 'Share current moves',
-    shareSnapshot: 'Share a snapshot',
-    shareWholeHistoryDescription: 'Share a snapshot and whole moves including undo/redo branches.',
-    shareCurrentHistoryDescription: 'Share a snapshot and current moves.',
-    shareSnapshotDescription: 'Share a snapshot of the current field',
+    confirmShare: 'Confirm',
+    shareMediaType: 'Media',
+    shareMediaTypeNone: 'None',
+    shareMediaTypeImage: 'Image',
+    shareMediaTypeMovie: 'Movie',
+    shareUrlType: 'Simulator URL',
+    shareUrlTypeNone: 'No',
+    shareUrlTypeSimple: 'Yes',
+    shareProcessing: 'Processing',
+    shareFailed: 'Failed to share',
+
     openInExistingAppAlert: 'Are you sure to open URL? Existing chain will be overwritten.',
 
     // archive

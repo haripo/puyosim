@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noImplicitAny": false,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "allowSyntheticDefaultImports": true,
+    "lib": ["esnext"],
+    "typeRoots" : ["./node_modules/@types"] // ../node_modules/@types を無視するために必要
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "../node_modules"
+  ]
+}

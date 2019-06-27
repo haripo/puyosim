@@ -68,7 +68,7 @@ export async function deleteArchive(id: string) {
   return await collectionReference.doc(id).delete();
 }
 
-export async function requestLogin(): any {
+export async function requestLogin(): Promise<any> {
   const credential = await firebase.auth().signInAnonymously();
   console.info('uid: ', credential.user.uid);
   return credential;

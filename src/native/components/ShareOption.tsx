@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
-import { Image, ImageStyle, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Share from 'react-native-share';
 
-import { contentsMargin, themeLightColor } from '../../shared/utils/constants';
-import { PendingPair, ShareUrls } from "../../shared/selectors/simulatorSelectors";
+import { Button, Left, ListItem, Radio, Right, Text as NativeBaseText } from 'native-base';
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 // @ts-ignore
-import t from '../../shared/utils/i18n';
-import FieldCapturer from "./FieldCapturer";
-import { StackForRendering } from "../../shared/models/stack";
+import { PendingPair, StackForRendering } from "../../types";
+import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "../../shared/reducers/shareOption";
+import ModalIndicator from "../../shared/components/ModalIndicator";
+
+// @ts-ignore
+import { t } from "../../shared/utils/i18n";
 
 export type Props = {
+  shareOption: ShareOptionType,
+  isGenerating: boolean,
+
   stack: StackForRendering,
   ghosts: PendingPair
-  shareURLs: ShareUrls,
   hasEditRecord: boolean,
 
   puyoSkin: string,
   layout: Layout,
   layoutForCapturingField: Layout,
   theme: Theme,
+
+  onShareOptionChanged: (hasUrl: UrlShareType, hasMedia: MediaShareType) => void,
+  onSharePressed: () => void
 }
 
 type State = {}
@@ -30,113 +37,86 @@ export default class ShareOption extends Component<Props, State> {
     title: 'Share'
   });
 
-  capturer: FieldCapturer | null = null;
-
-  constructor(props) {
-    super(props);
-  }
-
-  async share(shareUrl: string | null) {
-    try {
-      if (this.capturer === null) {
-        return;
-      }
-      const imageUri = await this.capturer.capture();
-
-      // share
-      const shareOptions = {
-        url: imageUri,
-        message: shareUrl || undefined
-      };
-      const response = await Share.open(shareOptions);
-
-      if (response['message'] !== 'OK') {
-        // error
-        console.warn(response);
-      }
-    } catch (e) {
-      // handle error
-      console.warn(e)
-    }
-  }
-
-  async handleWholeSharePressed() {
-    return await this.share(this.props.shareURLs.whole);
-  }
-
-  async handleCurrentSharePressed() {
-    return await this.share(this.props.shareURLs.current);
-  }
-
-  async handleSnapshotSharePressed() {
-    return await this.share(null);
-  }
-
-  renderItem(title: string, description: string, image: any, handler: () => void) {
-    return (
-      <View style={ styles.shareCard }>
-        <TouchableOpacity onPress={ handler }>
-          <View style={ styles.description }>
-            <View style={ { flex: 1 } }>
-              <Text style={ styles.title }>
-                { title }
-              </Text>
-              <Text>
-                { description }
-              </Text>
-            </View>
-            <View style={ { flex: 0 } }>
-              <Image
-                source={ image }
-                style={ styles.image as ImageStyle }
-              />
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+  handleUrlOptionChanged(selected) {
+    this.props.onShareOptionChanged(
+      selected,
+      this.props.shareOption.hasMedia
     );
   }
 
+  handleMediaOptionChanged(selected) {
+    this.props.onShareOptionChanged(
+      this.props.shareOption.hasUrl,
+      selected
+    );
+  }
+
+  async handleSharePressed() {
+    this.props.onSharePressed();
+  }
+
   render() {
-    const captureViewStyle = {
-      left: this.props.layout.screen.width * 2, // off-screen
-      width: this.props.layoutForCapturingField.field.width,
-      height: this.props.layoutForCapturingField.field.height
-    };
-
+    const option = this.props.shareOption;
     return (
-      <View style={ styles.container }>
+      <SafeAreaView style={ styles.container }>
         <View style={ styles.contents }>
-          <ScrollView>
-            {/*{*/}
-              {/*this.renderItem(*/}
-                {/*t('shareWholeHistory'),*/}
-                {/*t('shareWholeHistoryDescription'),*/}
-                {/*require('../../../assets/share-whole-history.png'),*/}
-                {/*this.handleWholeSharePressed.bind(this))*/}
-            {/*}*/}
-            {
-              this.props.hasEditRecord ? null : this.renderItem(
-                t('shareCurrentHistory'),
-                t('shareCurrentHistoryDescription'),
-                require('../../../assets/share-single-history.png'),
-                this.handleCurrentSharePressed.bind(this))
-            }
-            {
-              this.renderItem(
-                t('shareSnapshot'),
-                t('shareSnapshotDescription'),
-                require('../../../assets/share-snapshot.png'),
-                this.handleSnapshotSharePressed.bind(this))
-            }
-          </ScrollView>
-        </View>
+            <ScrollView>
+              <Text style={ styles.radioTitle }>{ t('shareUrlType') }</Text>
+              <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'none') } style={ styles.radioItem }>
+                <Left>
+                  <Text>{ t('shareUrlTypeNone') }</Text>
+                </Left>
+                <Right>
+                  <Radio selected={ option.hasUrl === 'none' } />
+                </Right>
+              </ListItem>
+              <ListItem onPress={ this.handleUrlOptionChanged.bind(this, 'current') } style={ styles.radioItem }>
+                <Left>
+                  <Text>{ t('shareUrlTypeSimple') }</Text>
+                </Left>
+                <Right>
+                  <Radio selected={ option.hasUrl === 'current' } />
+                </Right>
+              </ListItem>
 
-        <FieldCapturer
-          ref={ ref => this.capturer = ref }
-          { ...this.props }
-        />
-      </View>
+              <Text style={ styles.radioTitle }>{ t('shareMediaType') }</Text>
+              <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'none') } style={ styles.radioItem }>
+                <Left>
+                  <Text>{ t('shareMediaTypeNone') }</Text>
+                </Left>
+                <Right>
+                  <Radio selected={ option.hasMedia === 'none' } />
+                </Right>
+              </ListItem>
+              <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'image') } style={ styles.radioItem }>
+                <Left>
+                  <Text>{ t('shareMediaTypeImage') }</Text>
+                </Left>
+                <Right>
+                  <Radio selected={ option.hasMedia === 'image' } />
+                </Right>
+              </ListItem>
+              <ListItem onPress={ this.handleMediaOptionChanged.bind(this, 'video') } style={ styles.radioItem }>
+                <Left>
+                  <Text>{ t('shareMediaTypeMovie') }</Text>
+                </Left>
+                <Right>
+                  <Radio selected={ option.hasMedia === 'video' } />
+                </Right>
+              </ListItem>
+            </ScrollView>
+            <Button
+              primary
+              full
+              style={ styles.shareButton }
+              onPress={ this.handleSharePressed.bind(this) }
+              disabled={ this.props.shareOption.hasMedia === 'none' && this.props.shareOption.hasUrl === 'none' }
+            >
+              <NativeBaseText>{ t('confirmShare') }</NativeBaseText>
+            </Button>
+        </View>
+        <ModalIndicator visible={ this.props.isGenerating } text={ t('shareProcessing') } />
+      </SafeAreaView>
     );
   }
 }
@@ -152,25 +132,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  shareCard: {
-    margin: contentsMargin,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 18,
-    paddingBottom: 8,
-    backgroundColor: themeLightColor
-  },
-  title: {
-    marginBottom: 6,
+  radioTitle: {
     fontSize: 14,
-    fontWeight: "bold"
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginTop: 20
   },
-  image: {
-    width: 80,
-    height: 80,
-    marginLeft: 20
+  radioItem: {
+    height: 54
   },
-  description: {
-    flexDirection: 'row'
+  shareButton: {
+    margin: 8,
   }
 });

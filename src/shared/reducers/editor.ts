@@ -7,7 +7,7 @@ import {
   UNDO_EDITOR_FIELD
 } from "../actions/actions";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
-import { Stack } from "../models/stack";
+import { Stack } from "../../types";
 
 export type EditorState = FieldState & {
   currentItem: number,

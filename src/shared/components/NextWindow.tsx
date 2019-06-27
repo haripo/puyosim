@@ -4,9 +4,9 @@
 import React, { PureComponent } from 'react';
 import { View, ViewStyle } from 'react-native';
 import Puyo from './Puyo';
-import { Pair } from "../models/stack";
 import { Theme } from "../selectors/themeSelectors";
 import { Layout } from "../selectors/layoutSelectors";
+import { Pair } from "../../types";
 
 export type Props = {
   next: Pair,

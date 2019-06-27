@@ -3,13 +3,11 @@ import { finishDroppingAnimations, vanishPuyos, } from '../../shared/actions/act
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import ShareModal from "../components/ShareModal";
-import { getShareURL } from "../../shared/selectors/simulatorSelectors";
 
 const mapStateToProps = (state) => {
   return {
     layout: getLayout(state.layout),
     theme: getTheme(state.theme),
-    shareURLs: getShareURL(state.simulator)
   };
 };
 

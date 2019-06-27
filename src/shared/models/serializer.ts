@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import { HistoryRecord, MinimumHistoryRecord } from "./history";
-import { isEqualMove, Move } from "./move";
-import { fieldCols, fieldRows } from "../utils/constants";
+import { isEqualMove } from "./move";
+import { Move } from "../../types";
+
+// TODO: refactoring constants
+export const fieldRows = 13;
+export const fieldCols = 6;
 
 const chars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 

@@ -1,13 +1,15 @@
-import _ from 'lodash';
-import { fieldCols, fieldRows } from "../utils/constants";
-import { DroppingPlan, VanishingPlan } from "./ChainPlanner";
-import { getFirstCol, getSecondCol, Move } from "./move";
-import { PendingPairPuyo, PuyoConnection } from "../selectors/simulatorSelectors";
+import * as _ from 'lodash';
 
-export type Stack = number[][];
-export type Color = 0 | 1 | 2 | 3 | 4 | 5;
-export type Position = { row: number, col: number };
-export type Pair = number[]; // use Color[]
+import { DroppingPlan, VanishingPlan } from "./ChainPlanner";
+import { getFirstCol, getSecondCol } from "./move";
+import { Color, Pair, Stack, Position, PendingPairPuyo, StackForRendering, Move } from "../../types";
+
+// functions から参照するためにいったん消した.
+// utils/constants は react-native に依存しているので functions から使えない
+// import { fieldCols, fieldRows } from "../utils/constants";
+// TODO: refactoring constants
+export const fieldRows = 13;
+export const fieldCols = 6;
 
 export const connectableColors = new Set([1, 2, 3, 4, 5]);
 
@@ -114,17 +116,6 @@ export function applyVanishPlans(stack: Stack, plans: VanishingPlan[]): Stack {
   }
   return stack;
 }
-
-
-export type PuyoForRendering = {
-  row: number,
-  col: number,
-  color: Color,
-  connections: PuyoConnection
-  isDropping: boolean
-}
-
-export type StackForRendering = PuyoForRendering[][];
 
 export function getStackForRendering(stack: Stack, droppings): StackForRendering {
   const isDropping = (row, col) => {

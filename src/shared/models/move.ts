@@ -1,15 +1,9 @@
-import { fieldCols } from '../utils/constants';
+import { Move, Rotation } from "../../types";
 
+// TODO: refactoring constants
+const fieldCols = 6;
 const defaultCol = 2;
 const defaultRotation = 'top';
-
-export type Rotation = 'top' | 'right' | 'bottom' | 'left';
-
-export type Move = {
-  col: number,
-  rotation: Rotation,
-};
-
 
 function rotate(move: Move, direction: number): Move {
   const rotations: Rotation[] = ['top', 'right', 'bottom', 'left'];

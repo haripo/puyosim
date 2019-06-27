@@ -1,21 +1,19 @@
 import { connect } from 'react-redux';
 import ShareOption from "../components/ShareOption";
-import {
-  getGhostForSnapshot,
-  getShareURL,
-  getStackForSnapshot,
-  hasEditRecord
-} from "../../shared/selectors/simulatorSelectors";
+import { getGhostForSnapshot, getStackForSnapshot, hasEditRecord } from "../../shared/selectors/simulatorSelectors";
 import { getLayout, getLayoutForCapturingField } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
+import { State } from "../../shared/reducers";
+import { changeShareOption, shareConfirmed } from "../../shared/actions/actions";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
+    shareOption: state.shareOption.shareOption,
+    hasEditRecord: hasEditRecord(state.simulator),
+    isGenerating: state.shareOption.isGenerating,
+
     stack: getStackForSnapshot(state.simulator),
     ghosts: getGhostForSnapshot(state.simulator),
-
-    shareURLs: getShareURL(state.simulator),
-    hasEditRecord: hasEditRecord(state.simulator),
 
     puyoSkin: state.config.puyoSkin as string,
     layout: getLayout(state.layout),
@@ -26,6 +24,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onShareOptionChanged: (hasUrl, hasMedia) => {
+      dispatch(changeShareOption({ hasUrl, hasMedia }));
+    },
+    onSharePressed: () => {
+      dispatch(shareConfirmed());
+    }
   };
 };
 

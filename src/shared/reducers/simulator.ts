@@ -19,7 +19,7 @@ import {
   ROTATE_HIGHLIGHTS_RIGHT,
   UNDO_FIELD
 } from '../actions/actions';
-import { getDefaultMove, Move, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
+import { getDefaultMove, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
 import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
 import { generateQueue } from '../models/queue';
@@ -41,6 +41,7 @@ import { Archive } from "../utils/OnlineStorageService";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
 import { State } from "./index";
 import { ConfigState } from "./config";
+import { Move } from "../../types";
 
 export type SimulatorState = FieldState & {
   queue: number[][],
