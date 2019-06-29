@@ -224,7 +224,7 @@ export function createHistoryFromMinimumHistory(
         const pair = queue[(numHands - 1) % queue.length];
         const splitHeight = getSplitHeight(resultRecords[prev].stack, record.move);
 
-        let currentStack = resultRecords[prev].stack;
+        let currentStack = _.cloneDeep(resultRecords[prev].stack);
         createChainPlan(currentStack, fieldRows, fieldCols); // emulate chain
         currentStack = setPair(currentStack, record.move, pair);
 
@@ -245,7 +245,6 @@ export function createHistoryFromMinimumHistory(
           defaultNext: record.next.length > 0 ? record.next[0] + 1 : null,
           prev: prev
         });
-
 
         break;
       }
