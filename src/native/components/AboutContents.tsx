@@ -36,7 +36,7 @@ export default class AboutContents extends Component<Props, {}> {
     return (
       <View style={ styles.component }>
         <View style={ styles.row }>
-          <Text style={ styles.title }>puyosim { VersionNumber.appVersion }</Text>
+          <Text style={ styles.title }>rensim { VersionNumber.appVersion }</Text>
         </View>
         <View style={ styles.row }>
           <Button onPress={ () => Linking.openURL(AboutContents.websiteURL) }

@@ -63,7 +63,7 @@ type State = {
 
 export default class Simulator extends Component<Props & NavigationScreenProps, State> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'puyosim',
+    title: 'rensim',
     headerRight: (
       <TouchableOpacity
         style={{ marginRight: 10 }}
