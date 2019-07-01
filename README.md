@@ -1,4 +1,4 @@
-# puyosim
+# rensim (formerly known as puyosim)
 
 App for practicing Puyopuyo.
 http://puyos.im
