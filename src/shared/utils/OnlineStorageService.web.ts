@@ -8,8 +8,8 @@ type ArchivePlay = {
   score: number,
   history: string,
   historyIndex: number,
-  createdAt: Date,
-  updatedAt: Date,
+  createdAt: any,
+  updatedAt: any,
 };
 
 export type ArchiveRequestPayload = {

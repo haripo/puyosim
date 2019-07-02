@@ -68,6 +68,7 @@ export default class SaveModal extends Component<Props & NavigationScreenProps<P
     const title = this.state.title || 'No title';
     const params = this.props.navigation.state.params;
     const editItem = params ? params['editItem'] : {};
+    // @ts-ignore
     this.props.onSavePressed({
       ...editItem,
       title

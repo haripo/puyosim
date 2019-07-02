@@ -26,7 +26,7 @@ export default class WebToolbar extends React.Component<Props, {}> {
               onPress={ this.handleSharePressed.bind(this) }
               style={ styles.navigationItem }
             >
-              { t('share') }
+              <span style={{ color: "white" }}>{ t('share') }</span>
             </Text>
           </View>
         </View>

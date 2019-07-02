@@ -12,7 +12,6 @@ import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
 import { HotKeys } from 'react-hotkeys';
 import WebToolbar from './WebToolbar';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
@@ -23,8 +22,8 @@ import ViewerControls from "../../shared/components/ViewerControls";
 // TODO: https://github.com/vitalets/react-native-extended-stylesheet
 // import MediaQuery from "react-native-web-responsive";
 
-import { StackForRendering } from "../../shared/models/stack";
 import ChainResult from "../../shared/components/ChainResult";
+import { PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 
 export type Props = {
   match: any,

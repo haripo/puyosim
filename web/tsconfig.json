@@ -1,0 +1,31 @@
+// tsconfig for native build
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noEmit": false,
+    "strict": true,
+    "isolatedModules": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "jsx": "react",
+    "lib": ["esnext", "es5", "es6", "dom"],
+    "types": ["react", "react-native", "jest"],
+    "noErrorTruncation": true,
+    "sourceMap": true
+  },
+  "include": [
+    "../src/**/*.ts",
+    "../src/**/*.web.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../node_modules",
+    "../functions",
+    "../src/native",
+    "../src/**/*.native.ts"
+  ]
+}

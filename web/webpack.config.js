@@ -12,6 +12,9 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'src/shared'),
     path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
     path.resolve(appDirectory, 'node_modules/react-native-sentry'),
+    path.resolve(appDirectory, 'node_modules/react-native-fs'),
+    path.resolve(appDirectory, 'node_modules/react-native-share'),
+    // path.resolve(appDirectory, 'node_modules'),
   ],
   use: {
     loader: 'babel-loader',
@@ -49,19 +52,13 @@ const fontLoaderConfiguration = {
 const tsLoaderConfiguration = {
   test: /\.tsx?$/,
   exclude: [
-    "/node_modules/"
+    /node_modules/,
+    /test\.ts/
   ],
   use: {
     loader: 'ts-loader',
     options: {
-      compilerOptions: {
-        allowJs: true,
-        target: "ES5",
-        module: "es2015",
-        jsx: "react",
-        outDir: "web/public",
-        lib: ["dom", "ES2017"],
-      }
+      configFile: path.resolve(appDirectory, 'web/tsconfig.json')
     }
   }
 };
