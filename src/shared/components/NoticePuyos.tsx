@@ -22,9 +22,9 @@ export default class NoticePuyos extends Component<Props, {}> {
       1,
       6,
       30,
-      200,
-      300,
-      400
+      180,
+      360,
+      720
     ];
 
     this.images = [
@@ -54,7 +54,7 @@ export default class NoticePuyos extends Component<Props, {}> {
     const counts = Math.floor(this.props.score / this.rate);
     const puyos = this.getRenderNoticePuyos(counts);
     return puyos.map((type, index) => {
-      const style = [styles.puyo, { left: index * 16 + contentsPadding }];
+      const style = [styles.puyo, { left: index * 24 + contentsPadding }];
       return (
         <Image source={ this.images[type] } style={ style as ImageStyle } key={ index }/>
       );
