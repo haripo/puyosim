@@ -8,19 +8,11 @@ import {
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
-import Share from "react-native-share";
-import fs from 'react-native-fs';
-
 // @ts-ignore
 import { captureException } from "../utils/Sentry";
-
 // @ts-ignore
 import { t } from "../utils/i18n";
-
-type ShareParams = {
-  url: string | null,
-  message: string | null
-};
+import { fetchRemoteMedia, openShare } from "../utils/share.common";
 
 function fetchMediaUrl(state: State, mediaType: MediaShareType) {
   switch (mediaType) {
@@ -35,31 +27,19 @@ function fetchMediaUrl(state: State, mediaType: MediaShareType) {
 function* share() {
   try {
     const option: ShareOption = yield select<(State) => ShareOption>(state => state.shareOption.shareOption);
-
-    let shareParam: ShareParams = {
-      url: null,
-      message: "#puyosim "
-    };
+    let url: string | null = null;
+    let message: string | null = null;
 
     if (option.hasUrl === "current") {
-      shareParam.message = yield select<(State) => string>(getShareUrl);
+      message = yield select<(State) => string>(getShareUrl);
     }
 
     if (option.hasMedia !== 'none') {
       try {
-        const url = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
-
-        // 画像は base64 で受け渡ししてもシェアできるが，動画はファイルでないとうまくいかない
-        // （Twitter は拡張子によってファイル形式が判別するらしく，base64 で共有すると動画と認識してくれない）
-        const cacheFilePath = fs.CachesDirectoryPath + (option.hasMedia === 'video' ? '/cache.mp4' : '/cache.gif');
-        const { promise } = fs.downloadFile({
-          fromUrl: url,
-          toFile: cacheFilePath,
-        });
-
-        // wait download completed
-        yield call(() => promise);
-        shareParam.url = 'file://' + cacheFilePath;
+        const remoteUrl = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));
+        const extension = option.hasMedia === 'video' ? 'mp4' : 'gif';
+        const cacheFilePath = yield call(() => fetchRemoteMedia(remoteUrl, extension));
+        url = 'file://' + cacheFilePath;
       } catch (e) {
         yield put(showSnackbar(t('shareFailed')));
         console.error(e);
@@ -71,15 +51,7 @@ function* share() {
 
     yield put(shareMediaGenerationCompleted());
 
-    // なぜか setTimeout にしないと iOS でシェアできない
-    const shareResponse = yield call(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(Share.open(shareParam));
-        }, 1);
-      });
-    });
-
+    const shareResponse = yield call(() => openShare(url, message));
     if (shareResponse['message'] !== 'OK') {
       console.warn(shareResponse);
     }
