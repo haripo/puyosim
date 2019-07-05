@@ -1,3 +1,3 @@
-export async function getMinimumSupportedAppVersion() {
+export async function getMinimumSupportedAppVersion(): Promise<string | null> {
   return null;
 }

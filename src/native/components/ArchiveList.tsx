@@ -146,7 +146,7 @@ export default class ArchiveList extends Component<Props & NavigationScreenProps
               { item.title }
             </Text>
             <Text style={ styles.lastModified }>
-              { t('lastModified') }: { formatDateTime(item.play.updatedAt.toDate()) }
+              { t('lastModified') }: { formatDateTime(item.play.updatedAt) }
             </Text>
             <Text style={ styles.stats }>
               { item.play.maxChain } chain, { item.play.score } pts.

@@ -1,4 +1,4 @@
-// tsconfig for native build
+// tsconfig for web build
 {
   "compilerOptions": {
     "target": "es5",
@@ -22,7 +22,6 @@
     "../src/**/*.web.ts"
   ],
   "exclude": [
-    "node_modules",
     "../node_modules",
     "../functions",
     "../src/native",
