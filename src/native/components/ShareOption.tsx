@@ -5,13 +5,10 @@ import Share from 'react-native-share';
 import { Button, Left, ListItem, Radio, Right, Text as NativeBaseText } from 'native-base';
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
-// @ts-ignore
 import { PendingPair, StackForRendering } from "../../types";
 import { MediaShareType, ShareOption as ShareOptionType, UrlShareType } from "../../shared/reducers/shareOption";
 import ModalIndicator from "../../shared/components/ModalIndicator";
-
-// @ts-ignore
-import { t } from "../../shared/utils/i18n";
+import { t } from "../../shared/platformServices/i18n";
 
 export type Props = {
   shareOption: ShareOptionType,

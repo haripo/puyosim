@@ -1,8 +1,5 @@
 import firebase from "react-native-firebase";
-import { Sentry } from "react-native-sentry";
-
-// @ts-ignore
-import { captureException } from "./Sentry";
+import { captureException } from "../sentry";
 
 export async function getMinimumSupportedAppVersion() {
   try {

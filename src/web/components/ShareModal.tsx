@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { themeLightColor } from "../../shared/utils/constants";
-// @ts-ignore
-import t from '../../shared/utils/i18n';
+import { t } from '../../shared/platformServices/i18n';
 
 export type Props = {
   // shareURLs: ShareUrls

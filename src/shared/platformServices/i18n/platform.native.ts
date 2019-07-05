@@ -1,6 +1,6 @@
 import RNLanguages from 'react-native-languages';
 import i18n from 'i18n-js';
-import translations from './translations';
+import translations from '../../utils/translations';
 
 i18n.locale = RNLanguages.language;
 

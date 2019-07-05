@@ -4,12 +4,9 @@ import { contentsMargin, contentsPadding, themeLightColor } from "../../shared/u
 import IconButton from "../../shared/components/IconButton";
 import * as _ from "lodash";
 import { NavigationScreenProps } from "react-navigation";
-// @ts-ignore
-import t from '../../shared/utils/i18n';
-// @ts-ignore
-import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
-
-import { EventTracker } from "../../shared/utils/EventTracker.common";
+import { t } from '../../shared/platformServices/i18n';
+import { EventTracker } from "../../shared/platformServices/eventTracker";
+import { ArchiveRequestPayload } from "../../types";
 
 export type Props = NavigationScreenProps & {
   score: number,

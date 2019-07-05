@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { NavigationScreenProps } from "react-navigation";
-import { themeColor, themeLightColor } from "../../shared/utils/constants";
-
-// @ts-ignore
-import { t } from "../../shared/utils/i18n";
-
-// @ts-ignore
-import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
-import Icon from "./Simulator";
+import { themeLightColor } from "../../shared/utils/constants";
+import { t } from "../../shared/platformServices/i18n";
+import { ArchiveRequestPayload } from "../../types";
 
 export type Props = {
   componentId: string,

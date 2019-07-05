@@ -6,11 +6,8 @@ import { deserializeHistoryRecords, serializeHistoryRecords } from "../models/se
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
-// @ts-ignore
-import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
-// @ts-ignore
-import { captureException } from "../utils/Sentry";
-import { Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { captureException } from "../platformServices/sentry";
+import { ArchiveRequestPayload, Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;

@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import SettingsList from 'react-native-settings-list';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { defaultValues } from '../../shared/models/config';
-
-// @ts-ignore
-import t from '../../shared/utils/i18n';
-import {
-  NavigationRoute,
-  NavigationScreenConfigProps,
-  NavigationScreenProp,
-  NavigationScreenProps
-} from "react-navigation";
+import { t } from '../../shared/platformServices/i18n';
+import { NavigationScreenProps } from "react-navigation";
 
 function evalItem(configItem, config) {
   if (typeof configItem === 'function') {

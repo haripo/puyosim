@@ -7,14 +7,12 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
 import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-// @ts-ignore
-import t from '../../shared/utils/i18n';
+import { t } from '../../shared/platformServices/i18n';
 import { Layout } from "../../shared/selectors/layoutSelectors";
 import { Theme } from "../../shared/selectors/themeSelectors";
 import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
 import firebase from 'react-native-firebase';
-// @ts-ignore
-import { getMinimumSupportedAppVersion } from "../../shared/utils/RemoteConfig";
+import { getMinimumSupportedAppVersion } from "../../shared/platformServices/remoteConfig";
 import VersionNumber from "react-native-version-number";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import SplashScreen from 'react-native-splash-screen'

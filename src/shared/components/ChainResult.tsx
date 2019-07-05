@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
-
-// @ts-ignore
-import t from '../utils/i18n';
+import { t } from '../platformServices/i18n';
 
 type Props = {
   chain: number,

@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-export async function loadConfig() {
+export async function loadConfig(): Promise<any> {
   const c = await AsyncStorage.getItem('config') || '{}';
   return JSON.parse(c);
 }
 
-export async function saveConfig(key: string, value: string) {
+export async function saveConfig(key: string, value: string): Promise<void> {
   let configStr = await AsyncStorage.getItem('config');
   let config = {};
   if (configStr !== null) {

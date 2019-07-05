@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { webToolbarSize, themeColor, themeLightColor } from '../../shared/utils/constants';
 
-// @ts-ignore
-import t from '../../shared/utils/i18n';
+import { t } from '../../shared/platformServices/i18n';
 
 type Props = {
   onSharePressed: () => void

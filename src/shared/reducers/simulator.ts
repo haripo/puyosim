@@ -25,23 +25,23 @@ import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelect
 import { generateQueue } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
-  appendHistoryRecord, createEditHistoryRecord,
+  appendHistoryRecord,
+  createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
   createInitialHistoryRecord,
   History,
-  HistoryRecord, reindexDefaultNexts
+  HistoryRecord,
+  reindexDefaultNexts
 } from '../models/history';
 import { createField, getSplitHeight, setPair } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import _ from 'lodash';
-// @ts-ignore
-import { Archive } from "../utils/OnlineStorageService";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
 import { State } from "./index";
 import { ConfigState } from "./config";
-import { Move } from "../../types";
+import { Archive, Move } from "../../types";
 
 export type SimulatorState = FieldState & {
   queue: number[][],

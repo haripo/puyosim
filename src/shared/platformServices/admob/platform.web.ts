@@ -1,14 +1,10 @@
-abstract class Ad {
-  abstract show(): void;
-}
+import { AdInterface } from "./index";
 
-class InterstitialAd extends Ad {
+class InterstitialAd implements AdInterface {
   private readonly ad;
   private readonly unitId;
 
   constructor(unitId: string) {
-    super();
-
     this.unitId = unitId;
     // this.ad = firebase.admob().interstitial(this.unitId);
     this.load();
@@ -30,7 +26,7 @@ class InterstitialAd extends Ad {
   }
 }
 
-class NoopAd extends Ad {
+class NoopAd implements AdInterface {
   show() {
   }
 }
@@ -45,6 +41,7 @@ function getReloadAd() {
   //   default:
   //     return new NoopAd();
   // }
+  return new NoopAd();
 }
 
-export const reloadAd = getReloadAd();
+export const reloadAd: AdInterface = getReloadAd();

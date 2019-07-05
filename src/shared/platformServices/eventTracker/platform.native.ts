@@ -1,6 +1,6 @@
 import firebase from "react-native-firebase";
 
-export function sendEvent(type: string, params: any): void {
+export function sendEvent(type: string, params?: any): void {
   firebase.analytics().logEvent(type, params);
 }
 

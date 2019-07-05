@@ -8,11 +8,9 @@ import {
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
 import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
-// @ts-ignore
-import { captureException } from "../utils/Sentry";
-// @ts-ignore
-import { t } from "../utils/i18n";
-import { fetchRemoteMedia, openShare } from "../utils/share.common";
+import { captureException } from "../platformServices/sentry";
+import { t } from "../platformServices/i18n";
+import { fetchRemoteMedia, openShare } from "../platformServices/share";
 
 function fetchMediaUrl(state: State, mediaType: MediaShareType) {
   switch (mediaType) {

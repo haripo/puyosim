@@ -17,12 +17,10 @@ import { Layout } from "../../shared/selectors/layoutSelectors";
 import Field from "../../shared/components/Field";
 import _ from 'lodash';
 import { getStackForRendering } from "../../shared/models/stack";
-// @ts-ignore
-import t, { formatDateTime } from '../../shared/utils/i18n';
-// @ts-ignore
-import { Archive } from "../../shared/utils/OnlineStorageService";
+import { t, formatDateTime } from '../../shared/platformServices/i18n';
 import Loading from "../../shared/components/Loading";
 import { NavigationScreenProps } from "react-navigation";
+import { Archive } from "../../types";
 
 export interface Props {
   componentId: string,

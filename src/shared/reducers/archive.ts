@@ -1,12 +1,11 @@
 import {
   DELETE_ARCHIVE_FINISHED,
-  EDIT_ARCHIVE_FINISHED, LOAD_ARCHIVE, LOAD_ARCHIVE_LIST_FIRST_PAGE,
+  EDIT_ARCHIVE_FINISHED,
+  LOAD_ARCHIVE_LIST_FIRST_PAGE,
   LOAD_ARCHIVE_LIST_FIRST_PAGE_FINISHED,
   LOAD_ARCHIVE_LIST_NEXT_PAGE_FINISHED
 } from "../actions/actions";
-
-// @ts-ignore
-import { Archive } from "../utils/OnlineStorageService";
+import { Archive } from "../../types";
 
 export type ArchiveState = {
   archives: { [id: string]: Archive },

@@ -14,7 +14,18 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'node_modules/react-native-sentry'),
     path.resolve(appDirectory, 'node_modules/react-native-fs'),
     path.resolve(appDirectory, 'node_modules/react-native-share'),
-    // path.resolve(appDirectory, 'node_modules'),
+
+    // native-base
+    path.resolve(appDirectory, 'node_modules/native-base-shoutem-theme'),
+    path.resolve(appDirectory, 'node_modules/react-navigation'),
+    path.resolve(appDirectory, 'node_modules/react-native-easy-grid'),
+    path.resolve(appDirectory, 'node_modules/react-native-drawer'),
+    path.resolve(appDirectory, 'node_modules/react-native-safe-area-view'),
+    path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
+    path.resolve(appDirectory, 'node_modules/react-native-keyboard-aware-scroll-view'),
+    path.resolve(appDirectory, 'node_modules/react-native-web'),
+    path.resolve(appDirectory, 'node_modules/react-native-tab-view'),
+    path.resolve(appDirectory, 'node_modules/static-container'),
   ],
   use: {
     loader: 'babel-loader',
@@ -87,7 +98,8 @@ module.exports = {
     extensions: ['.web.js', '.js', '.ts', '.tsx', '.web.ts', '.web.tsx'],
     alias: {
       'react-native-svg': 'react-native-svg-web',
-      'react-native': 'react-native-web'
+      'react-native': 'react-native-web',
+      'react-native/Libraries/Renderer/shims/ReactNativePropRegistry': 'react-native-web/dist/modules/ReactNativePropRegistry',
     }
   },
   devServer: {
