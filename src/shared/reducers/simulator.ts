@@ -21,15 +21,14 @@ import {
 } from '../actions/actions';
 import { getDefaultMove, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
-import { generateQueue } from '../models/queue';
+import { generateQueue, getCurrentHand } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
   appendHistoryRecord,
   createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
-  createInitialHistoryRecord,
+  createInitialHistoryRecord, getDefaultNextMove,
   History,
   HistoryRecord,
   reindexDefaultNexts
@@ -81,7 +80,7 @@ function moveHighlightsRight(state: SimulatorState, action) {
 }
 
 function putNextPair(state: SimulatorState, action) {
-  const hand = getCurrentHand(state);
+  const hand = getCurrentHand(state.queue, state.numHands);
   const move = state.pendingPair;
   const prevStack = state.stack;
   const splitHeight = getSplitHeight(prevStack, move);

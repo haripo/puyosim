@@ -1,4 +1,4 @@
-import { applyDropPlans, applyVanishPlans, createField } from "../models/stack";
+import { applyDropPlans, applyVanishPlans, createField, hasDroppingPuyo } from "../models/stack";
 import { fieldCols, fieldRows } from "../utils/constants";
 import {
   APPLY_GRAVITY,
@@ -8,7 +8,6 @@ import {
 } from "../actions/actions";
 import { DroppingPlan, getDropPlan, getVanishPlan, VanishingPlan } from "../models/chainPlanner";
 import { calcChainStepScore } from "../models/score";
-import { hasDroppingPuyo } from "../selectors/fieldSelectors";
 import { Stack } from "../../types";
 
 export type FieldState = {
@@ -31,7 +30,7 @@ export type FieldState = {
 function runChainAnimation(state: FieldState, action) {
   // エディットによって 4 連結のぷよが浮いている状態にしたとき、
   // アニメーションが落下を先に処理するか消去を先に処理するかがここで決定されている
-  if (hasDroppingPuyo(state)) {
+  if (hasDroppingPuyo(state.stack)) {
     return applyGravity(state, {});
   }
   return vanishPuyos(state, {});

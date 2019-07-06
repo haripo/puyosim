@@ -65,20 +65,3 @@ export const getStack = createSelector(
 function _getStack(stack, droppings): StackForRendering {
   return getStackForRendering(stack, droppings);
 }
-
-
-export const hasDroppingPuyo = createSelector(
-  [
-    (state: FieldState) => state.stack
-  ],
-  (stack: Stack) => {
-    for (let i = 0; i < fieldCols; i++) {
-      for (let j = 1; j < fieldRows; j++) {
-        if (stack[j - 1][i] !== 0 && stack[j][i] === 0) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-);

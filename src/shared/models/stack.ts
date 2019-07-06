@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import { DroppingPlan, VanishingPlan } from "./ChainPlanner";
 import { getFirstCol, getSecondCol } from "./move";
-import { Color, Pair, Stack, Position, PendingPairPuyo, StackForRendering, Move } from "../../types";
+import { Color, Move, Pair, PendingPairPuyo, Position, Stack, StackForRendering } from "../../types";
 
 // functions から参照するためにいったん消した.
 // utils/constants は react-native に依存しているので functions から使えない
@@ -148,4 +148,16 @@ export function getStackForRendering(stack: Stack, droppings): StackForRendering
       };
     });
   });
+}
+
+
+export function hasDroppingPuyo(stack: Stack): boolean {
+  for (let i = 0; i < fieldCols; i++) {
+    for (let j = 1; j < fieldRows; j++) {
+      if (stack[j - 1][i] !== 0 && stack[j][i] === 0) {
+        return true;
+      }
+    }
+  }
+  return false;
 }

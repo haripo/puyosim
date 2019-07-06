@@ -8,6 +8,7 @@ import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
 import { captureException } from "../platformServices/sentry";
 import { ArchiveRequestPayload, Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { getCurrentHand } from "../models/queue";
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -15,23 +16,6 @@ export function canUndo(state: SimulatorState): boolean {
 
 export function canRedo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].next.length > 0;
-}
-
-export function getDefaultNextRecord(state: SimulatorState): HistoryRecord | null {
-  const next = state.history[state.historyIndex].defaultNext;
-  if (!next) {
-    return null;
-  }
-  return state.history[next];
-}
-
-export function getDefaultNextMove(state: SimulatorState): Move {
-  const nextRecord = getDefaultNextRecord(state);
-  if (nextRecord && nextRecord.type === 'move') {
-    return nextRecord.move;
-  } else {
-    return getDefaultMove();
-  }
 }
 
 export function getGhost(state: SimulatorState): PendingPairPuyo[] {
@@ -59,35 +43,35 @@ export const getPreviousHand = createSelector(
   (queue, numHands) => queue[(numHands - 1) % queue.length]
 );
 
-export const getCurrentHand = createSelector(
+export const getCurrentHandSelector = createSelector(
   [
     (state: SimulatorState) => state.queue,
     (state: SimulatorState) => state.numHands
   ],
-  (queue, numHands) => queue[numHands % queue.length]
+  getCurrentHand
 );
 
 export const getNextHand = createSelector(
   [
     (state: SimulatorState) => state.queue,
-    (state: SimulatorState) => state.numHands
+    (state: SimulatorState) => state.numHands + 1
   ],
-  (queue, numHands) => queue[(numHands + 1) % queue.length]
+  getCurrentHand
 );
 
 export const getDoubleNextHand = createSelector(
   [
     (state: SimulatorState) => state.queue,
-    (state: SimulatorState) => state.numHands
+    (state: SimulatorState) => state.numHands + 2
   ],
-  (queue, numHands) => queue[(numHands + 2) % queue.length]
+  getCurrentHand
 );
 
 
 const _getPendingPair = state => state.pendingPair;
 
 export const getPendingPair = createSelector(
-  [_getPendingPair, getCurrentHand],
+  [_getPendingPair, getCurrentHandSelector],
   (pair, hand): PendingPair => {
     let secondRow = 1;
     if (pair.rotation === 'bottom') {
@@ -122,7 +106,7 @@ export const getDropPositions = createSelector(
   [
     (state: SimulatorState) => state.stack,
     (state: SimulatorState) => state.pendingPair,
-    (state: SimulatorState) => getCurrentHand(state)
+    (state: SimulatorState) => getCurrentHandSelector(state)
   ],
   getDropPositionsStack
 );
