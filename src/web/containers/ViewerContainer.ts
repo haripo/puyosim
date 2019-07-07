@@ -38,7 +38,11 @@ const mapStateToProps = (state) => {
     canRedo: canRedo(state.simulator),
     layout: getLayout(state.layout),
     theme: getTheme(state.theme),
-    mode: 'view'
+    mode: 'view',
+
+    score: state.simulator.score,
+    chainScore: state.simulator.chainScore,
+    chain: state.simulator.chain,
   };
 };
 
