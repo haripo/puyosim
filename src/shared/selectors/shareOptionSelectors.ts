@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { SimulatorState } from "../reducers/simulator";
 import { State } from "../reducers";
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords } from "../models/history";
@@ -23,7 +22,20 @@ function createQuery(params) {
   return str.join("&");
 }
 
-export const getShareUrl = createSelector(
+export const getWholePathShareUrl = createSelector(
+  [
+    (state: State) => state.simulator.queue,
+    (state: State) => state.simulator.history,
+    (state: State) => state.simulator.historyIndex
+  ],
+  (queue, history, historyIndex) => {
+    const q = serializeQueue(queue);
+    const current = serializeHistoryRecords(history);
+    return createShareURL(q, current);
+  }
+);
+
+export const getCurrentPathShareUrl = createSelector(
   [
     (state: State) => state.simulator.queue,
     (state: State) => state.simulator.history,

@@ -6,7 +6,7 @@ import {
   showSnackbar
 } from "../actions/actions";
 import { MediaShareType, ShareOption } from "../reducers/shareOption";
-import { getHistoryMovieUrl, getShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
+import { getHistoryMovieUrl, getWholePathShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
 import { State } from "../reducers";
 import { captureException } from "../platformServices/sentry";
 import { t } from "../platformServices/i18n";
@@ -29,7 +29,7 @@ function* share() {
     let message: string | null = null;
 
     if (option.hasUrl === "current") {
-      message = yield select<(State) => string>(getShareUrl);
+      message = yield select<(State) => string>(getWholePathShareUrl);
     }
 
     if (option.hasMedia !== 'none') {
