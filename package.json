@@ -9,7 +9,7 @@
     "native:typecheck": "tsc",
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
-    "web:deploy": "npm run web:build && firebase deploy --project puyosim-web",
+    "web:deploy": "npm run web:build && firebase deploy --project puyosim-web --only hosting",
     "test": "jest"
   },
   "dependencies": {
