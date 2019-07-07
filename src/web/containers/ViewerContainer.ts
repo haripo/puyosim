@@ -6,6 +6,7 @@ import {
   moveHistory,
   reconstructHistory,
   redoField,
+  runChainAnimation,
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -45,26 +46,26 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onUndoSelected: () => {
       dispatch(undoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
       dispatch(reconstructHistory(history, queue, index))
     },
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
+      dispatch(finishVanishingAnimations('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
+      dispatch(finishDroppingAnimations('simulator'));
+      dispatch(vanishPuyos('simulator'));
     }
   };
 };
