@@ -10,6 +10,10 @@
       {
         "source": "/@(s|v)",
         "destination": "/simulator.html"
+      },
+      {
+        "source": "/img",
+        "function": "renderGif"
       }
     ]
   },
@@ -20,3 +24,4 @@
     ]
   }
 }
+

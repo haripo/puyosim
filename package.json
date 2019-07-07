@@ -10,6 +10,8 @@
     "web:start": "NODE_ENV=development webpack-dev-server --mode development --config web/webpack.config.js --watch",
     "web:build": "NODE_ENV=production webpack --config web/webpack.config.js --mode production",
     "web:deploy": "npm run web:build && firebase deploy --project puyosim-web --only hosting",
+    "functions:deploy": "cd functions && npm run build && cd .. && firebase deploy",
+    "functions:serve": "cd functions && npm run dev-build && cd .. && firebase serve",
     "test": "jest"
   },
   "dependencies": {

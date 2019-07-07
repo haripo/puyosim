@@ -35,6 +35,7 @@ export const renderGif = functions.runWith(runtimeOptions).https.onRequest(async
   const skin = request.query.skin || 'puyoSkinDefault';
   const data = await createGif(request.query.s, skin);
 
+  response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
@@ -68,6 +69,7 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const skin = request.query.skin || 'puyoSkinDefault';
   const data = await createGifMovie(strQueue, strHistory, skin);
 
+  response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
