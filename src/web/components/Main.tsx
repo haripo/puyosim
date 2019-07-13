@@ -7,6 +7,7 @@ import LayoutBaseContainer from '../containers/LayoutBaseContainer';
 import { Route, RouteComponentProps } from 'react-router-dom'
 import SimulatorContainer from '../containers/SimulatorContainer';
 import EditorContainer from '../containers/EditorContainer';
+import ViewerContainer from '../containers/ViewerContainer';
 
 export interface Props extends RouteComponentProps<{}> {
 }
@@ -22,7 +23,6 @@ export default class Main extends Component<Props, State> {
       shareModalIsOpen: false
     }
   }
-
 
   render() {
     return (
@@ -51,6 +51,12 @@ export default class Main extends Component<Props, State> {
                 path={ '/s' }
                 exact={ false }
                 component={ () => <SimulatorContainer/> }
+              />
+              <Route
+                key={ 'viewer' }
+                path={ '/v' }
+                exact={ false }
+                component={ () => <ViewerContainer params={ this.props.location.search } /> }
               />
               <Route
                 key={ 'editor' }

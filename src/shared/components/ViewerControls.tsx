@@ -56,7 +56,8 @@ export default class ViewerControls extends PureComponent<Props> {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'column',
-    height: 100
+    height: 100,
+    flex: 1,
   },
   buttonGroup: {
     flex: 1,

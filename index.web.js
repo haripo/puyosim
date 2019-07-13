@@ -17,6 +17,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route path='/s' component={ MainContainer }/>
+            <Route path='/v' component={ MainContainer }/>
             <Route path='/e' component={ MainContainer }/>
           </Switch>
         </BrowserRouter>

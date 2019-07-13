@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { themeColor } from '../../shared/utils/constants';
-import SidenavItem from "./SidenavItem";
+import SidenavItem from './SidenavItem';
 
 type Props = {
   path: string,
@@ -23,6 +23,12 @@ export default class Sidenav extends React.Component<Props, {}> {
           text='editor'
           path='/e'
           isActive={ this.props.path === '/e' }
+        />
+        <SidenavItem
+          icon='bookmark'
+          text='viewer'
+          path='/v'
+          isActive={ this.props.path === '/v' }
         />
         {/*<SidenavItem*/}
         {/*  icon='settings'*/}

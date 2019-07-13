@@ -17,7 +17,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "@react-native-community/async-storage": "^1.4.2",
-    "@types/react-router-dom": "^4.3.4",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
     "@typescript-eslint/typescript-estree": "^1.7.0",
@@ -74,6 +73,7 @@
     "@types/react-native-fs": "^2.8.3",
     "@types/react-redux": "^7.0.7",
     "@types/react-router": "^4.4.5",
+    "@types/react-router-dom": "^4.3.4",
     "@types/realm": "^1.13.0",
     "@types/redux": "^3.6.0",
     "@types/redux-logger": "^3.0.7",

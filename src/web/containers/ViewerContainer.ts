@@ -10,7 +10,6 @@ import {
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
-import Simulator from '../components/Simulator';
 import {
   canRedo,
   canUndo,
@@ -21,28 +20,31 @@ import {
 import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
+import Viewer from '../../web/components/Viewer';
 
 const mapStateToProps = (state) => {
   return {
     stack: getStack(state.simulator),
-    history: state.simulator.history,
-    historyIndex: state.simulator.historyIndex,
-    historyTreeLayout: getHistoryTreeLayout(state.simulator),
     ghosts: getGhost(state.simulator),
     pendingPair: getPendingPair(state.simulator),
     droppings: state.simulator.droppingPuyos,
     vanishings: getVanishingPuyos(state.simulator),
-    isActive: isActive(state),
-    puyoSkin: state.config.puyoSkin,
-    canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator),
-    layout: getLayout(state.layout),
-    theme: getTheme(state.theme),
-    mode: 'view',
 
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
     chain: state.simulator.chain,
+
+    puyoSkin: state.config.puyoSkin,
+    layout: getLayout(state.layout),
+    theme: getTheme(state.theme),
+
+    canUndo: canUndo(state.simulator),
+    canRedo: canRedo(state.simulator),
+
+    history: state.simulator.history,
+    historyIndex: state.simulator.historyIndex,
+    historyTreeLayout: getHistoryTreeLayout(state.simulator),
+    isActive: isActive(state),
   };
 };
 
@@ -77,4 +79,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Simulator);
+)(Viewer);
