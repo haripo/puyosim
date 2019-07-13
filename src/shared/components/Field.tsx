@@ -20,7 +20,7 @@ export interface Props {
   ghosts: PendingPairPuyo[],
   droppings?: DroppingPlan[],
   vanishings?: VanishingPlan[],
-  style: any,
+  style?: any,
 
   onTouched?: (row: number, col: number) => void,
 

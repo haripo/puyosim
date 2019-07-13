@@ -47,7 +47,11 @@ const mapStateToProps = (state: State) => {
     theme: getTheme(state.theme),
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
-    chain: state.simulator.chain
+    chain: state.simulator.chain,
+
+    match: {},
+    location: {},
+    mode: undefined
   };
 };
 
@@ -82,6 +86,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRestartSelected: () => {
       dispatch(restart());
+    },
+    onShareSelected: () => {
+
     },
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));

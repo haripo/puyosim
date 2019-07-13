@@ -1,32 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { webToolbarSize, themeColor, themeLightColor } from '../../shared/utils/constants';
-
-import { t } from '../../shared/platformServices/i18n';
+import { themeColor, themeLightColor, webToolbarSize } from '../../shared/utils/constants';
 
 type Props = {
-  onSharePressed: () => void
 }
 
 export default class WebToolbar extends React.Component<Props, {}> {
-  handleSharePressed() {
-    this.props.onSharePressed();
-  }
-
   render() {
     return (
       <View style={ styles.component }>
         <View style={ styles.inner }>
           <Text style={ styles.logo }>
-            puyosim web
+            puyosim
           </Text>
           <View style={ styles.navigation }>
-            <Text
-              onPress={ this.handleSharePressed.bind(this) }
-              style={ styles.navigationItem }
-            >
-              <span style={{ color: "white" }}>{ t('share') }</span>
-            </Text>
+          {/* 右側に表示されるナビゲーション */}
           </View>
         </View>
       </View>
@@ -40,11 +28,12 @@ const styles = StyleSheet.create({
     backgroundColor: themeLightColor,
   },
   inner: {
-    height: webToolbarSize - 3,
+    height: webToolbarSize,
     backgroundColor: themeColor,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    // boxShadow: '0px 4px 2px -2px rgba(0, 0, 0, 0.2)'
   },
   logo: {
     color: themeLightColor,

@@ -107,7 +107,7 @@ module.exports = {
     publicPath: '/',
     historyApiFallback: {
       rewrites: [
-        { from: /^\/[sv].*$/, to: '/simulator.html' }
+        { from: /^\/[sev].*$/, to: '/simulator.html' }
       ]
     }
   },
