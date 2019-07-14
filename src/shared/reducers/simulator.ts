@@ -41,6 +41,7 @@ import { createFieldReducer, FieldState, initialFieldState } from "./field";
 import { State } from "./index";
 import { ConfigState } from "./config";
 import { Archive, Move } from "../../types";
+import { original } from 'immer';
 
 export type SimulatorState = FieldState & {
   queue: number[][],
@@ -257,8 +258,8 @@ function refreshPlayId(state: SimulatorState, action) {
 
 function applyEditorState(state: SimulatorState, action, rootState: State) {
 
-  if (state.stack === rootState.editor.stack) {
-    // Stack が変化しなかった場合、設置処理を行わない
+  // Stack が変化しなかった場合、設置処理を行わない
+  if (original(state.stack) === original(rootState.editor.stack)) {
     return state;
   }
 

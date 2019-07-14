@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { captureException } from "../platformServices/sentry";
 import { ArchiveRequestPayload, Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 import { getCurrentHand } from "../models/queue";
+import { BrowserHistoryBuildOptions } from 'history';
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -114,14 +115,41 @@ export const getDropPositions = createSelector(
 export const getHistoryTreeLayout = createSelector(
   [
     (state: SimulatorState) => state.history,
+    (state: SimulatorState) => state.queue,
     (state: SimulatorState) => state.historyIndex
   ],
   _getHistoryTreeLayout
 );
 
-function _getHistoryTreeLayout(history, historyIndexBase) {
-  let nodes: any[] = [];
-  let paths: any[] = [];
+export type HistoryGraphNode = {
+  row: number,
+  col: number,
+  record: HistoryRecord,
+  isCurrentNode: boolean,
+  historyIndex: number
+}
+
+export type HistoryGraphPath = {
+  from: { row: number, col: number },
+  to: { row: number, col: number },
+  isCurrentPath: boolean
+}
+
+export type HisotryGraph = {
+  nodes: HistoryGraphNode,
+  paths: HistoryGraphPath,
+  queue: number[][],
+  width: number,
+  height: number
+}
+
+// TODO: model に移動する
+function _getHistoryTreeLayout(
+  history: HistoryRecord[],
+  queue: number[][],
+  historyIndexBase: number) {
+  let nodes: HistoryGraphNode[] = [];
+  let paths: HistoryGraphPath[] = [];
   let rightmostRow = 0;
   let deepestColumn = 0;
 
@@ -131,38 +159,47 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
     let index = historyIndexBase;
     while (index) {
       const p = history[index];
+      if (p.prev === null) {
+        break;
+      }
       indexMap[p.prev] = index;
       index = p.prev;
     }
   }
 
-  // calc graph layout
+  // calc graph layout recursively
   const calcLayout = (historyIndex, depth, parentRow) => {
     const record = history[historyIndex];
     if (!record) {
       return;
     }
 
-    return record.next.map((nextIndex, index) => {
-      if (index > 0) {
+    // TODO: for-of に直す
+    record.next.map((nextIndex, index) => {
+      if (0 < index) {
         rightmostRow += 1;
       }
       const isCurrentPath = indexMap[historyIndex] === nextIndex;
 
-      if (historyIndex > 0) {
+      // create path
+      if (0 < historyIndex) {
         paths.push({
           from: { row: parentRow, col: depth - 1 },
           to: { row: rightmostRow, col: depth },
           isCurrentPath
         });
       }
+
       if (depth > deepestColumn) {
         deepestColumn = depth;
       }
+
+      // create node
       nodes.push({
         row: rightmostRow,
         col: depth,
-        move: history[nextIndex].move,
+        // move: history[nextIndex].move,
+        record: history[nextIndex],
         isCurrentNode: nextIndex === historyIndexBase,
         historyIndex: nextIndex
       });
@@ -172,23 +209,23 @@ function _getHistoryTreeLayout(history, historyIndexBase) {
   calcLayout(0, 0, 0);
 
   // extract hands from history
-  let hands: any[] = [];
-
-  const searchHands = (index, depth) => {
-    const record = history[index];
-    if (depth > 0) {
-      hands[depth - 1] = record.pair;
-    }
-    record.next.map(nextIndex => {
-      searchHands(nextIndex, depth + 1);
-    });
-  };
-  searchHands(0, 0);
+  // let hands: any[] = [];
+  //
+  // const searchHands = (index, depth) => {
+  //   const record = history[index];
+  //   if (depth > 0) {
+  //     hands[depth - 1] = record.pair;
+  //   }
+  //   record.next.map(nextIndex => {
+  //     searchHands(nextIndex, depth + 1);
+  //   });
+  // };
+  // searchHands(0, 0);
 
   return {
     nodes,
     paths,
-    hands,
+    queue,
     width: rightmostRow,
     height: deepestColumn
   };

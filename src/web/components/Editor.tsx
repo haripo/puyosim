@@ -11,8 +11,9 @@ import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import ChainResult from '../../shared/components/ChainResult';
 import EditorControls from '../../shared/components/EditorControls';
+import { RouteComponentProps } from 'react-router';
 
-export type Props = {
+export type Props = RouteComponentProps<{}> & {
   stack: StackForRendering,
   pendingPair: PendingPair,
   droppings: DroppingPlan[],
@@ -30,6 +31,8 @@ export type Props = {
 
   currentItem: number,
 
+  onEditorMounted: () => void,
+  onEditorUnMounted: () => void,
   onUndoSelected: () => void,
   onResetSelected: () => void,
   onFieldTouched: (row: number, col: number) => void,
@@ -42,6 +45,14 @@ export type Props = {
 type State = {}
 
 export default class Editor extends Component<Props, State> {
+  componentDidMount() {
+    this.props.onEditorMounted();
+  }
+
+  componentWillUnmount() {
+    this.props.onEditorUnMounted();
+  }
+
   render() {
     return (
       <View

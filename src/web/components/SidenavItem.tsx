@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { themeLightColor } from '../../shared/utils/constants';
+import { themeColor, themeLightColor } from '../../shared/utils/constants';
 import { Link } from 'react-router-dom';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -22,9 +22,9 @@ export default function SidenavItem(props: Props) {
         paddingLeft: 20,
         textDecoration: 'none',
         opacity: props.isActive ? 1 : 0.5,
-        borderRightStyle: 'solid',
-        borderRightColor: themeLightColor,
-        borderRightWidth: props.isActive ? 3 : 0
+        borderLeftStyle: 'solid',
+        borderLeftColor: props.isActive ? themeLightColor : themeColor,
+        borderLeftWidth: 3
       } }
       to={ props.path }
     >

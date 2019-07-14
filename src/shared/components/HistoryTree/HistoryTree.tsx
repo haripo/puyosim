@@ -13,10 +13,11 @@ import Svg, { G, Rect, } from 'react-native-svg';
 // import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
+import { HisotryGraph, HistoryGraphNode, HistoryGraphPath } from '../../selectors/simulatorSelectors';
 
 export type Props = {
   onNodePressed: (historyIndex: number) => void,
-  historyTreeLayout: any
+  historyTreeLayout: HisotryGraph
 };
 
 type State = {
@@ -74,31 +75,33 @@ export default class HistoryTree extends React.Component<Props, State> {
     );
   }
 
-  renderNode(node) {
-    const { row, col, move, historyIndex, isCurrentNode } = node;
+  renderNode(node: HistoryGraphNode) {
+    const { row, col, record, historyIndex, isCurrentNode } = node;
 
-    if (move === null) {
+    if (record.type === 'head') {
       return null; // root node
     }
 
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
 
-    return (
-      <HistoryTreeNode
-        x={ x }
-        y={ y }
-        col={ move.col }
-        rotation={ move.rotation }
-        nodeWidth={ this.nodeWidth }
-        isCurrentNode={ isCurrentNode }
-        key={ `${ row }-${ col }-${ historyIndex }` }
-        onPress={ e => this.handleNodePressed(historyIndex, e) }
-      />
-    );
+    if (record.type === 'move') {
+      return (
+        <HistoryTreeNode
+          x={ x }
+          y={ y }
+          col={ record.move.col }
+          rotation={ record.move.rotation }
+          nodeWidth={ this.nodeWidth }
+          isCurrentNode={ isCurrentNode }
+          key={ `${ row }-${ col }-${ historyIndex }` }
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
+        />
+      );
+    }
   }
 
-  renderPath(path) {
+  renderPath(path: HistoryGraphPath) {
     const { from, to, isCurrentPath } = path;
     const x1 = from.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y1 = from.col * this.nodePaddingY + this.graphY + this.nodeWidth / 2;
@@ -127,7 +130,7 @@ export default class HistoryTree extends React.Component<Props, State> {
   }
 
   render() {
-    const { nodes, paths, hands, width, height } = this.props.historyTreeLayout;
+    const { nodes, paths, queue, width, height } = this.props.historyTreeLayout;
 
     const svgWidth = (width + 1) * this.nodePaddingX + this.graphX;
     const svgHeight = (height + 1) * this.nodePaddingY + this.graphY;
@@ -157,7 +160,7 @@ export default class HistoryTree extends React.Component<Props, State> {
                 height={ svgHeight }
                 fill={ themeLightColor }
               />
-              { hands.map((hand, i) => this.renderHand(hand, i)) }
+              { queue.map((hand, i) => this.renderHand(hand, i)) }
             </Svg>
           </View>
         </ScrollView>

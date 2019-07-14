@@ -9,7 +9,7 @@ import SimulatorContainer from '../containers/SimulatorContainer';
 import EditorContainer from '../containers/EditorContainer';
 import ViewerContainer from '../containers/ViewerContainer';
 
-export interface Props extends RouteComponentProps<{}> {
+export type Props = RouteComponentProps<{}> & {
 }
 
 type State = {
@@ -62,7 +62,7 @@ export default class Main extends Component<Props, State> {
                 key={ 'editor' }
                 path={ '/e' }
                 exact={ false }
-                component={ () => <EditorContainer/> }
+                component={ () => <EditorContainer { ...this.props } /> }
               />
             </View>
           </View>

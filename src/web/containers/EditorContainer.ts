@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import {
+  applyEditorState,
   applyGravity,
   finishDroppingAnimations,
-  finishVanishingAnimations,
+  finishVanishingAnimations, initializeEditor,
   putCurrentItem,
   resetEditorField,
   runChainAnimation,
@@ -40,6 +41,12 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onEditorMounted: () => {
+      dispatch(initializeEditor());
+    },
+    onEditorUnMounted: () => {
+      dispatch(applyEditorState());
+    },
     onUndoSelected: () => {
       dispatch(undoEditorField());
     },
