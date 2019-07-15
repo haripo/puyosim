@@ -27,18 +27,23 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'node_modules/react-native-tab-view'),
     path.resolve(appDirectory, 'node_modules/static-container'),
   ],
-  use: {
-    loader: 'babel-loader',
-    options: {
-      babelrc: false,
-      plugins: [
-        'react-native-web',
-        'transform-flow-strip-types',
-        ["@babel/plugin-proposal-class-properties", { "loose": false }],
-      ],
-      presets: ['@babel/preset-env']
+  use: [
+    {
+      loader: 'cache-loader'
+    },
+    {
+      loader: 'babel-loader',
+      options: {
+        babelrc: false,
+        plugins: [
+          'react-native-web',
+          'transform-flow-strip-types',
+          ["@babel/plugin-proposal-class-properties", { "loose": false }],
+        ],
+        presets: ['@babel/preset-env']
+      }
     }
-  }
+  ]
 };
 
 const imageLoaderConfiguration = {
@@ -66,12 +71,17 @@ const tsLoaderConfiguration = {
     /node_modules/,
     /test\.ts/
   ],
-  use: {
-    loader: 'ts-loader',
-    options: {
-      configFile: path.resolve(appDirectory, 'web/tsconfig.json')
+  use: [
+    {
+      loader: 'cache-loader'
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        configFile: path.resolve(appDirectory, 'web/tsconfig.json')
+      }
     }
-  }
+  ]
 };
 
 module.exports = {

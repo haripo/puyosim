@@ -19,8 +19,8 @@
     "canvas": "^2.5.0",
     "child-process-promise": "^2.2.1",
     "ffmpeg-static": "^2.4.0",
-    "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.3.0",
+    "firebase-admin": "^8.2.0",
+    "firebase-functions": "^3.1.0",
     "lodash": "^4.17.11",
     "tempfile": "^3.0.0"
   },

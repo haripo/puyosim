@@ -16,6 +16,14 @@ const theme = {
   themeLightColor: '#EFEBE9'
 };
 
+function makeFilename() {
+  const d = new Date();
+  return [
+    d.getFullYear(), d.getMonth(), d.getDate(),
+    d.getHours(), d.getMinutes(), d.getSeconds()
+  ].join('-')
+}
+
 async function createGifMovie(strQueue: string, strHistory: string, skin: string) {
   const queue = deserializeQueue(strQueue);
   const minimumHistory = deserializeHistoryRecords(strHistory);
@@ -32,10 +40,13 @@ async function createGif(strField: string, skin: string) {
 }
 
 export const renderGif = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
-  const skin = request.query.skin || 'puyoSkinDefault';
-  const data = await createGif(request.query.s, skin);
+  const skin = request.query.skin ||  'puyoSkinDefault';
+  const field = request.query.s.replace(/[\r\n]/g, '');
+  // TODO validate field
+  const data = await createGif(field, skin);
 
   response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
+  response.set('Content-Disposition', `attachment; filename="${makeFilename()}.jpg"`);
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
@@ -70,6 +81,7 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const data = await createGifMovie(strQueue, strHistory, skin);
 
   response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
+  response.set('Content-Disposition', `attachment; filename="${makeFilename()}.jpg"`);
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
@@ -85,3 +97,16 @@ export const renderGifMovieDebug = functions.runWith(runtimeOptions).https.onReq
   response.contentType('video/mp4');
   response.send(await createGifMovie(strQueue, strHistory, 'puyoSkinDefault'));
 });
+
+
+export const production = {
+  renderGif,
+  renderGifMovie
+};
+
+export const staging = {
+  renderGif,
+  renderGifMovie,
+  renderGifDebug,
+  renderGifMovieDebug
+};
