@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { themeLightColor } from "../../shared/utils/constants";
+import { StyleSheet, Text, View } from 'react-native';
 import { t } from '../../shared/platformServices/i18n';
+import CopyableTextInput from './CopyableTextInput';
 
 export type Props = {
   wholePathShareUrl: string,
-  currentPathShareUrl: string
+  currentPathShareUrl: string,
+  imageUrl: string,
+  movieUrl: string
 }
 
 type State = {}
@@ -17,15 +19,25 @@ export default class ShareModal extends Component<Props, State> {
 
   render() {
     return (
-      <View>
+      <View style={{
+        width: 700
+      }}>
         <Text style={ styles.title }>{ t('share') }</Text>
         <View>
           <Text>{ t('shareUrlTypeWholePath') }</Text>
-          <TextInput style={ styles.urlInput } value={ this.props.wholePathShareUrl } />
+          <CopyableTextInput value={ this.props.wholePathShareUrl } />
         </View>
         <View>
           <Text>{ t('shareUrlTypeCurrentPath') }</Text>
-          <TextInput style={ styles.urlInput } value={ this.props.currentPathShareUrl } />
+          <CopyableTextInput value={ this.props.currentPathShareUrl } />
+        </View>
+        <View>
+          <Text>{ t('shareUrlImage') }</Text>
+          <CopyableTextInput value={ this.props.imageUrl } filename='image.gif' />
+        </View>
+        <View>
+          <Text>{ t('shareUrlMovie') }</Text>
+          <CopyableTextInput value={ this.props.movieUrl } filename='movie.mp4' />
         </View>
       </View>
     );
@@ -35,15 +47,6 @@ export default class ShareModal extends Component<Props, State> {
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
-    paddingBottom: 10,
-  },
-  urlInput: {
-    width: 600,
-    padding: 6,
-    margin: 6,
-    paddingBottom: 10,
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: themeLightColor
+    paddingBottom: 10
   }
 });

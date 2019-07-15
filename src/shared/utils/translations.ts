@@ -65,6 +65,8 @@ const translations = {
     shareUrlTypeSimple: 'あり',
     shareUrlTypeWholePath: '全ての手順を共有する URL',
     shareUrlTypeCurrentPath: '現在手までの手順を共有する URL',
+    shareUrlImage: 'スナップショット',
+    shareUrlMovie: '連鎖動画',
     shareProcessing: '処理中',
     shareFailed: '共有に失敗しました',
 
@@ -159,6 +161,8 @@ const translations = {
     shareUrlTypeSimple: 'Yes',
     shareUrlTypeWholePath: 'URL which contains whole moves',
     shareUrlTypeCurrentPath: 'URL which contains current path of moves only',
+    shareUrlImage: 'Snapshot',
+    shareUrlMovie: 'Movie',
     shareProcessing: 'Processing',
     shareFailed: 'Failed to share',
 

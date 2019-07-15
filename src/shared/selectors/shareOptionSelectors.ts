@@ -10,7 +10,9 @@ function createShareURL(q: string, h: string | null): string {
   return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
 }
 
-const functionHost = 'https://us-central1-puyosim-web.cloudfunctions.net';
+const functionHost = __DEV__
+  ? 'https://rensim-staging.firebaseapp.com'
+  : 'https://puyos.im';
 
 function createQuery(params) {
   let str: string[] = [];
@@ -55,7 +57,7 @@ export const getStackImageUrl = createSelector(
   (stack) => {
     const s = stack.map(r => r.join('')).join('');
     const param = { s };
-    return `${ functionHost }/renderGif?${ createQuery(param) }`;
+    return `${ functionHost }/functions/snapshot?${ createQuery(param) }`;
   }
 );
 
@@ -69,6 +71,6 @@ export const getHistoryMovieUrl = createSelector(
     const q = serializeQueue(queue);
     const h = serializeHistoryRecords(getCurrentPathRecords(history, historyIndex));
     const param = { q, h };
-    return `${ functionHost }/renderGifMovie?${ createQuery(param) }`;
+    return `${ functionHost }/functions/movie?${ createQuery(param) }`;
   }
 );

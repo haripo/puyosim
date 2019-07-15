@@ -73,6 +73,11 @@ type State = {
   shareModalIsOpen: boolean
 }
 
+function notImplementedAlert() {
+  // @ts-ignore
+  alert('Not implemented yet');
+}
+
 export default class Simulator extends Component<Props, State> {
   hotkeyElementRef: any;
 
@@ -238,23 +243,20 @@ export default class Simulator extends Component<Props, State> {
                 <IconButton
                   icon='cloud-upload'
                   text='save'
-                  onPressed={ () => {
-                  } }
+                  onPressed={ notImplementedAlert }
                 />
                 <IconButton
                   style={ styles.controllerRightButton }
                   icon='cloud-download'
                   text='load'
-                  onPressed={ () => {
-                  } }
+                  onPressed={ notImplementedAlert }
                 />
               </View>
               <View style={ styles.buttonGroup }>
                 <IconButton
                   icon='share'
                   text='share'
-                  onPressed={ () => {
-                  } }
+                  onPressed={ this.handleSharePressed.bind(this) }
                 />
               </View>
             </View>

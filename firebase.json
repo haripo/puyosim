@@ -19,7 +19,7 @@
         },
         {
           "source": "/functions/movie",
-          "function": "production-renderMovie"
+          "function": "production-renderGifMovie"
         }
       ]
     },
@@ -43,7 +43,7 @@
         },
         {
           "source": "/functions/movie",
-          "function": "staging-renderMovie"
+          "function": "staging-renderGifMovie"
         }
       ]
     }

@@ -81,7 +81,7 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const data = await createGifMovie(strQueue, strHistory, skin);
 
   response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
-  response.set('Content-Disposition', `attachment; filename="${makeFilename()}.jpg"`);
+  response.set('Content-Disposition', `attachment; filename="${makeFilename()}.mp4"`);
   if (request.query.base64) {
     response.send(data.toString('base64'));
   } else {
