@@ -1,4 +1,4 @@
-import { getDefaultMove, getFirstCol, getSecondCol } from '../models/move';
+import { getFirstCol, getSecondCol } from '../models/move';
 import { getDropPositions as getDropPositionsStack, getStackForRendering, } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
@@ -7,9 +7,9 @@ import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
 import { captureException } from "../platformServices/sentry";
-import { ArchiveRequestPayload, Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { ArchiveRequestPayload, Color, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
 import { getCurrentHand } from "../models/queue";
-import { BrowserHistoryBuildOptions } from 'history';
+import { calcHistoryTreeLayout } from '../models/treeLayout';
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -118,7 +118,7 @@ export const getHistoryTreeLayout = createSelector(
     (state: SimulatorState) => state.queue,
     (state: SimulatorState) => state.historyIndex
   ],
-  _getHistoryTreeLayout
+  calcHistoryTreeLayout
 );
 
 export type HistoryGraphNode = {
@@ -126,7 +126,8 @@ export type HistoryGraphNode = {
   col: number,
   record: HistoryRecord,
   isCurrentNode: boolean,
-  historyIndex: number
+  historyIndex: number,
+  // path: HistoryGraphPath | null
 }
 
 export type HistoryGraphPath = {
@@ -135,7 +136,7 @@ export type HistoryGraphPath = {
   isCurrentPath: boolean
 }
 
-export type HisotryGraph = {
+export type HistoryGraph = {
   nodes: HistoryGraphNode,
   paths: HistoryGraphPath,
   queue: number[][],
@@ -144,92 +145,6 @@ export type HisotryGraph = {
 }
 
 // TODO: model に移動する
-function _getHistoryTreeLayout(
-  history: HistoryRecord[],
-  queue: number[][],
-  historyIndexBase: number) {
-  let nodes: HistoryGraphNode[] = [];
-  let paths: HistoryGraphPath[] = [];
-  let rightmostRow = 0;
-  let deepestColumn = 0;
-
-  // calc indexMap
-  let indexMap = {};
-  {
-    let index = historyIndexBase;
-    while (index) {
-      const p = history[index];
-      if (p.prev === null) {
-        break;
-      }
-      indexMap[p.prev] = index;
-      index = p.prev;
-    }
-  }
-
-  // calc graph layout recursively
-  const calcLayout = (historyIndex, depth, parentRow) => {
-    const record = history[historyIndex];
-    if (!record) {
-      return;
-    }
-
-    // TODO: for-of に直す
-    record.next.map((nextIndex, index) => {
-      if (0 < index) {
-        rightmostRow += 1;
-      }
-      const isCurrentPath = indexMap[historyIndex] === nextIndex;
-
-      // create path
-      if (0 < historyIndex) {
-        paths.push({
-          from: { row: parentRow, col: depth - 1 },
-          to: { row: rightmostRow, col: depth },
-          isCurrentPath
-        });
-      }
-
-      if (depth > deepestColumn) {
-        deepestColumn = depth;
-      }
-
-      // create node
-      nodes.push({
-        row: rightmostRow,
-        col: depth,
-        // move: history[nextIndex].move,
-        record: history[nextIndex],
-        isCurrentNode: nextIndex === historyIndexBase,
-        historyIndex: nextIndex
-      });
-      calcLayout(nextIndex, depth + 1, rightmostRow);
-    });
-  };
-  calcLayout(0, 0, 0);
-
-  // extract hands from history
-  // let hands: any[] = [];
-  //
-  // const searchHands = (index, depth) => {
-  //   const record = history[index];
-  //   if (depth > 0) {
-  //     hands[depth - 1] = record.pair;
-  //   }
-  //   record.next.map(nextIndex => {
-  //     searchHands(nextIndex, depth + 1);
-  //   });
-  // };
-  // searchHands(0, 0);
-
-  return {
-    nodes,
-    paths,
-    queue,
-    width: rightmostRow,
-    height: deepestColumn
-  };
-}
 
 export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {
   // serialize に失敗するパターンがあるようなので、デバッグのため確認する。

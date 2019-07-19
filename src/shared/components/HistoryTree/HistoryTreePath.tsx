@@ -11,6 +11,8 @@ type Props = {
   startY: number,
   endX: number,
   endY: number,
+  middleX?: number,
+  middleY?: number,
   isCurrentPath: boolean
 };
 
@@ -22,8 +24,11 @@ export default class HistoryTreePath extends React.Component<Props, {}> {
   }
 
   render() {
-    const { startX, startY, endX, endY, isCurrentPath } = this.props;
-    const path = `M ${startX} ${startY} C ${startX} ${startY + this.pathRound} ${endX} ${endY - this.pathRound} ${endX} ${endY}`;
+    const { startX, startY, endX, endY, middleX, middleY, isCurrentPath } = this.props;
+    let path = `M ${startX} ${startY} C ${startX} ${startY + this.pathRound} ${endX} ${endY - this.pathRound} ${endX} ${endY}`;
+    if (middleX && middleY) {
+      path = `M ${startX} ${startY} C ${startX} ${startY + this.pathRound} ${middleX} ${middleY - this.pathRound} ${middleX} ${middleY} L ${endX} ${endY}`;
+    }
     return (
       <Path
         d={ path }

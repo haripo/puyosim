@@ -13,11 +13,11 @@ import Svg, { G, Rect, } from 'react-native-svg';
 // import reactMixin from 'react-mixin';
 import HistoryTreePath from './HistoryTreePath';
 import HistoryTreeNode from './HistoryTreeNode';
-import { HisotryGraph, HistoryGraphNode, HistoryGraphPath } from '../../selectors/simulatorSelectors';
+import { HistoryGraph, HistoryGraphNode, HistoryGraphPath } from '../../selectors/simulatorSelectors';
 
 export type Props = {
   onNodePressed: (historyIndex: number) => void,
-  historyTreeLayout: HisotryGraph
+  historyTreeLayout: HistoryGraph
 };
 
 type State = {
@@ -77,11 +77,6 @@ export default class HistoryTree extends React.Component<Props, State> {
 
   renderNode(node: HistoryGraphNode) {
     const { row, col, record, historyIndex, isCurrentNode } = node;
-
-    if (record.type === 'head') {
-      return null; // root node
-    }
-
     const x = row * this.nodePaddingX + this.graphX;
     const y = col * this.nodePaddingY + this.graphY;
 
@@ -98,6 +93,17 @@ export default class HistoryTree extends React.Component<Props, State> {
           onPress={ e => this.handleNodePressed(historyIndex, e) }
         />
       );
+    } else {
+      return (
+        <HistoryTreeNode
+          x={ x }
+          y={ y }
+          nodeWidth={ this.nodeWidth }
+          isCurrentNode={ isCurrentNode }
+          key={ `${ row }-${ col }-${ historyIndex }` }
+          onPress={ e => this.handleNodePressed(historyIndex, e) }
+        />
+      );
     }
   }
 
@@ -108,16 +114,31 @@ export default class HistoryTree extends React.Component<Props, State> {
     const x2 = to.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2;
     const y2 = to.col * this.nodePaddingY + this.graphY;
 
-    return (
-      <HistoryTreePath
-        key={ `${ from.row }-${ from.col }-${ to.row }-${ to.col }` }
-        startX={ x1 }
-        startY={ y1 }
-        endX={ x2 }
-        endY={ y2 }
-        isCurrentPath={ isCurrentPath }
-      />
-    );
+    if (to.col - from.col === 1) {
+      return (
+        <HistoryTreePath
+          key={ `${ from.row }-${ from.col }-${ to.row }-${ to.col }` }
+          startX={ x1 }
+          startY={ y1 }
+          endX={ x2 }
+          endY={ y2 }
+          isCurrentPath={ isCurrentPath }
+        />
+      );
+    } else {
+      return (
+        <HistoryTreePath
+          key={ `${ from.row }-${ from.col }-${ to.row }-${ to.col }` }
+          startX={ x1 }
+          startY={ y1 }
+          middleX={ to.row * this.nodePaddingX + this.graphX+ this.nodeWidth / 2 }
+          middleY={ (from.col + 1) * this.nodePaddingY + this.graphY }
+          endX={ x2 }
+          endY={ y2 }
+          isCurrentPath={ isCurrentPath }
+        />
+      );
+    }
   }
 
   renderTree(nodes, paths) {
