@@ -37,6 +37,9 @@ const translations = {
     specify2ndHand: '2 手目',
     specify3rdHand: '3 手目',
     notSpecified: 'Any',
+    leftyMode: '左利きモード',
+    leftyOn: 'オン (2P レイアウト)',
+    leftyOff: 'オフ (1P レイアウト)',
 
     numVisibleNext: 'ネクスト',
     visibleDoubleNext: 'ダブルネクストを表示',
@@ -133,6 +136,9 @@ const translations = {
     specify2ndHand: '2nd',
     specify3rdHand: '3rd',
     notSpecified: 'Any',
+    leftyMode: 'Lefty mode',
+    leftyOn: 'ON (2P layout)',
+    leftyOff: 'OFF (1P layout)',
 
     numVisibleNext: 'Next window',
     visibleDoubleNext: 'Show double next',

@@ -29,15 +29,19 @@ const mapStateToProps = (state) => {
     pendingPair: getPendingPair(state.simulator),
     droppings: state.simulator.droppingPuyos,
     vanishings: getVanishingPuyos(state.simulator),
-    isActive: isActive(state),
-    puyoSkin: state.config.puyoSkin as string,
-    canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator),
-    layout: getLayout(state.layout),
-    theme: getTheme(state.theme),
+
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
     chain: state.simulator.chain,
+
+    puyoSkin: state.config.puyoSkin as string,
+    leftyMode: state.config.leftyMode,
+    layout: getLayout(state.layout),
+    theme: getTheme(state.theme),
+
+    isActive: isActive(state),
+    canUndo: canUndo(state.simulator),
+    canRedo: canRedo(state.simulator),
 
     history: state.simulator.history,
     historyIndex: state.simulator.historyIndex,

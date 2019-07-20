@@ -28,6 +28,7 @@ const mapStateToProps = (state: State) => {
     currentItem: state.editor.currentItem,
 
     puyoSkin: state.config.puyoSkin as string,
+    leftyMode: state.config.leftyMode,
     layout: getLayout(state.layout),
     theme: getTheme(state.theme),
 

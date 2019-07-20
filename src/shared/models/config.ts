@@ -139,7 +139,17 @@ export const configItems = {
         { value: 'puyoSkinDefault', name: t('puyoSkinDefault') },
         { value: 'puyoSkinCharacter', name: t('puyoSkinCharacter') }
       ]
+    },
+    {
+      key: 'leftyMode',
+      name: t('leftyMode'),
+      type: 'radio',
+      children: [
+        { value: 'on', name: t('leftyOn') },
+        { value: 'off', name: t('leftyOff') }
+      ]
     }
+
   ]
 };
 
@@ -153,7 +163,9 @@ export type ConfigValues = {
   specify2ndHand: string,
   specify3rdHand: string,
   numVisibleNext: string,
-  puyoSkin: string
+  puyoSkin: string,
+
+  leftyMode: string
 }
 
 // default values
@@ -167,5 +179,7 @@ export const defaultValues = {
   specify2ndHand: 'notSpecified',
   specify3rdHand: 'notSpecified',
   numVisibleNext: 'visibleDoubleNext',
-  puyoSkin: 'puyoSkinDefault'
+  puyoSkin: 'puyoSkinDefault',
+
+  leftyMode: 'off',
 };

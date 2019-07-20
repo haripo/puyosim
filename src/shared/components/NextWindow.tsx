@@ -11,7 +11,9 @@ import { Pair } from "../../types";
 export type Props = {
   next: Pair,
   doubleNext: Pair,
+
   numVisibleNext: string,
+  leftyMode: string,
 
   puyoSkin: string,
   theme: Theme,
@@ -52,9 +54,9 @@ export default class NextWindow extends PureComponent<Props, {}> {
   }
 
   render() {
-    const { next, doubleNext, numVisibleNext, theme } = this.props;
+    const { next, doubleNext, numVisibleNext, leftyMode, theme } = this.props;
     const style: ViewStyle = {
-      flexDirection: 'row',
+      flexDirection: leftyMode === 'on' ? 'row-reverse' : 'row',
       backgroundColor: theme.cardBackgroundColor,
       elevation: 2
     };

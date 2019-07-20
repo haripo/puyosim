@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
 import { contentsMargin } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
@@ -25,6 +25,7 @@ export type Props = {
   chain: number,
 
   puyoSkin: string,
+  leftyMode: string,
   layout: Layout,
   theme: Theme,
 
@@ -50,10 +51,10 @@ export default class Viewer extends Component<Props, State> {
     title: 'Viewer',
     headerRight: navigation.getParam('root', false) ? (
       <TouchableOpacity
-        style={{ marginRight: 10 }}
+        style={ { marginRight: 10 } }
         onPress={ () => navigation.replace('simulator', { ignoreDeepLink: true }) }
       >
-        <Text style={{ color: 'white' }}>OPEN SIMULATOR</Text>
+        <Text style={ { color: 'white' } }>OPEN SIMULATOR</Text>
       </TouchableOpacity>
     ) : null
   });
@@ -63,7 +64,12 @@ export default class Viewer extends Component<Props, State> {
       <LayoutBaseContainer>
         <View
           style={ styles.container }>
-          <View style={ styles.contents }>
+          <View style={ {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'stretch',
+            flexDirection: (this.props.leftyMode === 'on' ? 'row-reverse' : 'row')
+          } }>
             <View>
               <HandlingPuyos
                 pair={ this.props.pendingPair }
@@ -88,18 +94,22 @@ export default class Viewer extends Component<Props, State> {
             <View style={ styles.side }>
               <NextWindowContainer/>
               <SlimHistoryTree
-                style={{ marginTop: contentsMargin }}
+                style={ { marginTop: contentsMargin } }
                 history={ this.props.history }
                 currentIndex={ this.props.historyIndex }
                 onNodePressed={ this.props.onHistoryNodePressed }
               />
-              <ViewerControls
-                onUndoSelected={ this.props.onUndoSelected }
-                onRedoSelected={ this.props.onRedoSelected }
-                isActive={ this.props.isActive }
-                canUndo={ this.props.canUndo }
-                canRedo={ this.props.canRedo }
-              />
+              <View style={ {
+                height: 300 / 4,
+              } }>
+                <ViewerControls
+                  onUndoSelected={ this.props.onUndoSelected }
+                  onRedoSelected={ this.props.onRedoSelected }
+                  isActive={ this.props.isActive }
+                  canUndo={ this.props.canUndo }
+                  canRedo={ this.props.canRedo }
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -113,13 +123,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#F5F5F5'
-  },
-  contents: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    flexDirection: 'row'
+    backgroundColor: '#F5F5F5',
+    paddingRight: contentsMargin,
+    paddingBottom: contentsMargin
   },
   handlingPuyos: {
     marginTop: 3,
@@ -127,13 +133,14 @@ const styles = StyleSheet.create({
   },
   side: {
     flex: 1,
-    marginRight: contentsMargin,
-    marginBottom: contentsMargin
+    marginTop: contentsMargin,
+    marginLeft: contentsMargin,
   },
   sideHead: {
     flex: 1
   },
   field: {
-    margin: contentsMargin
+    marginTop: contentsMargin,
+    marginLeft: contentsMargin
   }
 });
