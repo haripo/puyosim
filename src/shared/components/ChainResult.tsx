@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
 import { t } from '../platformServices/i18n';
 
@@ -7,7 +7,7 @@ type Props = {
   chain: number,
   score: number,
   chainScore: number,
-  textAlign: string
+  textAlign?: string
 }
 
 export default class ChainResult extends Component<Props, {}> {

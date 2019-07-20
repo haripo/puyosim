@@ -28,7 +28,8 @@ import {
   createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
-  createInitialHistoryRecord, getDefaultNextMove,
+  createInitialHistoryRecord,
+  getDefaultNextMove,
   History,
   HistoryRecord,
   reindexDefaultNexts
@@ -95,7 +96,6 @@ function putNextPair(state: SimulatorState, action) {
 
   state.numHands += 1;
   state.isResetChainRequired = true;
-  state.pendingPair = getDefaultNextMove(state);
   state.numSplit += splitHeight ? 1 : 0;
 
   const record = createHistoryRecord(
@@ -116,6 +116,9 @@ function putNextPair(state: SimulatorState, action) {
 
   state.history = result.records;
   state.historyIndex = result.currentIndex;
+
+  // history が更新されてから次の move をとる必要がある
+  state.pendingPair = getDefaultNextMove(state);
 
   return state;
 }

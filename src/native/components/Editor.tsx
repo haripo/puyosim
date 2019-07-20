@@ -99,12 +99,6 @@ export default class Editor extends Component<Props & NavigationScreenProps, Sta
                   onDroppingAnimationFinished={ this.state.isVisible ? this.props.onDroppingAnimationFinished : undefined }
                   onVanishingAnimationFinished={ this.state.isVisible ? this.props.onVanishingAnimationFinished : undefined }
                 />
-                {/*
-                  this.state.isiVisible == false のとき、
-                  このコンポーネントは history 画面などの screen によって隠されている。
-                  その場合、アニメーション完了時のコールバックが history 画面のものとあわせて
-                  2 回発行されてしまうため、それを防ぐ。
-                 */ }
               </View>
               <View style={ styles.side }>
                 <View style={ styles.sideHead }>
