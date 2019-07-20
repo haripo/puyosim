@@ -73,11 +73,6 @@ type State = {
   shareModalIsOpen: boolean
 }
 
-function notImplementedAlert() {
-  // @ts-ignore
-  alert('Not implemented yet');
-}
-
 export default class Simulator extends Component<Props, State> {
   hotkeyElementRef: any;
 
@@ -239,19 +234,19 @@ export default class Simulator extends Component<Props, State> {
                   onPressed={ this.props.onRestartSelected.bind(this) }
                 />
               </View>
-              <View style={ styles.buttonGroup }>
-                <IconButton
-                  icon='cloud-upload'
-                  text='save'
-                  onPressed={ notImplementedAlert }
-                />
-                <IconButton
-                  style={ styles.controllerRightButton }
-                  icon='cloud-download'
-                  text='load'
-                  onPressed={ notImplementedAlert }
-                />
-              </View>
+              {/*<View style={ styles.buttonGroup }>*/}
+              {/*  <IconButton*/}
+              {/*    icon='cloud-upload'*/}
+              {/*    text='save'*/}
+              {/*    onPressed={ notImplementedAlert }*/}
+              {/*  />*/}
+              {/*  <IconButton*/}
+              {/*    style={ styles.controllerRightButton }*/}
+              {/*    icon='cloud-download'*/}
+              {/*    text='load'*/}
+              {/*    onPressed={ notImplementedAlert }*/}
+              {/*  />*/}
+              {/*</View>*/}
               <View style={ styles.buttonGroup }>
                 <IconButton
                   icon='share'
@@ -314,7 +309,7 @@ const styles = StyleSheet.create({
   buttons: {
     flex: 1,
     flexDirection: 'column',
-    height: 300 / 4 * 3,
+    height: 300 / 4 * 2,
     marginLeft: contentsPadding
   },
   buttonGroup: {
