@@ -1,7 +1,7 @@
 // @ts-ignore
-import { sendEvent, setUserId } from './EventTracker';
-import { HistoryRecord } from "../models/history";
-import { Stack } from "../../types";
+import { sendEvent, setUserId } from './platform';
+import { HistoryRecord } from "../../models/history";
+import { Stack } from "../../../types";
 
 // TODO: openHistoryFromSimulator 以外のイベントはまだ使ってない
 // TODO: historyRecord を送ると payload が長すぎてエラーになる

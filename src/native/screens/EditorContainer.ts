@@ -9,7 +9,7 @@ import {
   selectEditItem, undoEditorField,
   vanishPuyos,
 } from '../../shared/actions/actions';
-import { getStack, getVanishingPuyos, hasDroppingPuyo, isActive } from '../../shared/selectors/fieldSelectors';
+import { getStack, getVanishingPuyos, isActive } from '../../shared/selectors/fieldSelectors';
 import { getLayout } from '../../shared/selectors/layoutSelectors';
 import { getTheme } from '../../shared/selectors/themeSelectors';
 import Editor from "../components/Editor";

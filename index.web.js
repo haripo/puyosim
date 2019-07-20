@@ -4,8 +4,7 @@ import { Provider } from 'react-redux';
 import { AppRegistry } from 'react-native';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import SimulatorContainer from './src/web/containers/SimulatorContainer';
-import ViewerContainer from './src/web/containers/ViewerContainer';
+import MainContainer from './src/web/containers/MainContainer';
 import { getStore } from './src/shared/store/store';
 import sagas from './src/shared/sagas';
 import reducers from './src/shared/reducers'
@@ -17,8 +16,9 @@ class App extends Component {
       <Provider store={ this.props.store }>
         <BrowserRouter>
           <Switch>
-            <Route path='/s' component={ SimulatorContainer }/>
-            <Route path='/v' component={ ViewerContainer }/>
+            <Route path='/s' component={ MainContainer }/>
+            <Route path='/v' component={ MainContainer }/>
+            <Route path='/e' component={ MainContainer }/>
           </Switch>
         </BrowserRouter>
       </Provider>

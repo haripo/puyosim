@@ -6,7 +6,7 @@ import { themeColor, themeLightColor } from '../../utils/constants';
 import { G, Image, Rect, } from 'react-native-svg';
 import compareWith from '../../utils/compareWith';
 import { Animated, Platform } from "react-native";
-import { Rotation } from "../../models/move";
+import { Rotation } from "../../../types";
 
 const arrowImages = {
   top: require('../../../../assets/history_tree/arrow-top.png'),

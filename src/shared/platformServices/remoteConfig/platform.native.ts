@@ -1,10 +1,7 @@
 import firebase from "react-native-firebase";
-import { Sentry } from "react-native-sentry";
+import { captureException } from "../sentry";
 
-// @ts-ignore
-import { captureException } from "./Sentry";
-
-export async function getMinimumSupportedAppVersion() {
+export async function getMinimumSupportedAppVersion(): Promise<string | null> {
   try {
     if (__DEV__) {
       firebase.config().enableDeveloperMode();
@@ -29,5 +26,6 @@ export async function getMinimumSupportedAppVersion() {
   } catch (e) {
     captureException(e);
     console.error(e);
+    return null;
   }
 }

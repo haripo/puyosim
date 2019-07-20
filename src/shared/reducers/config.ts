@@ -1,8 +1,5 @@
 import { ConfigValues, defaultValues } from '../models/config';
 
-// @ts-ignore
-import { saveConfig, loadConfig } from '../utils/StorageService';
-
 function loadConfigCompleted(state: ConfigState, action): ConfigState {
   return {
     ...state,

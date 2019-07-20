@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { SimulatorState } from "../reducers/simulator";
 import { State } from "../reducers";
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords } from "../models/history";
@@ -11,7 +10,9 @@ function createShareURL(q: string, h: string | null): string {
   return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
 }
 
-const functionHost = 'https://us-central1-puyosim-web.cloudfunctions.net';
+const functionHost = __DEV__
+  ? 'https://rensim-staging.firebaseapp.com'
+  : 'https://puyos.im';
 
 function createQuery(params) {
   let str: string[] = [];
@@ -23,7 +24,20 @@ function createQuery(params) {
   return str.join("&");
 }
 
-export const getShareUrl = createSelector(
+export const getWholePathShareUrl = createSelector(
+  [
+    (state: State) => state.simulator.queue,
+    (state: State) => state.simulator.history,
+    (state: State) => state.simulator.historyIndex
+  ],
+  (queue, history, historyIndex) => {
+    const q = serializeQueue(queue);
+    const current = serializeHistoryRecords(history);
+    return createShareURL(q, current);
+  }
+);
+
+export const getCurrentPathShareUrl = createSelector(
   [
     (state: State) => state.simulator.queue,
     (state: State) => state.simulator.history,
@@ -43,7 +57,7 @@ export const getStackImageUrl = createSelector(
   (stack) => {
     const s = stack.map(r => r.join('')).join('');
     const param = { s };
-    return `${ functionHost }/renderGif?${ createQuery(param) }`;
+    return `${ functionHost }/functions/snapshot?${ createQuery(param) }`;
   }
 );
 
@@ -57,6 +71,6 @@ export const getHistoryMovieUrl = createSelector(
     const q = serializeQueue(queue);
     const h = serializeHistoryRecords(getCurrentPathRecords(history, historyIndex));
     const param = { q, h };
-    return `${ functionHost }/renderGifMovie?${ createQuery(param) }`;
+    return `${ functionHost }/functions/movie?${ createQuery(param) }`;
   }
 );

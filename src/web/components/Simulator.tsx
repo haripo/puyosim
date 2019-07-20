@@ -2,29 +2,29 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { parse } from 'query-string';
 import Modal from 'react-modal';
+import { HotKeys } from 'react-hotkeys';
 
+import { PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { HistoryRecord } from "../../shared/models/history";
+import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
+import { Layout } from "../../shared/selectors/layoutSelectors";
+import { Theme } from "../../shared/selectors/themeSelectors";
+import { contentsMargin, contentsPadding } from '../../shared/utils/constants';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import { contentsMargin, simulatorWidth } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
 import HistoryTree from '../../shared/components/HistoryTree/HistoryTree';
-import { HotKeys } from 'react-hotkeys';
-import WebToolbar from './WebToolbar';
-import LayoutBaseContainer from '../containers/LayoutBaseContainer';
-import { PendingPair, PendingPairPuyo } from "../../shared/selectors/simulatorSelectors";
-import { DroppingPlan, VanishingPlan } from "../../shared/models/chainPlanner";
-import { Layout } from "../../shared/selectors/layoutSelectors";
-import { Theme } from "../../shared/selectors/themeSelectors";
-import { HistoryRecord } from "../../shared/models/history";
-import ShareModalContainer from "../containers/ShareModalContainer";
 import ViewerControls from "../../shared/components/ViewerControls";
+import ShareModalContainer from "../containers/ShareModalContainer";
+import ChainResult from "../../shared/components/ChainResult";
+import IconButton from "../../shared/components/IconButton";
 
 // TODO: https://github.com/vitalets/react-native-extended-stylesheet
 // import MediaQuery from "react-native-web-responsive";
 
-import { StackForRendering } from "../../shared/models/stack";
-import ChainResult from "../../shared/components/ChainResult";
+// @ts-ignore
+const rootElement = document.getElementById('root');
 
 export type Props = {
   match: any,
@@ -180,57 +180,88 @@ export default class Simulator extends Component<Props, State> {
         focused>
         { /* Focused on mounted to enable hotkeys */ }
         <View
-          ref={ c => this.hotkeyElementRef = c }
-          // tabIndex={ -1 }
-          style={ { display: 'flex', alignItems: 'stretch', flexGrow: 1, flexDirection: 'column' } }>
-          <WebToolbar
-            onSharePressed={ this.handleSharePressed.bind(this) }
+          style={ {
+            marginTop: contentsMargin,
+            marginLeft: contentsMargin,
+            marginBottom: contentsMargin
+          } }
+          ref={ c => this.hotkeyElementRef = c }>
+          <HandlingPuyos
+            pair={ this.props.pendingPair }
+            puyoSkin={ this.props.puyoSkin }
+            layout={ this.props.layout }
+            style={ { marginBottom: contentsPadding } }>
+          </HandlingPuyos>
+          <Field
+            stack={ this.props.stack }
+            ghosts={ this.props.ghosts }
+            droppings={ this.props.droppings }
+            vanishings={ this.props.vanishings }
+            isActive={ this.props.isActive }
+            style={ {} }
+            theme={ this.props.theme }
+            layout={ this.props.layout }
+            puyoSkin={ this.props.puyoSkin }
+            onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
+            onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
           />
-          <LayoutBaseContainer>
-            <View style={ styles.container }>
-              <View style={ styles.contents }>
-                <View>
-                  <HandlingPuyos
-                    pair={ this.props.pendingPair }
-                    puyoSkin={ this.props.puyoSkin }
-                    layout={ this.props.layout }>
-                  </HandlingPuyos>
-                  <Field
-                    stack={ this.props.stack }
-                    ghosts={ this.props.ghosts }
-                    droppings={ this.props.droppings }
-                    vanishings={ this.props.vanishings }
-                    isActive={ this.props.isActive }
-                    style={ {} }
-                    theme={ this.props.theme }
-                    layout={ this.props.layout }
-                    puyoSkin={ this.props.puyoSkin }
-                    onDroppingAnimationFinished={ this.props.onDroppingAnimationFinished }
-                    onVanishingAnimationFinished={ this.props.onVanishingAnimationFinished }
-                  />
-                </View>
-                <View style={ styles.side }>
-                  <View style={ styles.sideHead }>
-                    <NextWindowContainer/>
-                    <ChainResult
-                      score={ this.props.score }
-                      chain={ this.props.chain }
-                      chainScore={ this.props.chainScore }
-                    />
-                  </View>
-                  { this.renderControls(keyMap) }
-                </View>
+        </View>
+        <View style={ styles.side }>
+          <View>
+            <NextWindowContainer/>
+            <ChainResult
+              score={ this.props.score }
+              chain={ this.props.chain }
+              chainScore={ this.props.chainScore }
+            />
+          </View>
+          <View style={ {
+            display: 'flex',
+            flexDirection: 'row'
+          } }>
+            { this.renderControls(keyMap) }
+            <View style={ styles.buttons }>
+              <View style={ styles.buttonGroup }>
+                <IconButton
+                  icon='fast-rewind'
+                  text='reset'
+                  onPressed={ this.props.onResetSelected.bind(this) }
+                />
+                <IconButton
+                  style={ styles.controllerRightButton }
+                  icon='delete'
+                  text='restart'
+                  onPressed={ this.props.onRestartSelected.bind(this) }
+                />
               </View>
-              {/*<MediaQuery minWidth={ 1224 }>*/}
-                <View style={ styles.historyTree }>
-                  <HistoryTree
-                    historyTreeLayout={ this.props.historyTreeLayout }
-                    onNodePressed={ this.props.onHistoryNodePressed }
-                  />
-                </View>
-              {/*</MediaQuery>*/}
+              {/*<View style={ styles.buttonGroup }>*/}
+              {/*  <IconButton*/}
+              {/*    icon='cloud-upload'*/}
+              {/*    text='save'*/}
+              {/*    onPressed={ notImplementedAlert }*/}
+              {/*  />*/}
+              {/*  <IconButton*/}
+              {/*    style={ styles.controllerRightButton }*/}
+              {/*    icon='cloud-download'*/}
+              {/*    text='load'*/}
+              {/*    onPressed={ notImplementedAlert }*/}
+              {/*  />*/}
+              {/*</View>*/}
+              <View style={ styles.buttonGroup }>
+                <IconButton
+                  icon='share'
+                  text='share'
+                  onPressed={ this.handleSharePressed.bind(this) }
+                />
+              </View>
             </View>
-          </LayoutBaseContainer>
+          </View>
+        </View>
+        <View>
+          <HistoryTree
+            historyTreeLayout={ this.props.historyTreeLayout }
+            onNodePressed={ this.props.onHistoryNodePressed }
+          />
         </View>
         <Modal
           isOpen={ this.state.shareModalIsOpen }
@@ -238,7 +269,7 @@ export default class Simulator extends Component<Props, State> {
           shouldReturnFocusAfterClose={ true }
           onRequestClose={ this.handleRequestShareModalClose.bind(this) }
           style={ modalStyles }
-          appElement={ document.getElementById('root') }
+          appElement={ rootElement }
         >
           <ShareModalContainer/>
         </Modal>
@@ -263,27 +294,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  contents: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: simulatorWidth - contentsMargin,
-    // height: screenHeight - contentsPadding * 2,
+    height: '100%'
   },
   side: {
-    flex: 1,
     justifyContent: 'space-between',
-    marginRight: contentsMargin,
-    marginLeft: contentsMargin,
-    marginBottom: contentsMargin
+    margin: contentsMargin,
+    width: 340
   },
-  sideHead: {
-    flex: 1
-  },
-  historyTree: {},
   hotkeyElement: {
     borderWidth: 0
+  },
+
+
+  buttons: {
+    flex: 1,
+    flexDirection: 'column',
+    height: 300 / 4 * 2,
+    marginLeft: contentsPadding
+  },
+  buttonGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  controllerRightButton: {
+    marginLeft: contentsMargin
   },
 });

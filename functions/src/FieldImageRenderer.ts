@@ -146,9 +146,12 @@ export default class FieldImageRenderer {
       fieldWidth,
       fieldHeight);
 
+    // draw cross
     {
       const img = await loadImageWithCache(cross);
-      this.context.drawImage(img, x + this.puyoSize * 2, y, this.puyoSize, this.puyoSize);
+      this.context.drawImage(img,
+        x + this.puyoSize * 2, y + this.puyoSize,
+        this.puyoSize, this.puyoSize);
     }
 
     for (let i = 0; i < fieldRows; i++) {
@@ -191,6 +194,11 @@ export default class FieldImageRenderer {
             this.puyoSize);
         }
       }
+    }
+
+    {
+      this.context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      this.context.fillRect(x, y, this.puyoSize * 6, this.puyoSize)
     }
   }
 }

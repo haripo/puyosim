@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery, fork } from "redux-saga/effects";
+import { call, fork, put, select, takeEvery } from "redux-saga/effects";
 import {
   ARCHIVE_CURRENT_FIELD,
   archiveCurrentFieldFinished,
@@ -18,18 +18,11 @@ import {
 import configSagas from './config';
 import shareSagas from './share';
 
-// @ts-ignore
-import { Archive, deleteArchive, loadArchiveList, saveArchive } from "../utils/OnlineStorageService";
-// @ts-ignore
-import { reloadAd } from "../models/admob";
-// @ts-ignore
-import { t } from "../../shared/utils/i18n";
-
-// @ts-ignore
-import { captureException } from "../utils/Sentry";
-
-// @ts-ignore
-import { requestLogin } from "../utils/OnlineStorageService";
+import { deleteArchive, loadArchiveList, requestLogin, saveArchive } from "../platformServices/remoteStorage";
+import { reloadAd } from "../platformServices/admob";
+import { t } from "../platformServices/i18n";
+import { captureException } from "../platformServices/sentry";
+import { Archive } from "../../types";
 
 function* getOrRequestLogin() {
   const currentUid = yield select<(State) => string>(state => state.uid);
@@ -73,7 +66,7 @@ function* handleLoadArchiveListNextPage(action) {
     const uid = yield call(getOrRequestLogin);
     const ids = yield select<(State) => string[]>(state => state.archive.sortedIds);
     const lastItem = yield select<(State) => Archive>(state => state.archive.archives[ids[ids.length - 1]]);
-    const archives = yield call(loadArchiveList, lastItem.play.updatedAt.toDate(), action.count, uid);
+    const archives = yield call(loadArchiveList, lastItem.play.updatedAt, action.count, uid);
     yield put(loadArchiveListNextPageFinished(archives));
   } catch (e) {
     console.error(e);

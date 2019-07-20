@@ -8,6 +8,10 @@ function swapColors(queue: number[], a: number, b: number) {
   return queue;
 }
 
+export function getCurrentHand(queue: number[][], numHands: number): number[] {
+  return queue[numHands % queue.length];
+}
+
 /**
  * 与えられた条件で配色制限を満たすように Queue を編集します
  * @param queue

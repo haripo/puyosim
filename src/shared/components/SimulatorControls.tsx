@@ -84,7 +84,8 @@ export default class SimulatorControls extends PureComponent<Props> {
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'column',
-    height: 300
+    height: 300,
+    flex: 1
   },
   buttonGroup: {
     flex: 1,

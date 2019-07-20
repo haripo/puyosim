@@ -1,18 +1,13 @@
 import firebase from "react-native-firebase";
 import { ADMOB_APP_ID_IOS, ADMOB_APP_ID_ANDROID } from 'react-native-dotenv';
 import { Platform } from "react-native";
+import { AdInterface } from "./index";
 
-abstract class Ad {
-  abstract show(): void;
-}
-
-class InterstitialAd extends Ad {
+class InterstitialAd implements AdInterface {
   private readonly ad;
   private readonly unitId;
 
   constructor(unitId: string) {
-    super();
-
     this.unitId = unitId;
     // FIXME
     // @ts-ignore
@@ -38,7 +33,7 @@ class InterstitialAd extends Ad {
   }
 }
 
-class NoopAd extends Ad {
+class NoopAd implements AdInterface {
   show() {
   }
 }
@@ -55,4 +50,4 @@ function getReloadAd() {
   }
 }
 
-export const reloadAd = getReloadAd();
+export const reloadAd: AdInterface = getReloadAd();

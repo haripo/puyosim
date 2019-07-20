@@ -35,3 +35,32 @@ export type Move = {
   rotation: Rotation,
 };
 
+export type ArchivePlay = {
+  id: string,
+  queue: number[],
+  stack: number[],
+  maxChain: number,
+  score: number,
+  history: string,
+  historyIndex: number,
+  // createdAt: RNFirebase.firestore.Timestamp,
+  // updatedAt: RNFirebase.firestore.Timestamp,
+  createdAt: Date,
+  updatedAt: Date,
+};
+
+export type ArchiveRequestPayload = {
+  play: ArchivePlay,
+  title: string
+}
+
+export type Archive = {
+  uid: string,
+  play: ArchivePlay,
+  title: string,
+  version: {
+    schema: number,
+    app: string,
+    build: string,
+  }
+}

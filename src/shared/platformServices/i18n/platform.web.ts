@@ -1,4 +1,4 @@
-import translations from './translations';
+import translations from '../../utils/translations';
 
 function detectLanguage() {
   try {
@@ -14,4 +14,5 @@ function detectLanguage() {
 
 const lang = detectLanguage();
 
-export default (key: string): string => (translations[lang] || translations['en'])[key];
+export const t = (key: string): string => (translations[lang] || translations['en'])[key];
+export const formatDateTime = (date: string | Date) => 'not implemented';

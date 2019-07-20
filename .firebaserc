@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "puyosim-web"
+  },
+  "targets": {
+    "puyosim-web": {
+      "hosting": {
+        "production": [
+          "puyosim-web"
+        ],
+        "staging": [
+          "rensim-staging"
+        ]
+      }
+    }
   }
 }

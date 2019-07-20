@@ -12,19 +12,38 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, 'src/shared'),
     path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
     path.resolve(appDirectory, 'node_modules/react-native-sentry'),
+    path.resolve(appDirectory, 'node_modules/react-native-fs'),
+    path.resolve(appDirectory, 'node_modules/react-native-share'),
+
+    // native-base
+    path.resolve(appDirectory, 'node_modules/native-base-shoutem-theme'),
+    path.resolve(appDirectory, 'node_modules/react-navigation'),
+    path.resolve(appDirectory, 'node_modules/react-native-easy-grid'),
+    path.resolve(appDirectory, 'node_modules/react-native-drawer'),
+    path.resolve(appDirectory, 'node_modules/react-native-safe-area-view'),
+    path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
+    path.resolve(appDirectory, 'node_modules/react-native-keyboard-aware-scroll-view'),
+    path.resolve(appDirectory, 'node_modules/react-native-web'),
+    path.resolve(appDirectory, 'node_modules/react-native-tab-view'),
+    path.resolve(appDirectory, 'node_modules/static-container'),
   ],
-  use: {
-    loader: 'babel-loader',
-    options: {
-      babelrc: false,
-      plugins: [
-        'react-native-web',
-        'transform-flow-strip-types',
-        ["@babel/plugin-proposal-class-properties", { "loose": false }],
-      ],
-      presets: ['@babel/preset-env']
+  use: [
+    {
+      loader: 'cache-loader'
+    },
+    {
+      loader: 'babel-loader',
+      options: {
+        babelrc: false,
+        plugins: [
+          'react-native-web',
+          'transform-flow-strip-types',
+          ["@babel/plugin-proposal-class-properties", { "loose": false }],
+        ],
+        presets: ['@babel/preset-env']
+      }
     }
-  }
+  ]
 };
 
 const imageLoaderConfiguration = {
@@ -49,27 +68,26 @@ const fontLoaderConfiguration = {
 const tsLoaderConfiguration = {
   test: /\.tsx?$/,
   exclude: [
-    "/node_modules/"
+    /node_modules/,
+    /test\.ts/
   ],
-  use: {
-    loader: 'ts-loader',
-    options: {
-      compilerOptions: {
-        allowJs: true,
-        target: "ES5",
-        module: "es2015",
-        jsx: "react",
-        outDir: "web/public",
-        lib: ["dom", "ES2017"],
+  use: [
+    {
+      loader: 'cache-loader'
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        configFile: path.resolve(appDirectory, 'web/tsconfig.json')
       }
     }
-  }
+  ]
 };
 
 module.exports = {
   entry: [path.resolve(appDirectory, 'index.web.js'), '@babel/polyfill'],
   output: {
-    filename: 'bundle.web.js',
+    filename: 'bundle/bundle.web.js',
     path: path.resolve(appDirectory, 'web/public')
   },
   module: {
@@ -90,7 +108,8 @@ module.exports = {
     extensions: ['.web.js', '.js', '.ts', '.tsx', '.web.ts', '.web.tsx'],
     alias: {
       'react-native-svg': 'react-native-svg-web',
-      'react-native': 'react-native-web'
+      'react-native': 'react-native-web',
+      'react-native/Libraries/Renderer/shims/ReactNativePropRegistry': 'react-native-web/dist/modules/ReactNativePropRegistry',
     }
   },
   devServer: {
@@ -98,7 +117,7 @@ module.exports = {
     publicPath: '/',
     historyApiFallback: {
       rewrites: [
-        { from: /^\/[sv].*$/, to: '/simulator.html' }
+        { from: /^\/[sev].*$/, to: '/simulator.html' }
       ]
     }
   },

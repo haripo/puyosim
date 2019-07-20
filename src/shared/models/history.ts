@@ -1,8 +1,9 @@
 import { createField, getSplitHeight, setPair } from './stack';
-import { isEqualMove } from "./move";
+import { getDefaultMove } from "./move";
 import { createChainPlan } from "./chainPlanner";
 import * as _ from 'lodash';
 import { Move, Pair, Stack } from "../../types";
+import { SimulatorState } from "../reducers/simulator";
 
 // TODO: refactoring constants
 export const fieldRows = 13;
@@ -299,4 +300,21 @@ export function reindexDefaultNexts(history: HistoryRecord[], historyIndex: numb
     history[index].defaultNext = next;
   }
   return history;
+}
+
+export function getDefaultNextRecord(state: SimulatorState): HistoryRecord | null {
+  const next = state.history[state.historyIndex].defaultNext;
+  if (!next) {
+    return null;
+  }
+  return state.history[next];
+}
+
+export function getDefaultNextMove(state: SimulatorState): Move {
+  const nextRecord = getDefaultNextRecord(state);
+  if (nextRecord && nextRecord.type === 'move') {
+    return nextRecord.move;
+  } else {
+    return getDefaultMove();
+  }
 }

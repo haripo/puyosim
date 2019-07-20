@@ -21,27 +21,27 @@ import {
 } from '../actions/actions';
 import { getDefaultMove, moveLeft, moveRight, rotateLeft, rotateRight } from '../models/move';
 import { fieldCols, fieldRows } from '../utils/constants';
-import { getCurrentHand, getDefaultNextMove } from '../selectors/simulatorSelectors';
-import { generateQueue } from '../models/queue';
+import { generateQueue, getCurrentHand } from '../models/queue';
 import { setPatternByName, setRandomHistory } from '../models/debug';
 import {
-  appendHistoryRecord, createEditHistoryRecord,
+  appendHistoryRecord,
+  createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
-  createInitialHistoryRecord,
+  createInitialHistoryRecord, getDefaultNextMove,
   History,
-  HistoryRecord, reindexDefaultNexts
+  HistoryRecord,
+  reindexDefaultNexts
 } from '../models/history';
 import { createField, getSplitHeight, setPair } from '../models/stack';
 import { deserializeHistoryRecords, deserializeQueue } from "../models/serializer";
 import uuid from 'uuid/v4';
 import _ from 'lodash';
-// @ts-ignore
-import { Archive } from "../utils/OnlineStorageService";
 import { createFieldReducer, FieldState, initialFieldState } from "./field";
 import { State } from "./index";
 import { ConfigState } from "./config";
-import { Move } from "../../types";
+import { Archive, Move } from "../../types";
+import { original } from 'immer';
 
 export type SimulatorState = FieldState & {
   queue: number[][],
@@ -81,7 +81,7 @@ function moveHighlightsRight(state: SimulatorState, action) {
 }
 
 function putNextPair(state: SimulatorState, action) {
-  const hand = getCurrentHand(state);
+  const hand = getCurrentHand(state.queue, state.numHands);
   const move = state.pendingPair;
   const prevStack = state.stack;
   const splitHeight = getSplitHeight(prevStack, move);
@@ -258,8 +258,8 @@ function refreshPlayId(state: SimulatorState, action) {
 
 function applyEditorState(state: SimulatorState, action, rootState: State) {
 
-  if (state.stack === rootState.editor.stack) {
-    // Stack が変化しなかった場合、設置処理を行わない
+  // Stack が変化しなかった場合、設置処理を行わない
+  if (original(state.stack) === original(rootState.editor.stack)) {
     return state;
   }
 

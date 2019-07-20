@@ -12,7 +12,7 @@ import {
   resetField,
   restart,
   rotateHighlightsLeft,
-  rotateHighlightsRight,
+  rotateHighlightsRight, runChainAnimation,
   undoField,
   vanishPuyos,
 } from '../../shared/actions/actions';
@@ -47,7 +47,11 @@ const mapStateToProps = (state: State) => {
     theme: getTheme(state.theme),
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
-    chain: state.simulator.chain
+    chain: state.simulator.chain,
+
+    match: {},
+    location: {},
+    mode: undefined
   };
 };
 
@@ -67,15 +71,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDropPressed: () => {
       dispatch(putNextPair());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onUndoSelected: () => {
       dispatch(undoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onRedoSelected: () => {
       dispatch(redoField());
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onResetSelected: () => {
       dispatch(resetField());
@@ -83,20 +87,24 @@ const mapDispatchToProps = (dispatch) => {
     onRestartSelected: () => {
       dispatch(restart());
     },
+    onShareSelected: () => {
+
+    },
     onHistoryNodePressed: (index: number) => {
       dispatch(moveHistory(index));
-      dispatch(vanishPuyos());
+      dispatch(runChainAnimation('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
-      dispatch(reconstructHistory(history, queue, index))
+      dispatch(reconstructHistory(history, queue, index));
+      dispatch(runChainAnimation('simulator'));
     },
     onVanishingAnimationFinished: () => {
-      dispatch(finishVanishingAnimations());
-      dispatch(applyGravity());
+      dispatch(finishVanishingAnimations('simulator'));
+      dispatch(applyGravity('simulator'));
     },
     onDroppingAnimationFinished: () => {
-      dispatch(finishDroppingAnimations());
-      dispatch(vanishPuyos());
+      dispatch(finishDroppingAnimations('simulator'));
+      dispatch(vanishPuyos('simulator'));
     }
   };
 };

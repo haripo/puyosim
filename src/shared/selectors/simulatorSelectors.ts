@@ -1,4 +1,4 @@
-import { getDefaultMove, getFirstCol, getSecondCol } from '../models/move';
+import { getFirstCol, getSecondCol } from '../models/move';
 import { getDropPositions as getDropPositionsStack, getStackForRendering, } from '../models/stack';
 import { SimulatorState } from '../reducers/simulator';
 import { createSelector } from 'reselect';
@@ -6,11 +6,10 @@ import { deserializeHistoryRecords, serializeHistoryRecords } from "../models/se
 import { getCurrentPathRecords, HistoryRecord } from "../models/history";
 import { DroppingPlan } from "../models/chainPlanner";
 import _ from 'lodash';
-// @ts-ignore
-import { ArchiveRequestPayload } from "../utils/OnlineStorageService";
-// @ts-ignore
-import { captureException } from "../utils/Sentry";
-import { Color, Move, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { captureException } from "../platformServices/sentry";
+import { ArchiveRequestPayload, Color, PendingPair, PendingPairPuyo, StackForRendering } from "../../types";
+import { getCurrentHand } from "../models/queue";
+import { calcHistoryTreeLayout } from '../models/treeLayout';
 
 export function canUndo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].prev !== null;
@@ -18,23 +17,6 @@ export function canUndo(state: SimulatorState): boolean {
 
 export function canRedo(state: SimulatorState): boolean {
   return state.history[state.historyIndex].next.length > 0;
-}
-
-export function getDefaultNextRecord(state: SimulatorState): HistoryRecord | null {
-  const next = state.history[state.historyIndex].defaultNext;
-  if (!next) {
-    return null;
-  }
-  return state.history[next];
-}
-
-export function getDefaultNextMove(state: SimulatorState): Move {
-  const nextRecord = getDefaultNextRecord(state);
-  if (nextRecord && nextRecord.type === 'move') {
-    return nextRecord.move;
-  } else {
-    return getDefaultMove();
-  }
 }
 
 export function getGhost(state: SimulatorState): PendingPairPuyo[] {
@@ -62,35 +44,35 @@ export const getPreviousHand = createSelector(
   (queue, numHands) => queue[(numHands - 1) % queue.length]
 );
 
-export const getCurrentHand = createSelector(
+export const getCurrentHandSelector = createSelector(
   [
     (state: SimulatorState) => state.queue,
     (state: SimulatorState) => state.numHands
   ],
-  (queue, numHands) => queue[numHands % queue.length]
+  getCurrentHand
 );
 
 export const getNextHand = createSelector(
   [
     (state: SimulatorState) => state.queue,
-    (state: SimulatorState) => state.numHands
+    (state: SimulatorState) => state.numHands + 1
   ],
-  (queue, numHands) => queue[(numHands + 1) % queue.length]
+  getCurrentHand
 );
 
 export const getDoubleNextHand = createSelector(
   [
     (state: SimulatorState) => state.queue,
-    (state: SimulatorState) => state.numHands
+    (state: SimulatorState) => state.numHands + 2
   ],
-  (queue, numHands) => queue[(numHands + 2) % queue.length]
+  getCurrentHand
 );
 
 
 const _getPendingPair = state => state.pendingPair;
 
 export const getPendingPair = createSelector(
-  [_getPendingPair, getCurrentHand],
+  [_getPendingPair, getCurrentHandSelector],
   (pair, hand): PendingPair => {
     let secondRow = 1;
     if (pair.rotation === 'bottom') {
@@ -125,7 +107,7 @@ export const getDropPositions = createSelector(
   [
     (state: SimulatorState) => state.stack,
     (state: SimulatorState) => state.pendingPair,
-    (state: SimulatorState) => getCurrentHand(state)
+    (state: SimulatorState) => getCurrentHandSelector(state)
   ],
   getDropPositionsStack
 );
@@ -133,85 +115,36 @@ export const getDropPositions = createSelector(
 export const getHistoryTreeLayout = createSelector(
   [
     (state: SimulatorState) => state.history,
+    (state: SimulatorState) => state.queue,
     (state: SimulatorState) => state.historyIndex
   ],
-  _getHistoryTreeLayout
+  calcHistoryTreeLayout
 );
 
-function _getHistoryTreeLayout(history, historyIndexBase) {
-  let nodes: any[] = [];
-  let paths: any[] = [];
-  let rightmostRow = 0;
-  let deepestColumn = 0;
-
-  // calc indexMap
-  let indexMap = {};
-  {
-    let index = historyIndexBase;
-    while (index) {
-      const p = history[index];
-      indexMap[p.prev] = index;
-      index = p.prev;
-    }
-  }
-
-  // calc graph layout
-  const calcLayout = (historyIndex, depth, parentRow) => {
-    const record = history[historyIndex];
-    if (!record) {
-      return;
-    }
-
-    return record.next.map((nextIndex, index) => {
-      if (index > 0) {
-        rightmostRow += 1;
-      }
-      const isCurrentPath = indexMap[historyIndex] === nextIndex;
-
-      if (historyIndex > 0) {
-        paths.push({
-          from: { row: parentRow, col: depth - 1 },
-          to: { row: rightmostRow, col: depth },
-          isCurrentPath
-        });
-      }
-      if (depth > deepestColumn) {
-        deepestColumn = depth;
-      }
-      nodes.push({
-        row: rightmostRow,
-        col: depth,
-        move: history[nextIndex].move,
-        isCurrentNode: nextIndex === historyIndexBase,
-        historyIndex: nextIndex
-      });
-      calcLayout(nextIndex, depth + 1, rightmostRow);
-    });
-  };
-  calcLayout(0, 0, 0);
-
-  // extract hands from history
-  let hands: any[] = [];
-
-  const searchHands = (index, depth) => {
-    const record = history[index];
-    if (depth > 0) {
-      hands[depth - 1] = record.pair;
-    }
-    record.next.map(nextIndex => {
-      searchHands(nextIndex, depth + 1);
-    });
-  };
-  searchHands(0, 0);
-
-  return {
-    nodes,
-    paths,
-    hands,
-    width: rightmostRow,
-    height: deepestColumn
-  };
+export type HistoryGraphNode = {
+  row: number,
+  col: number,
+  record: HistoryRecord,
+  isCurrentNode: boolean,
+  historyIndex: number,
+  // path: HistoryGraphPath | null
 }
+
+export type HistoryGraphPath = {
+  from: { row: number, col: number },
+  to: { row: number, col: number },
+  isCurrentPath: boolean
+}
+
+export type HistoryGraph = {
+  nodes: HistoryGraphNode,
+  paths: HistoryGraphPath,
+  queue: number[][],
+  width: number,
+  height: number
+}
+
+// TODO: model に移動する
 
 export function getArchivePayload(state: SimulatorState): ArchiveRequestPayload {
   // serialize に失敗するパターンがあるようなので、デバッグのため確認する。

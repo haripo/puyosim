@@ -7,12 +7,8 @@ import {
   SAVE_CONFIG,
   saveConfigCompleted
 } from "../actions/actions";
-
-// @ts-ignore
-import { loadConfig, saveConfig } from "../utils/StorageService";
-
-// @ts-ignore
-import { captureException } from "../utils/Sentry";
+import { loadConfig, saveConfig } from "../platformServices/storage";
+import { captureException } from "../platformServices/sentry";
 
 function* load() {
   let config = {};

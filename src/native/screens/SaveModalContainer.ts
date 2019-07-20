@@ -4,8 +4,7 @@ import SaveModal from "../components/SaveModal";
 import { getStack } from "../../shared/selectors/fieldSelectors";
 import { getLayout } from "../../shared/selectors/layoutSelectors";
 import { getTheme } from "../../shared/selectors/themeSelectors";
-// @ts-ignore
-import { ArchiveRequestPayload } from "../../shared/utils/OnlineStorageService";
+import { ArchiveRequestPayload } from "../../types";
 
 const mapStateToProps = (state) => {
   return {

@@ -1,5 +1,4 @@
-// @ts-ignore
-import t from '../utils/i18n';
+import { t } from '../platformServices/i18n';
 import { handsetPatterns } from '../utils/handsetPattern';
 
 function generateChildren(config, patterns, allowNotSpecified) {
