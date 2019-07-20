@@ -52,7 +52,7 @@ export default class Viewer extends Component<Props, State> {
     headerRight: navigation.getParam('root', false) ? (
       <TouchableOpacity
         style={ { marginRight: 10 } }
-        onPress={ () => navigation.replace('simulator', { ignoreDeepLink: true }) }
+        onPress={ () => navigation.replace('simulator', { fromViewer: true }) }
       >
         <Text style={ { color: 'white' } }>OPEN SIMULATOR</Text>
       </TouchableOpacity>
