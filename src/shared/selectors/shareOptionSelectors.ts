@@ -6,13 +6,13 @@ import { getCurrentPathRecords } from "../models/history";
 function createShareURL(q: string, h: string | null): string {
   const head = 'https://puyosim.page.link/';
   const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
-  const link = encodeURIComponent('https://puyos.im/v?' + query);
+  const link = encodeURIComponent('https://rens.im/v?' + query);
   return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
 }
 
 const functionHost = __DEV__
   ? 'https://rensim-staging.firebaseapp.com'
-  : 'https://puyos.im';
+  : 'https://rens.im';
 
 function createQuery(params) {
   let str: string[] = [];

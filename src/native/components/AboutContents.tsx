@@ -12,9 +12,9 @@ type Props = {
 
 export default class AboutContents extends Component<Props, {}> {
 
-  static websiteURL = 'http://puyos.im';
-  static feedbackURL = 'http://puyos.im/feedback.html';
-  static licensesURL = 'http://puyos.im/license.txt';
+  static websiteURL = 'http://rens.im';
+  static feedbackURL = 'http://rens.im/feedback.html';
+  static licensesURL = 'http://rens.im/license.txt';
 
   static navigationOptions = () => ({
     title: 'About'
