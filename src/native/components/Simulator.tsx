@@ -113,11 +113,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
   async componentDidMount() {
     SplashScreen.hide();
 
-    if (!this.props.navigation.getParam('fromViewer', false)) {
-      // config の読みこみと simulator の初期化が行われる
-      this.props.onMounted();
-    }
-
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
     if (semver.lt(VersionNumber.appVersion, minimumSupportedAppVersion || '0.0.1')) {
@@ -143,7 +138,10 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
 
     // open URL in viewer mode
     if (!this.props.navigation.getParam('fromViewer', false)) {
-      firebase.links()
+      // config の読みこみと simulator の初期化が行われる
+      this.props.onMounted();
+
+      await firebase.links()
         .getInitialLink()
         .then((url) => {
           this.launchViewer(url);

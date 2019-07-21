@@ -35,12 +35,12 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>15</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-1876795357833764~6972251977</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-apps://</string>
 	</array>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-1876795357833764~6972251977</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -58,6 +58,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://rens.im/link</string>
+	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save snapshot</string>
 	<key>NSPhotoLibraryUsageDescription</key>

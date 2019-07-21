@@ -4,7 +4,7 @@ import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords } from "../models/history";
 
 function createShareURL(q: string, h: string | null): string {
-  const head = 'https://puyosim.page.link/';
+  const head = 'https://rens.im/link/';
   const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
   const link = encodeURIComponent('https://rens.im/v?' + query);
   return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
