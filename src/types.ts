@@ -43,8 +43,6 @@ export type ArchivePlay = {
   score: number,
   history: string,
   historyIndex: number,
-  // createdAt: RNFirebase.firestore.Timestamp,
-  // updatedAt: RNFirebase.firestore.Timestamp,
   createdAt: Date,
   updatedAt: Date,
 };
