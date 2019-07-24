@@ -27,6 +27,7 @@ footer a {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   line-height: 0;
 }
 
@@ -34,4 +35,30 @@ footer a {
   width: 160px;
   height: 77px;
   padding: 12px 0;
+}
+
+@media screen and (min-width: 600px) {
+  .features {
+    margin: 80px;
+  }
+
+  .features .row {
+    margin: 60px 20px;
+  }
+
+  .features img {
+    margin: auto 20px;
+    box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .features .row {
+    margin: 60px auto;
+  }
+
+  .features img {
+    margin: 0 auto;
+    box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.1);
+  }
 }
