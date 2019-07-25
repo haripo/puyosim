@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as functions from 'firebase-functions';
-import FieldImageRenderer from './FieldImageRenderer';
+import { createImage, createVideo } from './media';
 import { deserializeHistoryRecords, deserializeQueue } from "../../src/shared/models/serializer";
 import { createHistoryFromMinimumHistory } from "../../src/shared/models/history";
 
@@ -29,30 +29,23 @@ async function createGifMovie(strQueue: string, strHistory: string, skin: string
   const minimumHistory = deserializeHistoryRecords(strHistory);
   const history = createHistoryFromMinimumHistory(minimumHistory, queue, minimumHistory.length - 1);
 
-  const renderer = new FieldImageRenderer(theme, skin);
-  return await renderer.renderVideo(history);
+  return await createVideo(history, theme, skin);
 }
 
 async function createGif(strField: string, skin: string) {
   const field = _.chunk(strField.split('').map(v => parseInt(v)), 6);
-  const renderer = new FieldImageRenderer(theme, skin);
-  return await renderer.renderField(field);
+  return await createImage(field, theme, skin);
 }
 
 export const renderGif = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
   const skin = request.query.skin ||  'puyoSkinDefault';
   const field = request.query.s.replace(/[\r\n]/g, '');
   // TODO validate field
-  const data = await createGif(field, skin);
 
   response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
   response.set('Content-Disposition', `attachment; filename="${makeFilename()}.jpg"`);
-  if (request.query.base64) {
-    response.send(data.toString('base64'));
-  } else {
-    response.contentType('image/gif');
-    response.send(data);
-  }
+  response.contentType('image/gif');
+  response.send(await createGif(field, skin));
 });
 
 export const renderGifDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
@@ -78,16 +71,11 @@ export const renderGifMovie = functions.runWith(runtimeOptions).https.onRequest(
   const strQueue = request.query.q;
   const strHistory = request.query.h;
   const skin = request.query.skin || 'puyoSkinDefault';
-  const data = await createGifMovie(strQueue, strHistory, skin);
 
   response.set('Cache-Control', 'public, max-age=300, s-maxage=5184000'); // 5184000 = 2 months
   response.set('Content-Disposition', `attachment; filename="${makeFilename()}.mp4"`);
-  if (request.query.base64) {
-    response.send(data.toString('base64'));
-  } else {
-    response.contentType('video/mp4');
-    response.send(data);
-  }
+  response.contentType('video/mp4');
+  response.send(await createGifMovie(strQueue, strHistory, skin));
 });
 
 export const renderGifMovieDebug = functions.runWith(runtimeOptions).https.onRequest(async (request, response) => {
