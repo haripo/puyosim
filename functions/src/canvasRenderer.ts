@@ -46,6 +46,10 @@ export default class CanvasRenderer {
     if (this.context === null) {
       throw new Error('Failed to get canvas context');
     }
+
+    // this.context.antialias = 'none';
+    this.context.filter = 'nearest';
+    this.context.imageSmoothingEnabled = false;
   }
 
   get asPngBuffer() {

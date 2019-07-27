@@ -20,6 +20,12 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
 
   let filePrefix = tempfile();
   let fileCount = 0;
+
+  const save = async () => {
+    const f = filePrefix + String(fileCount++).padStart(5, '0') + '.png';
+    fs.writeFileSync(f, canvasRenderer.asPngBuffer);
+  };
+
   const renderAndSave = async (stack: Stack, record: HistoryRecord, score: number, chain: number, chainScore: number) => {
     const renderingStack = getStackForRendering(stack, []);
     await canvasRenderer.render(
@@ -28,8 +34,7 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
       score,
       chainScore,
       chain);
-    const f = filePrefix + String(fileCount++).padStart(5, '0') + '.png';
-    fs.writeFileSync(f, canvasRenderer.asPngBuffer);
+    await save();
   };
 
   let totalScore = 0;
@@ -59,10 +64,24 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
     }
   }
 
+  for (let i = 0; i < 10; i++) {
+    // 最後のフレームを繰り返して動画末尾を引き延ばす
+    await save();
+  }
+
   const outputFile = tempfile('.mp4');
   const spawnResponse = spawn(
     ffmpeg.path,
-    ['-framerate', '3', '-i', filePrefix + '%05d.png', '-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-sws_flags', 'neighbor'/*, '-vf', '"scale=408:-1"'*/, outputFile],
+    [
+      '-framerate', '3',
+      '-i', filePrefix + '%05d.png',
+      '-vcodec', 'libx264',
+      '-pix_fmt', 'yuv420p',
+      '-sws_flags', 'neighbor',
+      '-crf', '23',
+      /*, '-vf', '"scale=408:-1"'*/
+      outputFile
+    ],
     { shell: true });
 
   let ffmpegOutput = '';
