@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Image, ImageStyle, StyleSheet, View } from 'react-native';
 import { cardBackgroundColor, contentsMargin, contentsPadding } from '../utils/constants';
+import { ojamaImages } from '../assets/puyoImages';
+import { getOjamaNotification } from '../models/score';
 
 type Props = {
   score: number
@@ -10,53 +12,12 @@ type Props = {
  * Component for render notice puyos
  */
 export default class NoticePuyos extends Component<Props, {}> {
-  rate: number;
-  noticeVolumes: number[];
-  images: any[];
-
-  constructor(props) {
-    super(props);
-
-    this.rate = 70;
-    this.noticeVolumes = [
-      1,
-      6,
-      30,
-      180,
-      360,
-      720
-    ];
-
-    this.images = [
-      require('../../../assets/ojama_small.png'),
-      require('../../../assets/ojama_large.png'),
-      require('../../../assets/ojama_stone.png'),
-      require('../../../assets/ojama_mushroom.png'),
-      require('../../../assets/ojama_star.png'),
-      require('../../../assets/ojama_crown.png')
-    ];
-  }
-
-  getRenderNoticePuyos(counts) {
-    let result: number[] = [];
-    for (let i = 0; i < this.noticeVolumes.length; i++) {
-      const r = this.noticeVolumes.length - i - 1;
-      const volume = this.noticeVolumes[r];
-      while (counts >= volume) {
-        result.push(r);
-        counts -= volume;
-      }
-    }
-    return result;
-  }
-
   renderNoticePuyos() {
-    const counts = Math.floor(this.props.score / this.rate);
-    const puyos = this.getRenderNoticePuyos(counts);
+    const puyos = getOjamaNotification(this.props.score);
     return puyos.map((type, index) => {
       const style = [styles.puyo, { left: index * 24 + contentsPadding }];
       return (
-        <Image source={ this.images[type] } style={ style as ImageStyle } key={ index }/>
+        <Image source={ ojamaImages[type] } style={ style as ImageStyle } key={ index }/>
       );
     });
   }
