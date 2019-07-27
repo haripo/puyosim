@@ -32,18 +32,18 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
     fs.writeFileSync(f, canvasRenderer.asPngBuffer);
   };
 
-  let score = 0;
+  let totalScore = 0;
   for (const record of history) {
     const stack = record.stack;
     let chain = 0;
     let chainScore = 0;
-    await renderAndSave(stack, record, score, chain, chainScore);
+    await renderAndSave(stack, record, totalScore, chain, chainScore);
 
     // run chains
     while (true) {
       const dropPlans = getDropPlan(stack, fieldRows, fieldCols);
       if (dropPlans.length > 0) {
-        await renderAndSave(stack, record, score, chain, chainScore);
+        await renderAndSave(stack, record, totalScore, chain, chainScore);
       }
 
       const vanishPlans = getVanishPlan(stack, fieldRows, fieldCols);
@@ -51,8 +51,8 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
         chain++;
         const stepScore = calcChainStepScore(chain, vanishPlans);
         chainScore += stepScore;
-        score += stepScore;
-        await renderAndSave(stack, record, score, chain, chainScore);
+        totalScore += stepScore;
+        await renderAndSave(stack, record, totalScore, chain, chainScore);
       } else {
         break;
       }
