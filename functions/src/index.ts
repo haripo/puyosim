@@ -29,7 +29,7 @@ async function createGifMovie(strQueue: string, strHistory: string, skin: string
   const minimumHistory = deserializeHistoryRecords(strHistory);
   const history = createHistoryFromMinimumHistory(minimumHistory, queue, minimumHistory.length - 1);
 
-  return await createVideo(history, theme, skin);
+  return await createVideo(history, queue, theme, skin);
 }
 
 async function createGif(strField: string, skin: string) {

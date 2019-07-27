@@ -14,32 +14,38 @@ import CanvasRenderer from './canvasRenderer';
 const fieldRows = 13;
 const fieldCols = 6;
 
-export async function createVideo(history: HistoryRecord[], theme: Theme, puyoSkin: string) {
+export async function createVideo(history: HistoryRecord[], queue: number[][], theme: Theme, puyoSkin: string) {
   const canvasRenderer = new CanvasRenderer(theme, puyoSkin);
 
   let filePrefix = tempfile();
   let fileCount = 0;
-  const renderAndSave = async (stack: Stack) => {
+  const renderAndSave = async (stack: Stack, record: HistoryRecord, chain: number) => {
     const renderingStack = getStackForRendering(stack, []);
-    await canvasRenderer.render(renderingStack);
+    await canvasRenderer.render(
+      renderingStack,
+      queue.slice(record.numHands, record.numHands + 2),
+      record.score,
+      chain);
     const f = filePrefix + String(fileCount++).padStart(5, '0') + '.png';
     fs.writeFileSync(f, canvasRenderer.asPngBuffer);
   };
 
   for (const record of history) {
     const stack = record.stack;
-    await renderAndSave(stack);
+    await renderAndSave(stack, record, 0);
 
     // run chains
+    let chain = 0;
     while (true) {
       const dropPlans = getDropPlan(stack, fieldRows, fieldCols);
       if (dropPlans.length > 0) {
-        await renderAndSave(stack);
+        await renderAndSave(stack, record, chain);
       }
 
       const vanishPlans = getVanishPlan(stack, fieldRows, fieldCols);
       if (vanishPlans.length > 0) {
-        await renderAndSave(stack);
+        chain++;
+        await renderAndSave(stack, record, chain);
       } else {
         break;
       }
@@ -49,7 +55,7 @@ export async function createVideo(history: HistoryRecord[], theme: Theme, puyoSk
   const outputFile = tempfile('.mp4');
   const spawnResponse = spawn(
     ffmpeg.path,
-    ['-framerate', '3', '-i', filePrefix + '%05d.png', '-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-sws_flags', 'neighbor', '-vf', '"scale=408:-1"', outputFile],
+    ['-framerate', '3', '-i', filePrefix + '%05d.png', '-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-sws_flags', 'neighbor'/*, '-vf', '"scale=408:-1"'*/, outputFile],
     { shell: true });
 
   let ffmpegOutput = '';
@@ -63,7 +69,6 @@ export async function createVideo(history: HistoryRecord[], theme: Theme, puyoSk
   await spawnResponse;
 
   console.info("Ffmpeg finished: \n" + ffmpegOutput);
-
   return fs.readFileSync(outputFile);
 }
 
