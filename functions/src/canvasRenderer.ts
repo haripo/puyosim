@@ -2,7 +2,8 @@ import { Canvas, CanvasRenderingContext2D, createCanvas, loadImage } from 'canva
 
 import { Theme } from "../../src/shared/selectors/themeSelectors";
 import { StackForRendering } from "../../src/types";
-import { connectionImages, puyoImages } from "../../src/shared/assets/puyoImages";
+import { connectionImages, puyoImages, ojamaImages } from "../../src/shared/assets/puyoImages";
+import { getOjamaNotification } from '../../src/shared/models/score';
 
 const cross = require('../../assets/cross.png');
 
@@ -138,14 +139,41 @@ export default class CanvasRenderer {
     }
   }
 
-  async renderMetrics(score: number, chain: number) {
-    const height = 24;
+  async renderOjama(chainScore: number) {
     let x = this.fieldWidth + this.margin * 2;
     let y = this.puyoSize * 2 + this.margin * 3;
+
+    this.context.fillStyle = this.theme.cardBackgroundColor;
+    this.context.fillRect(
+      x,
+      y,
+      this.fieldWidth,
+      this.puyoSize + this.margin * 2);
+
+    const puyos = getOjamaNotification(chainScore);
+    let i = 0;
+    for (let puyo of puyos) {
+      const resource = ojamaImages[puyo];
+      const img = await loadImageWithCache(resource);
+      this.context.drawImage(
+        img,
+        x + i * (this.puyoSize / 3 * 2) + this.margin,
+        y + this.margin,
+        this.puyoSize,
+        this.puyoSize);
+      i++;
+    }
+  }
+
+  async renderMetrics(score: number, chain: number, chainScore: number) {
+    const height = 24;
+    let x = this.fieldWidth + this.margin * 2;
+    let y = this.puyoSize * 3 + this.margin * 6;
 
     const values = [
       { title: 'score', value: score },
       { title: 'chain', value: chain },
+      { title: 'chain score', value: chainScore },
     ];
 
     for (let i = 0; i < values.length; i++) {
@@ -193,10 +221,11 @@ export default class CanvasRenderer {
     this.context.fillRect(this.margin, this.margin, this.puyoSize * 6, this.puyoSize)
   }
 
-  async render(stack: StackForRendering, nexts?: number[][], score?: number, chain?: number) {
+  async render(stack: StackForRendering, nexts?: number[][], score?: number, chainScore?: number, chain?: number) {
     if (nexts === undefined
       && score === undefined
-      && chain === undefined) {
+      && chain === undefined
+      && chainScore === undefined) {
       this.canvas.width = this.fieldWidth + this.margin * 2;
     }
 
@@ -206,8 +235,11 @@ export default class CanvasRenderer {
     if (nexts !== undefined) {
       await this.renderNexts(nexts);
     }
-    if (score !== undefined && chain !== undefined) {
-      await this.renderMetrics(score, chain);
+    if (chainScore !== undefined) {
+      await this.renderOjama(chainScore);
+    }
+    if (score !== undefined && chain !== undefined && chainScore !== undefined) {
+      await this.renderMetrics(score, chain, chainScore);
     }
     await this.renderShadow();
   }

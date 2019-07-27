@@ -10,6 +10,7 @@ import { getDropPlan, getVanishPlan } from "../../src/shared/models/chainPlanner
 
 import ffmpeg from 'ffmpeg-static';
 import CanvasRenderer from './canvasRenderer';
+import { calcChainStepScore } from '../../src/shared/models/score';
 
 const fieldRows = 13;
 const fieldCols = 6;
@@ -19,33 +20,39 @@ export async function createVideo(history: HistoryRecord[], queue: number[][], t
 
   let filePrefix = tempfile();
   let fileCount = 0;
-  const renderAndSave = async (stack: Stack, record: HistoryRecord, chain: number) => {
+  const renderAndSave = async (stack: Stack, record: HistoryRecord, score: number, chain: number, chainScore: number) => {
     const renderingStack = getStackForRendering(stack, []);
     await canvasRenderer.render(
       renderingStack,
       queue.slice(record.numHands, record.numHands + 2),
-      record.score,
+      score,
+      chainScore,
       chain);
     const f = filePrefix + String(fileCount++).padStart(5, '0') + '.png';
     fs.writeFileSync(f, canvasRenderer.asPngBuffer);
   };
 
+  let score = 0;
   for (const record of history) {
     const stack = record.stack;
-    await renderAndSave(stack, record, 0);
+    let chain = 0;
+    let chainScore = 0;
+    await renderAndSave(stack, record, score, chain, chainScore);
 
     // run chains
-    let chain = 0;
     while (true) {
       const dropPlans = getDropPlan(stack, fieldRows, fieldCols);
       if (dropPlans.length > 0) {
-        await renderAndSave(stack, record, chain);
+        await renderAndSave(stack, record, score, chain, chainScore);
       }
 
       const vanishPlans = getVanishPlan(stack, fieldRows, fieldCols);
       if (vanishPlans.length > 0) {
         chain++;
-        await renderAndSave(stack, record, chain);
+        const stepScore = calcChainStepScore(chain, vanishPlans);
+        chainScore += stepScore;
+        score += stepScore;
+        await renderAndSave(stack, record, score, chain, chainScore);
       } else {
         break;
       }

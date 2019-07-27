@@ -88,6 +88,10 @@ export function getOjamaNotification(score: number) {
     while (counts >= volume) {
       result.push(r);
       counts -= volume;
+
+      if (result.length > 5) {
+        return result;
+      }
     }
   }
   return result;
