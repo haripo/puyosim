@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(runChainAnimation('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
-      dispatch(reconstructHistory(history, queue, index))
+      dispatch(reconstructHistory(history, queue, index, true))
     },
     onVanishingAnimationFinished: () => {
       dispatch(finishVanishingAnimations('simulator'));
