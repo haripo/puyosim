@@ -23,6 +23,9 @@ const translations = {
     // settings
     noLimit: '制限なし',
     numColors: '色数',
+    queueConfig: 'ツモ設定',
+    eSportsCompatible: 'ぷよスポ互換',
+    queueGenerationCustom: 'カスタム',
     queueBalanceConfig: 'ツモ補正',
     colorBalance: '配色補正',
     balancedIn128: '128 手で均等',
@@ -122,6 +125,9 @@ const translations = {
 
     noLimit: 'No limit',
     numColors: 'The number of colors',
+    queueConfig: 'Queue',
+    eSportsCompatible: 'Puyo-eSports compatible',
+    queueGenerationCustom: 'Custom',
     queueBalanceConfig: 'Handset generation',
     colorBalance: 'Color balance',
     balancedIn128: 'Balanced in 128 hands',
