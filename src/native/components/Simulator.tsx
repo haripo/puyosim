@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Linking, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { parse } from 'query-string';
 import NextWindowContainer from '../../shared/containers/NextWindowContainer';
-import { contentsMargin } from '../../shared/utils/constants';
+import { contentsMargin, contentsPadding } from '../../shared/utils/constants';
 import Field from '../../shared/components/Field';
 import HandlingPuyos from '../../shared/components/HandlingPuyos';
 import SimulatorControls from '../../shared/components/SimulatorControls';
@@ -33,6 +33,7 @@ export type Props = {
   chain: number,
 
   puyoSkin: string,
+  leftyMode: string,
   layout: Layout,
   theme: Theme,
 
@@ -64,10 +65,10 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     title: 'rensim',
     headerRight: (
       <TouchableOpacity
-        style={{ marginRight: 10 }}
+        style={ { marginRight: 10 } }
         onPress={ () => navigation.toggleDrawer() }
       >
-        <Icon name={ 'menu' } size={ 25 } color="#FFF" />
+        <Icon name={ 'menu' } size={ 25 } color="#FFF"/>
       </TouchableOpacity>
     ),
   });
@@ -112,8 +113,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
   async componentDidMount() {
     SplashScreen.hide();
 
-    this.props.onMounted();
-
     // deprecated version warning
     const minimumSupportedAppVersion = await getMinimumSupportedAppVersion();
     if (semver.lt(VersionNumber.appVersion, minimumSupportedAppVersion || '0.0.1')) {
@@ -138,8 +137,11 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
     }
 
     // open URL in viewer mode
-    if (!this.props.navigation.getParam('ignoreDeepLink', false)) {
-      firebase.links()
+    if (!this.props.navigation.getParam('fromViewer', false)) {
+      // config の読みこみと simulator の初期化が行われる
+      this.props.onMounted();
+
+      await firebase.links()
         .getInitialLink()
         .then((url) => {
           this.launchViewer(url);
@@ -164,10 +166,6 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
           { cancelable: false }
         );
       });
-
-    // setTimeout(() => {
-    //   this.launchViewer("https://puyos.im/v?q=FrGDrFxsiryjEsiiDGyxwkDkGswjqksqrqrFDEpzppGkkkGkDzFswpplqxkwqGkzEEpFiGDzrywrrsijrFxjxFsDjiyjGFljizwyjsjFzxrGjplEqxxlGizslrwpwsFk&h=msapsghoeqfbmrccdfjkuqoiceuobqbahcgdvfhprrdpaicubneotmncfmpoccigfetqbdcphoidrpahc9&i=0");
-    // }, 1);
   }
 
   render() {
@@ -176,7 +174,12 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
         <View
           style={ styles.container }>
           <SafeAreaView style={ { flex: 1 } }>
-            <View style={ styles.contents }>
+            <View style={ {
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              flexDirection: (this.props.leftyMode === 'on' ? 'row-reverse' : 'row')
+            } }>
               <View>
                 <HandlingPuyos
                   pair={ this.props.pendingPair }
@@ -205,6 +208,7 @@ export default class Simulator extends Component<Props & NavigationScreenProps, 
                     score={ this.props.score }
                     chain={ this.props.chain }
                     chainScore={ this.props.chainScore }
+                    textAlign={ this.props.leftyMode === 'on' ? 'right' : 'left' }
                   />
                 </View>
                 <SimulatorControls
@@ -233,28 +237,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#F5F5F5'
-  },
-  contents: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    flexDirection: 'row'
+    backgroundColor: '#F5F5F5',
+    paddingRight: contentsMargin,
+    paddingBottom: contentsMargin
   },
   handlingPuyos: {
-    marginTop: 3,
-    marginLeft: 3,
+    marginTop: contentsMargin,
+    marginLeft: contentsMargin,
   },
   side: {
     flex: 1,
-    marginRight: contentsMargin,
     marginTop: contentsMargin,
-    marginBottom: contentsMargin
+    marginLeft: contentsMargin,
   },
   sideHead: {
     flex: 1
   },
   field: {
-    margin: contentsMargin
+    marginTop: contentsMargin,
+    marginLeft: contentsMargin
   }
 });

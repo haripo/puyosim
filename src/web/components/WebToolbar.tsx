@@ -16,7 +16,7 @@ export default class WebToolbar extends React.Component<Props, {}> {
       <View style={ styles.component }>
         <View style={ styles.inner }>
           <Text style={ styles.logo }>
-            puyosim
+            rensim
           </Text>
           <View style={ styles.navigation }>
             <View style={ styles.navigationItem }>

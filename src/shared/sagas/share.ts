@@ -1,22 +1,22 @@
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {
   SHARE_CONFIRMED,
   shareMediaGenerationCompleted,
   shareMediaGenerationFailed,
   showSnackbar
-} from "../actions/actions";
-import { MediaShareType, ShareOption } from "../reducers/shareOption";
-import { getHistoryMovieUrl, getWholePathShareUrl, getStackImageUrl } from "../selectors/shareOptionSelectors";
-import { State } from "../reducers";
-import { captureException } from "../platformServices/sentry";
-import { t } from "../platformServices/i18n";
-import { fetchRemoteMedia, openShare } from "../platformServices/share";
+} from '../actions/actions';
+import { MediaShareType, ShareOption } from '../reducers/shareOption';
+import { getHistoryMovieUrl, getWholePathShareUrl, getStackImageUrl } from '../selectors/shareOptionSelectors';
+import { State } from '../reducers';
+import { captureException } from '../platformServices/sentry';
+import { t } from '../platformServices/i18n';
+import { fetchRemoteMedia, openShare } from '../platformServices/share';
 
 function fetchMediaUrl(state: State, mediaType: MediaShareType) {
   switch (mediaType) {
     case 'image':
       return getStackImageUrl(state);
-    case "video":
+    case 'video':
       return getHistoryMovieUrl(state);
   }
   return null;
@@ -26,12 +26,14 @@ function* share() {
   try {
     const option: ShareOption = yield select<(State) => ShareOption>(state => state.shareOption.shareOption);
     let url: string | null = null;
-    let message: string | null = null;
+    let message: string | null = '';
 
-    if (option.hasUrl === "current") {
-      message = yield select<(State) => string>(getWholePathShareUrl);
+    if (option.hasUrl === 'current') {
+      message += yield select<(State) => string>(getWholePathShareUrl);
+      message += ' ';
     }
-
+    message += '#rensim';
+    
     if (option.hasMedia !== 'none') {
       try {
         const remoteUrl = yield select<(State) => string | null>(s => fetchMediaUrl(s, option.hasMedia));

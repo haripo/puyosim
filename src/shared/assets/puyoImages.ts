@@ -67,3 +67,13 @@ export const connectionImages = {
     }
   ]
 };
+
+// TODO: ファイル名と内容が一致してないのを修正する
+export const ojamaImages = [
+  require('../../../assets/ojama_small.png'),
+  require('../../../assets/ojama_large.png'),
+  require('../../../assets/ojama_stone.png'),
+  require('../../../assets/ojama_mushroom.png'),
+  require('../../../assets/ojama_star.png'),
+  require('../../../assets/ojama_crown.png')
+];

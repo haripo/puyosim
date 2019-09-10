@@ -3,16 +3,16 @@ import { State } from "../reducers";
 import { serializeHistoryRecords, serializeQueue } from "../models/serializer";
 import { getCurrentPathRecords } from "../models/history";
 
-function createShareURL(q: string, h: string | null): string {
-  const head = 'https://puyosim.page.link/';
-  const query = h ? `q=${q}&h=${h}&i=${0}` : `q=${q}`;
-  const link = encodeURIComponent('https://puyos.im/v?' + query);
+function createShareURL(q: string, h: string | null, i: number): string {
+  const head = 'https://rens.im/link/';
+  const query = h ? `q=${q}&h=${h}&i=${i}` : `q=${q}`;
+  const link = encodeURIComponent('https://rens.im/v?' + query);
   return `${head}?link=${link}&apn=com.puyosimulator&isi=1435074935&ibi=com.haripo.puyosim&amv=17&efr=1`;
 }
 
 const functionHost = __DEV__
   ? 'https://rensim-staging.firebaseapp.com'
-  : 'https://puyos.im';
+  : 'https://rens.im';
 
 function createQuery(params) {
   let str: string[] = [];
@@ -33,7 +33,7 @@ export const getWholePathShareUrl = createSelector(
   (queue, history, historyIndex) => {
     const q = serializeQueue(queue);
     const current = serializeHistoryRecords(history);
-    return createShareURL(q, current);
+    return createShareURL(q, current, historyIndex);
   }
 );
 
@@ -46,7 +46,7 @@ export const getCurrentPathShareUrl = createSelector(
   (queue, history, historyIndex) => {
     const q = serializeQueue(queue);
     const current = serializeHistoryRecords(getCurrentPathRecords(history, historyIndex));
-    return createShareURL(q, current);
+    return createShareURL(q, current, historyIndex);
   }
 );
 

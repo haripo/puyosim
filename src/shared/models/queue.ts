@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import { handsetStrToColors } from '../utils/handsetPattern';
+import { ConfigState } from '../reducers/config';
+import { queueList } from '../utils/puyoESportsQueue';
 
 function swapColors(queue: number[], a: number, b: number) {
   const buf = queue[a];
@@ -55,7 +57,15 @@ export function limitInitialColors(
 /**
  * Create queue
  */
-export function generateQueue(configs) {
+export function generateQueue(configs: ConfigState) {
+  if (configs.queueSettings === 'eSportsCompatible') {
+    const randomIndex = Math.ceil(Math.random() * queueList.length);
+    const queue = queueList[randomIndex]
+      .split('')
+      .map(char => ['R', 'G', 'B', 'Y', 'P'].findIndex(c => c === char) + 1);
+    return _.chunk(queue, 2);
+  }
+
   const numColors = parseInt(configs.numColors);
   let queue: number[] = [];
   if (configs.colorBalance === '128') {

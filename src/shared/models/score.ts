@@ -43,6 +43,16 @@ const colorBonusTable = [
   24
 ];
 
+const ojamaRate = 70;
+const ojamaVolumes = [
+  1,
+  6,
+  30,
+  180,
+  360,
+  720
+];
+
 function getConnectionBonus(vanished: VanishingPlan[]): number {
   return _.sum(vanished
     .map(c => {
@@ -69,3 +79,20 @@ export function calcChainStepScore(chainCount: number, vanishingPlans: Vanishing
   return score === 0 ? 40 : score;
 }
 
+export function getOjamaNotification(score: number) {
+  let counts = Math.floor(score / ojamaRate);
+  let result: number[] = [];
+  for (let i = 0; i < ojamaVolumes.length; i++) {
+    const r = ojamaVolumes.length - i - 1;
+    const volume = ojamaVolumes[r];
+    while (counts >= volume) {
+      result.push(r);
+      counts -= volume;
+
+      if (result.length > 5) {
+        return result;
+      }
+    }
+  }
+  return result;
+}

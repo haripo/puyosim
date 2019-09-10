@@ -131,7 +131,7 @@ export default class HistoryTree extends React.Component<Props, State> {
           key={ `${ from.row }-${ from.col }-${ to.row }-${ to.col }` }
           startX={ x1 }
           startY={ y1 }
-          middleX={ to.row * this.nodePaddingX + this.graphX+ this.nodeWidth / 2 }
+          middleX={ to.row * this.nodePaddingX + this.graphX + this.nodeWidth / 2 }
           middleY={ (from.col + 1) * this.nodePaddingY + this.graphY }
           endX={ x2 }
           endY={ y2 }
@@ -165,25 +165,27 @@ export default class HistoryTree extends React.Component<Props, State> {
           To ignore this, wrap Svg by View and specifying its size.
         */ }
         <ScrollView>
-          {/*<View width={ svgWidth } height={ svgHeight }>*/}
-          <View>
-            <Svg width={ svgWidth } height={ svgHeight }>
-              { this.renderTree(nodes, paths) }
-            </Svg>
-          </View>
-          <View style={ styles.handView }>
-            {/*<View style={ styles.handView } height={ svgHeight }>*/}
-            <Svg width={ this.handWidth } height={ svgHeight }>
-              <Rect
-                x={ 0 }
-                y={ 0 }
-                width={ this.handWidth }
-                height={ svgHeight }
-                fill={ themeLightColor }
-              />
-              { queue.map((hand, i) => this.renderHand(hand, i)) }
-            </Svg>
-          </View>
+          <ScrollView horizontal>
+            {/*<View width={ svgWidth } height={ svgHeight }>*/ }
+            <View>
+              <Svg width={ svgWidth } height={ svgHeight }>
+                { this.renderTree(nodes, paths) }
+              </Svg>
+            </View>
+            <View style={ styles.handView }>
+              {/*<View style={ styles.handView } height={ svgHeight }>*/ }
+              <Svg width={ this.handWidth } height={ svgHeight }>
+                <Rect
+                  x={ 0 }
+                  y={ 0 }
+                  width={ this.handWidth }
+                  height={ svgHeight }
+                  fill={ themeLightColor }
+                />
+                { queue.map((hand, i) => this.renderHand(hand, i)) }
+              </Svg>
+            </View>
+          </ScrollView>
         </ScrollView>
       </View>
     );

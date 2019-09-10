@@ -28,7 +28,8 @@ import {
   createEditHistoryRecord,
   createHistoryFromMinimumHistory,
   createHistoryRecord,
-  createInitialHistoryRecord, getDefaultNextMove,
+  createInitialHistoryRecord,
+  getDefaultNextMove,
   History,
   HistoryRecord,
   reindexDefaultNexts
@@ -95,7 +96,6 @@ function putNextPair(state: SimulatorState, action) {
 
   state.numHands += 1;
   state.isResetChainRequired = true;
-  state.pendingPair = getDefaultNextMove(state);
   state.numSplit += splitHeight ? 1 : 0;
 
   const record = createHistoryRecord(
@@ -116,6 +116,9 @@ function putNextPair(state: SimulatorState, action) {
 
   state.history = result.records;
   state.historyIndex = result.currentIndex;
+
+  // history が更新されてから次の move をとる必要がある
+  state.pendingPair = getDefaultNextMove(state);
 
   return state;
 }
@@ -204,18 +207,25 @@ function setHistory(state: SimulatorState, action) {
 }
 
 function reconstructHistory(state: SimulatorState, action): SimulatorState {
-  const { history, queue, index } = action;
+  const { history, queue, index, reset } = action;
   state.queue = deserializeQueue(queue);
   state.history = createHistoryFromMinimumHistory(
     deserializeHistoryRecords(history),
     state.queue,
     index);
-  state.historyIndex = index;
+
+  if (reset) {
+    state.historyIndex = 0;
+    state.history = reindexDefaultNexts(state.history, index);
+  } else {
+    state.historyIndex = index;
+  }
 
   state.startDateTime = new Date();
   state.playId = uuid();
 
-  state = revert(state, index);
+  state = revert(state, state.historyIndex);
+
   return state;
 }
 

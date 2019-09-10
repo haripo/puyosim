@@ -1,32 +1,28 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import NoticePuyos from './NoticePuyos';
 import { t } from '../platformServices/i18n';
 
 type Props = {
   chain: number,
   score: number,
-  chainScore: number
+  chainScore: number,
+  textAlign?: string
 }
 
 export default class ChainResult extends Component<Props, {}> {
   render() {
-    const { chain, score, chainScore } = this.props;
+    const { chain, score, chainScore, textAlign } = this.props;
     return (
-      <View style={ styles.component }>
-        <NoticePuyos score={ chainScore } />
-        <Text>
+      <View>
+        <NoticePuyos score={ chainScore }/>
+        <Text style={ { textAlign: textAlign == 'left' ? 'left' : 'right' } }>
           { chain } { t('chain') } { chainScore } { t('points') }
         </Text>
-        <Text>
+        <Text style={ { textAlign: textAlign == 'left' ? 'left' : 'right' } }>
           { t('total') } { score } { t('points') }
         </Text>
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  component: {
-  },
-});

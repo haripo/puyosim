@@ -22,11 +22,20 @@ export async function loadArchiveList(startAt: Date | null, size: number, uid: s
 
   return querySnapshot.docs
     .map(d => d.data())
+    .map(d => {
+      // convert RNFirebase.firestore.Timestamp to Date
+      d['play']['createdAt'] = new Date(d['play']['createdAt'].seconds * 1000);
+      d['play']['updatedAt'] = new Date(d['play']['updatedAt'].seconds * 1000);
+      return d;
+    });
 }
 
 export async function saveArchive(payload: ArchiveRequestPayload, uid: string): Promise<Archive> {
   const request: Archive = {
-    ...payload,
+    title: payload.title,
+    play: {
+      ...payload.play,
+    },
     uid,
     version: {
       schema: 2,
@@ -34,7 +43,12 @@ export async function saveArchive(payload: ArchiveRequestPayload, uid: string): 
       build: VersionNumber.buildVersion
     }
   };
-  await collectionReference.doc(payload.play.id).set(request);
+
+  const dateConvertedRequest: any = request;
+  dateConvertedRequest.play.createdAt = firebase.firestore.Timestamp.fromDate(payload.play.createdAt);
+  dateConvertedRequest.play.updatedAt = firebase.firestore.Timestamp.fromDate(payload.play.updatedAt);
+
+  await collectionReference.doc(payload.play.id).set(dateConvertedRequest);
   return request;
 }
 

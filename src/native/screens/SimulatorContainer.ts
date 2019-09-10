@@ -27,16 +27,20 @@ const mapStateToProps = (state: State) => {
     pendingPair: getPendingPair(state.simulator),
     droppings: state.simulator.droppingPuyos,
     vanishings: getVanishingPuyos(state.simulator),
-    isActive: isActive(state.simulator),
-    puyoSkin: state.config.puyoSkin as string,
-    canUndo: canUndo(state.simulator),
-    canRedo: canRedo(state.simulator),
-    layout: getLayout(state.layout),
-    theme: getTheme(state.theme),
+
     score: state.simulator.score,
     chainScore: state.simulator.chainScore,
     chain: state.simulator.chain,
-    isReady: state.simulator.isReady
+
+    puyoSkin: state.config.puyoSkin as string,
+    leftyMode: state.config.leftyMode,
+    layout: getLayout(state.layout),
+    theme: getTheme(state.theme),
+
+    isReady: state.simulator.isReady,
+    isActive: isActive(state.simulator),
+    canUndo: canUndo(state.simulator),
+    canRedo: canRedo(state.simulator),
   };
 };
 
@@ -74,7 +78,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(runChainAnimation('simulator'));
     },
     onReconstructHistoryRequested: (history: string, queue: string, index: number) => {
-      dispatch(reconstructHistory(history, queue, index));
+      dispatch(reconstructHistory(history, queue, index, true));
       dispatch(runChainAnimation('simulator'));
     },
     onVanishingAnimationFinished: () => {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="jp">
 <head>
-  <title>puyosim</title>
+  <title>rensim | Android,iOS,Web 対応のぷよぷよシミュレータ</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
@@ -17,16 +17,13 @@
 <div class="container">
   <section class="hero">
     <img src="assets/icon.png">
-    <h1 class="h1">puyosim</h1>
+    <h1 class="h1">rensim</h1>
     <div>
       The best puyopuyo training app on Android / iOS / Web
     </div>
     <div>
       スマートフォン・PC で使えるぷよぷよシミュレータです．
     </div>
-  </section>
-  <section>
-    <h2>Installation</h2>
     <div class="store-badges">
       <div class="store-badge">
         <a
@@ -49,38 +46,79 @@
     </div>
     <div>
       <a href='/s'>
-        or launch browser version (beta)
+        or launch web version
       </a>
     </div>
   </section>
-  <section>
-    <h2>Screenshots</h2>
-    <img src="assets/screenshot1.png" width="200px">
-    <img src="assets/screenshot2.png" width="200px">
-    <img src="assets/screenshot3.png" width="200px">
-    <img src="assets/screenshot4.png" width="200px">
-  </section>
-  <section>
-    <h2>Features</h2>
+  <section class="features">
     <div class="row">
       <div class="column">
-        <ul>
-          <li><i class="fa fa-check-square-o"></i>とこぷよモード</li>
-          <li><i class="fa fa-check-square-o"></i>連鎖アニメーション</li>
-          <li><i class="fa fa-check-square-o"></i>Undo / Redo</li>
-          <li><i class="fa fa-check-square-o"></i>操作履歴表示</li>
-          <li><i class="fa fa-check-square-o"></i>English translation</li>
-          <li><i class="fa fa-check-square-o"></i>色数設定</li>
-          <li><i class="fa fa-check-square-o"></i>ツモ制限・初手パターン固定設定</li>
-          <li><i class="fa fa-check-square-o"></i>ダブルネクスト表示設定</li>
-          <li><i class="fa fa-check-square-o"></i>ぷよスキン設定</li>
-          <li><i class="fa fa-check-square-o"></i>シェア</li>
-        </ul>
+        <h3>とこぷよモード</h3>
+        <p>
+          メイン機能であるとこぷよシミュレーション．<br>
+          連鎖アニメーションによる連鎖の確認や，ちぎり数などのデータを確認できます．<br>
+          Undo/Redo もちろんのこと，盤面の保存・読み込みにも対応するほか，<br>
+          ツモ補正，初手固定設定などを変更することでいろいろなツモパターンを試せます．
+        </p>
       </div>
+      <img src="assets/screenshot_simulator.png" width="200px">
+    </div>
+    <div class="row">
+      <div class="column">
+        <h3>エディットモード</h3>
+        <p>
+          ぷよ設置・削除など基本的なエディット機能を備えています．<br>
+          とこぷよモードとエディットモードの切り替えはいつでも可能で，<br>
+          とこぷよの途中にエディットを試しとこぷよに戻るなど，自由に検討することができます．
+        </p>
+      </div>
+      <img src="assets/screenshot_edit.png" width="200px">
+    </div>
+    <div class="row">
+      <div class="column">
+        <h3>履歴モード</h3>
+        <p>
+          rensim は undo/redo を含めてすべての操作履歴を保存しています．<br>
+          履歴はツリー表示されており，自由にタイムトラベルすることができます
+        </p>
+      </div>
+      <img src="assets/screenshot_history.png" width="200px">
+    </div>
+    <div class="row">
+      <div class="column">
+        <h3>カスタマイズ</h3>
+        <p>
+          シミュレータのツモの設定やダブルネクストの表示/非表示切り替え，<br>
+          スキン変更．2P モードなど様々なカスタマイズを搭載しています．
+        </p>
+      </div>
+      <img src="assets/screenshot_config.png" width="200px">
     </div>
   </section>
+
+  <div class="store-badges">
+    <div class="store-badge">
+      <a
+        href='https://play.google.com/store/apps/details?id=com.puyosimulator&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
+        target="_blank">
+        <img alt='Get it on Google Play'
+             src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+             width="200px"/>
+      </a>
+    </div>
+    <div class="store-badge">
+      <a
+        href='https://itunes.apple.com/us/app/puyosim/id1435074935?mt=8'
+        target="_blank">
+        <img alt='Get it on App Store'
+             src='assets/app_store_badge.svg'
+             class="ios-badge"/>
+      </a>
+    </div>
+  </div>
+
   <footer>
-    <a href="https://haripo.com">haripo.com</a>
+    Developed by <a href="https://haripo.com">haripo.com</a>
   </footer>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->

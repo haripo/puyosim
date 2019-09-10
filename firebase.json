@@ -8,6 +8,7 @@
         "**/.*",
         "**/node_modules/**"
       ],
+      "appAssociation": "AUTO",
       "rewrites": [
         {
           "source": "/@(s|v|e)",
@@ -20,6 +21,10 @@
         {
           "source": "/functions/movie",
           "function": "production-renderGifMovie"
+        },
+        {
+          "source": "/link/**",
+          "dynamicLinks": true
         }
       ]
     },

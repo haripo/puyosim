@@ -23,6 +23,9 @@ const translations = {
     // settings
     noLimit: '制限なし',
     numColors: '色数',
+    queueConfig: 'ツモ設定',
+    eSportsCompatible: 'ぷよスポ互換',
+    queueGenerationCustom: 'カスタム',
     queueBalanceConfig: 'ツモ補正',
     colorBalance: '配色補正',
     balancedIn128: '128 手で均等',
@@ -37,6 +40,9 @@ const translations = {
     specify2ndHand: '2 手目',
     specify3rdHand: '3 手目',
     notSpecified: 'Any',
+    leftyMode: '左利きモード',
+    leftyOn: 'オン (2P レイアウト)',
+    leftyOff: 'オフ (1P レイアウト)',
 
     numVisibleNext: 'ネクスト',
     visibleDoubleNext: 'ダブルネクストを表示',
@@ -119,6 +125,9 @@ const translations = {
 
     noLimit: 'No limit',
     numColors: 'The number of colors',
+    queueConfig: 'Queue',
+    eSportsCompatible: 'Puyo-eSports compatible',
+    queueGenerationCustom: 'Custom',
     queueBalanceConfig: 'Handset generation',
     colorBalance: 'Color balance',
     balancedIn128: 'Balanced in 128 hands',
@@ -133,6 +142,9 @@ const translations = {
     specify2ndHand: '2nd',
     specify3rdHand: '3rd',
     notSpecified: 'Any',
+    leftyMode: 'Lefty mode',
+    leftyOn: 'ON (2P layout)',
+    leftyOff: 'OFF (1P layout)',
 
     numVisibleNext: 'Next window',
     visibleDoubleNext: 'Show double next',
