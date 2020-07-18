@@ -26,7 +26,7 @@
     "firebase-functions": "^3.1.0",
     "i18n-js": "^3.2.1",
     "immer": "^3.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "native-base": "^2.13.0",
     "query-string": "^6.4.2",
     "raven-for-redux": "^1.4.0",
