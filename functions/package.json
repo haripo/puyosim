@@ -21,7 +21,7 @@
     "ffmpeg-static": "^2.4.0",
     "firebase-admin": "^8.2.0",
     "firebase-functions": "^3.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "tempfile": "^3.0.0"
   },
   "devDependencies": {
